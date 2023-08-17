@@ -132,13 +132,16 @@ const AddNewCategory: React.FC<AddNewCategoryType> = ({ initialValue }) => {
   //   getAllCategories();
   // }, [getAllCategories]);
 
+  // TODO need to be cached
   useEffect(() => {
-    if (allCategories.length > 0) {
-      setLoader(false);
-    } else {
-      getAllCategories();
-    }
-  }, [allCategories]);
+    // if (allCategories.length > 0) {
+    //   setLoader(false);
+    // } else {
+    //   getAllCategories();
+    // }
+    getAllCategories();
+  }, []);
+  // }, [allCategories]);
 
   if (loader) {
     return (

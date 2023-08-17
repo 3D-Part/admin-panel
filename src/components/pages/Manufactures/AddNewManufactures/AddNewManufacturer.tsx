@@ -21,7 +21,7 @@ type AddNewManufacturerType = {
 const AddNewManufacturer: React.FC<AddNewManufacturerType> = ({
   initialValue,
 }) => {
-  const [loader, setLoader] = useState(true);
+  const [loader, setLoader] = useState(false);
   const manufacturerDataRef = useRef<ManufacturerFormBody>(
     {} as ManufacturerFormBody
   );
@@ -66,26 +66,29 @@ const AddNewManufacturer: React.FC<AddNewManufacturerType> = ({
     }
   };
 
-  const getAllCategories = useCallback(async () => {
-    const data = await fetchAllManufactures();
-    if (data) {
-      setLoader(false);
-    } else {
-      setLoader(true);
-    }
-  }, [fetchAllManufactures]);
+  // const getAllManufactures = useCallback(async () => {
+  //   const data = await fetchAllManufactures();
+  //   if (data) {
+  //     setLoader(false);
+  //   } else {
+  //     setLoader(true);
+  //   }
+  // }, [fetchAllManufactures]);
 
   // useEffect(() => {
-  //   getAllCategories();
-  // }, [getAllCategories]);
+  //   getAllManufactures();
+  // }, [getAllManufactures]);
 
-  useEffect(() => {
-    if (allManufactures.length > 0) {
-      setLoader(false);
-    } else {
-      getAllCategories();
-    }
-  }, [allManufactures]);
+  // TODO need to be cached
+  // useEffect(() => {
+  //   // if (allManufactures.length > 0) {
+  //   //   setLoader(false);
+  //   // } else {
+  //   //   getAllManufactures();
+  //   // }
+  //   getAllManufactures();
+  // }, []);
+  // }, [allManufactures]);
 
   if (loader) {
     return (

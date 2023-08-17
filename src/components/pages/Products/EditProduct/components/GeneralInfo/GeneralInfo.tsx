@@ -95,30 +95,35 @@ const GeneralInfo = () => {
   const getAllManufactures = useCallback(async () => {
     setLoader(true);
     const data = await fetchAllManufactures();
-    if (data) {
-      setLoader(false);
-    } else {
-      setLoader(true);
-    }
+    setLoader(false);
+    // if (data) {
+    //   setLoader(false);
+    // } else {
+    //   setLoader(true);
+    // }
   }, [fetchAllManufactures]);
 
+  // TODO need to be cached
   useEffect(() => {
-    if (allManufactures.length > 0) {
-      setLoader(false);
-    } else {
-      getAllManufactures();
-    }
-  }, [allManufactures, getAllManufactures]);
+    // if (allManufactures.length > 0) {
+    //   setLoader(false);
+    // } else {
+    //   getAllManufactures();
+    // }
+    getAllManufactures();
+  }, []);
+  // }, [allManufactures, getAllManufactures]);
 
   // GET CATEGORIES
   const getAllCategories = useCallback(async () => {
     setLoader(true);
     const data = await fetchAllCategories();
-    if (data) {
-      setLoader(false);
-    } else {
-      setLoader(true);
-    }
+    setLoader(false);
+    // if (data) {
+    //   setLoader(false);
+    // } else {
+    //   setLoader(true);
+    // }
   }, [fetchAllCategories]);
 
   useEffect(() => {
@@ -139,13 +144,16 @@ const GeneralInfo = () => {
     productDataRef.current = _activeProductFormData;
   }, [activeProduct]);
 
+  // TODO need to be cached
   useEffect(() => {
-    if (allCategories.length > 0) {
-      setLoader(false);
-    } else {
-      getAllCategories();
-    }
-  }, [allCategories, getAllCategories]);
+    // if (allCategories.length > 0) {
+    //   setLoader(false);
+    // } else {
+    //   getAllCategories();
+    // }
+    getAllCategories();
+  }, []);
+  // }, [allCategories, getAllCategories]);
 
   useEffect(() => {
     setIsPublished(activeProduct.isPublished);
@@ -156,13 +164,7 @@ const GeneralInfo = () => {
     }
   }, [activeProduct]);
 
-  if (
-    loader ||
-    !activeProduct ||
-    allCategories.length === 0 ||
-    allManufactures.length === 0
-  )
-    return <Loader />;
+  if (loader || !activeProduct || allCategories.length === 0) return <Loader />;
 
   return (
     <form

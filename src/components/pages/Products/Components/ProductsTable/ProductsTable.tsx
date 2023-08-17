@@ -44,7 +44,7 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
   }, [currentPage, fetchProductsData]);
 
   useEffect(() => {
-    if (currentPage > totalPages) {
+    if (currentPage > totalPages && currentPage > 1) {
       changeCurrentPage(currentPage - 1);
     }
   }, [changeCurrentPage, currentPage, totalPages]);

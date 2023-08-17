@@ -19,7 +19,7 @@ type AddNewAttributeType = {
 };
 
 const AddNewAttribute: React.FC<AddNewAttributeType> = ({ initialValue }) => {
-  const [loader, setLoader] = useState(true);
+  const [loader, setLoader] = useState(false);
   const attributeDataRef = useRef<AttributeFormBody>({} as AttributeFormBody);
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -62,26 +62,22 @@ const AddNewAttribute: React.FC<AddNewAttributeType> = ({ initialValue }) => {
     }
   };
 
-  const getAllAttributes = useCallback(async () => {
-    const data = await fetchAllAttributes();
-    if (data) {
-      setLoader(false);
-    } else {
-      setLoader(true);
-    }
-  }, [fetchAllAttributes]);
+  // const getAllAttributes = useCallback(async () => {
+  //   const data = await fetchAllAttributes();
+  //   if (data) {
+  //     setLoader(false);
+  //   } else {
+  //     setLoader(true);
+  //   }
+  // }, [fetchAllAttributes]);
 
   // useEffect(() => {
-  //   getAllAttributes();
-  // }, [getAllAttributes]);
-
-  useEffect(() => {
-    if (allAttributes.length > 0) {
-      setLoader(false);
-    } else {
-      getAllAttributes();
-    }
-  }, [allAttributes]);
+  //   if (allAttributes.length > 0) {
+  //     setLoader(false);
+  //   } else {
+  //     getAllAttributes();
+  //   }
+  // }, [allAttributes]);
 
   if (loader) {
     return (

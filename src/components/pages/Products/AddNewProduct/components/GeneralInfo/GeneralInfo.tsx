@@ -99,13 +99,16 @@ const GeneralInfo = () => {
     }
   }, [fetchAllManufactures]);
 
+  // TODO need to be cached
   useEffect(() => {
-    if (allManufactures.length > 0) {
-      setLoader(false);
-    } else {
-      getAllManufactures();
-    }
-  }, [allManufactures, getAllManufactures]);
+    // if (allManufactures.length > 0) {
+    //   setLoader(false);
+    // } else {
+    //   getAllManufactures();
+    // }
+    getAllManufactures();
+  }, []);
+  // }, [allManufactures, getAllManufactures]);
 
   // GET CATEGORIES
   const getAllCategories = useCallback(async () => {
@@ -118,13 +121,16 @@ const GeneralInfo = () => {
     }
   }, [fetchAllCategories]);
 
+  // TODO need to be cached
   useEffect(() => {
-    if (allCategories.length > 0) {
-      setLoader(false);
-    } else {
-      getAllCategories();
-    }
-  }, [allCategories, getAllCategories]);
+    // if (allCategories.length > 0) {
+    //   setLoader(false);
+    // } else {
+    //   getAllCategories();
+    // }
+    getAllCategories();
+  }, []);
+  // }, [allCategories, getAllCategories]);
 
   if (loader) return <Loader />;
 

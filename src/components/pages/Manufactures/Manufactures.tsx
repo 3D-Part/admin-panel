@@ -107,7 +107,7 @@ export const Manufactures = () => {
   };
 
   useEffect(() => {
-    if (currentPage > totalPages) {
+    if (currentPage > totalPages && currentPage > 1) {
       changeCurrentPage(currentPage - 1);
     }
   }, [changeCurrentPage, currentPage, totalPages]);

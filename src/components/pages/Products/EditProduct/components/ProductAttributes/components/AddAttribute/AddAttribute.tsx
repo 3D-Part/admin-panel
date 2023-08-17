@@ -8,6 +8,7 @@ import { AttributeData } from "@/shared/types";
 import AddAttributeForm from "./components/AddAttributeForm/AddAttributeForm";
 
 const AddAttribute = () => {
+  const [loader, setLoader] = useState(false);
   const [selectedAttribute, setSelectedAttribute] = useState<AttributeData>(
     {} as AttributeData
   );
@@ -19,10 +20,20 @@ const AddAttribute = () => {
 
   const { allAttributes, fetchAllAttributes } = useAttributesStore();
 
+  const getAllAttributes = async () => {
+    setLoader(true);
+    await fetchAllAttributes();
+    setLoader(false);
+  };
+
+  // TODO need to be cached
+  // useEffect(() => {
+  //   if (allAttributes.length !== 0) return;
+  //   fetchAllAttributes();
+  // }, [allAttributes, fetchAllAttributes]);
   useEffect(() => {
-    if (allAttributes.length !== 0) return;
-    fetchAllAttributes();
-  }, [allAttributes, fetchAllAttributes]);
+    getAllAttributes();
+  }, []);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -39,7 +50,13 @@ const AddAttribute = () => {
     _selectedAttribute && setSelectedAttribute(_selectedAttribute);
   };
 
-  if (!allAttributes.length) return <Loader />;
+  if (loader) return <Loader />;
+  if (!allAttributes.length)
+    return (
+      <div className="mt-4 text-white text-xl">
+        There is no attributes available
+      </div>
+    );
 
   return (
     <div className="flex flex-wrap w-full ">

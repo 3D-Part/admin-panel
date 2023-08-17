@@ -42,10 +42,14 @@ const CategoryAttribute: React.FC<CategoryAttributeType> = ({
     }
   };
 
+  // TODO need to be cached
+  // useEffect(() => {
+  //   if (allAttributes.length !== 0) return;
+  //   fetchAllAttributes();
+  // }, [allAttributes, fetchAllAttributes]);
   useEffect(() => {
-    if (allAttributes.length !== 0) return;
     fetchAllAttributes();
-  }, [allAttributes, fetchAllAttributes]);
+  }, []);
 
   useEffect(() => {
     if (initialAttributes && initialAttributes.length > 0) {
