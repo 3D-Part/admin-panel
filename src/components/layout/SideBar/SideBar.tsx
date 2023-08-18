@@ -19,7 +19,7 @@ const SideBar = () => {
   useEffect(() => {
     const jwtCookieName = "jwtToken";
     if (!document.cookie.includes(jwtCookieName)) {
-      router.push(URLPart.Login);
+      router.push(URLPart.Login), { shallow: true };
     }
   }, [router]);
 
@@ -111,7 +111,10 @@ const SideBar = () => {
                         <Sidebar.Item
                           className="cursor-pointer"
                           key={item.name}
-                          href={item.href}
+                          // href={item.href}
+                          onClick={() =>
+                            router.push(item.href, { shallow: true })
+                          }
                           active={pathname === item.href}
                         >
                           {item.name}
@@ -126,7 +129,10 @@ const SideBar = () => {
                     className="cursor-pointer"
                     key={menuItem.name}
                     active={pathname === menuItem.href}
-                    href={menuItem.href}
+                    // href={menuItem.href}
+                    onClick={() =>
+                      router.push(menuItem.href, { shallow: true })
+                    }
                     icon={menuItem.icon}
                   >
                     {menuItem.name}

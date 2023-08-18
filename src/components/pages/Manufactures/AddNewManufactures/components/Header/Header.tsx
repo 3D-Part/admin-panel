@@ -14,7 +14,7 @@ const ManufacturerHeader = () => {
       <Button
         color="light"
         className="cursor-pointer"
-        onClick={() => router.push(URLPart.Manufacturers)}
+        onClick={() => router.push(URLPart.Manufacturers, { shallow: true })}
       >
         <HiArrowCircleLeft className="text-xl text-white" />
       </Button>

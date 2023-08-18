@@ -11,7 +11,7 @@ const SideBar = () => {
   const router = useRouter();
   const signOut = () => {
     JWT.deleteJwtToken();
-    router.push(URLPart.Login);
+    router.push(URLPart.Login, { shallow: true });
   };
   return (
     <>

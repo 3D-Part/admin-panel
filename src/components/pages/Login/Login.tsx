@@ -25,7 +25,7 @@ const Login = () => {
     const data = await login(loginBody);
 
     if (data) {
-      router.push("products");
+      router.push("products", { shallow: true });
     }
   };
 

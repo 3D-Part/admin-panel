@@ -15,7 +15,7 @@ export const AttributesHeader = () => {
       {/* <Search value="Search" /> */}
       <Button
         className="cursor-pointer"
-        onClick={() => router.push(URLPart.AddNewAttribute)}
+        onClick={() => router.push(URLPart.AddNewAttribute, { shallow: true })}
       >
         Add new <HiPlus className="ml-2" />
       </Button>

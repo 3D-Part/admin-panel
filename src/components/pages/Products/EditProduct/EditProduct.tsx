@@ -16,7 +16,7 @@ export const EditProduct = () => {
   useEffect(() => {
     if (activeProduct.id) return;
 
-    router.push(URLPart.Products);
+    router.push(URLPart.Products, { shallow: true });
   }, [activeProduct, router]);
 
   return (

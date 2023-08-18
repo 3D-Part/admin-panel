@@ -14,7 +14,7 @@ const CategoryHeader = () => {
       <Button
         color="light"
         className="cursor-pointer"
-        onClick={() => router.push(URLPart.Categories)}
+        onClick={() => router.push(URLPart.Categories, { shallow: true })}
       >
         <HiArrowCircleLeft className="text-xl text-white" />
       </Button>

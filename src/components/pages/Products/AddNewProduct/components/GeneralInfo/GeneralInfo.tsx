@@ -91,7 +91,7 @@ const GeneralInfo = () => {
       });
 
       resetData();
-      router.push(URLPart.EditProduct);
+      router.push(URLPart.EditProduct, { shallow: true });
     }
   };
 

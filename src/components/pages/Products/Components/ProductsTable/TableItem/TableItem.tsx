@@ -71,7 +71,7 @@ export const TableItem: React.FC<TableItemType> = ({
 
   const editProduct = () => {
     changeActiveProduct(product);
-    router.push(URLPart.EditProduct);
+    router.push(URLPart.EditProduct, { shallow: true });
   };
 
   useEffect(() => {

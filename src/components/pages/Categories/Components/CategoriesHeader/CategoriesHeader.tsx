@@ -15,7 +15,7 @@ export const CategoriesHeader = () => {
       {/* <Search value="Search" /> */}
       <Button
         className="cursor-pointer"
-        onClick={() => router.push(URLPart.AddNewCategory)}
+        onClick={() => router.push(URLPart.AddNewCategory, { shallow: true })}
       >
         Add new <HiPlus className="ml-2" />
       </Button>

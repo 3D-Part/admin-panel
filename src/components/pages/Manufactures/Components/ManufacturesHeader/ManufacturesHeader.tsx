@@ -15,7 +15,9 @@ export const ManufacturesHeader = () => {
       {/* <Search value="Search" /> */}
       <Button
         className="cursor-pointer"
-        onClick={() => router.push(URLPart.AddNewManufacturer)}
+        onClick={() =>
+          router.push(URLPart.AddNewManufacturer, { shallow: true })
+        }
       >
         Add new <HiPlus className="ml-2" />
       </Button>

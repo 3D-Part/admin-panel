@@ -14,7 +14,7 @@ const AttributeHeader = () => {
       <Button
         color="light"
         className="cursor-pointer"
-        onClick={() => router.push(URLPart.Attributes)}
+        onClick={() => router.push(URLPart.Attributes, { shallow: true })}
       >
         <HiArrowCircleLeft className="text-xl text-white" />
       </Button>
