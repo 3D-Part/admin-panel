@@ -10,7 +10,10 @@ const nextConfig = {
   },
 
   images: {
-    domains: ["bucket3dparts.s3.eu-central-1.amazonaws.com"],
+    domains: [
+      "bucket3dparts.s3.eu-central-1.amazonaws.com",
+      "bucket3dpart.s3.eu-central-1.amazonaws.com",
+    ],
   },
 
   async redirects() {
