@@ -75,6 +75,7 @@ const CategoryEditModal: React.FC<ModalType> = ({
   const updateAttributes = async (categoryId: string) => {
     const _data: CategoryAttributeData[] = [];
 
+    await removeAttributesFromCategory();
     if (categoryAttributeIds.current.length === 0) return;
 
     categoryAttributeIds.current.forEach((attributeId) => {
@@ -85,15 +86,7 @@ const CategoryEditModal: React.FC<ModalType> = ({
       _data.push(_categoryAttribute);
     });
 
-    removeAttributesFromCategory();
-    const response = await addCategoryAttributesBulk(_data);
-    // if (response) {
-    //   toast(`Category attributes are changed!`, {
-    //     hideProgressBar: true,
-    //     autoClose: 2000,
-    //     type: "success",
-    //   });
-    // }
+    await addCategoryAttributesBulk(_data);
   };
 
   const saveFunction = async () => {
