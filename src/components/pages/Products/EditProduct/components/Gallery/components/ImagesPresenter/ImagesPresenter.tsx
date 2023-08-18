@@ -11,7 +11,7 @@ const ImagesPresenter = () => {
   const { activeProduct } = useProductsStore();
   const { images } = activeProduct;
 
-  if (images?.length === 0) return <Title />;
+  if (images?.length === 0) return;
 
   return (
     <div className="flex flex-col align-baseline gap-8 mb-12">

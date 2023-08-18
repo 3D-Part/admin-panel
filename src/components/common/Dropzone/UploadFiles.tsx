@@ -73,7 +73,6 @@ const UploadFiles: React.FC<UploadFilesType> = ({ setActiveFormData }) => {
               {isDragActive ? (
                 <span>Drop the files here ...</span>
               ) : (
-                // eslint-disable-next-line react/no-unescaped-entities
                 <span>
                   Drag and drop some files here, or click to select files
                 </span>
@@ -89,9 +88,11 @@ const UploadFiles: React.FC<UploadFilesType> = ({ setActiveFormData }) => {
 
       {/* FILES PREVIEW */}
       <div className="w-full flex flex-wrap gap-4 mb-4">
-        <h3 className="text-lg leading-none tracking-tight text-gray-800 dark:text-white">
-          Accepted Files:
-        </h3>
+        {files.length > 0 && (
+          <h3 className="text-lg leading-none tracking-tight text-gray-800 dark:text-white">
+            Accepted Files:
+          </h3>
+        )}
 
         <div className="w-full flex gap-6">
           {files.length > 0 &&
