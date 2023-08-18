@@ -103,7 +103,7 @@ const SideBar = () => {
                   <Sidebar.Collapse
                     key={menuItem.name}
                     icon={menuItem.icon}
-                    open={menuItem.open}
+                    open={pathname.includes(menuItem.href)}
                     label={menuItem.name}
                   >
                     {menuItem.children.map((item) => {
