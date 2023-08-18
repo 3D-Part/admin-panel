@@ -4,11 +4,15 @@ import {
   PaginationData,
   AttributesData,
   AttributeFormBody,
+  SortParamsData,
 } from "@/shared/types";
 
 const API_BASE_URL = process.env.API_KEY;
 
-const getAttributes = async (paginationData?: PaginationData) => {
+const getAttributes = async (
+  sortData: SortParamsData,
+  paginationData?: PaginationData
+) => {
   const { offset, limit } = paginationData || {};
 
   const queryParams = new URLSearchParams();
@@ -17,6 +21,9 @@ const getAttributes = async (paginationData?: PaginationData) => {
     queryParams.append("offset", offset.toString());
     queryParams.append("limit", limit.toString());
   }
+
+  queryParams.append("sort[order]", sortData.order);
+  queryParams.append("sort[field]", sortData.field);
 
   try {
     const data = await API.get<AttributesData>(

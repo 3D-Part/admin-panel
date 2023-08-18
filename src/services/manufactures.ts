@@ -4,11 +4,15 @@ import {
   PaginationData,
   ManufacturesData,
   ManufacturerFormBody,
+  SortParamsData,
 } from "@/shared/types";
 
 const API_BASE_URL = process.env.API_KEY;
 
-const getManufactures = async (paginationData?: PaginationData) => {
+const getManufactures = async (
+  sortData: SortParamsData,
+  paginationData?: PaginationData
+) => {
   const { offset, limit } = paginationData || {};
 
   const queryParams = new URLSearchParams();
@@ -17,6 +21,8 @@ const getManufactures = async (paginationData?: PaginationData) => {
     queryParams.append("offset", offset.toString());
     queryParams.append("limit", limit.toString());
   }
+  queryParams.append("sort[order]", sortData.order);
+  queryParams.append("sort[field]", sortData.field);
 
   try {
     const data = await API.get<ManufacturesData>(

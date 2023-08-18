@@ -4,6 +4,11 @@ export interface PaginationData {
   limit?: number;
 }
 
+export interface SortParamsData {
+  field: string;
+  order: "ASC" | "DESC";
+}
+
 // LOGIN
 export interface LoginData {
   email: string;
@@ -175,14 +180,14 @@ export interface ProductsData {
 
 export interface ProductFormBody {
   name: string;
-  description: string;
-  details: string;
+  description?: string;
+  details?: string;
   isPublished: boolean;
   isMostSold: boolean;
   isRecommended: boolean;
   sku: string;
   categoryId: string;
-  manufacturerId: string;
+  manufacturerId?: string;
   price: number;
   weight: number;
   quantity: number;

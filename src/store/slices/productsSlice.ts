@@ -1,5 +1,10 @@
 import { StateCreator } from "zustand";
-import { PaginationData, ProductData, ProductFormBody } from "@/shared/types";
+import {
+  PaginationData,
+  ProductData,
+  ProductFormBody,
+  SortParamsData,
+} from "@/shared/types";
 import { ProductsAPI } from "@/services";
 
 export interface ProductsSliceInterface {
@@ -9,6 +14,8 @@ export interface ProductsSliceInterface {
   currentPage: number;
   itemsPerPage: number;
   totalPages: number;
+  sortFiled: string;
+  sortOrder: "ASC" | "DESC";
   changeCurrentPage: (data: number) => void;
   changeItemsPerPage: (data: number) => void;
   changeActiveProduct: (product: ProductData) => void;
@@ -31,6 +38,8 @@ export const productsSlice: StateCreator<ProductsSliceInterface> = (
   currentPage: 1,
   itemsPerPage: 15,
   totalPages: 1,
+  sortFiled: "createdAt",
+  sortOrder: "DESC",
 
   changeCurrentPage: (data: number) => {
     set({ currentPage: data });
@@ -45,8 +54,14 @@ export const productsSlice: StateCreator<ProductsSliceInterface> = (
   },
 
   fetchProducts: async (paginationData?: PaginationData) => {
+    const sort = {
+      field: get().sortFiled,
+      order: get().sortOrder,
+    };
+
     try {
-      const data = await ProductsAPI.getProducts(paginationData);
+      const data = await ProductsAPI.getProducts(sort, paginationData);
+
       if (data) {
         set({ currentPageProducts: data.rows });
         set({ totalPages: Math.ceil(data.count / get().itemsPerPage) });
@@ -60,8 +75,12 @@ export const productsSlice: StateCreator<ProductsSliceInterface> = (
   },
 
   fetchAllProducts: async () => {
+    const sort = {
+      field: get().sortFiled,
+      order: get().sortOrder,
+    };
     try {
-      const data = await ProductsAPI.getProducts();
+      const data = await ProductsAPI.getProducts(sort);
       if (data) {
         set({ allProducts: data.rows });
       }
@@ -77,18 +96,20 @@ export const productsSlice: StateCreator<ProductsSliceInterface> = (
 
     const _productData: ProductFormBody = {
       name: product.name,
-      description: product.description,
-      details: product.details,
       isPublished: product.isPublished,
       isMostSold: product.isMostSold,
       isRecommended: product.isRecommended,
       sku: product.sku,
       categoryId: product.categoryId,
-      manufacturerId: product.manufacturerId,
       price: product.price,
       weight: product.weight,
       quantity: product.quantity,
     };
+
+    if (product.description) _productData.description = product.description;
+    if (product.description) _productData.details = product.details;
+    if (product.description)
+      _productData.manufacturerId = product.manufacturerId;
 
     try {
       const data = await ProductsAPI.addNewProduct(_productData);

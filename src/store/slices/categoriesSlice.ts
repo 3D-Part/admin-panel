@@ -8,6 +8,8 @@ export interface CategorySliceInterface {
   currentPage: number;
   itemsPerPage: number;
   totalPages: number;
+  sortFiled: string;
+  sortOrder: "ASC" | "DESC";
   changeCurrentPage: (data: number) => void;
   changeItemsPerPage: (data: number) => void;
   fetchCategories: (paginationData?: PaginationData) => Promise<boolean>;
@@ -30,6 +32,8 @@ export const categorySlice: StateCreator<CategorySliceInterface> = (
   currentPage: 1,
   itemsPerPage: 15,
   totalPages: 1,
+  sortFiled: "createdAt",
+  sortOrder: "DESC",
 
   changeCurrentPage: (data: number) => {
     set({ currentPage: data });
@@ -40,8 +44,13 @@ export const categorySlice: StateCreator<CategorySliceInterface> = (
   },
 
   fetchCategories: async (paginationData?: PaginationData) => {
+    const sort = {
+      field: get().sortFiled,
+      order: get().sortOrder,
+    };
+
     try {
-      const data = await CategoriesAPI.getCategories(paginationData);
+      const data = await CategoriesAPI.getCategories(sort, paginationData);
       if (data) {
         set({ currentPageCategories: data.rows });
         set({ totalPages: Math.ceil(data.count / get().itemsPerPage) });
@@ -55,8 +64,13 @@ export const categorySlice: StateCreator<CategorySliceInterface> = (
   },
 
   fetchAllCategories: async () => {
+    const sort = {
+      field: get().sortFiled,
+      order: get().sortOrder,
+    };
+
     try {
-      const data = await CategoriesAPI.getCategories();
+      const data = await CategoriesAPI.getCategories(sort);
       if (data) {
         set({ allCategories: data.rows });
       }

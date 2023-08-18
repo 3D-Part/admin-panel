@@ -36,6 +36,7 @@ const GeneralInfo = () => {
   const { addNewProducts } = useProductsStore();
   const { fetchAllManufactures, allManufactures } = useManufactureStore();
   const { fetchAllCategories, allCategories } = useCategoryStore();
+  const [isRecommended, setIsRecommended] = useState(false);
 
   const productDataRef = useRef<ProductFormBody>({} as ProductFormBody);
   const formRef = useRef<HTMLFormElement>(null);
@@ -58,6 +59,7 @@ const GeneralInfo = () => {
     productDataRef.current = {} as ProductFormBody;
     setIsPublished(true);
     setIsMostSold(false);
+    setIsRecommended(false);
   };
 
   const changeIsPublished = () => {
@@ -68,12 +70,17 @@ const GeneralInfo = () => {
     setIsMostSold(!isMostSold);
   };
 
+  const changeIsRecommended = () => {
+    setIsRecommended(!isRecommended);
+  };
+
   const onSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!productDataRef.current.name) return;
 
     productDataRef.current.isPublished = isPublished;
     productDataRef.current.isMostSold = isMostSold;
+    productDataRef.current.isRecommended = isRecommended;
 
     const request = await addNewProducts(productDataRef.current);
     if (request) {
@@ -300,6 +307,13 @@ const GeneralInfo = () => {
         checked={isMostSold}
         label="Most sold"
         onChange={changeIsMostSold}
+      />
+
+      {/* IS RECOMMENDED */}
+      <ToggleSwitch
+        checked={isRecommended}
+        label="Recommended"
+        onChange={changeIsRecommended}
       />
 
       <Button className="mt-4" type="submit">

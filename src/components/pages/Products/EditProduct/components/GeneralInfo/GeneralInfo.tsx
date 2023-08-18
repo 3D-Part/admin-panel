@@ -129,18 +129,26 @@ const GeneralInfo = () => {
   useEffect(() => {
     const _activeProductFormData: ProductFormBody = {
       name: activeProduct.name,
-      description: activeProduct.description ? activeProduct.description : "",
-      details: activeProduct.details ? activeProduct.details : "",
       isPublished: activeProduct.isPublished,
       isMostSold: activeProduct.isMostSold,
       isRecommended: activeProduct.isRecommended,
       sku: activeProduct.sku,
       categoryId: activeProduct.categoryId,
-      manufacturerId: activeProduct.manufacturerId,
       price: activeProduct.price,
       weight: activeProduct.weight,
       quantity: activeProduct.quantity,
     };
+
+    if (activeProduct.description) {
+      _activeProductFormData.description = activeProduct.description;
+    }
+    if (activeProduct.details) {
+      _activeProductFormData.details = activeProduct.details;
+    }
+    if (activeProduct.manufacturerId) {
+      _activeProductFormData.manufacturerId = activeProduct.manufacturerId;
+    }
+
     productDataRef.current = _activeProductFormData;
   }, [activeProduct]);
 
