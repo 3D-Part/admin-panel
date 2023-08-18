@@ -17,7 +17,6 @@ import {
 } from "flowbite-react";
 import { useEffect, useRef } from "react";
 import CategoryAttribute from "../../CategoryAttribute/CategoryAttribute";
-import { toast } from "react-toastify";
 import { CategoryAttributeAPI } from "@/services";
 
 type ModalType = {
@@ -37,7 +36,6 @@ const CategoryEditModal: React.FC<ModalType> = ({
   const categoryAttributeIds = useRef<string[]>([]);
 
   const changeCategoryAttributeIds = (attributes: string[]) => {
-    console.log("attributes: ", attributes);
     categoryAttributeIds.current = attributes;
   };
 

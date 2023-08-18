@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Checkbox, Dropdown, Label } from "flowbite-react";
 import { useAttributesStore } from "@/store/store";
 import { CategoryAttribute } from "@/shared/types";
@@ -9,36 +9,54 @@ type CategoryAttributeType = {
   initialAttributes?: CategoryAttribute[];
 };
 
+type ActiveAttributesType = {
+  name: string;
+  id: string;
+};
+
 const CategoryAttribute: React.FC<CategoryAttributeType> = ({
   onAttributesChange,
   initialAttributes,
 }) => {
-  const activeCategoryAttributeIds = useRef<string[]>([]);
+  // const activeCategoryAttributeIds = useRef<string[]>([]);
 
-  const addActiveCategoryAttribute = (attributeId: string) => {
-    activeCategoryAttributeIds.current.push(attributeId);
-    onAttributesChange(activeCategoryAttributeIds.current);
+  const [activeAttributes, setActiveAttributes] = useState<
+    ActiveAttributesType[]
+  >([]);
+
+  const addActiveCategoryAttribute = (id: string, name: string) => {
+    const newAttribute = {
+      id,
+      name,
+    };
+    setActiveAttributes((prevAttributes) => [...prevAttributes, newAttribute]);
   };
 
-  const removeActiveCategoryAttribute = (attributeId: string) => {
-    const index = activeCategoryAttributeIds.current.indexOf(attributeId);
+  const removeActiveCategoryAttribute = (id: string, name: string) => {
+    const attributeIndex = activeAttributes.findIndex(
+      (attr) => attr.name === name
+    );
 
-    if (index !== -1) {
-      activeCategoryAttributeIds.current.splice(index, 1);
-      onAttributesChange(activeCategoryAttributeIds.current);
+    if (attributeIndex !== -1) {
+      const updatedAttributes = activeAttributes.filter(
+        (attr) => attr.id !== id
+      );
+      setActiveAttributes(updatedAttributes);
     }
   };
 
   const { Item } = Dropdown;
   const { allAttributes, fetchAllAttributes } = useAttributesStore();
 
-  const handleInputChange = (e: { target: { checked: any; id: any } }) => {
-    const { checked, id } = e.target;
+  const handleInputChange = (e: {
+    target: { checked: any; id: string; name: string };
+  }) => {
+    const { checked, id, name } = e.target;
 
     if (checked) {
-      addActiveCategoryAttribute(id);
+      addActiveCategoryAttribute(id, name);
     } else {
-      removeActiveCategoryAttribute(id);
+      removeActiveCategoryAttribute(id, name);
     }
   };
 
@@ -52,20 +70,41 @@ const CategoryAttribute: React.FC<CategoryAttributeType> = ({
   }, []);
 
   useEffect(() => {
+    const attributeIds = activeAttributes.map((attribute) => attribute.id);
+    onAttributesChange(attributeIds);
+  }, [activeAttributes, onAttributesChange]);
+
+  useEffect(() => {
     if (initialAttributes && initialAttributes.length > 0) {
+      const _activeAttributes: ActiveAttributesType[] = [];
       initialAttributes.forEach((initAttribute) => {
-        activeCategoryAttributeIds.current.push(initAttribute.attribute.id);
+        const attribute = {
+          id: initAttribute.attribute.id,
+          name: initAttribute.attribute.name,
+        };
+        _activeAttributes.push(attribute);
+        setActiveAttributes(_activeAttributes);
       });
     }
   }, [initialAttributes]);
 
   return (
     <div className="w-full">
-      <div className="mb-2 block">
-        <Label
-          htmlFor="categoryAttributes"
-          value="Choose Category Attributes"
-        />
+      <div className="mb-2 flex gap-2">
+        <Label htmlFor="categoryAttributes" value="Category Attributes" />
+        {activeAttributes.length > 0 && (
+          <div className="text-sm font-medium text-gray-900 dark:text-gray-300 flex flex-wrap gap-1">
+            (
+            {activeAttributes.map((attribute, index) => {
+              return (
+                <span key={attribute.id}>
+                  {index > 0 ? "," : ""} {attribute.name}
+                </span>
+              );
+            })}
+            )
+          </div>
+        )}
       </div>
       <Dropdown dismissOnClick={false} label="Attributes">
         {allAttributes.map((attribute) => {
@@ -77,6 +116,7 @@ const CategoryAttribute: React.FC<CategoryAttributeType> = ({
             <Item key={attribute.id}>
               <div className="flex items-center gap-2">
                 <Checkbox
+                  name={attribute.name}
                   defaultChecked={checked}
                   onChange={handleInputChange}
                   id={attribute.id}
