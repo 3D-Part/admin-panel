@@ -38,8 +38,7 @@ const ManufactureFormModal: React.FC<ModalType> = ({
     manufacturerDataRef.current = {} as ManufacturerData;
   };
 
-  const saveFunction = (e: SyntheticEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const saveFunction = () => {
     if (!manufacturerDataRef.current.name) return;
 
     const _manufacturer: ManufacturerFormBody = {
@@ -64,7 +63,7 @@ const ManufactureFormModal: React.FC<ModalType> = ({
         <Modal.Body>
           {allManufactures.length > 0 ? (
             <form
-              onSubmit={saveFunction}
+              onSubmit={(e) => e.preventDefault()}
               className="flex max-w-md flex-col gap-4"
             >
               <div>
@@ -86,7 +85,7 @@ const ManufactureFormModal: React.FC<ModalType> = ({
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button type="submit">Save</Button>
+          <Button onClick={saveFunction}>Save</Button>
           <Button color="gray" onClick={onClose}>
             Cancel
           </Button>

@@ -38,8 +38,7 @@ const AttributeFormModal: React.FC<ModalType> = ({
     attributeDataRef.current = {} as AttributeData;
   };
 
-  const saveFunction = (e: SyntheticEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const saveFunction = () => {
     if (!attributeDataRef.current.name) return;
 
     const _attribute: AttributeFormBody = {
@@ -64,7 +63,7 @@ const AttributeFormModal: React.FC<ModalType> = ({
         <Modal.Body>
           {allAttributes.length > 0 ? (
             <form
-              onSubmit={saveFunction}
+              onSubmit={(e) => e.preventDefault()}
               className="flex max-w-md flex-col gap-4"
             >
               <div>
@@ -86,7 +85,7 @@ const AttributeFormModal: React.FC<ModalType> = ({
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button type="submit">Save</Button>
+          <Button onClick={saveFunction}>Save</Button>
           <Button color="gray" onClick={onClose}>
             Cancel
           </Button>
