@@ -14,6 +14,8 @@ export enum URLPart {
 
   Attributes = "/attributes",
   AddNewAttribute = "/attributes/add-new",
+
+  Orders = "/orders",
 }
 
 export enum Errors {

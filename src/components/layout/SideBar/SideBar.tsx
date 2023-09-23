@@ -6,6 +6,7 @@ import {
   HiLightBulb,
   HiShoppingBag,
   HiLibrary,
+  HiDocumentText,
 } from "react-icons/hi";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
@@ -87,6 +88,12 @@ const SideBar = () => {
           href: URLPart.AddNewAttribute,
         },
       ],
+    },
+    {
+      name: "Orders",
+      href: URLPart.Orders,
+      icon: HiDocumentText,
+      open: false,
     },
   ];
   return (
