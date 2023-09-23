@@ -10,7 +10,7 @@ import {
 } from "react-icons/hi";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { URLPart } from "@/shared/enums";
+import { URLPartsEnum } from "@/shared/enums";
 import { useEffect } from "react";
 
 const SideBar = () => {
@@ -20,7 +20,7 @@ const SideBar = () => {
   useEffect(() => {
     const jwtCookieName = "jwtToken";
     if (!document.cookie.includes(jwtCookieName)) {
-      router.push(URLPart.Login), { shallow: true };
+      router.push(URLPartsEnum.Login), { shallow: true };
     }
   }, [router]);
 
@@ -33,65 +33,65 @@ const SideBar = () => {
       children: [
         {
           name: "All products",
-          href: URLPart.Products,
+          href: URLPartsEnum.Products,
         },
         {
           name: "Add new product",
-          href: URLPart.AddNewProduct,
+          href: URLPartsEnum.AddNewProduct,
         },
       ],
     },
     {
       name: "Categories",
-      href: URLPart.Categories,
+      href: URLPartsEnum.Categories,
       icon: HiFolderOpen,
       open: false,
       children: [
         {
           name: "All categories",
-          href: URLPart.Categories,
+          href: URLPartsEnum.Categories,
         },
         {
           name: "Add new category",
-          href: URLPart.AddNewCategory,
+          href: URLPartsEnum.AddNewCategory,
         },
       ],
     },
     {
       name: "Manufacturers",
-      href: URLPart.Manufacturers,
+      href: URLPartsEnum.Manufacturers,
       icon: HiLibrary,
       open: false,
       children: [
         {
           name: "All manufacturers",
-          href: URLPart.Manufacturers,
+          href: URLPartsEnum.Manufacturers,
         },
         {
           name: "Add new manufacturer",
-          href: URLPart.AddNewManufacturer,
+          href: URLPartsEnum.AddNewManufacturer,
         },
       ],
     },
     {
       name: "Attributes",
-      href: URLPart.Attributes,
+      href: URLPartsEnum.Attributes,
       icon: HiLightBulb,
       open: false,
       children: [
         {
           name: "All attributes",
-          href: URLPart.Attributes,
+          href: URLPartsEnum.Attributes,
         },
         {
           name: "Add new attribute",
-          href: URLPart.AddNewAttribute,
+          href: URLPartsEnum.AddNewAttribute,
         },
       ],
     },
     {
       name: "Orders",
-      href: URLPart.Orders,
+      href: URLPartsEnum.Orders,
       icon: HiDocumentText,
       open: false,
     },

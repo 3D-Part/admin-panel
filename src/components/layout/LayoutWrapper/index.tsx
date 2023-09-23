@@ -1,6 +1,6 @@
 "use client";
 
-import { URLPart } from "@/shared/enums";
+import { URLPartsEnum } from "@/shared/enums";
 import { usePathname } from "next/navigation";
 import React from "react";
 import Header from "../Header/Header";
@@ -8,7 +8,7 @@ import SideBar from "../SideBar/SideBar";
 
 const LayoutWrapper = () => {
   const pathname = usePathname();
-  const isLoginPage = pathname === URLPart.Login;
+  const isLoginPage = pathname === URLPartsEnum.Login;
 
   if (isLoginPage) return;
 

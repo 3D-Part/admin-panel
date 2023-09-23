@@ -217,3 +217,38 @@ export interface S3FormData {
     "X-Amz-Signature": string;
   };
 }
+
+// ORDERS
+
+interface OrderProduct {
+  id: string;
+  name: string;
+  sku: string;
+  quantity: number;
+  price: string;
+  total: number;
+}
+
+export interface Order {
+  id: number;
+  orderNumber: string;
+  fullName: string;
+  email: number;
+  phone: string;
+  city: string;
+  postCode: string;
+  street: string;
+  products: OrderProduct[];
+  price: string;
+  shippingPrice: string;
+  discount: string;
+  total: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface OrdersData {
+  count: number;
+  rows: Order[];
+}

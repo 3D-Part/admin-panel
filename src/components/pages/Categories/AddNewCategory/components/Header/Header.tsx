@@ -1,6 +1,6 @@
 "use client";
 
-import { URLPart } from "@/shared/enums";
+import { URLPartsEnum } from "@/shared/enums";
 import { Button } from "flowbite-react";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -14,7 +14,7 @@ const CategoryHeader = () => {
       <Button
         color="light"
         className="cursor-pointer"
-        onClick={() => router.push(URLPart.Categories, { shallow: true })}
+        onClick={() => router.push(URLPartsEnum.Categories, { shallow: true })}
       >
         <HiArrowCircleLeft className="text-xl text-white" />
       </Button>

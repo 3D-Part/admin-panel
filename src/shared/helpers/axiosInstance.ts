@@ -1,6 +1,6 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-import { ErrorCode, Errors, URLPart } from "../enums";
+import { ErrorCodeEnum, ErrorsEnum, URLPartsEnum } from "../enums";
 
 const API_BASE_URL = process.env.API_KEY;
 
@@ -58,11 +58,11 @@ axiosInstance.interceptors.response.use(
     });
 
     if (
-      _errorResponse.status === ErrorCode.Unauthorized &&
-      _errorResponse.data.key === Errors.Unauthorized
+      _errorResponse.status === ErrorCodeEnum.Unauthorized &&
+      _errorResponse.data.key === ErrorsEnum.Unauthorized
     ) {
       setTimeout(() => {
-        window.location.href = URLPart.Login;
+        window.location.href = URLPartsEnum.Login;
       }, 1000);
     }
     // Nemojte zaboraviti da ponovo odbacite grešku kako bi komponente koje koriste Axios mogle nastaviti dalje rukovanje greškom ako je potrebno

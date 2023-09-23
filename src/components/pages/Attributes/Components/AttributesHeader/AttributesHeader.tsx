@@ -5,7 +5,7 @@ import React from "react";
 import { Button } from "flowbite-react";
 import { HiPlus } from "react-icons/hi";
 import { useRouter } from "next/navigation";
-import { URLPart } from "@/shared/enums";
+import { URLPartsEnum } from "@/shared/enums";
 
 export const AttributesHeader = () => {
   const router = useRouter();
@@ -15,7 +15,9 @@ export const AttributesHeader = () => {
       {/* <Search value="Search" /> */}
       <Button
         className="cursor-pointer"
-        onClick={() => router.push(URLPart.AddNewAttribute, { shallow: true })}
+        onClick={() =>
+          router.push(URLPartsEnum.AddNewAttribute, { shallow: true })
+        }
       >
         Add new <HiPlus className="ml-2" />
       </Button>

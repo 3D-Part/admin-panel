@@ -5,7 +5,7 @@ import { Search } from "@/components/common";
 import { Button } from "flowbite-react";
 import { HiPlus } from "react-icons/hi";
 import { useRouter } from "next/navigation";
-import { URLPart } from "@/shared/enums";
+import { URLPartsEnum } from "@/shared/enums";
 
 export const CategoriesHeader = () => {
   const router = useRouter();
@@ -15,7 +15,9 @@ export const CategoriesHeader = () => {
       {/* <Search value="Search" /> */}
       <Button
         className="cursor-pointer"
-        onClick={() => router.push(URLPart.AddNewCategory, { shallow: true })}
+        onClick={() =>
+          router.push(URLPartsEnum.AddNewCategory, { shallow: true })
+        }
       >
         Add new <HiPlus className="ml-2" />
       </Button>

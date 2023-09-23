@@ -21,6 +21,8 @@ import {
   StoreManagerSliceInterface,
 } from "./slices/storeManagerSlice";
 
+import { ordersSlice, OrdersSliceInterface } from "./slices/orderSlice";
+
 export const useCategoryStore = create<CategorySliceInterface>()((...a) => ({
   ...categorySlice(...a),
 }));
@@ -46,3 +48,7 @@ export const useS3ManagerStore = create<StoreManagerSliceInterface>()(
     ...storeManagerSlice(...a),
   })
 );
+
+export const useOrdersStore = create<OrdersSliceInterface>()((...a) => ({
+  ...ordersSlice(...a),
+}));

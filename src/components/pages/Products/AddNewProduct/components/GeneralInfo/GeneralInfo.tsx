@@ -22,7 +22,7 @@ import React, {
 } from "react";
 import { ProductFormBody } from "@/shared/types";
 import { toast } from "react-toastify";
-import { URLPart } from "@/shared/enums";
+import { URLPartsEnum } from "@/shared/enums";
 import { useRouter } from "next/navigation";
 
 const GeneralInfo = () => {
@@ -91,7 +91,7 @@ const GeneralInfo = () => {
       });
 
       resetData();
-      router.push(URLPart.EditProduct, { shallow: true });
+      router.push(URLPartsEnum.EditProduct, { shallow: true });
     }
   };
 

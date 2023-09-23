@@ -1,4 +1,4 @@
-import { URLPart } from "@/shared/enums";
+import { URLPartsEnum } from "@/shared/enums";
 
 import { PaginationData, ProductData, ProductFormBody } from "@/shared/types";
 import { useProductsStore } from "@/store/store";
@@ -71,7 +71,7 @@ export const TableItem: React.FC<TableItemType> = ({
 
   const editProduct = () => {
     changeActiveProduct(product);
-    router.push(URLPart.EditProduct, { shallow: true });
+    router.push(URLPartsEnum.EditProduct, { shallow: true });
   };
 
   useEffect(() => {

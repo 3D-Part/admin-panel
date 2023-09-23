@@ -5,13 +5,13 @@ import Image from "next/image";
 import { Avatar, Dropdown, Navbar } from "flowbite-react";
 import JWT from "@/shared/helpers/jwtToken";
 import { useRouter } from "next/navigation";
-import { URLPart } from "@/shared/enums";
+import { URLPartsEnum } from "@/shared/enums";
 
 const SideBar = () => {
   const router = useRouter();
   const signOut = () => {
     JWT.deleteJwtToken();
-    router.push(URLPart.Login, { shallow: true });
+    router.push(URLPartsEnum.Login, { shallow: true });
   };
   return (
     <>

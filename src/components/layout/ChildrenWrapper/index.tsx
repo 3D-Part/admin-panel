@@ -1,12 +1,12 @@
 "use client";
 
-import { URLPart } from "@/shared/enums";
+import { URLPartsEnum } from "@/shared/enums";
 import { usePathname } from "next/navigation";
 import React from "react";
 
 const ChildrenWrapper = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
-  const isLoginPage = pathname === URLPart.Login;
+  const isLoginPage = pathname === URLPartsEnum.Login;
 
   return (
     <div

@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-export enum URLPart {
+export enum URLPartsEnum {
   Login = "/login",
 
   Categories = "/categories",
@@ -18,10 +18,22 @@ export enum URLPart {
   Orders = "/orders",
 }
 
-export enum Errors {
+export enum ErrorsEnum {
   Unauthorized = "UNAUTHORIZED_ERROR",
 }
 
-export enum ErrorCode {
+export enum ErrorCodeEnum {
   Unauthorized = 401,
+}
+
+export enum OrderStatusEnum {
+  Pending = "PENDING",
+  Processing = "PROCESSING",
+  Shipped = "SHIPPED",
+  Cancelled = "CANCELLED",
+  Rejected = "REJECTED",
+  Refunded = "REFUNDED",
+  OnHold = "ONHOLD",
+  Delivered = "DELIVERED",
+  Completed = "COMPLETED",
 }

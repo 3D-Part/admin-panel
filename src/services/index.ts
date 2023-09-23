@@ -6,3 +6,4 @@ export { default as ProductsAPI } from "./products";
 export { default as StoreManagerAPI } from "./storeManager";
 export { default as ProductAttributeAPI } from "./productAttributes";
 export { default as CategoryAttributeAPI } from "./categoryAttributes";
+export { default as OrdersAPI } from "./orders";
