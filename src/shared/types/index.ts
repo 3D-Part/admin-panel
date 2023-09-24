@@ -230,7 +230,7 @@ interface OrderProduct {
 }
 
 export interface Order {
-  id: number;
+  id: string;
   orderNumber: string;
   fullName: string;
   email: number;

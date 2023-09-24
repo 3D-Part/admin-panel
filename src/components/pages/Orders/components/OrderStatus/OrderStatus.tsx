@@ -7,36 +7,53 @@ type OrderStatusType = {
 };
 
 const OrderStatus: React.FC<OrderStatusType> = ({ status }) => {
-  const [statusColor, setStatusColor] = useState("info");
+  const [statusStyle, setStatusStyle] = useState("");
 
   useEffect(() => {
     switch (status) {
       case OrderStatusEnum.Pending:
+        setStatusStyle(
+          "bg-green-400 text-green-800 dark:bg-green-400 dark:text-green-800"
+        );
+        break;
+      case OrderStatusEnum.Accepted:
+        setStatusStyle(
+          "bg-emerald-900 text-emerald-600 dark:bg-emerald-900 dark:text-emerald-600"
+        );
+        break;
       case OrderStatusEnum.Shipped:
-        setStatusColor("info");
+        setStatusStyle(
+          "bg-cyan-500 text-cyan-950 dark:bg-cyan-500 dark:text-cyan-950"
+        );
         break;
-      case OrderStatusEnum.Processing:
-        setStatusColor("indigo");
-        break;
-      case OrderStatusEnum.Rejected:
-        setStatusColor("failure");
-        break;
+
       case OrderStatusEnum.OnHold:
-      case OrderStatusEnum.Cancelled:
-        setStatusColor("warning");
+        setStatusStyle(
+          "bg-orange-400 text-orange-800 dark:bg-orange-400 dark:text-orange-800"
+        );
         break;
-      case OrderStatusEnum.Delivered:
+      case OrderStatusEnum.Cancelled:
+      case OrderStatusEnum.Rejected:
+      case OrderStatusEnum.Refunded:
+        setStatusStyle(
+          "bg-red-200 text-red-300 dark:bg-red-500 dark:text-red-300"
+        );
+        break;
       case OrderStatusEnum.Completed:
-        setStatusColor("success");
+        setStatusStyle(
+          "bg-sky-950 text-sky-600 dark:bg-sky-950 dark:text-sky-600"
+        );
         break;
       default:
-        setStatusColor("dark");
+        setStatusStyle(
+          "bg-green-400 text-green-800 dark:bg-green-400 dark:text-green-800"
+        );
         break;
     }
   }, [status]);
 
   return (
-    <Badge color={statusColor} className="justify-center">
+    <Badge className={`justify-center max-w-[100px] ${statusStyle}`}>
       {status}
     </Badge>
   );
