@@ -29,10 +29,7 @@ export enum ErrorCodeEnum {
 export enum OrderStatusEnum {
   Pending = "PENDING",
   Accepted = "ACCEPTED",
-  Shipped = "SHIPPED",
-  Cancelled = "CANCELLED",
-  Rejected = "REJECTED",
-  Refunded = "REFUNDED",
-  OnHold = "ONHOLD",
-  Completed = "COMPLETED",
+  Declined = "DECLINED",
+  Shipping = "SHIPPING",
+  Finished = "FINISHED",
 }
