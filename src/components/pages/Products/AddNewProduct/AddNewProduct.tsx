@@ -1,5 +1,5 @@
 import React from "react";
-import { TabsMenu } from "./components/TabsMenu/TabsMenu";
+import { TabsMenu } from "./Components/TabsMenu/TabsMenu";
 
 export const AddNewProduct = () => {
   return (
