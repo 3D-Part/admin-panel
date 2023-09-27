@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { URLPart } from "@/shared/enums";
 import { Button } from "flowbite-react";
 import { HiPlus } from "react-icons/hi";
-import { TabsMenu } from "./components/TabsMenu/TabsMenu";
+import { TabsMenu } from "./Components/TabsMenu/TabsMenu";
 
 export const EditProduct = () => {
   const { activeProduct } = useProductsStore();
