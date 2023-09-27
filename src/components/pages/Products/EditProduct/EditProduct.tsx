@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { TabsMenu } from "./components/TabsMenu/TabsMenu";
+import { TabsMenu } from "./Components/TabsMenu/TabsMenu";
 import { useProductsStore } from "@/store/store";
 import { useRouter } from "next/navigation";
 import { URLPart } from "@/shared/enums";

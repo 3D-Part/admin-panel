@@ -1,14 +1,14 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { CategoriesHeader } from "./components/CategoriesHeader/CategoriesHeader";
-import { CategoriesTable } from "./components/CategoriesTable/CategoriesTable";
+import { CategoriesTable } from "./Components/CategoriesTable/CategoriesTable";
 import { useCategoryStore } from "@/store/store";
-import CategoryEditModal from "./components/CategoryEditModal/CategoryEditModal";
+import CategoryEditModal from "./Components/CategoryEditModal/CategoryEditModal";
 import { WarningModal } from "@/components/common";
 import { PaginationData, CategoryData, CategoryFormBody } from "@/shared/types";
 import { toast } from "react-toastify";
 import { CategoriesAPI } from "@/services";
+import { CategoriesHeader } from "./Components/CategoriesHeader/CategoriesHeader";
 
 export const Categories = () => {
   // TODO some functionalities will be moved to store

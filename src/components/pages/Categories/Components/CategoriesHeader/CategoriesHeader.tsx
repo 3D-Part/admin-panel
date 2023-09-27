@@ -1,7 +1,7 @@
 "use client"; // This is a client component 👈🏽
 
 import React from "react";
-import { Search } from "@/components/common";
+// import { Search } from "@/components/common";
 import { Button } from "flowbite-react";
 import { HiPlus } from "react-icons/hi";
 import { useRouter } from "next/navigation";

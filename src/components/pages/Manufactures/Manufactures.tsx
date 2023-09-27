@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { ManufacturesHeader } from "./components/ManufacturesHeader/ManufacturesHeader";
+import { ManufacturesHeader } from "./Components/ManufacturesHeader/ManufacturesHeader";
 import { useManufactureStore } from "@/store/store";
-import ManufacturesFormModal from "./components/ManufactureFormModal/ManufactureFormModal";
+import ManufacturesFormModal from "./Components/ManufactureFormModal/ManufactureFormModal";
 import { WarningModal } from "@/components/common";
 import {
   PaginationData,
@@ -12,7 +12,7 @@ import {
 } from "@/shared/types";
 import manufacturesAPI from "@/services/manufactures";
 import { toast } from "react-toastify";
-import { ManufacturesTable } from "./components/ManufacturesTable/ManufacturesTable";
+import { ManufacturesTable } from "./Components/ManufacturesTable/ManufacturesTable";
 
 export const Manufactures = () => {
   // TODO some functionalities will be moved to store
