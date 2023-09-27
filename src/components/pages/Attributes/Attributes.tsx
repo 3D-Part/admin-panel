@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { AttributesHeader } from "./components/AttributesHeader/AttributesHeader";
+// import { AttributesHeader } from "./components/AttributesHeader/AttributesHeader";
 import { useAttributesStore } from "@/store/store";
 import AttributeFormModal from "./components/AttributeFormModal/AttributeFormModal";
 import { WarningModal } from "@/components/common";
@@ -118,7 +118,7 @@ export const Attributes = () => {
 
   return (
     <div className="w-full">
-      <AttributesHeader />
+      {/* <AttributesHeader /> */}
       <AttributesTable
         onWarningModalOpen={onWarningModalOpen}
         openEditModal={openEditModal}
