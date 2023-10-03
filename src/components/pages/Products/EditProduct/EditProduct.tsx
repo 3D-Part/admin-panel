@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { TabsMenu } from "./components/TabsMenu/TabsMenu";
 import { useProductsStore } from "@/store/store";
 import { useRouter } from "next/navigation";
 import { URLPartsEnum } from "@/shared/enums";
 import { Button } from "flowbite-react";
 import { HiPlus } from "react-icons/hi";
+import { TabsMenu } from "./Components/TabsMenu/TabsMenu";
 
 export const EditProduct = () => {
   const { activeProduct } = useProductsStore();

@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import { ProductsOverviewHeader } from "./components/ProductsHeader/ProductsHeader";
-import { ProductsTable } from "./components/ProductsTable/ProductsTable";
 import { WarningModal } from "@/components/common";
 import { useProductsStore } from "@/store/store";
 import { toast } from "react-toastify";
 import { ProductsAPI } from "@/services";
 import { PaginationData, ProductData } from "@/shared/types";
+import { ProductsOverviewHeader } from "./Components/ProductsHeader/ProductsHeader";
+import { ProductsTable } from "./Components/ProductsTable/ProductsTable";
 
 export const Products = () => {
   const [isWarningModalOpen, setIsWarningModalOpen] = useState(false);
