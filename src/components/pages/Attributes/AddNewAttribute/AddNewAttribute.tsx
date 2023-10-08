@@ -2,23 +2,22 @@
 
 import { AttributeFormBody } from "@/shared/types";
 import { useAttributesStore } from "@/store/store";
+import { Loader } from "@/components/common";
 import { Button, Label, TextInput } from "flowbite-react";
 import React, { SyntheticEvent, useRef, useState } from "react";
-import AttributeHeader from "./components/AttributeHeader/AttributeHeader";
 import { toast } from "react-toastify";
-import { Loader } from "@/components/common";
+import AttributeHeader from "./components/AttributeHeader/AttributeHeader";
 
 type AddNewAttributeType = {
   initialValue?: AttributeFormBody;
 };
 
 const AddNewAttribute: React.FC<AddNewAttributeType> = ({ initialValue }) => {
-  const [loader, setLoader] = useState(false);
+  const [loader] = useState(false);
   const attributeDataRef = useRef<AttributeFormBody>({} as AttributeFormBody);
   const formRef = useRef<HTMLFormElement>(null);
 
-  const { fetchAllAttributes, allAttributes, addNewAttribute } =
-    useAttributesStore();
+  const { addNewAttribute } = useAttributesStore();
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
