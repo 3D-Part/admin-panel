@@ -10,9 +10,7 @@ type OrderStatusType = {
 const OrderStatus: React.FC<OrderStatusType> = ({ status }) => {
   const statusStyle = getOrderStatusStyle(status);
 
-  useEffect(() => {
-    console.log("statusStyle:", statusStyle);
-  }, [statusStyle]);
+  useEffect(() => {}, [statusStyle]);
 
   return (
     <Badge className={`justify-center max-w-[100px] ${statusStyle}`}>
