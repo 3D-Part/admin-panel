@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import { OrdersTable } from "./Components/OrdersTable/OrdersTable";
-import OrderEditModal from "./Components/OrderEditModal/OrderEditModal";
+import { OrdersTable } from "./components/OrdersTable/OrdersTable";
+import OrderEditModal from "./components/OrderEditModal/OrderEditModal";
 import { Order } from "@/shared/types";
 
 const Orders = () => {

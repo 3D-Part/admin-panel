@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { AttributesHeader } from "./Components/AttributesHeader/AttributesHeader";
+import { AttributesHeader } from "./components/AttributesHeader/AttributesHeader";
 import { useAttributesStore } from "@/store/store";
-import AttributeFormModal from "./Components/AttributeFormModal/AttributeFormModal";
+import AttributeFormModal from "./components/AttributeFormModal/AttributeFormModal";
 import { WarningModal } from "@/components/common";
 import {
   PaginationData,
@@ -12,7 +12,7 @@ import {
 } from "@/shared/types";
 import { AttributeAPI } from "@/services";
 import { toast } from "react-toastify";
-import { AttributesTable } from "./Components/AttributesTable/AttributesTable";
+import { AttributesTable } from "./components/AttributesTable/AttributesTable";
 
 export const Attributes = () => {
   // TODO some functionalities will be moved to store

@@ -4,7 +4,7 @@ import { AttributeFormBody } from "@/shared/types";
 import { useAttributesStore } from "@/store/store";
 import { Button, Label, TextInput } from "flowbite-react";
 import React, { SyntheticEvent, useRef, useState } from "react";
-import AttributeHeader from "./Components/AttributeHeader/AttributeHeader";
+import AttributeHeader from "./components/AttributeHeader/AttributeHeader";
 import { toast } from "react-toastify";
 import { Loader } from "@/components/common";
 
