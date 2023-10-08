@@ -50,7 +50,10 @@ export const TableItem: React.FC<TableItemType> = ({
         <Table.Cell>{email}</Table.Cell>
         <Table.Cell>{city}</Table.Cell>
         <Table.Cell>{price}KM</Table.Cell>
-        <Table.Cell onClick={() => openEditModal(order)}>
+        <Table.Cell
+          className="cursor-pointer"
+          onClick={() => openEditModal(order)}
+        >
           <OrderStatus status={status} />
         </Table.Cell>
       </Table.Row>

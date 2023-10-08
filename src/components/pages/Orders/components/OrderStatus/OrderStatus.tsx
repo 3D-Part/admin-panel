@@ -1,5 +1,5 @@
 import { OrderStatusEnum } from "@/shared/enums";
-import React from "react";
+import React, { useEffect } from "react";
 import { Badge } from "flowbite-react";
 import getOrderStatusStyle from "@/shared/helpers/getOrderStatusStyle";
 
@@ -9,6 +9,10 @@ type OrderStatusType = {
 
 const OrderStatus: React.FC<OrderStatusType> = ({ status }) => {
   const statusStyle = getOrderStatusStyle(status);
+
+  useEffect(() => {
+    console.log("statusStyle:", statusStyle);
+  }, [statusStyle]);
 
   return (
     <Badge className={`justify-center max-w-[100px] ${statusStyle}`}>
