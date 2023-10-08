@@ -1,5 +1,10 @@
 import { API } from "@/shared/helpers";
-import { OrdersData, SortParamsData, PaginationData } from "@/shared/types";
+import {
+  OrdersData,
+  SortParamsData,
+  PaginationData,
+  OrderFormBody,
+} from "@/shared/types";
 
 const API_BASE_URL = process.env.API_KEY;
 
@@ -27,8 +32,58 @@ const getOrders = async (
   }
 };
 
+const orderAccept = async (id: string): Promise<any | null> => {
+  try {
+    const data: any = await API.post(`${API_BASE_URL}/order/${id}/accept`);
+    return data;
+  } catch (error) {
+    console.error("Error accepting order:", error);
+    return null;
+  }
+};
+
+const orderDecline = async (
+  id: string,
+  body: OrderFormBody
+): Promise<any | null> => {
+  try {
+    const data: any = await API.post(
+      `${API_BASE_URL}/order/${id}/decline`,
+      body
+    );
+    return data;
+  } catch (error) {
+    console.error("Error declining order:", error);
+    return null;
+  }
+};
+
+const orderShipping = async (id: string): Promise<any | null> => {
+  try {
+    const data: any = await API.post(`${API_BASE_URL}/order/${id}/shipping`);
+    return data;
+  } catch (error) {
+    console.error("Error shipping order:", error);
+    return null;
+  }
+};
+
+const orderFinish = async (id: string): Promise<any | null> => {
+  try {
+    const data: any = await API.post(`${API_BASE_URL}/order/${id}/finish`);
+    return data;
+  } catch (error) {
+    console.error("Error accepting order:", error);
+    return null;
+  }
+};
+
 const OrdersAPI = {
   getOrders,
+  orderAccept,
+  orderDecline,
+  orderShipping,
+  orderFinish,
 };
 
 export default OrdersAPI;

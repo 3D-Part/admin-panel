@@ -252,3 +252,7 @@ export interface OrdersData {
   count: number;
   rows: Order[];
 }
+
+export interface OrderFormBody {
+  message: string;
+}

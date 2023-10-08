@@ -11,10 +11,13 @@ import OrderStatus from "../../OrderStatus/OrderStatus";
 
 type TableItemType = {
   order: Order;
-  // onWarningModalOpen: (product: ProductData) => void;
+  openEditModal: (order: Order) => void;
 };
 
-export const TableItem: React.FC<TableItemType> = ({ order }) => {
+export const TableItem: React.FC<TableItemType> = ({
+  order,
+  openEditModal,
+}) => {
   const [test, setTest] = useState("");
   const { id, fullName, email, city, price, status } = order;
 
@@ -47,7 +50,7 @@ export const TableItem: React.FC<TableItemType> = ({ order }) => {
         <Table.Cell>{email}</Table.Cell>
         <Table.Cell>{city}</Table.Cell>
         <Table.Cell>{price}KM</Table.Cell>
-        <Table.Cell>
+        <Table.Cell onClick={() => openEditModal(order)}>
           <OrderStatus status={status} />
         </Table.Cell>
       </Table.Row>

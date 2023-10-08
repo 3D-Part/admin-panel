@@ -130,6 +130,7 @@ export const Attributes = () => {
         onSave={onSaveEditModal}
         initialValue={activeAttributeRef.current}
       />
+
       <WarningModal
         onSave={onWarningModalConfirm}
         isOpen={isWarningModalOpen}

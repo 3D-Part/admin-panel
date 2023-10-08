@@ -5,9 +5,13 @@ import React, { useCallback, useEffect, useState } from "react";
 import { TableItem } from "./TableItem/TableItem";
 import { useOrdersStore } from "@/store/store";
 import { Loader } from "@/components/common";
-import { PaginationData, ProductData } from "@/shared/types";
+import { Order, PaginationData } from "@/shared/types";
 
-export const OrdersTable: React.FC = () => {
+type OrdersTableType = {
+  openEditModal: (order: Order) => void;
+};
+
+export const OrdersTable: React.FC<OrdersTableType> = ({ openEditModal }) => {
   const [loader, setLoader] = useState(true);
 
   const {
@@ -64,7 +68,7 @@ export const OrdersTable: React.FC = () => {
                 <TableItem
                   key={order.id}
                   order={order}
-                  // onWarningModalOpen={onWarningModalOpen}
+                  openEditModal={openEditModal}
                 />
               );
             })}
