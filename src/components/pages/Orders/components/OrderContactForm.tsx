@@ -62,7 +62,6 @@ const OrderContactForm: React.FC<ModalType> = ({
     setIsModalOpen(false);
     setIsWarningModalOpen(false);
 
-    console.log("response: ", response);
     // if (response) {
     toast(`Message is sent!`, {
       hideProgressBar: true,
