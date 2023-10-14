@@ -5,13 +5,9 @@ import React, { useCallback, useEffect, useState } from "react";
 import { TableItem } from "./TableItem/TableItem";
 import { useOrdersStore } from "@/store/store";
 import { Loader } from "@/components/common";
-import { Order, PaginationData } from "@/shared/types";
+import { PaginationData } from "@/shared/types";
 
-type OrdersTableType = {
-  openEditModal: (order: Order) => void;
-};
-
-export const OrdersTable: React.FC<OrdersTableType> = ({ openEditModal }) => {
+export const OrdersTable = () => {
   const [loader, setLoader] = useState(true);
 
   const {
@@ -56,21 +52,13 @@ export const OrdersTable: React.FC<OrdersTableType> = ({ openEditModal }) => {
           <Table.HeadCell>City</Table.HeadCell>
           <Table.HeadCell>Price</Table.HeadCell>
           <Table.HeadCell>Status</Table.HeadCell>
-          {/* <Table.HeadCell>
-            <span className="sr-only">Edit</span>
-          </Table.HeadCell> */}
+          <Table.HeadCell></Table.HeadCell>
         </Table.Head>
 
         {!loader && (
           <Table.Body className="divide-y">
             {currentPageOrders.map((order) => {
-              return (
-                <TableItem
-                  key={order.id}
-                  order={order}
-                  openEditModal={openEditModal}
-                />
-              );
+              return <TableItem key={order.id} order={order} />;
             })}
           </Table.Body>
         )}

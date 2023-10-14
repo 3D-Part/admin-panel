@@ -78,12 +78,29 @@ const orderFinish = async (id: string): Promise<any | null> => {
   }
 };
 
+const orderContactMessage = async (
+  id: string,
+  body: OrderFormBody
+): Promise<any | null> => {
+  try {
+    const data: any = await API.post(
+      `${API_BASE_URL}/order/${id}/message/send`,
+      body
+    );
+    return data;
+  } catch (error) {
+    console.error("Error sending message:", error);
+    return null;
+  }
+};
+
 const OrdersAPI = {
   getOrders,
   orderAccept,
   orderDecline,
   orderShipping,
   orderFinish,
+  orderContactMessage,
 };
 
 export default OrdersAPI;
