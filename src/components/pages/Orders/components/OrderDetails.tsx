@@ -1,5 +1,5 @@
 import { Order, OrderProduct } from "@/shared/types";
-import { Button, Modal } from "flowbite-react";
+import { Button, Modal, Table } from "flowbite-react";
 import React, { useEffect } from "react";
 
 type OrderDetailsType = {
@@ -45,13 +45,13 @@ const ProductWrapper: React.FC<ProductWrapperType> = ({ product }) => {
   const { name, price, quantity, sku, total } = product;
 
   return (
-    <div className="flex justify-between items-center gap-4 flex-1 basis-[100%] rounded-lg bg-slate-600 text-white p-5">
-      <ProductDetailWrapper name="Name:" value={name} />
-      <ProductDetailWrapper name="Price:" value={price} />
-      <ProductDetailWrapper name="Quantity:" value={quantity} />
-      <ProductDetailWrapper name="Sku:" value={sku} />
-      <ProductDetailWrapper name="Total:" value={total} />
-    </div>
+    <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+      <Table.Cell>{name}</Table.Cell>
+      <Table.Cell>{price}</Table.Cell>
+      <Table.Cell>{quantity}</Table.Cell>
+      <Table.Cell>{sku}</Table.Cell>
+      <Table.Cell>{total}KM</Table.Cell>
+    </Table.Row>
   );
 };
 
@@ -107,11 +107,21 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
 
         <div className="mt-8 text-white">
           <h3 className="font-semibold text-xl mb-4">Products:</h3>
-          <div className="flex flex-wrap gap-4">
-            {products.map((product) => {
-              return <ProductWrapper key={product.id} product={product} />;
-            })}
-          </div>
+          <Table>
+            <Table.Head>
+              <Table.HeadCell>Name</Table.HeadCell>
+              <Table.HeadCell>Price</Table.HeadCell>
+              <Table.HeadCell>Quantity</Table.HeadCell>
+              <Table.HeadCell>Sku</Table.HeadCell>
+              <Table.HeadCell>Total</Table.HeadCell>
+            </Table.Head>
+
+            <Table.Body className="divide-y">
+              {products.map((product) => {
+                return <ProductWrapper key={product.id} product={product} />;
+              })}
+            </Table.Body>
+          </Table>
         </div>
       </Modal.Body>
       <Modal.Footer>
