@@ -14,7 +14,7 @@ type OrderDetailType = {
 };
 const OrderDetail: React.FC<OrderDetailType> = ({ value, name }) => {
   return (
-    <div className="flex justify-between items-center gap-4 flex-1 basis-[48%] rounded-lg bg-slate-600 text-white p-5">
+    <div className="flex justify-between items-center gap-4 flex-1 basis-[48%] rounded-lg bg-slate-600 text-white p-3">
       <p className="font-semibold">{name}</p>
       <span className="text-gray-300">{value}</span>
     </div>
