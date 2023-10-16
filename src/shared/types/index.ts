@@ -220,7 +220,7 @@ export interface S3FormData {
 
 // ORDERS
 
-interface OrderProduct {
+export interface OrderProduct {
   id: string;
   name: string;
   sku: string;
@@ -233,7 +233,7 @@ export interface Order {
   id: string;
   orderNumber: string;
   fullName: string;
-  email: number;
+  email: string;
   phone: string;
   city: string;
   postCode: string;
