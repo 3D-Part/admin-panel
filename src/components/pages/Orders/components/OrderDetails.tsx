@@ -45,7 +45,7 @@ const ProductWrapper: React.FC<ProductWrapperType> = ({ product }) => {
   const { name, price, quantity, sku, total } = product;
 
   return (
-    <div className="flex justify-between items-center gap-4 flex-1 basis-[48%] rounded-lg bg-slate-600 text-white p-5">
+    <div className="flex justify-between items-center gap-4 flex-1 rounded-lg bg-slate-600 text-white p-5">
       <ProductDetailWrapper name="Name:" value={name} />
       <ProductDetailWrapper name="Price:" value={price} />
       <ProductDetailWrapper name="Quantity:" value={quantity} />
