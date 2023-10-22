@@ -17,7 +17,28 @@ const TextEditor: React.FC<TextEditorType> = ({
 }) => {
   const quillRef = useRef(null);
 
-  const op = (value: string) => {
+  const modules = {
+    toolbar: [
+      [{ font: [] }, { header: [] }],
+      [{ list: "ordered" }, { list: "bullet" }],
+      ["bold", "italic", "underline"],
+      [{ color: [] }], // Add color and background color options
+      ["link"],
+    ],
+  };
+
+  const formats = [
+    "font",
+    "header",
+    "list",
+    "bold",
+    "italic",
+    "underline",
+    "color",
+    "link",
+  ];
+
+  const onChange = (value: string) => {
     handleEditorChange(value);
   };
 
@@ -30,7 +51,9 @@ const TextEditor: React.FC<TextEditorType> = ({
         className="text-editor-dark flex flex-col min-h-[200px] w-full overflow-hidden rounded-lg border disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 border-gray-300 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500"
         ref={quillRef}
         theme="snow"
-        onChange={op}
+        modules={modules}
+        formats={formats}
+        onChange={onChange}
       />
     </div>
   );
