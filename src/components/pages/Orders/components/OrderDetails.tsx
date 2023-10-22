@@ -1,6 +1,6 @@
 import { Order, OrderProduct } from "@/shared/types";
 import { Button, Modal, Table } from "flowbite-react";
-import React, { useEffect } from "react";
+import React from "react";
 
 type OrderDetailsType = {
   isOpen: boolean;
@@ -17,23 +17,6 @@ const OrderDetail: React.FC<OrderDetailType> = ({ value, name }) => {
     <div className="flex justify-between items-center gap-4 flex-1 basis-[48%] rounded-lg bg-slate-600 text-white p-3">
       <p className="font-semibold">{name}</p>
       <span className="text-gray-300">{value}</span>
-    </div>
-  );
-};
-
-type ProductDetailWrapperType = {
-  name: string;
-  value: string | number;
-};
-
-const ProductDetailWrapper: React.FC<ProductDetailWrapperType> = ({
-  name,
-  value,
-}) => {
-  return (
-    <div className="flex flex-wrap justify-between items-center gap-3">
-      <p className="font-semibold">{name}</p>
-      <p className="text-gray-400">{value}</p>
     </div>
   );
 };

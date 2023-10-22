@@ -5,14 +5,7 @@ import {
   useCategoryStore,
   useProductsStore,
 } from "@/store/store";
-import {
-  Button,
-  Label,
-  Select,
-  TextInput,
-  Textarea,
-  ToggleSwitch,
-} from "flowbite-react";
+import { Button, Label, Select, TextInput, ToggleSwitch } from "flowbite-react";
 import React, {
   SyntheticEvent,
   useCallback,
@@ -24,6 +17,7 @@ import { ProductFormBody } from "@/shared/types";
 import { toast } from "react-toastify";
 import { URLPartsEnum } from "@/shared/enums";
 import { useRouter } from "next/navigation";
+import TextEditor from "@/components/common/TextEditor";
 
 const GeneralInfo = () => {
   const [isPublished, setIsPublished] = useState(true);
@@ -52,6 +46,14 @@ const GeneralInfo = () => {
       ...productDataRef.current,
       [name]: value,
     };
+  };
+
+  const handleDescriptionChange = (text: string) => {
+    productDataRef.current.description = text;
+  };
+
+  const handleDetailsChange = (text: string) => {
+    productDataRef.current.details = text;
   };
 
   const resetData = () => {
@@ -272,12 +274,10 @@ const GeneralInfo = () => {
             value="Description"
           />
         </div>
-        <Textarea
-          onChange={handleInputChange}
-          id="description"
-          name="description"
+        <TextEditor
+          handleEditorChange={handleDescriptionChange}
           placeholder="Product description..."
-          rows={4}
+          id="description"
         />
       </div>
 
@@ -286,12 +286,10 @@ const GeneralInfo = () => {
         <div className="mb-2 block">
           <Label className="text-base" htmlFor="details" value="Details" />
         </div>
-        <Textarea
-          onChange={handleInputChange}
-          id="details"
-          name="details"
+        <TextEditor
+          handleEditorChange={handleDetailsChange}
           placeholder="Product details..."
-          rows={4}
+          id="details"
         />
       </div>
 
