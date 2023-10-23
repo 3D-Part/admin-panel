@@ -107,8 +107,8 @@ export const productsSlice: StateCreator<ProductsSliceInterface> = (
     };
 
     if (product.description) _productData.description = product.description;
-    if (product.description) _productData.details = product.details;
-    if (product.description)
+    if (product.details) _productData.details = product.details;
+    if (product.manufacturerId)
       _productData.manufacturerId = product.manufacturerId;
 
     try {

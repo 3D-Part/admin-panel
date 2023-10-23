@@ -41,7 +41,7 @@ axiosInstance.interceptors.response.use(
 
     const _errorResponse = error.response;
     const _errors: ErrorType[] = _errorResponse.data.errors as ErrorType[];
-    let activeErrorMessage = "tttt";
+    let activeErrorMessage = "";
 
     if (_errors.length > 0 && _errors[0].message) {
       activeErrorMessage = _errors[0].message;
@@ -63,7 +63,7 @@ axiosInstance.interceptors.response.use(
     ) {
       setTimeout(() => {
         window.location.href = URLPartsEnum.Login;
-      }, 1000);
+      }, 250);
     }
     // Nemojte zaboraviti da ponovo odbacite grešku kako bi komponente koje koriste Axios mogle nastaviti dalje rukovanje greškom ako je potrebno
     return Promise.reject(error);
