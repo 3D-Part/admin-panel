@@ -5,7 +5,14 @@ import {
   useCategoryStore,
   useProductsStore,
 } from "@/store/store";
-import { Button, Label, Select, TextInput, ToggleSwitch } from "flowbite-react";
+import {
+  Button,
+  Label,
+  Select,
+  TextInput,
+  Textarea,
+  ToggleSwitch,
+} from "flowbite-react";
 import React, {
   SyntheticEvent,
   useCallback,
@@ -48,9 +55,9 @@ const GeneralInfo = () => {
     };
   };
 
-  const handleDescriptionChange = (text: string) => {
-    productDataRef.current.description = text;
-  };
+  // const handleDescriptionChange = (text: string) => {
+  //   productDataRef.current.description = text;
+  // };
 
   const handleDetailsChange = (text: string) => {
     productDataRef.current.details = text;
@@ -274,10 +281,18 @@ const GeneralInfo = () => {
             value="Description"
           />
         </div>
-        <TextEditor
+        {/* <TextEditor
           handleEditorChange={handleDescriptionChange}
           placeholder="Product description..."
           id="description"
+        /> */}
+
+        <Textarea
+          onChange={handleInputChange}
+          id="description"
+          name="description"
+          placeholder="Product description..."
+          rows={4}
         />
       </div>
 

@@ -53,9 +53,9 @@ const GeneralInfo = () => {
     };
   };
 
-  const handleDescriptionChange = (text: string) => {
-    productDataRef.current.description = text;
-  };
+  // const handleDescriptionChange = (text: string) => {
+  //   productDataRef.current.description = text;
+  // };
 
   const handleDetailsChange = (text: string) => {
     productDataRef.current.details = text;
@@ -325,20 +325,20 @@ const GeneralInfo = () => {
             value="Description"
           />
         </div>
-        {/* <Textarea
+        <Textarea
           onChange={handleInputChange}
           id="description"
           name="description"
           placeholder="Product description..."
           rows={6}
           defaultValue={activeProduct.description}
-        /> */}
-        <TextEditor
+        />
+        {/* <TextEditor
           handleEditorChange={handleDescriptionChange}
           placeholder="Product description..."
           id="description"
           defaultValue={activeProduct.description}
-        />
+        /> */}
       </div>
 
       {/* DETAILS */}
