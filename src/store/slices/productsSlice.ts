@@ -16,8 +16,10 @@ export interface ProductsSliceInterface {
   totalPages: number;
   sortFiled: string;
   sortOrder: "ASC" | "DESC";
+  productFilters: {};
   changeCurrentPage: (data: number) => void;
   changeItemsPerPage: (data: number) => void;
+  changeProductFilter: (data: {}) => void;
   changeActiveProduct: (product: ProductData) => void;
   fetchProducts: (paginationData?: PaginationData) => Promise<boolean>;
   fetchAllProducts: (paginationData?: PaginationData) => Promise<boolean>;
@@ -40,6 +42,7 @@ export const productsSlice: StateCreator<ProductsSliceInterface> = (
   totalPages: 1,
   sortFiled: "createdAt",
   sortOrder: "DESC",
+  productFilters: {},
 
   changeCurrentPage: (data: number) => {
     set({ currentPage: data });
@@ -47,6 +50,10 @@ export const productsSlice: StateCreator<ProductsSliceInterface> = (
 
   changeItemsPerPage: (data: number) => {
     set({ itemsPerPage: data });
+  },
+
+  changeProductFilter: (data: {}) => {
+    set({ productFilters: data });
   },
 
   changeActiveProduct: (product: ProductData) => {
@@ -60,7 +67,11 @@ export const productsSlice: StateCreator<ProductsSliceInterface> = (
     };
 
     try {
-      const data = await ProductsAPI.getProducts(sort, paginationData);
+      const data = await ProductsAPI.getProducts(
+        sort,
+        paginationData,
+        get().productFilters
+      );
 
       if (data) {
         set({ currentPageProducts: data.rows });
