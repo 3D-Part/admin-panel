@@ -25,6 +25,7 @@ export const CategoriesTable: React.FC<CategoriesTableType> = ({
     changeCurrentPage,
     itemsPerPage,
     totalPages,
+    changeCategoryFilter,
   } = useCategoryStore();
 
   const fetchCategoriesData = useCallback(async () => {
@@ -40,6 +41,10 @@ export const CategoriesTable: React.FC<CategoriesTableType> = ({
       setLoader(true);
     }
   }, [currentPage, fetchCategories, itemsPerPage]);
+
+  useEffect(() => {
+    changeCategoryFilter({});
+  }, []);
 
   useEffect(() => {
     fetchCategoriesData();
