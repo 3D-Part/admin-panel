@@ -11,7 +11,8 @@ const API_BASE_URL = process.env.API_KEY;
 
 const getAttributes = async (
   sortData: SortParamsData,
-  paginationData?: PaginationData
+  paginationData?: PaginationData,
+  params = {}
 ) => {
   const { offset, limit } = paginationData || {};
 
@@ -27,7 +28,8 @@ const getAttributes = async (
 
   try {
     const data = await API.get<AttributesData>(
-      `${API_BASE_URL}/shop/attributes/?${queryParams}`
+      `${API_BASE_URL}/shop/attributes/?${queryParams}`,
+      params
     );
     return data;
   } catch (error) {

@@ -25,6 +25,7 @@ export const AttributesTable: React.FC<AttributesTableType> = ({
     changeCurrentPage,
     itemsPerPage,
     totalPages,
+    changeAttributeFilter,
   } = useAttributesStore();
 
   const fetchAttributesData = useCallback(async () => {
@@ -40,6 +41,10 @@ export const AttributesTable: React.FC<AttributesTableType> = ({
       setLoader(true);
     }
   }, [currentPage, fetchAttributes, itemsPerPage]);
+
+  useEffect(() => {
+    changeAttributeFilter({});
+  }, []);
 
   useEffect(() => {
     fetchAttributesData();

@@ -42,9 +42,9 @@ export const ManufacturesTable: React.FC<ManufacturesTableType> = ({
     }
   }, [currentPage, fetchManufactures, itemsPerPage]);
 
-  useEffect(() => {
-    changeManufactureFilter({});
-  }, []);
+  // useEffect(() => {
+  //   changeManufactureFilter({});
+  // }, []);
 
   useEffect(() => {
     fetchManufacturesData();
