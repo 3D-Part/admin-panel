@@ -1,18 +1,18 @@
 "use client"; // This is a client component 👈🏽
 
 import React from "react";
-// import { Search } from "@/components/common";
 import { Button } from "flowbite-react";
 import { HiPlus } from "react-icons/hi";
 import { useRouter } from "next/navigation";
 import { URLPartsEnum } from "@/shared/enums";
+import ManufacturesSearch from "./ManufacturesSearch";
 
 export const ManufacturesHeader = () => {
   const router = useRouter();
 
   return (
     <div className="w-full flex justify-between items-center">
-      {/* <Search value="Search" /> */}
+      <ManufacturesSearch />
       <Button
         className="cursor-pointer"
         onClick={() =>

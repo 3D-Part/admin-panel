@@ -14,8 +14,10 @@ export interface ManufactureSliceInterface {
   totalPages: number;
   sortFiled: string;
   sortOrder: "ASC" | "DESC";
+  manufactureFilters: {};
   changeCurrentPage: (data: number) => void;
   changeItemsPerPage: (data: number) => void;
+  changeManufactureFilter: (data: {}) => void;
   fetchManufactures: (paginationData?: PaginationData) => Promise<boolean>;
   fetchAllManufactures: (paginationData?: PaginationData) => Promise<boolean>;
   addNewManufacture: (manufacture: ManufacturerFormBody) => Promise<boolean>;
@@ -36,6 +38,7 @@ export const manufactureSlice: StateCreator<ManufactureSliceInterface> = (
   totalPages: 1,
   sortFiled: "createdAt",
   sortOrder: "DESC",
+  manufactureFilters: {},
 
   changeCurrentPage: (data: number) => {
     set({ currentPage: data });
@@ -45,6 +48,10 @@ export const manufactureSlice: StateCreator<ManufactureSliceInterface> = (
     set({ itemsPerPage: data });
   },
 
+  changeManufactureFilter: (data: {}) => {
+    set({ manufactureFilters: data });
+  },
+
   fetchManufactures: async (paginationData?: PaginationData) => {
     const sort = {
       field: get().sortFiled,
@@ -52,7 +59,11 @@ export const manufactureSlice: StateCreator<ManufactureSliceInterface> = (
     };
 
     try {
-      const data = await ManufacturesAPI.getManufactures(sort, paginationData);
+      const data = await ManufacturesAPI.getManufactures(
+        sort,
+        paginationData,
+        get().manufactureFilters
+      );
       if (data) {
         set({ currentPageManufactures: data.rows });
         set({ totalPages: Math.ceil(data.count / get().itemsPerPage) });
