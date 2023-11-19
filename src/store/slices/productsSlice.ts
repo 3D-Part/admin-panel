@@ -1,10 +1,5 @@
 import { StateCreator } from "zustand";
-import {
-  PaginationData,
-  ProductData,
-  ProductFormBody,
-  SortParamsData,
-} from "@/shared/types";
+import { PaginationData, ProductData, ProductFormBody } from "@/shared/types";
 import { ProductsAPI } from "@/services";
 
 export interface ProductsSliceInterface {

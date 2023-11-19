@@ -18,7 +18,6 @@ export const Products = () => {
     changeActiveProduct,
     currentPage,
     itemsPerPage,
-    changeProductFilter,
   } = useProductsStore();
 
   const fetchProductsData = async () => {
