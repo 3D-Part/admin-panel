@@ -1,11 +1,7 @@
 "use client";
 
 import { ProductAttributeAPI, ProductsAPI } from "@/services";
-import {
-  AttributeData,
-  CreateProductAttributeBody,
-  EditProductAttributeBody,
-} from "@/shared/types";
+import { EditProductAttributeBody } from "@/shared/types";
 import { useProductsStore } from "@/store/store";
 import { Button, Label, Spinner, TextInput } from "flowbite-react";
 import React, { SyntheticEvent, useRef, useState } from "react";

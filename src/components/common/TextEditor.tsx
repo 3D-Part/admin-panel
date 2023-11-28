@@ -18,7 +18,9 @@ const TextEditor: React.FC<TextEditorType> = ({
 }) => {
   const modules = {
     toolbar: [
-      [{ font: [] }, { header: [] }],
+      // [{ font: [] }, { header: [] }],
+      [{ font: [] }],
+      [{ size: [] }], // Add font size options
       [{ list: "ordered" }, { list: "bullet" }],
       ["bold", "italic", "underline"],
       [{ color: [] }], // Add color and background color options
@@ -28,6 +30,7 @@ const TextEditor: React.FC<TextEditorType> = ({
 
   const formats = [
     "font",
+    "size",
     "header",
     "list",
     "bold",
