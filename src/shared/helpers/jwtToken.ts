@@ -1,8 +1,8 @@
 import { LoginResponseData } from '../types'
 
 const addJwtTokens = (data: LoginResponseData) => {
-    console.log('login data', data)
-    document.cookie = `accessToken=${data.accessToken}; HttpOnly; SameSite=Strict`
+    // document.cookie = `accessToken=${data.accessToken}; HttpOnly; SameSite=Strict`
+    document.cookie = `accessToken=${data.accessToken}; SameSite=Strict`
     document.cookie = `refreshToken=${data.refreshToken}; SameSite=Strict`
 }
 

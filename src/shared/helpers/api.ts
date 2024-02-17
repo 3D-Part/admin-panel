@@ -44,8 +44,14 @@ const post = async <T1, T2>(
     headers?: Record<string, any>
 ): Promise<T2> => {
     try {
+        // Get the accessToken token from the cookie (if it's stored there)
+        const accessToken = document.cookie.replace(
+            /(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/,
+            '$1'
+        )
         const combineHeaders = {
             ...headers,
+            Authorization: `Bearer ${accessToken}`,
         }
 
         const res = await axiosInstance({
@@ -54,7 +60,7 @@ const post = async <T1, T2>(
             data,
             params,
             headers: combineHeaders,
-            withCredentials: true,
+            // withCredentials: true,
         })
         return res.data as T2
     } catch (err) {
@@ -68,7 +74,7 @@ const postS3 = async <T1, T2>(
     headers?: Record<string, any>
 ): Promise<T2> => {
     try {
-        // Get the JWT token from the cookie (if it's stored there)
+        // Get the accessToken token from the cookie (if it's stored there)
 
         // Set the "Authorization" header with the JWT token
         const combineHeaders = {
@@ -106,15 +112,15 @@ const remove = async <T1>(
     headers?: Record<string, any>
 ): Promise<boolean> => {
     try {
-        // Get the JWT token from the cookie (if it's stored there)
-        const jwtToken = document.cookie.replace(
-            /(?:(?:^|.*;\s*)jwtToken\s*=\s*([^;]*).*$)|^.*$/,
+        // Get the accessToken token from the cookie (if it's stored there)
+        const accessToken = document.cookie.replace(
+            /(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/,
             '$1'
         )
 
         const combineHeaders = {
             ...headers,
-            Authorization: `Bearer ${jwtToken}`,
+            Authorization: `Bearer ${accessToken}`,
         }
 
         const res = await axiosInstance({
@@ -145,15 +151,15 @@ const put = async <T1, T2>(
     headers?: Record<string, any>
 ): Promise<T2> => {
     try {
-        // Get the JWT token from the cookie (if it's stored there)
-        const jwtToken = document.cookie.replace(
-            /(?:(?:^|.*;\s*)jwtToken\s*=\s*([^;]*).*$)|^.*$/,
+        // Get the accessToken token from the cookie (if it's stored there)
+        const accessToken = document.cookie.replace(
+            /(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/,
             '$1'
         )
 
         const combineHeaders = {
             ...headers,
-            Authorization: `Bearer ${jwtToken}`,
+            Authorization: `Bearer ${accessToken}`,
         }
 
         const res = await axiosInstance({
@@ -183,15 +189,15 @@ const patch = async <T1, T2>(
     headers?: Record<string, any>
 ): Promise<T2> => {
     try {
-        // Get the JWT token from the cookie (if it's stored there)
-        const jwtToken = document.cookie.replace(
-            /(?:(?:^|.*;\s*)jwtToken\s*=\s*([^;]*).*$)|^.*$/,
+        // Get the accessToken token from the cookie (if it's stored there)
+        const accessToken = document.cookie.replace(
+            /(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/,
             '$1'
         )
 
         const combineHeaders = {
             ...headers,
-            Authorization: `Bearer ${jwtToken}`,
+            Authorization: `Bearer ${accessToken}`,
         }
 
         const res = await axiosInstance({

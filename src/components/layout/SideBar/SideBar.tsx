@@ -19,8 +19,8 @@ const SideBar = () => {
     const router = useRouter()
 
     const checkTokenValidity = async () => {
-        const res = await AuthAPI.verifyTokenValidity()
-        console.log('res', res)
+        // const res = await AuthAPI.verifyTokenValidity()
+        // console.log('res', res)
     }
 
     useEffect(() => {
@@ -130,7 +130,7 @@ const SideBar = () => {
                                                     // href={item.href}
                                                     onClick={() =>
                                                         router.push(item.href, {
-                                                            shallow: true,
+                                                            // shallow: true,
                                                         })
                                                     }
                                                     active={
@@ -152,7 +152,7 @@ const SideBar = () => {
                                         // href={menuItem.href}
                                         onClick={() =>
                                             router.push(menuItem.href, {
-                                                shallow: true,
+                                                // shallow: true,
                                             })
                                         }
                                         icon={menuItem.icon}

@@ -52,10 +52,10 @@ axiosInstance.interceptors.response.use(
             autoClose: 2000,
             type: 'error',
         })
-        console.log('error', error)
-        console.log('originalRequest', originalRequest)
-        console.log('_errorResponse', _errorResponse)
-        console.log('originalRequest._retry', originalRequest._retry)
+        // console.log('error', error)
+        // console.log('originalRequest', originalRequest)
+        // console.log('_errorResponse', _errorResponse)
+        // console.log('originalRequest._retry', originalRequest._retry)
         if (originalRequest._retry) {
             console.log('sada bi trebalo da preki i ne posalje request')
             return
@@ -76,15 +76,9 @@ axiosInstance.interceptors.response.use(
                 const response = await AuthAPI.getNewAccessToken({
                     refreshToken: refreshToken,
                 })
-
-                console.log('response', response)
+                console.log('response: ', response)
                 return axios(originalRequest)
-            } catch (error) {
-                alert('ajmoooo')
-                // Handle refresh token error or redirect to login
-            }
-        } else {
-            alert('no')
+            } catch (error) {}
         }
 
         // Don't forget to re-throw the error so that components using Axios can continue further error handling if necessary
