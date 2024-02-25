@@ -6,6 +6,10 @@ const addJwtTokens = (data: LoginResponseData) => {
     document.cookie = `refreshToken=${data.refreshToken}; SameSite=Strict`
 }
 
+const changeAccessToken = (token: string) => {
+    document.cookie = `accessToken=${token}; SameSite=Strict`
+}
+
 const deleteJwtTokens = () => {
     const accessTokenCookieName = 'accessToken'
     const refreshTokenCookieName = 'refreshToken'
@@ -20,6 +24,7 @@ const deleteJwtTokens = () => {
 const JWT = {
     addJwtTokens,
     deleteJwtTokens,
+    changeAccessToken,
 }
 
 export default JWT

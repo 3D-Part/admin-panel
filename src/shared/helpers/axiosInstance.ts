@@ -3,6 +3,7 @@ import { toast } from 'react-toastify'
 import { ErrorCodeEnum, ErrorsEnum, URLPartsEnum } from '../enums'
 import { AuthAPI } from '@/services'
 import getCookie from '@/shared/helpers/getCookies'
+import JWT from './jwtToken'
 
 const API_BASE_URL = process.env.API_KEY
 
@@ -52,14 +53,10 @@ axiosInstance.interceptors.response.use(
             autoClose: 2000,
             type: 'error',
         })
-        // console.log('error', error)
-        // console.log('originalRequest', originalRequest)
-        // console.log('_errorResponse', _errorResponse)
-        // console.log('originalRequest._retry', originalRequest._retry)
-        if (originalRequest._retry) {
-            console.log('sada bi trebalo da preki i ne posalje request')
-            return
-        }
+        // if (originalRequest._retry) {
+        //     console.log('sada bi trebalo da preki i ne posalje request')
+        //     return
+        // }
         if (
             _errorResponse.status === ErrorCodeEnum.Unauthorized &&
             !originalRequest._retry
@@ -67,7 +64,19 @@ axiosInstance.interceptors.response.use(
             originalRequest._retry = true
 
             if (originalRequest.url.includes('get-new-access-token')) {
-                // window.location.href = URLPartsEnum.Login
+                const message =
+                    'Your session has expired, you will have to login again'
+
+                toast(message, {
+                    hideProgressBar: true,
+                    autoClose: 2000,
+                    type: 'warning',
+                })
+
+                setTimeout(() => {
+                    window.location.href = URLPartsEnum.Login
+                }, 3000)
+
                 return
             }
 
@@ -76,7 +85,14 @@ axiosInstance.interceptors.response.use(
                 const response = await AuthAPI.getNewAccessToken({
                     refreshToken: refreshToken,
                 })
-                console.log('response: ', response)
+                if (response?.accessToken) {
+                    JWT.changeAccessToken(response?.accessToken)
+                    // update request with new accessToken
+                    originalRequest.headers[
+                        'Authorization'
+                    ] = `Bearer ${response.accessToken}`
+                }
+
                 return axios(originalRequest)
             } catch (error) {}
         }

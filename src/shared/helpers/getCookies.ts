@@ -1,5 +1,9 @@
 const getCookie = (name: string): string => {
-    const value = `; ${document.cookie}`
+    if (typeof document === 'undefined') {
+        return ''
+    }
+
+    const value = `${document.cookie}`
     const parts = value.split(`; ${name}=`)
 
     if (parts.length > 1) {

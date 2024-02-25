@@ -29,7 +29,7 @@ const SideBar = () => {
         console.log('jwtCookieName', jwtCookieName)
         // checkTokenValidity()
         // if (!document.cookie.includes(jwtCookieName)) {
-        //     router.push(URLPartsEnum.Login, { shallow: true })
+        //     router.push(URLPartsEnum.Login)
         // }
     }, [router])
 

@@ -13,7 +13,7 @@ const SideBar = () => {
     const signOut = async () => {
         await AuthAPI.logout()
         JWT.deleteJwtTokens()
-        router.push(URLPartsEnum.Login, { shallow: true })
+        router.push(URLPartsEnum.Login)
     }
     return (
         <>
