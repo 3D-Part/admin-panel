@@ -22,6 +22,7 @@ import React, {
 } from "react";
 import { ProductFormBody } from "@/shared/types";
 import { toast } from "react-toastify";
+import TextEditor from "@/components/common/TextEditor";
 
 const GeneralInfo = () => {
   const [isPublished, setIsPublished] = useState(true);
@@ -50,6 +51,14 @@ const GeneralInfo = () => {
       ...productDataRef.current,
       [name]: value,
     };
+  };
+
+  // const handleDescriptionChange = (text: string) => {
+  //   productDataRef.current.description = text;
+  // };
+
+  const handleDetailsChange = (text: string) => {
+    productDataRef.current.details = text;
   };
 
   const resetData = () => {
@@ -324,6 +333,12 @@ const GeneralInfo = () => {
           rows={6}
           defaultValue={activeProduct.description}
         />
+        {/* <TextEditor
+          handleEditorChange={handleDescriptionChange}
+          placeholder="Product description..."
+          id="description"
+          defaultValue={activeProduct.description}
+        /> */}
       </div>
 
       {/* DETAILS */}
@@ -331,12 +346,18 @@ const GeneralInfo = () => {
         <div className="mb-2 block">
           <Label className="text-base" htmlFor="details" value="Details" />
         </div>
-        <Textarea
+        {/* <Textarea
           onChange={handleInputChange}
           id="details"
           name="details"
           placeholder="Product details..."
           rows={6}
+          defaultValue={activeProduct.details}
+        /> */}
+        <TextEditor
+          handleEditorChange={handleDetailsChange}
+          placeholder="Product details..."
+          id="details"
           defaultValue={activeProduct.details}
         />
       </div>

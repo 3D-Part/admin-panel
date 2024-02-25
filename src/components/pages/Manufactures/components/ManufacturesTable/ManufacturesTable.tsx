@@ -25,6 +25,7 @@ export const ManufacturesTable: React.FC<ManufacturesTableType> = ({
     changeCurrentPage,
     itemsPerPage,
     totalPages,
+    changeManufactureFilter,
   } = useManufactureStore();
 
   const fetchManufacturesData = useCallback(async () => {
@@ -40,6 +41,10 @@ export const ManufacturesTable: React.FC<ManufacturesTableType> = ({
       setLoader(true);
     }
   }, [currentPage, fetchManufactures, itemsPerPage]);
+
+  // useEffect(() => {
+  //   changeManufactureFilter({});
+  // }, []);
 
   useEffect(() => {
     fetchManufacturesData();

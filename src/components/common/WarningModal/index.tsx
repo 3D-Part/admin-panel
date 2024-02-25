@@ -8,12 +8,14 @@ type ModalType = {
   onSave: () => void;
   onClose: () => void;
   message?: string;
+  isLoading?: boolean;
 };
 
 const WarningModal: React.FC<ModalType> = ({
   isOpen,
   onSave,
   onClose,
+  isLoading = false,
   message = "Are you sure you want to delete?",
 }) => {
   return (
@@ -27,10 +29,15 @@ const WarningModal: React.FC<ModalType> = ({
               {message}
             </h3>
             <div className="flex justify-center gap-4">
-              <Button color="failure" onClick={onSave}>
+              <Button
+                isProcessing={isLoading}
+                disabled={isLoading}
+                color="failure"
+                onClick={onSave}
+              >
                 <span>Yes, I am sure</span>
               </Button>
-              <Button color="gray" onClick={onClose}>
+              <Button disabled={isLoading} color="gray" onClick={onClose}>
                 No, cancel
               </Button>
             </div>

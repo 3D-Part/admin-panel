@@ -1,10 +1,5 @@
 import { StateCreator } from "zustand";
-import {
-  PaginationData,
-  ProductData,
-  ProductFormBody,
-  SortParamsData,
-} from "@/shared/types";
+import { PaginationData, ProductData, ProductFormBody } from "@/shared/types";
 import { ProductsAPI } from "@/services";
 
 export interface ProductsSliceInterface {
@@ -16,8 +11,10 @@ export interface ProductsSliceInterface {
   totalPages: number;
   sortFiled: string;
   sortOrder: "ASC" | "DESC";
+  productFilters: {};
   changeCurrentPage: (data: number) => void;
   changeItemsPerPage: (data: number) => void;
+  changeProductFilter: (data: {}) => void;
   changeActiveProduct: (product: ProductData) => void;
   fetchProducts: (paginationData?: PaginationData) => Promise<boolean>;
   fetchAllProducts: (paginationData?: PaginationData) => Promise<boolean>;
@@ -40,6 +37,7 @@ export const productsSlice: StateCreator<ProductsSliceInterface> = (
   totalPages: 1,
   sortFiled: "createdAt",
   sortOrder: "DESC",
+  productFilters: {},
 
   changeCurrentPage: (data: number) => {
     set({ currentPage: data });
@@ -47,6 +45,10 @@ export const productsSlice: StateCreator<ProductsSliceInterface> = (
 
   changeItemsPerPage: (data: number) => {
     set({ itemsPerPage: data });
+  },
+
+  changeProductFilter: (data: {}) => {
+    set({ productFilters: data });
   },
 
   changeActiveProduct: (product: ProductData) => {
@@ -60,7 +62,11 @@ export const productsSlice: StateCreator<ProductsSliceInterface> = (
     };
 
     try {
-      const data = await ProductsAPI.getProducts(sort, paginationData);
+      const data = await ProductsAPI.getProducts(
+        sort,
+        paginationData,
+        get().productFilters
+      );
 
       if (data) {
         set({ currentPageProducts: data.rows });
@@ -107,8 +113,8 @@ export const productsSlice: StateCreator<ProductsSliceInterface> = (
     };
 
     if (product.description) _productData.description = product.description;
-    if (product.description) _productData.details = product.details;
-    if (product.description)
+    if (product.details) _productData.details = product.details;
+    if (product.manufacturerId)
       _productData.manufacturerId = product.manufacturerId;
 
     try {

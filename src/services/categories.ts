@@ -11,7 +11,8 @@ const API_BASE_URL = process.env.API_KEY;
 
 const getCategories = async (
   sortData: SortParamsData,
-  paginationData?: PaginationData
+  paginationData?: PaginationData,
+  params = {}
 ) => {
   const { offset, limit } = paginationData || {};
 
@@ -27,7 +28,8 @@ const getCategories = async (
 
   try {
     const data = await API.get<CategoriesData>(
-      `/shop/categories/?${queryParams}`
+      `/shop/categories/?${queryParams}`,
+      params
     );
     return data;
   } catch (error) {

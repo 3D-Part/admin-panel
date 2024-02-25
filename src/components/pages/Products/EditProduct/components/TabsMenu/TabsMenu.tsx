@@ -2,11 +2,11 @@
 
 import { HiAdjustments, HiUserCircle } from "react-icons/hi";
 import { MdDashboard } from "react-icons/md";
-import GeneralInfo from "../GeneralInfo/GeneralInfo";
-import ProductAttributes from "../ProductAttributes/ProductAttributes";
-import Gallery from "../Gallery/Gallery";
 import { useState } from "react";
 import Tabs from "@/components/common/Tabs/Tabs";
+import GeneralInfo from "../GeneralInfo/GeneralInfo";
+import Gallery from "../Gallery/Gallery";
+import ProductAttributes from "../ProductAttributes/ProductAttributes";
 
 export const TabsMenu = () => {
   const [activeTab, setActiveTab] = useState(1);

@@ -23,7 +23,12 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
     fetchProducts,
     changeCurrentPage,
     totalPages,
+    changeProductFilter,
   } = useProductsStore();
+
+  useEffect(() => {
+    changeProductFilter({});
+  }, []);
 
   const fetchProductsData = useCallback(async () => {
     setLoader(true);
@@ -50,7 +55,7 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
   }, [changeCurrentPage, currentPage, totalPages]);
 
   return (
-    <div className="mt-8">
+    <div className="mt-8 overflow-x-auto">
       <Table>
         <Table.Head>
           {/* <Table.HeadCell /> */}

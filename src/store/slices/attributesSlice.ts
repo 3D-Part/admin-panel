@@ -14,8 +14,10 @@ export interface AttributesSliceInterface {
   totalPages: number;
   sortFiled: string;
   sortOrder: "ASC" | "DESC";
+  attributeFilters: {};
   changeCurrentPage: (data: number) => void;
   changeItemsPerPage: (data: number) => void;
+  changeAttributeFilter: (data: {}) => void;
   fetchAttributes: (paginationData?: PaginationData) => Promise<boolean>;
   fetchAllAttributes: (paginationData?: PaginationData) => Promise<boolean>;
   addNewAttribute: (attribute: AttributeFormBody) => Promise<boolean>;
@@ -36,6 +38,7 @@ export const attributeSlice: StateCreator<AttributesSliceInterface> = (
   totalPages: 1,
   sortFiled: "createdAt",
   sortOrder: "DESC",
+  attributeFilters: {},
 
   changeCurrentPage: (data: number) => {
     set({ currentPage: data });
@@ -45,6 +48,10 @@ export const attributeSlice: StateCreator<AttributesSliceInterface> = (
     set({ itemsPerPage: data });
   },
 
+  changeAttributeFilter: (data: {}) => {
+    set({ attributeFilters: data });
+  },
+
   fetchAttributes: async (paginationData?: PaginationData) => {
     const sort = {
       field: get().sortFiled,
@@ -52,7 +59,11 @@ export const attributeSlice: StateCreator<AttributesSliceInterface> = (
     };
 
     try {
-      const data = await AttributeAPI.getAttributes(sort, paginationData);
+      const data = await AttributeAPI.getAttributes(
+        sort,
+        paginationData,
+        get().attributeFilters
+      );
       if (data) {
         set({ currentPageAttributes: data.rows });
         set({ totalPages: Math.ceil(data.count / get().itemsPerPage) });

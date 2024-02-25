@@ -2,8 +2,8 @@
 
 import { useProductsStore } from "@/store/store";
 import React from "react";
-import Img from "./components/Img";
 import Title from "./components/Title";
+import Img from "./components/Img";
 
 const S3_URL = process.env.S3_URL;
 

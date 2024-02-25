@@ -3,67 +3,70 @@
 import { Pagination, Table } from "flowbite-react";
 import React, { useCallback, useEffect, useState } from "react";
 import { TableItem } from "./TableItem/TableItem";
-import { useCategoryStore } from "@/store/store";
+import { useAttributesStore } from "@/store/store";
 import { Loader } from "@/components/common";
-import { PaginationData, CategoryData } from "@/shared/types";
+import { PaginationData, AttributeData } from "@/shared/types";
 
-type CategoriesTableType = {
-  onWarningModalOpen: (category: CategoryData) => void;
-  openEditModal: (category: CategoryData) => void;
+type AttributesTableType = {
+  onWarningModalOpen: (attribute: AttributeData) => void;
+  openEditModal: (attribute: AttributeData) => void;
 };
 
-export const CategoriesTable: React.FC<CategoriesTableType> = ({
+export const AttributesTable: React.FC<AttributesTableType> = ({
   onWarningModalOpen,
   openEditModal,
 }) => {
   const [loader, setLoader] = useState(true);
 
   const {
-    fetchCategories,
-    currentPageCategories,
+    fetchAttributes,
+    currentPageAttributes,
     currentPage,
     changeCurrentPage,
     itemsPerPage,
     totalPages,
-  } = useCategoryStore();
+    changeAttributeFilter,
+  } = useAttributesStore();
 
-  const fetchCategoriesData = useCallback(async () => {
+  const fetchAttributesData = useCallback(async () => {
     setLoader(true);
     const paginationData: PaginationData = {
       offset: (currentPage - 1) * itemsPerPage,
       limit: itemsPerPage,
     };
-    const data = await fetchCategories(paginationData);
+    const data = await fetchAttributes(paginationData);
     if (data) {
       setLoader(false);
     } else {
       setLoader(true);
     }
-  }, [currentPage, fetchCategories, itemsPerPage]);
+  }, [currentPage, fetchAttributes, itemsPerPage]);
 
   useEffect(() => {
-    fetchCategoriesData();
-  }, [currentPage, fetchCategoriesData]);
+    changeAttributeFilter({});
+  }, []);
+
+  useEffect(() => {
+    fetchAttributesData();
+  }, [currentPage, fetchAttributesData]);
 
   return (
     <div className="mt-8">
       <Table>
         <Table.Head>
           <Table.HeadCell>Name</Table.HeadCell>
-          <Table.HeadCell>Parent</Table.HeadCell>
-          <Table.HeadCell>URL Slug</Table.HeadCell>
           <Table.HeadCell>
             <span className="sr-only">Edit or Remove</span>
           </Table.HeadCell>
         </Table.Head>
         {!loader && (
           <Table.Body className="divide-y">
-            {currentPageCategories.length > 0 &&
-              currentPageCategories.map((category) => {
+            {currentPageAttributes.length > 0 &&
+              currentPageAttributes.map((attribute) => {
                 return (
                   <TableItem
-                    key={category.id}
-                    category={category}
+                    key={attribute.id}
+                    attribute={attribute}
                     onWarningModalOpen={onWarningModalOpen}
                     openEditModal={openEditModal}
                   />

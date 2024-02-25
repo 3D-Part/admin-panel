@@ -5,9 +5,9 @@ import React, { useCallback, useEffect, useState } from "react";
 import { TableItem } from "./TableItem/TableItem";
 import { useOrdersStore } from "@/store/store";
 import { Loader } from "@/components/common";
-import { PaginationData, ProductData } from "@/shared/types";
+import { PaginationData } from "@/shared/types";
 
-export const OrdersTable: React.FC = () => {
+export const OrdersTable = () => {
   const [loader, setLoader] = useState(true);
 
   const {
@@ -50,23 +50,16 @@ export const OrdersTable: React.FC = () => {
           <Table.HeadCell>Name</Table.HeadCell>
           <Table.HeadCell>Email</Table.HeadCell>
           <Table.HeadCell>City</Table.HeadCell>
+          <Table.HeadCell>Date</Table.HeadCell>
           <Table.HeadCell>Price</Table.HeadCell>
           <Table.HeadCell>Status</Table.HeadCell>
-          {/* <Table.HeadCell>
-            <span className="sr-only">Edit</span>
-          </Table.HeadCell> */}
+          <Table.HeadCell></Table.HeadCell>
         </Table.Head>
 
         {!loader && (
           <Table.Body className="divide-y">
             {currentPageOrders.map((order) => {
-              return (
-                <TableItem
-                  key={order.id}
-                  order={order}
-                  // onWarningModalOpen={onWarningModalOpen}
-                />
-              );
+              return <TableItem key={order.id} order={order} />;
             })}
           </Table.Body>
         )}
