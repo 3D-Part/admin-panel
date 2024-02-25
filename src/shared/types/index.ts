@@ -241,6 +241,7 @@ export interface Order {
     fullName: string
     email: string
     phone: string
+    description: string
     city: string
     postCode: string
     street: string

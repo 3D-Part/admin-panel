@@ -7,31 +7,15 @@ import {
     HiShoppingBag,
     HiLibrary,
     HiDocumentText,
+    HiUsers,
 } from 'react-icons/hi'
 import { usePathname } from 'next/navigation'
 import { useRouter } from 'next/navigation'
 import { URLPartsEnum } from '@/shared/enums'
-import { useEffect } from 'react'
-import { AuthAPI } from '@/services'
 
 const SideBar = () => {
     const pathname = usePathname()
     const router = useRouter()
-
-    const checkTokenValidity = async () => {
-        // const res = await AuthAPI.verifyTokenValidity()
-        // console.log('res', res)
-    }
-
-    useEffect(() => {
-        // TODO move this login
-        const jwtCookieName = 'accessToken'
-        console.log('jwtCookieName', jwtCookieName)
-        // checkTokenValidity()
-        // if (!document.cookie.includes(jwtCookieName)) {
-        //     router.push(URLPartsEnum.Login)
-        // }
-    }, [router])
 
     const menuItems = [
         {
@@ -102,6 +86,12 @@ const SideBar = () => {
             name: 'Orders',
             href: URLPartsEnum.Orders,
             icon: HiDocumentText,
+            open: false,
+        },
+        {
+            name: 'Users',
+            href: URLPartsEnum.Users,
+            icon: HiUsers,
             open: false,
         },
     ]

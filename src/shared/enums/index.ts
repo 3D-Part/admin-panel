@@ -1,35 +1,37 @@
 /* eslint-disable no-unused-vars */
 export enum URLPartsEnum {
-  Login = "/login",
+    Login = '/login',
 
-  Categories = "/categories",
-  AddNewCategory = "/categories/add-new",
+    Categories = '/categories',
+    AddNewCategory = '/categories/add-new',
 
-  Products = "/products",
-  AddNewProduct = "/products/add-new",
-  EditProduct = "/products/edit",
+    Products = '/products',
+    AddNewProduct = '/products/add-new',
+    EditProduct = '/products/edit',
 
-  Manufacturers = "/manufacturers",
-  AddNewManufacturer = "/manufacturers/add-new",
+    Manufacturers = '/manufacturers',
+    AddNewManufacturer = '/manufacturers/add-new',
 
-  Attributes = "/attributes",
-  AddNewAttribute = "/attributes/add-new",
+    Attributes = '/attributes',
+    AddNewAttribute = '/attributes/add-new',
 
-  Orders = "/orders",
+    Orders = '/orders',
+
+    Users = '/users',
 }
 
 export enum ErrorsEnum {
-  Unauthorized = "UNAUTHORIZED_ERROR",
+    Unauthorized = 'UNAUTHORIZED_ERROR',
 }
 
 export enum ErrorCodeEnum {
-  Unauthorized = 401,
+    Unauthorized = 401,
 }
 
 export enum OrderStatusEnum {
-  Pending = "PENDING",
-  Accepted = "ACCEPTED",
-  Declined = "DECLINED",
-  Shipping = "SHIPPING",
-  Finished = "FINISHED",
+    Pending = 'PENDING',
+    Accepted = 'ACCEPTED',
+    Declined = 'DECLINED',
+    Shipping = 'SHIPPING',
+    Finished = 'FINISHED',
 }
