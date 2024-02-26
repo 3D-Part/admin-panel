@@ -17,7 +17,11 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
     (config) => {
-        // Here we can add additional configurations here before sending the request, if needed
+        const token = getCookie('accessToken')
+        // If a token exists, add it to the Authorization header
+        if (token) {
+            config.headers['Authorization'] = `Bearer ${token}`
+        }
 
         return config
     },

@@ -263,3 +263,15 @@ export interface OrdersData {
 export interface OrderFormBody {
     message: string
 }
+
+// SUBSCRIBERS
+export interface Subscriber {
+    id: string
+    email: string
+    createdAt: string
+    updatedAt: string
+}
+export interface SubscribersData {
+    count: number
+    rows: Subscriber[]
+}

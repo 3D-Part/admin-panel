@@ -18,6 +18,8 @@ export enum URLPartsEnum {
     Orders = '/orders',
 
     Users = '/users',
+
+    Subscribers = '/subscribers',
 }
 
 export enum ErrorsEnum {

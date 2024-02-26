@@ -3,17 +3,15 @@ const getCookie = (name: string): string => {
         return ''
     }
 
-    const value = `${document.cookie}`
-    const parts = value.split(`; ${name}=`)
+    const token = document.cookie.replace(
+        new RegExp(`(?:(?:^|.*;\\s*)${name}\\s*=\\s*([^;]*).*$)|^.*$`),
+        '$1'
+    )
 
-    if (parts.length > 1) {
-        const lastPart = parts.pop()
-        if (lastPart) {
-            const cookieValue = lastPart.split(';').shift()
-            return cookieValue || ''
-        }
+    if (token) {
+        return token
+    } else {
+        return ''
     }
-
-    return ''
 }
 export default getCookie

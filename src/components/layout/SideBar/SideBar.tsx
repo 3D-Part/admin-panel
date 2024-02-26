@@ -9,6 +9,8 @@ import {
     HiDocumentText,
     HiUsers,
 } from 'react-icons/hi'
+import { MdUnsubscribe } from 'react-icons/md'
+
 import { usePathname } from 'next/navigation'
 import { useRouter } from 'next/navigation'
 import { URLPartsEnum } from '@/shared/enums'
@@ -89,11 +91,17 @@ const SideBar = () => {
             open: false,
         },
         {
-            name: 'Users',
-            href: URLPartsEnum.Users,
-            icon: HiUsers,
+            name: 'Subscribers',
+            href: URLPartsEnum.Subscribers,
+            icon: MdUnsubscribe,
             open: false,
         },
+        // {
+        //     name: 'Users',
+        //     href: URLPartsEnum.Users,
+        //     icon: HiUsers,
+        //     open: false,
+        // },
     ]
     return (
         <>

@@ -44,14 +44,8 @@ const post = async <T1, T2>(
     headers?: Record<string, any>
 ): Promise<T2> => {
     try {
-        // Get the accessToken token from the cookie (if it's stored there)
-        const accessToken = document.cookie.replace(
-            /(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/,
-            '$1'
-        )
         const combineHeaders = {
             ...headers,
-            Authorization: `Bearer ${accessToken}`,
         }
 
         const res = await axiosInstance({
@@ -112,15 +106,8 @@ const remove = async <T1>(
     headers?: Record<string, any>
 ): Promise<boolean> => {
     try {
-        // Get the accessToken token from the cookie (if it's stored there)
-        const accessToken = document.cookie.replace(
-            /(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/,
-            '$1'
-        )
-
         const combineHeaders = {
             ...headers,
-            Authorization: `Bearer ${accessToken}`,
         }
 
         const res = await axiosInstance({
@@ -151,15 +138,8 @@ const put = async <T1, T2>(
     headers?: Record<string, any>
 ): Promise<T2> => {
     try {
-        // Get the accessToken token from the cookie (if it's stored there)
-        const accessToken = document.cookie.replace(
-            /(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/,
-            '$1'
-        )
-
         const combineHeaders = {
             ...headers,
-            Authorization: `Bearer ${accessToken}`,
         }
 
         const res = await axiosInstance({
@@ -189,15 +169,8 @@ const patch = async <T1, T2>(
     headers?: Record<string, any>
 ): Promise<T2> => {
     try {
-        // Get the accessToken token from the cookie (if it's stored there)
-        const accessToken = document.cookie.replace(
-            /(?:(?:^|.*;\s*)accessToken\s*=\s*([^;]*).*$)|^.*$/,
-            '$1'
-        )
-
         const combineHeaders = {
             ...headers,
-            Authorization: `Bearer ${accessToken}`,
         }
 
         const res = await axiosInstance({
