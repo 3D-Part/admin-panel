@@ -42,7 +42,7 @@ export const SubscribersTable = () => {
     }, [currentPage, fetchSubscribersData])
 
     return (
-        <div className="mt-8">
+        <div className="">
             <Table>
                 <Table.Head>
                     <Table.HeadCell>Name</Table.HeadCell>
