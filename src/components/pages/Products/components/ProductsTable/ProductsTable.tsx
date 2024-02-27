@@ -1,20 +1,20 @@
-"use client"; // This is a client component 👈🏽
+'use client' // This is a client component 👈🏽
 
-import { Pagination, Table } from "flowbite-react";
-import React, { useCallback, useEffect, useState } from "react";
-import { TableItem } from "./TableItem/TableItem";
-import { useProductsStore } from "@/store/store";
-import { Loader } from "@/components/common";
-import { PaginationData, ProductData } from "@/shared/types";
+import { Pagination, Table } from 'flowbite-react'
+import React, { useCallback, useEffect, useState } from 'react'
+import { TableItem } from './TableItem/TableItem'
+import { useProductsStore } from '@/store/store'
+import { Loader } from '@/components/common'
+import { PaginationData, ProductData } from '@/shared/types'
 
 type ProductsTableType = {
-  onWarningModalOpen: (product: ProductData) => void;
-};
+  onWarningModalOpen: (product: ProductData) => void
+}
 
 export const ProductsTable: React.FC<ProductsTableType> = ({
   onWarningModalOpen,
 }) => {
-  const [loader, setLoader] = useState(true);
+  const [loader, setLoader] = useState(true)
 
   const {
     currentPageProducts,
@@ -24,35 +24,35 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
     changeCurrentPage,
     totalPages,
     changeProductFilter,
-  } = useProductsStore();
+  } = useProductsStore()
 
   useEffect(() => {
-    changeProductFilter({});
-  }, []);
+    changeProductFilter({})
+  }, [])
 
   const fetchProductsData = useCallback(async () => {
-    setLoader(true);
+    setLoader(true)
     const paginationData: PaginationData = {
       offset: (currentPage - 1) * itemsPerPage,
       limit: itemsPerPage,
-    };
-    const data = await fetchProducts(paginationData);
-    if (data) {
-      setLoader(false);
-    } else {
-      setLoader(true);
     }
-  }, [currentPage, fetchProducts, itemsPerPage]);
+    const data = await fetchProducts(paginationData)
+    if (data) {
+      setLoader(false)
+    } else {
+      setLoader(true)
+    }
+  }, [currentPage, fetchProducts, itemsPerPage])
 
   useEffect(() => {
-    fetchProductsData();
-  }, [currentPage, fetchProductsData]);
+    fetchProductsData()
+  }, [currentPage, fetchProductsData])
 
   useEffect(() => {
     if (currentPage > totalPages && currentPage > 1) {
-      changeCurrentPage(currentPage - 1);
+      changeCurrentPage(currentPage - 1)
     }
-  }, [changeCurrentPage, currentPage, totalPages]);
+  }, [changeCurrentPage, currentPage, totalPages])
 
   return (
     <div className="mt-8 overflow-x-auto">
@@ -79,7 +79,7 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
                   product={product}
                   onWarningModalOpen={onWarningModalOpen}
                 />
-              );
+              )
             })}
           </Table.Body>
         )}
@@ -90,10 +90,10 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
         className="mt-8"
         currentPage={currentPage}
         onPageChange={(page) => {
-          changeCurrentPage(page);
+          changeCurrentPage(page)
         }}
         totalPages={totalPages}
       />
     </div>
-  );
-};
+  )
+}

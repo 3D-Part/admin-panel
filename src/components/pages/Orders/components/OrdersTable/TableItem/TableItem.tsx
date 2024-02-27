@@ -1,29 +1,29 @@
-import { Order } from "@/shared/types";
-import { Table } from "flowbite-react";
-import React, { useEffect, useState } from "react";
-import OrderStatus from "../../OrderStatus/OrderStatus";
-import { BiMessageDetail } from "react-icons/bi";
-import OrderContactForm from "../../OrderContactForm";
-import OrderEditModal from "../../OrderEditModal/OrderEditModal";
-import OrderDetails from "../../OrderDetails";
+import { Order } from '@/shared/types'
+import { Table } from 'flowbite-react'
+import React, { useEffect, useState } from 'react'
+import OrderStatus from '../../OrderStatus/OrderStatus'
+import { BiMessageDetail } from 'react-icons/bi'
+import OrderContactForm from '../../OrderContactForm'
+import OrderEditModal from '../../OrderEditModal/OrderEditModal'
+import OrderDetails from '../../OrderDetails'
 
 type TableItemType = {
-  order: Order;
-};
+  order: Order
+}
 
 export const TableItem: React.FC<TableItemType> = ({ order }) => {
-  const { fullName, email, city, price, status, createdAt } = order;
+  const { fullName, email, city, price, status, createdAt } = order
 
-  const [isFormModalOpen, setIsFormModalOpen] = useState(false);
-  const [isOrderStatusModalOpen, setIsOrderStatusModalOpen] = useState(false);
-  const [isOrderDetailsOpen, setIsOrderDetailsOpen] = useState(false);
+  const [isFormModalOpen, setIsFormModalOpen] = useState(false)
+  const [isOrderStatusModalOpen, setIsOrderStatusModalOpen] = useState(false)
+  const [isOrderDetailsOpen, setIsOrderDetailsOpen] = useState(false)
 
-  const isoDate = createdAt;
-  const date = new Date(isoDate);
-  const year = date.toLocaleString("en-US", { year: "numeric" });
-  const month = date.toLocaleString("en-US", { month: "2-digit" });
-  const day = date.toLocaleString("en-US", { day: "2-digit" });
-  const formattedDate = `${day}.${month}.${year}`;
+  const isoDate = createdAt
+  const date = new Date(isoDate)
+  const year = date.toLocaleString('en-US', { year: 'numeric' })
+  const month = date.toLocaleString('en-US', { month: '2-digit' })
+  const day = date.toLocaleString('en-US', { day: '2-digit' })
+  const formattedDate = `${day}.${month}.${year}`
 
   return (
     <>
@@ -75,5 +75,5 @@ export const TableItem: React.FC<TableItemType> = ({ order }) => {
         />
       )}
     </>
-  );
-};
+  )
+}

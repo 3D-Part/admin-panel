@@ -1,10 +1,10 @@
-import { StateCreator } from "zustand";
-import { S3FormData } from "@/shared/types";
-import { StoreManagerAPI } from "@/services";
+import { StateCreator } from 'zustand'
+import { S3FormData } from '@/shared/types'
+import { StoreManagerAPI } from '@/services'
 
 export interface StoreManagerSliceInterface {
-  s3FormData: S3FormData;
-  getS3FormData: () => Promise<S3FormData | null>;
+  s3FormData: S3FormData
+  getS3FormData: () => Promise<S3FormData | null>
 }
 
 export const storeManagerSlice: StateCreator<StoreManagerSliceInterface> = (
@@ -15,14 +15,14 @@ export const storeManagerSlice: StateCreator<StoreManagerSliceInterface> = (
 
   getS3FormData: async () => {
     try {
-      const data: S3FormData = await StoreManagerAPI.getS3FormData();
+      const data: S3FormData = await StoreManagerAPI.getS3FormData()
       // if (data) {
       //   set({ s3FormData: data });
       // }
-      return data;
+      return data
     } catch (error) {
-      console.error("Greška pri dohvatu podataka:", error);
+      console.error('Greška pri dohvatu podataka:', error)
     }
-    return null;
+    return null
   },
-});
+})

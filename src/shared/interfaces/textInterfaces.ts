@@ -1,9 +1,9 @@
 export interface TextComponentInterface {
-  children: React.ReactNode;
-  className?: string;
+  children: React.ReactNode
+  className?: string
 }
 
 export interface ParagraphComponentInterface extends TextComponentInterface {
-  size: "L" | "M" | "S" | "XS";
-  weight: "Semibold" | "Medium" | "Regular";
+  size: 'L' | 'M' | 'S' | 'XS'
+  weight: 'Semibold' | 'Medium' | 'Regular'
 }

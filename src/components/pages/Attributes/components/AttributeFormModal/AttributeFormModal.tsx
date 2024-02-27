@@ -1,17 +1,17 @@
-"use client";
+'use client'
 
-import { Loader } from "@/components/common";
-import { AttributeFormBody, AttributeData } from "@/shared/types";
-import { useAttributesStore } from "@/store/store";
-import { Button, Label, Modal, Select, TextInput } from "flowbite-react";
-import { SyntheticEvent, useEffect, useRef } from "react";
+import { Loader } from '@/components/common'
+import { AttributeFormBody, AttributeData } from '@/shared/types'
+import { useAttributesStore } from '@/store/store'
+import { Button, Label, Modal, Select, TextInput } from 'flowbite-react'
+import { SyntheticEvent, useEffect, useRef } from 'react'
 
 type ModalType = {
-  isOpen: boolean;
-  initialValue?: AttributeData;
-  onSave: (attribute: AttributeFormBody) => void;
-  onClose: () => void;
-};
+  isOpen: boolean
+  initialValue?: AttributeData
+  onSave: (attribute: AttributeFormBody) => void
+  onClose: () => void
+}
 
 const AttributeFormModal: React.FC<ModalType> = ({
   isOpen,
@@ -19,42 +19,42 @@ const AttributeFormModal: React.FC<ModalType> = ({
   onSave,
   onClose,
 }) => {
-  const attributeDataRef = useRef<AttributeData>({} as AttributeData);
+  const attributeDataRef = useRef<AttributeData>({} as AttributeData)
 
-  const { allAttributes } = useAttributesStore();
+  const { allAttributes } = useAttributesStore()
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
 
     attributeDataRef.current = {
       ...attributeDataRef.current,
       [name]: value,
-    };
-  };
+    }
+  }
 
   const resetData = () => {
-    attributeDataRef.current = {} as AttributeData;
-  };
+    attributeDataRef.current = {} as AttributeData
+  }
 
   const saveFunction = () => {
-    if (!attributeDataRef.current.name) return;
+    if (!attributeDataRef.current.name) return
 
     const _attribute: AttributeFormBody = {
       name: attributeDataRef.current.name,
-    };
+    }
 
-    onSave(_attribute);
-    resetData();
-  };
+    onSave(_attribute)
+    resetData()
+  }
 
   useEffect(() => {
-    if (!initialValue) return;
+    if (!initialValue) return
 
-    attributeDataRef.current = initialValue;
-  }, [initialValue]);
-  if (!isOpen) return null;
+    attributeDataRef.current = initialValue
+  }, [initialValue])
+  if (!isOpen) return null
 
   return (
     <>
@@ -76,7 +76,7 @@ const AttributeFormModal: React.FC<ModalType> = ({
                   id="attributeName"
                   required
                   type="text"
-                  defaultValue={initialValue?.name ? initialValue.name : ""}
+                  defaultValue={initialValue?.name ? initialValue.name : ''}
                 />
               </div>
             </form>
@@ -92,7 +92,7 @@ const AttributeFormModal: React.FC<ModalType> = ({
         </Modal.Footer>
       </Modal>
     </>
-  );
-};
+  )
+}
 
-export default AttributeFormModal;
+export default AttributeFormModal

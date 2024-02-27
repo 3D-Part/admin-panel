@@ -1,60 +1,60 @@
-"use client";
+'use client'
 
-import React, { useCallback, useEffect, useState } from "react";
-import { useDropzone } from "react-dropzone";
-import { HiCloudUpload } from "react-icons/hi";
-import ImagePreview from "./components/ImagePreview/ImagePreview";
-import { toast } from "react-toastify";
+import React, { useCallback, useEffect, useState } from 'react'
+import { useDropzone } from 'react-dropzone'
+import { HiCloudUpload } from 'react-icons/hi'
+import ImagePreview from './components/ImagePreview/ImagePreview'
+import { toast } from 'react-toastify'
 
 type RejectedFile = {
-  file: File;
+  file: File
   errors: {
-    code: string;
-    message: string;
-  }[];
-};
+    code: string
+    message: string
+  }[]
+}
 
 type UploadFilesType = {
-  setActiveFormData: (files: File[]) => void;
-};
+  setActiveFormData: (files: File[]) => void
+}
 
 const UploadFiles: React.FC<UploadFilesType> = ({ setActiveFormData }) => {
-  const [files, setFiles] = useState<File[]>([]);
+  const [files, setFiles] = useState<File[]>([])
 
   const onDrop = useCallback(
     (acceptedFiles: File[], rejectedFiles: RejectedFile[]) => {
       if (rejectedFiles.length > 0) {
         rejectedFiles.forEach((rejectedFile) => {
-          const errorMessage = rejectedFiles[0].errors[0].message;
-          const toastMessage = `${rejectedFile.file.name} ${errorMessage}`;
+          const errorMessage = rejectedFiles[0].errors[0].message
+          const toastMessage = `${rejectedFile.file.name} ${errorMessage}`
 
           toast(toastMessage, {
             hideProgressBar: true,
             autoClose: 4000,
-            type: "error",
-          });
-        });
+            type: 'error',
+          })
+        })
       }
 
-      setFiles((prevFiles) => [...prevFiles, ...acceptedFiles]);
+      setFiles((prevFiles) => [...prevFiles, ...acceptedFiles])
     },
     []
-  );
+  )
 
   const removeFile = (name: string) => {
-    setFiles((files) => files.filter((files) => files.name !== name));
-  };
+    setFiles((files) => files.filter((files) => files.name !== name))
+  }
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
-      "image/*": [],
+      'image/*': [],
     },
-  });
+  })
 
   useEffect(() => {
-    setActiveFormData(files);
-  }, [files, setActiveFormData]);
+    setActiveFormData(files)
+  }, [files, setActiveFormData])
 
   return (
     <div className="w-full flex flex-wrap gap-8">
@@ -104,12 +104,12 @@ const UploadFiles: React.FC<UploadFilesType> = ({ setActiveFormData }) => {
                   name={file.name}
                   removeAction={removeFile}
                 />
-              );
+              )
             })}
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default UploadFiles;
+export default UploadFiles

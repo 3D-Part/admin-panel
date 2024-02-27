@@ -1,12 +1,12 @@
-import Image from "next/image";
-import React from "react";
-import { HiXCircle } from "react-icons/hi";
+import Image from 'next/image'
+import React from 'react'
+import { HiXCircle } from 'react-icons/hi'
 
 type ImagePreviewType = {
-  src: string;
-  name: string;
-  removeAction: (name: string) => void;
-};
+  src: string
+  name: string
+  removeAction: (name: string) => void
+}
 
 const ImagePreview: React.FC<ImagePreviewType> = ({
   src,
@@ -14,8 +14,8 @@ const ImagePreview: React.FC<ImagePreviewType> = ({
   removeAction,
 }) => {
   const removeImg = () => {
-    removeAction(name);
-  };
+    removeAction(name)
+  }
 
   return (
     <div className="relative  rounded-lg  w-[100px] h-[100px]">
@@ -36,7 +36,7 @@ const ImagePreview: React.FC<ImagePreviewType> = ({
         className="absolute top-0 right-0 translate-x-1/2 translate-y-[-50%] text-red-400 text-2xl hover:text-white cursor-pointer"
       />
     </div>
-  );
-};
+  )
+}
 
-export default ImagePreview;
+export default ImagePreview

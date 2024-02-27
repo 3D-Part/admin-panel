@@ -1,10 +1,10 @@
-"use client";
+'use client'
 
-import { Tabs } from "flowbite-react";
-import { HiAdjustments, HiUserCircle } from "react-icons/hi";
-import { MdDashboard } from "react-icons/md";
-import GeneralInfo from "../GeneralInfo/GeneralInfo";
-import ProductAttributes from "../ProductAttributes/ProductAttributes";
+import { Tabs } from 'flowbite-react'
+import { HiAdjustments, HiUserCircle } from 'react-icons/hi'
+import { MdDashboard } from 'react-icons/md'
+import GeneralInfo from '../GeneralInfo/GeneralInfo'
+import ProductAttributes from '../ProductAttributes/ProductAttributes'
 
 export const TabsMenu = () => {
   return (
@@ -25,5 +25,5 @@ export const TabsMenu = () => {
         </Tabs.Item>
       </Tabs.Group>
     </div>
-  );
-};
+  )
+}

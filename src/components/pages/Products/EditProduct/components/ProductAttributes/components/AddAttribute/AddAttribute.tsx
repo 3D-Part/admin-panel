@@ -1,30 +1,30 @@
-"use client";
+'use client'
 
-import { Loader } from "@/components/common";
-import { useAttributesStore } from "@/store/store";
-import { Button, Label, Select } from "flowbite-react";
-import React, { useEffect, useRef, useState } from "react";
-import { AttributeData } from "@/shared/types";
-import AddAttributeForm from "./components/AddAttributeForm/AddAttributeForm";
+import { Loader } from '@/components/common'
+import { useAttributesStore } from '@/store/store'
+import { Button, Label, Select } from 'flowbite-react'
+import React, { useEffect, useRef, useState } from 'react'
+import { AttributeData } from '@/shared/types'
+import AddAttributeForm from './components/AddAttributeForm/AddAttributeForm'
 
 const AddAttribute = () => {
-  const [loader, setLoader] = useState(false);
+  const [loader, setLoader] = useState(false)
   const [selectedAttribute, setSelectedAttribute] = useState<AttributeData>(
     {} as AttributeData
-  );
+  )
 
   const resetSelectedAttribute = () => {
-    setSelectedAttribute({} as AttributeData);
-  };
-  const attributeDataRef = useRef<string>("");
+    setSelectedAttribute({} as AttributeData)
+  }
+  const attributeDataRef = useRef<string>('')
 
-  const { allAttributes, fetchAllAttributes } = useAttributesStore();
+  const { allAttributes, fetchAllAttributes } = useAttributesStore()
 
   const getAllAttributes = async () => {
-    setLoader(true);
-    await fetchAllAttributes();
-    setLoader(false);
-  };
+    setLoader(true)
+    await fetchAllAttributes()
+    setLoader(false)
+  }
 
   // TODO need to be cached
   // useEffect(() => {
@@ -32,31 +32,31 @@ const AddAttribute = () => {
   //   fetchAllAttributes();
   // }, [allAttributes, fetchAllAttributes]);
   useEffect(() => {
-    getAllAttributes();
-  }, []);
+    getAllAttributes()
+  }, [])
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { value } = e.target;
+    const { value } = e.target
 
-    attributeDataRef.current = value;
-  };
+    attributeDataRef.current = value
+  }
 
   const addAttribute = () => {
     const _selectedAttribute = allAttributes.find(
       (attribute) => attribute.id === attributeDataRef.current
-    );
-    _selectedAttribute && setSelectedAttribute(_selectedAttribute);
-  };
+    )
+    _selectedAttribute && setSelectedAttribute(_selectedAttribute)
+  }
 
-  if (loader) return <Loader />;
+  if (loader) return <Loader />
   if (!allAttributes.length)
     return (
       <div className="mt-4 text-white text-xl">
         There is no attributes available
       </div>
-    );
+    )
 
   return (
     <div className="flex flex-wrap w-full ">
@@ -72,13 +72,13 @@ const AddAttribute = () => {
             // required
             // defaultValue={activeProduct.attributeId}
           >
-            <option value={""}>None</option>
+            <option value={''}>None</option>
             {allAttributes.map((attribute) => {
               return (
                 <option value={attribute.id} key={attribute.id}>
                   {attribute.name}
                 </option>
-              );
+              )
             })}
           </Select>
         </div>
@@ -93,7 +93,7 @@ const AddAttribute = () => {
         />
       )}
     </div>
-  );
-};
+  )
+}
 
-export default AddAttribute;
+export default AddAttribute

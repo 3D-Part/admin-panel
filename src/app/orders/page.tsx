@@ -1,8 +1,8 @@
-import Orders from "@/components/pages/Orders/Orders";
-import React from "react";
+import Orders from '@/components/pages/Orders/Orders'
+import React from 'react'
 
 const OrdersPage = () => {
-  return <Orders />;
-};
+  return <Orders />
+}
 
-export default OrdersPage;
+export default OrdersPage

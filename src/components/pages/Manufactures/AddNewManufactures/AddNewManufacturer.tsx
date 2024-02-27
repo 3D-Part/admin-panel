@@ -1,70 +1,70 @@
-"use client";
+'use client'
 
-import { ManufacturerFormBody } from "@/shared/types";
-import { useManufactureStore } from "@/store/store";
-import { Button, Label, TextInput } from "flowbite-react";
+import { ManufacturerFormBody } from '@/shared/types'
+import { useManufactureStore } from '@/store/store'
+import { Button, Label, TextInput } from 'flowbite-react'
 import React, {
   SyntheticEvent,
   useCallback,
   useEffect,
   useRef,
   useState,
-} from "react";
-import ManufacturerHeader from "./components/Header/Header";
-import { toast } from "react-toastify";
-import { Loader } from "@/components/common";
+} from 'react'
+import ManufacturerHeader from './components/Header/Header'
+import { toast } from 'react-toastify'
+import { Loader } from '@/components/common'
 
 type AddNewManufacturerType = {
-  initialValue?: ManufacturerFormBody;
-};
+  initialValue?: ManufacturerFormBody
+}
 
 const AddNewManufacturer: React.FC<AddNewManufacturerType> = ({
   initialValue,
 }) => {
-  const [loader, setLoader] = useState(false);
+  const [loader, setLoader] = useState(false)
   const manufacturerDataRef = useRef<ManufacturerFormBody>(
     {} as ManufacturerFormBody
-  );
-  const formRef = useRef<HTMLFormElement>(null);
+  )
+  const formRef = useRef<HTMLFormElement>(null)
 
   const { fetchAllManufactures, allManufactures, addNewManufacture } =
-    useManufactureStore();
+    useManufactureStore()
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
 
     manufacturerDataRef.current = {
       ...manufacturerDataRef.current,
       [name]: value,
-    };
-  };
+    }
+  }
 
   const resetData = () => {
-    formRef.current && formRef.current.reset();
-    manufacturerDataRef.current = {} as ManufacturerFormBody;
-  };
+    formRef.current && formRef.current.reset()
+    manufacturerDataRef.current = {} as ManufacturerFormBody
+  }
 
   const saveFunction = async (e: SyntheticEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!manufacturerDataRef.current.name) return;
+    e.preventDefault()
+    if (!manufacturerDataRef.current.name) return
 
     const _manufacturer: ManufacturerFormBody = {
       name: manufacturerDataRef.current.name,
-    };
+    }
 
-    const request = await addNewManufacture(_manufacturer);
+    const request = await addNewManufacture(_manufacturer)
     if (request) {
       toast(`${_manufacturer.name} is added!`, {
         hideProgressBar: true,
         autoClose: 2000,
-        type: "success",
-      });
+        type: 'success',
+      })
 
-      resetData();
+      resetData()
     }
-  };
+  }
 
   // const getAllManufactures = useCallback(async () => {
   //   const data = await fetchAllManufactures();
@@ -96,7 +96,7 @@ const AddNewManufacturer: React.FC<AddNewManufacturerType> = ({
         <ManufacturerHeader />
         <Loader />
       </div>
-    );
+    )
   }
 
   return (
@@ -118,7 +118,7 @@ const AddNewManufacturer: React.FC<AddNewManufacturerType> = ({
             id="manufacturerName"
             required
             type="text"
-            defaultValue={initialValue?.name ? initialValue.name : ""}
+            defaultValue={initialValue?.name ? initialValue.name : ''}
           />
         </div>
 
@@ -127,7 +127,7 @@ const AddNewManufacturer: React.FC<AddNewManufacturerType> = ({
         </Button>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default AddNewManufacturer;
+export default AddNewManufacturer

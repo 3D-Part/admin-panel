@@ -1,14 +1,14 @@
-import React, { useRef } from "react";
-import dynamic from "next/dynamic";
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
-import "react-quill/dist/quill.snow.css";
+import React, { useRef } from 'react'
+import dynamic from 'next/dynamic'
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
+import 'react-quill/dist/quill.snow.css'
 
 type TextEditorType = {
-  handleEditorChange: (text: string) => void;
-  defaultValue?: string;
-  placeholder?: string;
-  id?: string;
-};
+  handleEditorChange: (text: string) => void
+  defaultValue?: string
+  placeholder?: string
+  id?: string
+}
 
 const TextEditor: React.FC<TextEditorType> = ({
   handleEditorChange,
@@ -21,28 +21,28 @@ const TextEditor: React.FC<TextEditorType> = ({
       // [{ font: [] }, { header: [] }],
       [{ font: [] }],
       [{ size: [] }], // Add font size options
-      [{ list: "ordered" }, { list: "bullet" }],
-      ["bold", "italic", "underline"],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      ['bold', 'italic', 'underline'],
       [{ color: [] }], // Add color and background color options
-      ["link"],
+      ['link'],
     ],
-  };
+  }
 
   const formats = [
-    "font",
-    "size",
-    "header",
-    "list",
-    "bold",
-    "italic",
-    "underline",
-    "color",
-    "link",
-  ];
+    'font',
+    'size',
+    'header',
+    'list',
+    'bold',
+    'italic',
+    'underline',
+    'color',
+    'link',
+  ]
 
   const onChange = (value: string) => {
-    handleEditorChange(value);
-  };
+    handleEditorChange(value)
+  }
 
   return (
     <div>
@@ -57,7 +57,7 @@ const TextEditor: React.FC<TextEditorType> = ({
         onChange={onChange}
       />
     </div>
-  );
-};
+  )
+}
 
-export default TextEditor;
+export default TextEditor

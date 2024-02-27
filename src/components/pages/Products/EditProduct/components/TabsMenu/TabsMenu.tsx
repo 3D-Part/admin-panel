@@ -1,28 +1,28 @@
-"use client";
+'use client'
 
-import { HiAdjustments, HiUserCircle } from "react-icons/hi";
-import { MdDashboard } from "react-icons/md";
-import { useState } from "react";
-import Tabs from "@/components/common/Tabs/Tabs";
-import GeneralInfo from "../GeneralInfo/GeneralInfo";
-import Gallery from "../Gallery/Gallery";
-import ProductAttributes from "../ProductAttributes/ProductAttributes";
+import { HiAdjustments, HiUserCircle } from 'react-icons/hi'
+import { MdDashboard } from 'react-icons/md'
+import { useState } from 'react'
+import Tabs from '@/components/common/Tabs/Tabs'
+import GeneralInfo from '../GeneralInfo/GeneralInfo'
+import Gallery from '../Gallery/Gallery'
+import ProductAttributes from '../ProductAttributes/ProductAttributes'
 
 export const TabsMenu = () => {
-  const [activeTab, setActiveTab] = useState(1);
+  const [activeTab, setActiveTab] = useState(1)
 
   const ActiveComponent = () => {
     switch (activeTab) {
       case 1:
-        return <GeneralInfo />;
+        return <GeneralInfo />
       case 2:
-        return <Gallery />;
+        return <Gallery />
       case 3:
-        return <ProductAttributes />;
+        return <ProductAttributes />
       default:
-        break;
+        break
     }
-  };
+  }
 
   return (
     <div className="flex flex-col w-full ">
@@ -43,5 +43,5 @@ export const TabsMenu = () => {
 
       <ActiveComponent />
     </div>
-  );
-};
+  )
+}

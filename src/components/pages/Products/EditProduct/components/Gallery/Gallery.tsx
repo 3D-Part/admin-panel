@@ -1,8 +1,8 @@
-"use client";
+'use client'
 
-import React from "react";
-import UploadImages from "./components/UploadImages/UploadImages";
-import ImagesPresenter from "./components/ImagesPresenter/ImagesPresenter";
+import React from 'react'
+import UploadImages from './components/UploadImages/UploadImages'
+import ImagesPresenter from './components/ImagesPresenter/ImagesPresenter'
 
 const Gallery = () => {
   return (
@@ -10,7 +10,7 @@ const Gallery = () => {
       <ImagesPresenter />
       <UploadImages />
     </div>
-  );
-};
+  )
+}
 
-export default Gallery;
+export default Gallery

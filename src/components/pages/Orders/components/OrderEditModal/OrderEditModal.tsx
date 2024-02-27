@@ -1,27 +1,20 @@
-"use client";
+'use client'
 
-import { OrderStatusEnum } from "@/shared/enums";
-import executeOrderAction from "@/shared/helpers/executeOrderAction";
-import getOrderStatusStyle from "@/shared/helpers/getOrderStatusStyle";
-import { Order, PaginationData } from "@/shared/types";
-import { useOrdersStore } from "@/store/store";
-import {
-  Badge,
-  Button,
-  Dropdown,
-  Label,
-  Modal,
-  Textarea,
-} from "flowbite-react";
-import { useEffect, useRef, useState } from "react";
-import { toast } from "react-toastify";
+import { OrderStatusEnum } from '@/shared/enums'
+import executeOrderAction from '@/shared/helpers/executeOrderAction'
+import getOrderStatusStyle from '@/shared/helpers/getOrderStatusStyle'
+import { Order, PaginationData } from '@/shared/types'
+import { useOrdersStore } from '@/store/store'
+import { Badge, Button, Dropdown, Label, Modal, Textarea } from 'flowbite-react'
+import { useEffect, useRef, useState } from 'react'
+import { toast } from 'react-toastify'
 
 type ModalType = {
-  isOpen: boolean;
-  initialValue?: Order;
-  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  onClose: () => void;
-};
+  isOpen: boolean
+  initialValue?: Order
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
+  onClose: () => void
+}
 
 const OrderEditModal: React.FC<ModalType> = ({
   isOpen,
@@ -30,12 +23,12 @@ const OrderEditModal: React.FC<ModalType> = ({
   // onSave,
   onClose,
 }) => {
-  const { Item } = Dropdown;
+  const { Item } = Dropdown
 
-  const [activeStatus, setActiveStatus] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [activeStatus, setActiveStatus] = useState('')
+  const [loading, setLoading] = useState(false)
 
-  const declineMessageRef = useRef("");
+  const declineMessageRef = useRef('')
 
   const orderStatus = [
     OrderStatusEnum.Pending,
@@ -43,67 +36,67 @@ const OrderEditModal: React.FC<ModalType> = ({
     OrderStatusEnum.Declined,
     OrderStatusEnum.Shipping,
     OrderStatusEnum.Finished,
-  ];
+  ]
 
-  const { currentPage, itemsPerPage, fetchOrders } = useOrdersStore();
-
-  useEffect(() => {
-    if (!initialValue) return;
-
-    setActiveStatus(initialValue.status);
-  }, [initialValue]);
+  const { currentPage, itemsPerPage, fetchOrders } = useOrdersStore()
 
   useEffect(() => {
-    declineMessageRef.current = "";
-  }, [activeStatus]);
+    if (!initialValue) return
+
+    setActiveStatus(initialValue.status)
+  }, [initialValue])
+
+  useEffect(() => {
+    declineMessageRef.current = ''
+  }, [activeStatus])
 
   const handleInputChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >
   ) => {
-    const { value } = e.target;
+    const { value } = e.target
 
-    declineMessageRef.current = value;
-  };
+    declineMessageRef.current = value
+  }
 
   const fetchOrdersData = async () => {
     const paginationData: PaginationData = {
       offset: (currentPage - 1) * itemsPerPage,
       limit: itemsPerPage,
-    };
-    await fetchOrders(paginationData);
-  };
+    }
+    await fetchOrders(paginationData)
+  }
 
   const saveFunction = async () => {
-    if (!initialValue) return;
+    if (!initialValue) return
 
-    let response;
-    setLoading(true);
+    let response
+    setLoading(true)
 
     if (activeStatus === OrderStatusEnum.Declined) {
       const _body = {
         message: declineMessageRef.current,
-      };
+      }
 
-      response = await executeOrderAction(initialValue.id, activeStatus, _body);
+      response = await executeOrderAction(initialValue.id, activeStatus, _body)
     } else {
-      response = await executeOrderAction(initialValue.id, activeStatus);
+      response = await executeOrderAction(initialValue.id, activeStatus)
     }
 
-    await fetchOrdersData();
+    await fetchOrdersData()
 
-    setLoading(false);
-    setIsModalOpen(false);
+    setLoading(false)
+    setIsModalOpen(false)
 
     if (response) {
       toast(`Order status is changed!`, {
         hideProgressBar: true,
         autoClose: 2000,
-        type: "success",
-      });
+        type: 'success',
+      })
     }
-  };
+  }
 
   return (
     <>
@@ -118,9 +111,9 @@ const OrderEditModal: React.FC<ModalType> = ({
               <div className="mb-2 block">
                 <Label htmlFor="attributeName" value="Change order status" />
               </div>
-              <Dropdown label={activeStatus ? activeStatus : "Change status"}>
+              <Dropdown label={activeStatus ? activeStatus : 'Change status'}>
                 {orderStatus.map((status) => {
-                  const statusStyle = getOrderStatusStyle(status);
+                  const statusStyle = getOrderStatusStyle(status)
 
                   return (
                     <Item key={status} onClick={() => setActiveStatus(status)}>
@@ -128,7 +121,7 @@ const OrderEditModal: React.FC<ModalType> = ({
                         {status}
                       </Badge>
                     </Item>
-                  );
+                  )
                 })}
               </Dropdown>
             </div>
@@ -163,7 +156,7 @@ const OrderEditModal: React.FC<ModalType> = ({
         </Modal.Footer>
       </Modal>
     </>
-  );
-};
+  )
+}
 
-export default OrderEditModal;
+export default OrderEditModal

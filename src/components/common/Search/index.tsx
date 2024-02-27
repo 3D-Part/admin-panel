@@ -1,10 +1,10 @@
-"use client"; // This is a client component 👈🏽
+'use client' // This is a client component 👈🏽
 
-import { SyntheticEvent, useEffect, useState } from "react";
-import { IoCloseCircleOutline } from "react-icons/io5";
+import { SyntheticEvent, useEffect, useState } from 'react'
+import { IoCloseCircleOutline } from 'react-icons/io5'
 
 interface SearchProps {
-  getData: (value: string) => void;
+  getData: (value: string) => void
   //   setValue: (value: string) => void;
 }
 
@@ -12,31 +12,31 @@ const Search: React.FC<SearchProps> = ({
   getData,
   //   setValue,
 }) => {
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('')
 
   useEffect(() => {
-    if (!query) return;
+    if (!query) return
 
     const delayDebounceFn = setTimeout(() => {
-      getData(query);
-    }, 1000);
+      getData(query)
+    }, 1000)
 
-    return () => clearTimeout(delayDebounceFn);
-  }, [query]);
+    return () => clearTimeout(delayDebounceFn)
+  }, [query])
 
   const reset = () => {
-    setQuery("");
-    getData("");
-  };
+    setQuery('')
+    getData('')
+  }
 
   const onSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    getData(query);
-  };
+    e.preventDefault()
+    getData(query)
+  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(e.target.value);
-  };
+    setQuery(e.target.value)
+  }
 
   return (
     <form onSubmit={onSubmit} className="flex items-center gap-4">
@@ -77,7 +77,7 @@ const Search: React.FC<SearchProps> = ({
         </div>
       )}
     </form>
-  );
-};
+  )
+}
 
-export default Search;
+export default Search

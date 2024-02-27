@@ -1,17 +1,17 @@
-"use client";
+'use client'
 
-import { Loader } from "@/components/common";
-import { ManufacturerFormBody, ManufacturerData } from "@/shared/types";
-import { useManufactureStore } from "@/store/store";
-import { Button, Label, Modal, Select, TextInput } from "flowbite-react";
-import { SyntheticEvent, useEffect, useRef } from "react";
+import { Loader } from '@/components/common'
+import { ManufacturerFormBody, ManufacturerData } from '@/shared/types'
+import { useManufactureStore } from '@/store/store'
+import { Button, Label, Modal, Select, TextInput } from 'flowbite-react'
+import { SyntheticEvent, useEffect, useRef } from 'react'
 
 type ModalType = {
-  isOpen: boolean;
-  initialValue?: ManufacturerData;
-  onSave: (manufacturer: ManufacturerFormBody) => void;
-  onClose: () => void;
-};
+  isOpen: boolean
+  initialValue?: ManufacturerData
+  onSave: (manufacturer: ManufacturerFormBody) => void
+  onClose: () => void
+}
 
 const ManufactureFormModal: React.FC<ModalType> = ({
   isOpen,
@@ -19,42 +19,42 @@ const ManufactureFormModal: React.FC<ModalType> = ({
   onSave,
   onClose,
 }) => {
-  const manufacturerDataRef = useRef<ManufacturerData>({} as ManufacturerData);
+  const manufacturerDataRef = useRef<ManufacturerData>({} as ManufacturerData)
 
-  const { allManufactures } = useManufactureStore();
+  const { allManufactures } = useManufactureStore()
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
 
     manufacturerDataRef.current = {
       ...manufacturerDataRef.current,
       [name]: value,
-    };
-  };
+    }
+  }
 
   const resetData = () => {
-    manufacturerDataRef.current = {} as ManufacturerData;
-  };
+    manufacturerDataRef.current = {} as ManufacturerData
+  }
 
   const saveFunction = () => {
-    if (!manufacturerDataRef.current.name) return;
+    if (!manufacturerDataRef.current.name) return
 
     const _manufacturer: ManufacturerFormBody = {
       name: manufacturerDataRef.current.name,
-    };
+    }
 
-    onSave(_manufacturer);
-    resetData();
-  };
+    onSave(_manufacturer)
+    resetData()
+  }
 
   useEffect(() => {
-    if (!initialValue) return;
+    if (!initialValue) return
 
-    manufacturerDataRef.current = initialValue;
-  }, [initialValue]);
-  if (!isOpen) return null;
+    manufacturerDataRef.current = initialValue
+  }, [initialValue])
+  if (!isOpen) return null
 
   return (
     <>
@@ -76,7 +76,7 @@ const ManufactureFormModal: React.FC<ModalType> = ({
                   id="manufacturerName"
                   required
                   type="text"
-                  defaultValue={initialValue?.name ? initialValue.name : ""}
+                  defaultValue={initialValue?.name ? initialValue.name : ''}
                 />
               </div>
             </form>
@@ -92,7 +92,7 @@ const ManufactureFormModal: React.FC<ModalType> = ({
         </Modal.Footer>
       </Modal>
     </>
-  );
-};
+  )
+}
 
-export default ManufactureFormModal;
+export default ManufactureFormModal

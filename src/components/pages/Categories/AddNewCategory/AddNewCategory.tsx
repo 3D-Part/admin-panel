@@ -1,132 +1,132 @@
-"use client";
+'use client'
 
-import { CategoryAttributeData, CategoryFormBody } from "@/shared/types";
-import { useCategoryStore } from "@/store/store";
-import { Button, Label, Select, TextInput, Textarea } from "flowbite-react";
+import { CategoryAttributeData, CategoryFormBody } from '@/shared/types'
+import { useCategoryStore } from '@/store/store'
+import { Button, Label, Select, TextInput, Textarea } from 'flowbite-react'
 import React, {
   SyntheticEvent,
   useCallback,
   useEffect,
   useRef,
   useState,
-} from "react";
-import CategoryHeader from "./components/Header/Header";
-import { toast } from "react-toastify";
-import { Loader } from "@/components/common";
-import CategoryAttribute from "../CategoryAttribute/CategoryAttribute";
-import { CategoryAttributeAPI } from "@/services";
+} from 'react'
+import CategoryHeader from './components/Header/Header'
+import { toast } from 'react-toastify'
+import { Loader } from '@/components/common'
+import CategoryAttribute from '../CategoryAttribute/CategoryAttribute'
+import { CategoryAttributeAPI } from '@/services'
 
 type AddNewCategoryType = {
-  initialValue?: CategoryFormBody;
-};
+  initialValue?: CategoryFormBody
+}
 
 const AddNewCategory: React.FC<AddNewCategoryType> = ({ initialValue }) => {
-  const [loader, setLoader] = useState(true);
-  const categoryDataRef = useRef<CategoryFormBody>({} as CategoryFormBody);
-  const formRef = useRef<HTMLFormElement>(null);
-  const categoryAttributeIds = useRef<string[]>([]);
-  const [slug, setSlug] = useState(initialValue?.slug);
+  const [loader, setLoader] = useState(true)
+  const categoryDataRef = useRef<CategoryFormBody>({} as CategoryFormBody)
+  const formRef = useRef<HTMLFormElement>(null)
+  const categoryAttributeIds = useRef<string[]>([])
+  const [slug, setSlug] = useState(initialValue?.slug)
 
   const { fetchAllCategories, allCategories, addNewCategory } =
-    useCategoryStore();
+    useCategoryStore()
 
-  const { addCategoryAttributesBulk } = CategoryAttributeAPI;
+  const { addCategoryAttributesBulk } = CategoryAttributeAPI
 
   const changeCategoryAttributeIds = (attributes: string[]) => {
-    categoryAttributeIds.current = attributes;
-  };
+    categoryAttributeIds.current = attributes
+  }
 
   const handleInputChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >
   ) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
 
     categoryDataRef.current = {
       ...categoryDataRef.current,
       [name]: value,
-    };
-  };
+    }
+  }
 
   const onBlurInput = () => {
     if (categoryDataRef.current.name && !categoryDataRef.current.slug) {
       const _slug = categoryDataRef.current.name
         .toLocaleLowerCase()
-        .replace(/ /g, "-");
-      setSlug(_slug);
-      categoryDataRef.current.slug = _slug;
+        .replace(/ /g, '-')
+      setSlug(_slug)
+      categoryDataRef.current.slug = _slug
     }
-  };
+  }
 
   const resetData = () => {
-    formRef.current && formRef.current.reset();
-    categoryDataRef.current = {} as CategoryFormBody;
-    setSlug("");
-  };
+    formRef.current && formRef.current.reset()
+    categoryDataRef.current = {} as CategoryFormBody
+    setSlug('')
+  }
 
   const saveAttributes = async (categoryId: string) => {
-    const _data: CategoryAttributeData[] = [];
+    const _data: CategoryAttributeData[] = []
 
-    if (categoryAttributeIds.current.length === 0) return;
+    if (categoryAttributeIds.current.length === 0) return
 
     categoryAttributeIds.current.forEach((attributeId) => {
       const _categoryAttribute = {
         categoryId: categoryId,
         attributeId: attributeId,
-      };
-      _data.push(_categoryAttribute);
-    });
+      }
+      _data.push(_categoryAttribute)
+    })
 
-    const response = await addCategoryAttributesBulk(_data);
+    const response = await addCategoryAttributesBulk(_data)
     if (response) {
       toast(`Category attributes are added!`, {
         hideProgressBar: true,
         autoClose: 2000,
-        type: "success",
-      });
+        type: 'success',
+      })
     }
-  };
+  }
 
   const saveFunction = async (e: SyntheticEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!categoryDataRef.current.name) return;
+    e.preventDefault()
+    if (!categoryDataRef.current.name) return
 
     const _category: CategoryFormBody = {
       name: categoryDataRef.current.name,
       slug: categoryDataRef.current.slug,
       parentCategoryId: null,
       description: categoryDataRef.current.description,
-    };
-
-    if (categoryDataRef.current.parentCategoryId) {
-      _category.parentCategoryId = categoryDataRef.current.parentCategoryId;
     }
 
-    categoryDataRef.current.parentCategoryId = null;
+    if (categoryDataRef.current.parentCategoryId) {
+      _category.parentCategoryId = categoryDataRef.current.parentCategoryId
+    }
 
-    const response = await addNewCategory(_category);
+    categoryDataRef.current.parentCategoryId = null
 
-    if (response && typeof response !== "boolean") {
+    const response = await addNewCategory(_category)
+
+    if (response && typeof response !== 'boolean') {
       toast(`${_category.name} is added!`, {
         hideProgressBar: true,
         autoClose: 2000,
-        type: "success",
-      });
+        type: 'success',
+      })
 
-      const res = await saveAttributes(response.id);
-      resetData();
+      const res = await saveAttributes(response.id)
+      resetData()
     }
-  };
+  }
 
   const getAllCategories = useCallback(async () => {
-    const data = await fetchAllCategories();
+    const data = await fetchAllCategories()
     if (data) {
-      setLoader(false);
+      setLoader(false)
     } else {
-      setLoader(true);
+      setLoader(true)
     }
-  }, [fetchAllCategories]);
+  }, [fetchAllCategories])
 
   // useEffect(() => {
   //   getAllCategories();
@@ -139,8 +139,8 @@ const AddNewCategory: React.FC<AddNewCategoryType> = ({ initialValue }) => {
     // } else {
     //   getAllCategories();
     // }
-    getAllCategories();
-  }, []);
+    getAllCategories()
+  }, [])
   // }, [allCategories]);
 
   if (loader) {
@@ -149,7 +149,7 @@ const AddNewCategory: React.FC<AddNewCategoryType> = ({ initialValue }) => {
         <CategoryHeader />
         <Loader />
       </div>
-    );
+    )
   }
 
   return (
@@ -172,7 +172,7 @@ const AddNewCategory: React.FC<AddNewCategoryType> = ({ initialValue }) => {
             id="categoryName"
             required
             type="text"
-            defaultValue={initialValue?.name ? initialValue.name : ""}
+            defaultValue={initialValue?.name ? initialValue.name : ''}
           />
         </div>
 
@@ -214,16 +214,16 @@ const AddNewCategory: React.FC<AddNewCategoryType> = ({ initialValue }) => {
             defaultValue={
               initialValue?.parentCategoryId
                 ? initialValue?.parentCategoryId
-                : ""
+                : ''
             }
           >
-            <option value={""}>None</option>
+            <option value={''}>None</option>
             {allCategories.map((category) => {
               return (
                 <option key={category.id} value={category.id}>
                   {category.name}
                 </option>
-              );
+              )
             })}
           </Select>
         </div>
@@ -235,7 +235,7 @@ const AddNewCategory: React.FC<AddNewCategoryType> = ({ initialValue }) => {
         </Button>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default AddNewCategory;
+export default AddNewCategory

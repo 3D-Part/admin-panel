@@ -1,11 +1,11 @@
-"use client"; // This is a client component 👈🏽
+'use client' // This is a client component 👈🏽
 
-import React from "react";
-import { Button } from "flowbite-react";
-import { HiPlus } from "react-icons/hi";
-import { URLPartsEnum } from "@/shared/enums";
-import { Search } from "@/components/common";
-import ProductsSearch from "./ProductsSearch";
+import React from 'react'
+import { Button } from 'flowbite-react'
+import { HiPlus } from 'react-icons/hi'
+import { URLPartsEnum } from '@/shared/enums'
+import { Search } from '@/components/common'
+import ProductsSearch from './ProductsSearch'
 
 export const ProductsOverviewHeader = () => {
   return (
@@ -15,5 +15,5 @@ export const ProductsOverviewHeader = () => {
         Add new <HiPlus className="ml-2" />
       </Button>
     </div>
-  );
-};
+  )
+}

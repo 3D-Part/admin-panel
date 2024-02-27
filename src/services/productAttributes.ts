@@ -1,10 +1,10 @@
-import { API } from "@/shared/helpers";
+import { API } from '@/shared/helpers'
 import {
   CreateProductAttributeBody,
   EditProductAttributeBody,
-} from "@/shared/types";
+} from '@/shared/types'
 
-const API_BASE_URL = process.env.API_KEY;
+const API_BASE_URL = process.env.API_KEY
 
 // const getProductAttributes = async (paginationData?: PaginationData) => {
 //   const { offset, limit } = paginationData || {};
@@ -31,17 +31,14 @@ const addProductAttribute = async (
   body: CreateProductAttributeBody
 ): Promise<boolean> => {
   try {
-    const data = await API.post(
-      `${API_BASE_URL}/shop/product-attributes`,
-      body
-    );
+    const data = await API.post(`${API_BASE_URL}/shop/product-attributes`, body)
 
-    return true;
+    return true
   } catch (error) {
-    console.error("Error adding product attribute:", error);
-    return false;
+    console.error('Error adding product attribute:', error)
+    return false
   }
-};
+}
 
 const editProductAttribute = async (
   id: string,
@@ -51,29 +48,29 @@ const editProductAttribute = async (
     const data = await API.patch(
       `${API_BASE_URL}/shop/product-attributes/${id}`,
       body
-    );
-    return true;
+    )
+    return true
   } catch (error) {
-    console.error("Error editing attribute:", error);
-    return false;
+    console.error('Error editing attribute:', error)
+    return false
   }
-};
+}
 
 const removeProductAttribute = async (id: string): Promise<boolean> => {
   try {
-    await API.remove(`${API_BASE_URL}/shop/product-attributes/${id}`);
-    return true;
+    await API.remove(`${API_BASE_URL}/shop/product-attributes/${id}`)
+    return true
   } catch (error) {
-    console.error("Error removing attributes:", error);
-    return false;
+    console.error('Error removing attributes:', error)
+    return false
   }
-};
+}
 
 const ProductAttributeAPI = {
   // getProductAttributes,
   addProductAttribute,
   editProductAttribute,
   removeProductAttribute,
-};
+}
 
-export default ProductAttributeAPI;
+export default ProductAttributeAPI

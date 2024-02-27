@@ -1,59 +1,59 @@
-"use client";
+'use client'
 
-import { AttributeFormBody } from "@/shared/types";
-import { useAttributesStore } from "@/store/store";
-import { Loader } from "@/components/common";
-import { Button, Label, TextInput } from "flowbite-react";
-import React, { SyntheticEvent, useRef, useState } from "react";
-import { toast } from "react-toastify";
-import AttributeHeader from "./components/AttributeHeader/AttributeHeader";
+import { AttributeFormBody } from '@/shared/types'
+import { useAttributesStore } from '@/store/store'
+import { Loader } from '@/components/common'
+import { Button, Label, TextInput } from 'flowbite-react'
+import React, { SyntheticEvent, useRef, useState } from 'react'
+import { toast } from 'react-toastify'
+import AttributeHeader from './components/AttributeHeader/AttributeHeader'
 
 type AddNewAttributeType = {
-  initialValue?: AttributeFormBody;
-};
+  initialValue?: AttributeFormBody
+}
 
 const AddNewAttribute: React.FC<AddNewAttributeType> = ({ initialValue }) => {
-  const [loader] = useState(false);
-  const attributeDataRef = useRef<AttributeFormBody>({} as AttributeFormBody);
-  const formRef = useRef<HTMLFormElement>(null);
+  const [loader] = useState(false)
+  const attributeDataRef = useRef<AttributeFormBody>({} as AttributeFormBody)
+  const formRef = useRef<HTMLFormElement>(null)
 
-  const { addNewAttribute } = useAttributesStore();
+  const { addNewAttribute } = useAttributesStore()
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
 
     attributeDataRef.current = {
       ...attributeDataRef.current,
       [name]: value,
-    };
-  };
+    }
+  }
 
   const resetData = () => {
-    formRef.current && formRef.current.reset();
-    attributeDataRef.current = {} as AttributeFormBody;
-  };
+    formRef.current && formRef.current.reset()
+    attributeDataRef.current = {} as AttributeFormBody
+  }
 
   const saveFunction = async (e: SyntheticEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!attributeDataRef.current.name) return;
+    e.preventDefault()
+    if (!attributeDataRef.current.name) return
 
     const _attribute: AttributeFormBody = {
       name: attributeDataRef.current.name,
-    };
+    }
 
-    const request = await addNewAttribute(_attribute);
+    const request = await addNewAttribute(_attribute)
     if (request) {
       toast(`${_attribute.name} is added!`, {
         hideProgressBar: true,
         autoClose: 2000,
-        type: "success",
-      });
+        type: 'success',
+      })
 
-      resetData();
+      resetData()
     }
-  };
+  }
 
   // const getAllAttributes = useCallback(async () => {
   //   const data = await fetchAllAttributes();
@@ -78,7 +78,7 @@ const AddNewAttribute: React.FC<AddNewAttributeType> = ({ initialValue }) => {
         <AttributeHeader />
         <Loader />
       </div>
-    );
+    )
   }
 
   return (
@@ -100,7 +100,7 @@ const AddNewAttribute: React.FC<AddNewAttributeType> = ({ initialValue }) => {
             id="attributeName"
             required
             type="text"
-            defaultValue={initialValue?.name ? initialValue.name : ""}
+            defaultValue={initialValue?.name ? initialValue.name : ''}
           />
         </div>
 
@@ -109,7 +109,7 @@ const AddNewAttribute: React.FC<AddNewAttributeType> = ({ initialValue }) => {
         </Button>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default AddNewAttribute;
+export default AddNewAttribute

@@ -1,28 +1,28 @@
-"use client";
+'use client'
 
-import { Search } from "@/components/common";
-import { PaginationData } from "@/shared/types";
+import { Search } from '@/components/common'
+import { PaginationData } from '@/shared/types'
 import {
   useAttributesStore,
   useCategoryStore,
   useManufactureStore,
-} from "@/store/store";
-import { Spinner } from "flowbite-react";
-import React, { useCallback, useState } from "react";
+} from '@/store/store'
+import { Spinner } from 'flowbite-react'
+import React, { useCallback, useState } from 'react'
 
 const AttributesSearch = () => {
-  const [loader, setLoader] = useState(false);
+  const [loader, setLoader] = useState(false)
 
   const {
     itemsPerPage,
     fetchAttributes,
     changeCurrentPage,
     changeAttributeFilter,
-  } = useAttributesStore();
+  } = useAttributesStore()
 
   const fetchCategoriesData = useCallback(
     async (value: string) => {
-      changeCurrentPage(1);
+      changeCurrentPage(1)
 
       const filters = {
         filters: {
@@ -30,31 +30,31 @@ const AttributesSearch = () => {
             like: `%${value}%`,
           },
         },
-      };
+      }
 
-      changeAttributeFilter(filters);
+      changeAttributeFilter(filters)
 
-      setLoader(true);
+      setLoader(true)
       const paginationData: PaginationData = {
         offset: 0,
         limit: itemsPerPage,
-      };
-      const data = await fetchAttributes(paginationData);
+      }
+      const data = await fetchAttributes(paginationData)
       if (data) {
-        setLoader(false);
+        setLoader(false)
       } else {
-        setLoader(true);
+        setLoader(true)
       }
     },
     [changeCurrentPage, changeAttributeFilter, fetchAttributes, itemsPerPage]
-  );
+  )
 
   return (
     <div className="flex gap-8 items-center">
       <Search getData={fetchCategoriesData} />
       {loader && <Spinner aria-label="Loading..." size="lg" />}
     </div>
-  );
-};
+  )
+}
 
-export default AttributesSearch;
+export default AttributesSearch

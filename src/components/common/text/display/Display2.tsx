@@ -1,5 +1,5 @@
-import React from "react";
-import { TextComponentInterface } from "../../../../shared/interfaces/textInterfaces";
+import React from 'react'
+import { TextComponentInterface } from '../../../../shared/interfaces/textInterfaces'
 
 const Display2: React.FC<TextComponentInterface> = ({
   children,
@@ -11,7 +11,7 @@ const Display2: React.FC<TextComponentInterface> = ({
     >
       {children}
     </p>
-  );
-};
+  )
+}
 
-export default Display2;
+export default Display2

@@ -1,18 +1,18 @@
-"use client";
+'use client'
 
-import { WarningModal } from "@/components/common";
-import { OrdersAPI } from "@/services";
-import { Order } from "@/shared/types";
-import { Button, Label, Modal, Textarea } from "flowbite-react";
-import { useEffect, useRef, useState } from "react";
-import { toast } from "react-toastify";
+import { WarningModal } from '@/components/common'
+import { OrdersAPI } from '@/services'
+import { Order } from '@/shared/types'
+import { Button, Label, Modal, Textarea } from 'flowbite-react'
+import { useEffect, useRef, useState } from 'react'
+import { toast } from 'react-toastify'
 
 type ModalType = {
-  isOpen: boolean;
-  initialValue?: Order;
-  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  onClose: () => void;
-};
+  isOpen: boolean
+  initialValue?: Order
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
+  onClose: () => void
+}
 
 const OrderContactForm: React.FC<ModalType> = ({
   isOpen,
@@ -21,55 +21,55 @@ const OrderContactForm: React.FC<ModalType> = ({
   // onSave,
   onClose,
 }) => {
-  const [loading, setLoading] = useState(false);
-  const [isWarningModalOpen, setIsWarningModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false)
+  const [isWarningModalOpen, setIsWarningModalOpen] = useState(false)
 
-  const declineMessageRef = useRef("");
+  const declineMessageRef = useRef('')
 
   useEffect(() => {
-    declineMessageRef.current = "";
-  }, []);
+    declineMessageRef.current = ''
+  }, [])
 
-  const { orderContactMessage } = OrdersAPI;
+  const { orderContactMessage } = OrdersAPI
 
   const handleInputChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >
   ) => {
-    const { value } = e.target;
+    const { value } = e.target
 
-    declineMessageRef.current = value;
-  };
+    declineMessageRef.current = value
+  }
 
   const saveFunction = () => {
-    setIsWarningModalOpen(true);
-  };
+    setIsWarningModalOpen(true)
+  }
 
   const sendEmail = async () => {
-    if (!initialValue) return;
+    if (!initialValue) return
 
-    let response;
-    setLoading(true);
+    let response
+    setLoading(true)
 
     const _body = {
       message: declineMessageRef.current,
-    };
+    }
 
-    response = await orderContactMessage(initialValue.id, _body);
+    response = await orderContactMessage(initialValue.id, _body)
 
-    setLoading(false);
-    setIsModalOpen(false);
-    setIsWarningModalOpen(false);
+    setLoading(false)
+    setIsModalOpen(false)
+    setIsWarningModalOpen(false)
 
     // if (response) {
     toast(`Message is sent!`, {
       hideProgressBar: true,
       autoClose: 2000,
-      type: "success",
-    });
+      type: 'success',
+    })
     // }
-  };
+  }
 
   return (
     <>
@@ -118,7 +118,7 @@ const OrderContactForm: React.FC<ModalType> = ({
         />
       )}
     </>
-  );
-};
+  )
+}
 
-export default OrderContactForm;
+export default OrderContactForm

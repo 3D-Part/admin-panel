@@ -1,12 +1,12 @@
-"use client";
+'use client'
 
-import { Loader } from "@/components/common";
+import { Loader } from '@/components/common'
 import {
   CategoryAttributeData,
   CategoryData,
   CategoryFormBody,
-} from "@/shared/types";
-import { useCategoryStore } from "@/store/store";
+} from '@/shared/types'
+import { useCategoryStore } from '@/store/store'
 import {
   Button,
   Label,
@@ -14,17 +14,17 @@ import {
   Select,
   TextInput,
   Textarea,
-} from "flowbite-react";
-import { useEffect, useRef } from "react";
-import CategoryAttribute from "../../CategoryAttribute/CategoryAttribute";
-import { CategoryAttributeAPI } from "@/services";
+} from 'flowbite-react'
+import { useEffect, useRef } from 'react'
+import CategoryAttribute from '../../CategoryAttribute/CategoryAttribute'
+import { CategoryAttributeAPI } from '@/services'
 
 type ModalType = {
-  isOpen: boolean;
-  initialValue?: CategoryData;
-  onSave: (category: CategoryFormBody) => void;
-  onClose: () => void;
-};
+  isOpen: boolean
+  initialValue?: CategoryData
+  onSave: (category: CategoryFormBody) => void
+  onClose: () => void
+}
 
 const CategoryEditModal: React.FC<ModalType> = ({
   isOpen,
@@ -32,92 +32,92 @@ const CategoryEditModal: React.FC<ModalType> = ({
   onSave,
   onClose,
 }) => {
-  const categoryDataRef = useRef<CategoryData>({} as CategoryData);
-  const categoryAttributeIds = useRef<string[]>([]);
+  const categoryDataRef = useRef<CategoryData>({} as CategoryData)
+  const categoryAttributeIds = useRef<string[]>([])
 
   const changeCategoryAttributeIds = (attributes: string[]) => {
-    categoryAttributeIds.current = attributes;
-  };
+    categoryAttributeIds.current = attributes
+  }
 
-  const { allCategories } = useCategoryStore();
+  const { allCategories } = useCategoryStore()
   const { addCategoryAttributesBulk, removeCategoryAttributesBulk } =
-    CategoryAttributeAPI;
+    CategoryAttributeAPI
 
   const handleInputChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >
   ) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
 
     categoryDataRef.current = {
       ...categoryDataRef.current,
       [name]: value,
-    };
-  };
+    }
+  }
 
   const resetData = () => {
-    categoryDataRef.current = {} as CategoryData;
-  };
+    categoryDataRef.current = {} as CategoryData
+  }
 
   const removeAttributesFromCategory = async () => {
     const initAttributeIds = initialValue?.categoryAttributes.map(
       (catAttribute) => {
-        return catAttribute.id;
+        return catAttribute.id
       }
-    );
+    )
 
     if (initAttributeIds && initAttributeIds?.length > 0) {
-      await removeCategoryAttributesBulk(initAttributeIds);
+      await removeCategoryAttributesBulk(initAttributeIds)
     }
-  };
+  }
 
   const updateAttributes = async (categoryId: string) => {
-    const _data: CategoryAttributeData[] = [];
+    const _data: CategoryAttributeData[] = []
 
-    await removeAttributesFromCategory();
-    if (categoryAttributeIds.current.length === 0) return;
+    await removeAttributesFromCategory()
+    if (categoryAttributeIds.current.length === 0) return
 
     categoryAttributeIds.current.forEach((attributeId) => {
       const _categoryAttribute = {
         categoryId: categoryId,
         attributeId: attributeId,
-      };
-      _data.push(_categoryAttribute);
-    });
+      }
+      _data.push(_categoryAttribute)
+    })
 
-    await addCategoryAttributesBulk(_data);
-  };
+    await addCategoryAttributesBulk(_data)
+  }
 
   const saveFunction = async () => {
-    if (!categoryDataRef.current.name) return;
+    if (!categoryDataRef.current.name) return
 
     const _category: CategoryFormBody = {
       name: categoryDataRef.current.name,
       slug: categoryDataRef.current.slug,
       description: categoryDataRef.current.description
         ? categoryDataRef.current.description
-        : "",
-    };
+        : '',
+    }
 
     if (categoryDataRef.current.parentCategoryId) {
-      _category.parentCategoryId = categoryDataRef.current.parentCategoryId;
+      _category.parentCategoryId = categoryDataRef.current.parentCategoryId
     }
 
     if (initialValue) {
-      await updateAttributes(initialValue.id);
+      await updateAttributes(initialValue.id)
     }
-    onSave(_category);
-    resetData();
-  };
+    onSave(_category)
+    resetData()
+  }
 
   useEffect(() => {
-    if (!initialValue) return;
+    if (!initialValue) return
 
-    categoryDataRef.current = initialValue;
-  }, [initialValue]);
+    categoryDataRef.current = initialValue
+  }, [initialValue])
 
-  if (!isOpen) return null;
+  if (!isOpen) return null
 
   return (
     <>
@@ -139,7 +139,7 @@ const CategoryEditModal: React.FC<ModalType> = ({
                   id="categoryName"
                   required
                   type="text"
-                  defaultValue={initialValue?.name ? initialValue.name : ""}
+                  defaultValue={initialValue?.name ? initialValue.name : ''}
                 />
               </div>
 
@@ -153,7 +153,7 @@ const CategoryEditModal: React.FC<ModalType> = ({
                   id="urlSlug"
                   required
                   type="text"
-                  defaultValue={initialValue?.slug ? initialValue.slug : ""}
+                  defaultValue={initialValue?.slug ? initialValue.slug : ''}
                 />
               </div>
 
@@ -164,7 +164,7 @@ const CategoryEditModal: React.FC<ModalType> = ({
                 <Textarea
                   onChange={handleInputChange}
                   defaultValue={
-                    initialValue?.description ? initialValue?.description : ""
+                    initialValue?.description ? initialValue?.description : ''
                   }
                   id="description"
                   name="description"
@@ -184,16 +184,16 @@ const CategoryEditModal: React.FC<ModalType> = ({
                   defaultValue={
                     initialValue?.parentCategoryId
                       ? initialValue?.parentCategoryId
-                      : ""
+                      : ''
                   }
                 >
-                  <option value={""}>None</option>
+                  <option value={''}>None</option>
                   {allCategories.map((category) => {
                     return (
                       <option key={category.id} value={category.id}>
                         {category.name}
                       </option>
-                    );
+                    )
                   })}
                 </Select>
               </div>
@@ -215,7 +215,7 @@ const CategoryEditModal: React.FC<ModalType> = ({
         </Modal.Footer>
       </Modal>
     </>
-  );
-};
+  )
+}
 
-export default CategoryEditModal;
+export default CategoryEditModal

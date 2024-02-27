@@ -8,17 +8,17 @@ import { URLPartsEnum } from '@/shared/enums'
 import AttributesSearch from './AttributesSearch'
 
 export const AttributesHeader = () => {
-    const router = useRouter()
+  const router = useRouter()
 
-    return (
-        <div className="w-full flex justify-between items-center">
-            <AttributesSearch />
-            <Button
-                className="cursor-pointer"
-                onClick={() => router.push(URLPartsEnum.AddNewAttribute)}
-            >
-                Add new <HiPlus className="ml-2" />
-            </Button>
-        </div>
-    )
+  return (
+    <div className="w-full flex justify-between items-center">
+      <AttributesSearch />
+      <Button
+        className="cursor-pointer"
+        onClick={() => router.push(URLPartsEnum.AddNewAttribute)}
+      >
+        Add new <HiPlus className="ml-2" />
+      </Button>
+    </div>
+  )
 }

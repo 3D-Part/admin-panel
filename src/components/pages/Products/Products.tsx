@@ -1,16 +1,16 @@
-"use client";
+'use client'
 
-import React, { useState } from "react";
-import { WarningModal } from "@/components/common";
-import { useProductsStore } from "@/store/store";
-import { toast } from "react-toastify";
-import { ProductsAPI } from "@/services";
-import { PaginationData, ProductData } from "@/shared/types";
-import { ProductsOverviewHeader } from "./components/ProductsHeader/ProductsHeader";
-import { ProductsTable } from "./components/ProductsTable/ProductsTable";
+import React, { useState } from 'react'
+import { WarningModal } from '@/components/common'
+import { useProductsStore } from '@/store/store'
+import { toast } from 'react-toastify'
+import { ProductsAPI } from '@/services'
+import { PaginationData, ProductData } from '@/shared/types'
+import { ProductsOverviewHeader } from './components/ProductsHeader/ProductsHeader'
+import { ProductsTable } from './components/ProductsTable/ProductsTable'
 
 export const Products = () => {
-  const [isWarningModalOpen, setIsWarningModalOpen] = useState(false);
+  const [isWarningModalOpen, setIsWarningModalOpen] = useState(false)
 
   const {
     activeProduct,
@@ -18,44 +18,44 @@ export const Products = () => {
     changeActiveProduct,
     currentPage,
     itemsPerPage,
-  } = useProductsStore();
+  } = useProductsStore()
 
   const fetchProductsData = async () => {
     const paginationData: PaginationData = {
       offset: (currentPage - 1) * itemsPerPage,
       limit: itemsPerPage,
-    };
-    await fetchProducts(paginationData);
-  };
+    }
+    await fetchProducts(paginationData)
+  }
 
   const onWarningModalConfirm = async () => {
     if (!activeProduct) {
-      setIsWarningModalOpen(false);
-      return;
+      setIsWarningModalOpen(false)
+      return
     }
 
-    const response = await ProductsAPI.removeProducts(activeProduct.id);
+    const response = await ProductsAPI.removeProducts(activeProduct.id)
 
     if (response) {
-      const toastMessage = `product ${activeProduct.name} is removed`;
+      const toastMessage = `product ${activeProduct.name} is removed`
       toast(toastMessage, {
         hideProgressBar: true,
         autoClose: 2000,
-        type: "success",
-      });
-      fetchProductsData();
+        type: 'success',
+      })
+      fetchProductsData()
     }
-    setIsWarningModalOpen(false);
-  };
+    setIsWarningModalOpen(false)
+  }
 
   const onWarningModalOpen = (product: ProductData) => {
-    setIsWarningModalOpen(true);
-    changeActiveProduct(product);
-  };
+    setIsWarningModalOpen(true)
+    changeActiveProduct(product)
+  }
 
   const onWarningModalClose = () => {
-    setIsWarningModalOpen(false);
-  };
+    setIsWarningModalOpen(false)
+  }
 
   return (
     <div className="w-full">
@@ -69,5 +69,5 @@ export const Products = () => {
         message={`Are you sure you want to delete ${activeProduct.name}?`}
       />
     </div>
-  );
-};
+  )
+}

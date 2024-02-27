@@ -1,95 +1,95 @@
-"use client";
+'use client'
 
-import { ProductAttributeAPI, ProductsAPI } from "@/services";
-import { EditProductAttributeBody } from "@/shared/types";
-import { useProductsStore } from "@/store/store";
-import { Button, Label, Spinner, TextInput } from "flowbite-react";
-import React, { SyntheticEvent, useRef, useState } from "react";
-import { HiCheckCircle, HiXCircle } from "react-icons/hi";
-import { toast } from "react-toastify";
+import { ProductAttributeAPI, ProductsAPI } from '@/services'
+import { EditProductAttributeBody } from '@/shared/types'
+import { useProductsStore } from '@/store/store'
+import { Button, Label, Spinner, TextInput } from 'flowbite-react'
+import React, { SyntheticEvent, useRef, useState } from 'react'
+import { HiCheckCircle, HiXCircle } from 'react-icons/hi'
+import { toast } from 'react-toastify'
 
 type AttributeEditFormType = {
-  name: string;
-  value: string;
-  attributeId: string;
-};
+  name: string
+  value: string
+  attributeId: string
+}
 
 const AttributeEditForm: React.FC<AttributeEditFormType> = ({
   name,
   value,
   attributeId,
 }) => {
-  const [loader, setLoader] = useState(false);
-  const attributeValue = useRef<string>();
-  const [isValueChanged, setIsValueChanged] = useState(false);
+  const [loader, setLoader] = useState(false)
+  const attributeValue = useRef<string>()
+  const [isValueChanged, setIsValueChanged] = useState(false)
 
-  const { activeProduct, changeActiveProduct } = useProductsStore();
+  const { activeProduct, changeActiveProduct } = useProductsStore()
 
   const handleInputChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >
   ) => {
-    const { value: inputValue } = e.target;
+    const { value: inputValue } = e.target
 
     if (inputValue !== value) {
-      setIsValueChanged(true);
+      setIsValueChanged(true)
     } else {
-      setIsValueChanged(false);
+      setIsValueChanged(false)
     }
 
-    attributeValue.current = inputValue;
-  };
+    attributeValue.current = inputValue
+  }
 
   const removeAttribute = async () => {
-    setLoader(true);
+    setLoader(true)
     // TODO Check res
-    const res = await ProductAttributeAPI.removeProductAttribute(attributeId);
+    const res = await ProductAttributeAPI.removeProductAttribute(attributeId)
     if (res) {
-      const toastMessage = `product attribute is removed`;
+      const toastMessage = `product attribute is removed`
       toast(toastMessage, {
         hideProgressBar: true,
         autoClose: 2000,
-        type: "success",
-      });
+        type: 'success',
+      })
     }
-    const _productData = await ProductsAPI.getOneProduct(activeProduct.id);
+    const _productData = await ProductsAPI.getOneProduct(activeProduct.id)
     if (_productData) {
-      changeActiveProduct(_productData);
+      changeActiveProduct(_productData)
     }
-    setLoader(false);
-  };
+    setLoader(false)
+  }
 
   const onSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!isValueChanged || !attributeValue.current) return;
+    e.preventDefault()
+    if (!isValueChanged || !attributeValue.current) return
 
     const _body: EditProductAttributeBody = {
       value: attributeValue.current,
-    };
+    }
 
-    setLoader(true);
+    setLoader(true)
     const res = await ProductAttributeAPI.editProductAttribute(
       attributeId,
       _body
-    );
+    )
 
     if (res) {
-      const toastMessage = `product attribute is changed to ${attributeValue.current}`;
+      const toastMessage = `product attribute is changed to ${attributeValue.current}`
       toast(toastMessage, {
         hideProgressBar: true,
         autoClose: 2000,
-        type: "success",
-      });
+        type: 'success',
+      })
     }
 
-    const _productData = await ProductsAPI.getOneProduct(activeProduct.id);
+    const _productData = await ProductsAPI.getOneProduct(activeProduct.id)
     if (_productData) {
-      changeActiveProduct(_productData);
+      changeActiveProduct(_productData)
     }
 
-    setLoader(false);
-  };
+    setLoader(false)
+  }
 
   return (
     <div className="max-w-md">
@@ -122,7 +122,7 @@ const AttributeEditForm: React.FC<AttributeEditFormType> = ({
         </div>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default AttributeEditForm;
+export default AttributeEditForm

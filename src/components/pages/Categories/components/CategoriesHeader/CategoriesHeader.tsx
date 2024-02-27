@@ -8,17 +8,17 @@ import { URLPartsEnum } from '@/shared/enums'
 import CategoriesSearch from './CategoriesSearch'
 
 export const CategoriesHeader = () => {
-    const router = useRouter()
+  const router = useRouter()
 
-    return (
-        <div className="w-full flex justify-between items-center">
-            <CategoriesSearch />
-            <Button
-                className="cursor-pointer"
-                onClick={() => router.push(URLPartsEnum.AddNewCategory)}
-            >
-                Add new <HiPlus className="ml-2" />
-            </Button>
-        </div>
-    )
+  return (
+    <div className="w-full flex justify-between items-center">
+      <CategoriesSearch />
+      <Button
+        className="cursor-pointer"
+        onClick={() => router.push(URLPartsEnum.AddNewCategory)}
+      >
+        Add new <HiPlus className="ml-2" />
+      </Button>
+    </div>
+  )
 }

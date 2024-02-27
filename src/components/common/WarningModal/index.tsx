@@ -1,22 +1,22 @@
-"use client";
+'use client'
 
-import { Button, Modal } from "flowbite-react";
-import { HiOutlineExclamationCircle } from "react-icons/hi";
+import { Button, Modal } from 'flowbite-react'
+import { HiOutlineExclamationCircle } from 'react-icons/hi'
 
 type ModalType = {
-  isOpen: boolean;
-  onSave: () => void;
-  onClose: () => void;
-  message?: string;
-  isLoading?: boolean;
-};
+  isOpen: boolean
+  onSave: () => void
+  onClose: () => void
+  message?: string
+  isLoading?: boolean
+}
 
 const WarningModal: React.FC<ModalType> = ({
   isOpen,
   onSave,
   onClose,
   isLoading = false,
-  message = "Are you sure you want to delete?",
+  message = 'Are you sure you want to delete?',
 }) => {
   return (
     <>
@@ -45,7 +45,7 @@ const WarningModal: React.FC<ModalType> = ({
         </Modal.Body>
       </Modal>
     </>
-  );
-};
+  )
+}
 
-export default WarningModal;
+export default WarningModal

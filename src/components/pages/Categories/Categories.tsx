@@ -1,21 +1,21 @@
-"use client";
+'use client'
 
-import React, { useEffect, useRef, useState } from "react";
-import { CategoriesTable } from "./components/CategoriesTable/CategoriesTable";
-import { useCategoryStore } from "@/store/store";
-import CategoryEditModal from "./components/CategoryEditModal/CategoryEditModal";
-import { WarningModal } from "@/components/common";
-import { PaginationData, CategoryData, CategoryFormBody } from "@/shared/types";
-import { toast } from "react-toastify";
-import { CategoriesAPI } from "@/services";
-import { CategoriesHeader } from "./components/CategoriesHeader/CategoriesHeader";
+import React, { useEffect, useRef, useState } from 'react'
+import { CategoriesTable } from './components/CategoriesTable/CategoriesTable'
+import { useCategoryStore } from '@/store/store'
+import CategoryEditModal from './components/CategoryEditModal/CategoryEditModal'
+import { WarningModal } from '@/components/common'
+import { PaginationData, CategoryData, CategoryFormBody } from '@/shared/types'
+import { toast } from 'react-toastify'
+import { CategoriesAPI } from '@/services'
+import { CategoriesHeader } from './components/CategoriesHeader/CategoriesHeader'
 
 export const Categories = () => {
   // TODO some functionalities will be moved to store
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isWarningModalOpen, setIsWarningModalOpen] = useState(false);
-  const activeCategoryRef = useRef<CategoryData>();
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isWarningModalOpen, setIsWarningModalOpen] = useState(false)
+  const activeCategoryRef = useRef<CategoryData>()
 
   const {
     fetchCategories,
@@ -25,89 +25,89 @@ export const Categories = () => {
     itemsPerPage,
     totalPages,
     changeCurrentPage,
-  } = useCategoryStore();
+  } = useCategoryStore()
 
   // ********* AddNew or Edit Modal *********
 
   const onCloseModal = () => {
-    setIsModalOpen(false);
-  };
+    setIsModalOpen(false)
+  }
 
   // EDIT
   const openEditModal = (category: CategoryData) => {
-    activeCategoryRef.current = category;
-    setIsModalOpen(true);
-  };
+    activeCategoryRef.current = category
+    setIsModalOpen(true)
+  }
 
   // ********* Warning Modal *********
   const onWarningModalOpen = (category: CategoryData) => {
-    setIsWarningModalOpen(true);
-    activeCategoryRef.current = category;
-  };
+    setIsWarningModalOpen(true)
+    activeCategoryRef.current = category
+  }
 
   const onWarningModalClose = () => {
-    setIsWarningModalOpen(false);
-  };
+    setIsWarningModalOpen(false)
+  }
 
   const fetchCategoriesData = async () => {
     const paginationData: PaginationData = {
       offset: (currentPage - 1) * itemsPerPage,
       limit: itemsPerPage,
-    };
-    await fetchCategories(paginationData);
-  };
+    }
+    await fetchCategories(paginationData)
+  }
 
   const onWarningModalConfirm = async () => {
     if (!activeCategoryRef.current) {
-      setIsWarningModalOpen(false);
-      return;
+      setIsWarningModalOpen(false)
+      return
     }
 
     const response = await CategoriesAPI.removeCategory(
       activeCategoryRef.current?.id
-    );
+    )
 
     if (response) {
-      const toastMessage = `category ${activeCategoryRef.current.name} is removed`;
+      const toastMessage = `category ${activeCategoryRef.current.name} is removed`
       toast(toastMessage, {
         hideProgressBar: true,
         autoClose: 2000,
-        type: "success",
-      });
-      fetchCategoriesData();
-      fetchAllCategories();
+        type: 'success',
+      })
+      fetchCategoriesData()
+      fetchAllCategories()
     }
-    setIsWarningModalOpen(false);
-  };
+    setIsWarningModalOpen(false)
+  }
 
   const onSaveEditModal = async (category: CategoryFormBody) => {
     if (!activeCategoryRef.current?.id) {
-      setIsModalOpen(false);
+      setIsModalOpen(false)
     } else {
-      const res = await editCategory(activeCategoryRef.current?.id, category);
+      const res = await editCategory(activeCategoryRef.current?.id, category)
       if (res) {
-        const toastMessage = `category ${activeCategoryRef.current.name} is changed!`;
+        const toastMessage = `category ${activeCategoryRef.current.name} is changed!`
         toast(toastMessage, {
           hideProgressBar: true,
           autoClose: 2000,
-          type: "success",
-        });
+          type: 'success',
+        })
 
-        fetchCategoriesData();
+        fetchCategoriesData()
       }
-      setIsModalOpen(false);
+      setIsModalOpen(false)
     }
-  };
+  }
 
   useEffect(() => {
     if (currentPage > totalPages && currentPage > 1) {
-      changeCurrentPage(currentPage - 1);
+      changeCurrentPage(currentPage - 1)
     }
-  }, [changeCurrentPage, currentPage, totalPages]);
+  }, [changeCurrentPage, currentPage, totalPages])
 
   useEffect(() => {
-    fetchAllCategories();
-  }, [fetchAllCategories]);
+    fetchAllCategories()
+  }, [fetchAllCategories])
 
   return (
     <div className="w-full">
@@ -130,5 +130,5 @@ export const Categories = () => {
         message={`Are you sure you want to delete ${activeCategoryRef.current?.name}?`}
       />
     </div>
-  );
-};
+  )
+}

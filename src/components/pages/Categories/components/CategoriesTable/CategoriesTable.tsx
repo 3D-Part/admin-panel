@@ -1,22 +1,22 @@
-"use client"; // This is a client component 👈🏽
+'use client' // This is a client component 👈🏽
 
-import { Pagination, Table } from "flowbite-react";
-import React, { useCallback, useEffect, useState } from "react";
-import { TableItem } from "./TableItem/TableItem";
-import { useCategoryStore } from "@/store/store";
-import { Loader } from "@/components/common";
-import { PaginationData, CategoryData } from "@/shared/types";
+import { Pagination, Table } from 'flowbite-react'
+import React, { useCallback, useEffect, useState } from 'react'
+import { TableItem } from './TableItem/TableItem'
+import { useCategoryStore } from '@/store/store'
+import { Loader } from '@/components/common'
+import { PaginationData, CategoryData } from '@/shared/types'
 
 type CategoriesTableType = {
-  onWarningModalOpen: (category: CategoryData) => void;
-  openEditModal: (category: CategoryData) => void;
-};
+  onWarningModalOpen: (category: CategoryData) => void
+  openEditModal: (category: CategoryData) => void
+}
 
 export const CategoriesTable: React.FC<CategoriesTableType> = ({
   onWarningModalOpen,
   openEditModal,
 }) => {
-  const [loader, setLoader] = useState(true);
+  const [loader, setLoader] = useState(true)
 
   const {
     fetchCategories,
@@ -26,29 +26,29 @@ export const CategoriesTable: React.FC<CategoriesTableType> = ({
     itemsPerPage,
     totalPages,
     changeCategoryFilter,
-  } = useCategoryStore();
+  } = useCategoryStore()
 
   const fetchCategoriesData = useCallback(async () => {
-    setLoader(true);
+    setLoader(true)
     const paginationData: PaginationData = {
       offset: (currentPage - 1) * itemsPerPage,
       limit: itemsPerPage,
-    };
-    const data = await fetchCategories(paginationData);
-    if (data) {
-      setLoader(false);
-    } else {
-      setLoader(true);
     }
-  }, [currentPage, fetchCategories, itemsPerPage]);
+    const data = await fetchCategories(paginationData)
+    if (data) {
+      setLoader(false)
+    } else {
+      setLoader(true)
+    }
+  }, [currentPage, fetchCategories, itemsPerPage])
 
   useEffect(() => {
-    changeCategoryFilter({});
-  }, []);
+    changeCategoryFilter({})
+  }, [])
 
   useEffect(() => {
-    fetchCategoriesData();
-  }, [currentPage, fetchCategoriesData]);
+    fetchCategoriesData()
+  }, [currentPage, fetchCategoriesData])
 
   return (
     <div className="mt-8">
@@ -72,7 +72,7 @@ export const CategoriesTable: React.FC<CategoriesTableType> = ({
                     onWarningModalOpen={onWarningModalOpen}
                     openEditModal={openEditModal}
                   />
-                );
+                )
               })}
           </Table.Body>
         )}
@@ -83,10 +83,10 @@ export const CategoriesTable: React.FC<CategoriesTableType> = ({
         className="mt-8"
         currentPage={currentPage}
         onPageChange={(page) => {
-          changeCurrentPage(page);
+          changeCurrentPage(page)
         }}
         totalPages={totalPages}
       />
     </div>
-  );
-};
+  )
+}

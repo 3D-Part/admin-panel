@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react'
 
 const ProductAttributes = () => {
-  return <div className="flex flex-wrap w-3/6 bg-black"></div>;
-};
+  return <div className="flex flex-wrap w-3/6 bg-black"></div>
+}
 
-export default ProductAttributes;
+export default ProductAttributes

@@ -1,8 +1,8 @@
-"use client";
+'use client'
 
-import React from "react";
-import AddAttribute from "./components/AddAttribute/AddAttribute";
-import AttributesPresenter from "./components/AttributesPresenter/AttributesPresenter";
+import React from 'react'
+import AddAttribute from './components/AddAttribute/AddAttribute'
+import AttributesPresenter from './components/AttributesPresenter/AttributesPresenter'
 
 const ProductAttributes = () => {
   return (
@@ -10,7 +10,7 @@ const ProductAttributes = () => {
       <AddAttribute />
       <AttributesPresenter />
     </div>
-  );
-};
+  )
+}
 
-export default ProductAttributes;
+export default ProductAttributes

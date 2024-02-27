@@ -1,19 +1,19 @@
-import { ManufacturerData } from "@/shared/types";
-import { Table } from "flowbite-react";
-import React from "react";
+import { ManufacturerData } from '@/shared/types'
+import { Table } from 'flowbite-react'
+import React from 'react'
 
 type TableItemType = {
-  manufacture: ManufacturerData;
-  onWarningModalOpen: (manufacture: ManufacturerData) => void;
-  openEditModal: (manufacture: ManufacturerData) => void;
-};
+  manufacture: ManufacturerData
+  onWarningModalOpen: (manufacture: ManufacturerData) => void
+  openEditModal: (manufacture: ManufacturerData) => void
+}
 
 export const TableItem: React.FC<TableItemType> = ({
   manufacture,
   onWarningModalOpen,
   openEditModal,
 }) => {
-  const { name } = manufacture;
+  const { name } = manufacture
 
   return (
     <>
@@ -42,5 +42,5 @@ export const TableItem: React.FC<TableItemType> = ({
         </Table.Cell>
       </Table.Row>
     </>
-  );
-};
+  )
+}

@@ -1,24 +1,24 @@
-"use client";
+'use client'
 
-import { Search } from "@/components/common";
-import { PaginationData } from "@/shared/types";
-import { useCategoryStore, useProductsStore } from "@/store/store";
-import { Spinner } from "flowbite-react";
-import React, { useCallback, useState } from "react";
+import { Search } from '@/components/common'
+import { PaginationData } from '@/shared/types'
+import { useCategoryStore, useProductsStore } from '@/store/store'
+import { Spinner } from 'flowbite-react'
+import React, { useCallback, useState } from 'react'
 
 const CategoriesSearch = () => {
-  const [loader, setLoader] = useState(false);
+  const [loader, setLoader] = useState(false)
 
   const {
     itemsPerPage,
     fetchCategories,
     changeCurrentPage,
     changeCategoryFilter,
-  } = useCategoryStore();
+  } = useCategoryStore()
 
   const fetchCategoriesData = useCallback(
     async (value: string) => {
-      changeCurrentPage(1);
+      changeCurrentPage(1)
 
       const filters = {
         filters: {
@@ -26,31 +26,31 @@ const CategoriesSearch = () => {
             like: `%${value}%`,
           },
         },
-      };
+      }
 
-      changeCategoryFilter(filters);
+      changeCategoryFilter(filters)
 
-      setLoader(true);
+      setLoader(true)
       const paginationData: PaginationData = {
         offset: 0,
         limit: itemsPerPage,
-      };
-      const data = await fetchCategories(paginationData);
+      }
+      const data = await fetchCategories(paginationData)
       if (data) {
-        setLoader(false);
+        setLoader(false)
       } else {
-        setLoader(true);
+        setLoader(true)
       }
     },
     [changeCurrentPage, itemsPerPage]
-  );
+  )
 
   return (
     <div className="flex gap-8 items-center">
       <Search getData={fetchCategoriesData} />
       {loader && <Spinner aria-label="Loading..." size="lg" />}
     </div>
-  );
-};
+  )
+}
 
-export default CategoriesSearch;
+export default CategoriesSearch

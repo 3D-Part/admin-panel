@@ -1,28 +1,25 @@
-import { StateCreator } from "zustand";
-import { PaginationData, ProductData, ProductFormBody } from "@/shared/types";
-import { ProductsAPI } from "@/services";
+import { StateCreator } from 'zustand'
+import { PaginationData, ProductData, ProductFormBody } from '@/shared/types'
+import { ProductsAPI } from '@/services'
 
 export interface ProductsSliceInterface {
-  activeProduct: ProductData;
-  allProducts: ProductData[];
-  currentPageProducts: ProductData[];
-  currentPage: number;
-  itemsPerPage: number;
-  totalPages: number;
-  sortFiled: string;
-  sortOrder: "ASC" | "DESC";
-  productFilters: {};
-  changeCurrentPage: (data: number) => void;
-  changeItemsPerPage: (data: number) => void;
-  changeProductFilter: (data: {}) => void;
-  changeActiveProduct: (product: ProductData) => void;
-  fetchProducts: (paginationData?: PaginationData) => Promise<boolean>;
-  fetchAllProducts: (paginationData?: PaginationData) => Promise<boolean>;
-  addNewProducts: (attribute: ProductFormBody) => Promise<boolean>;
-  editProduct: (
-    productID: string,
-    product: ProductFormBody
-  ) => Promise<boolean>;
+  activeProduct: ProductData
+  allProducts: ProductData[]
+  currentPageProducts: ProductData[]
+  currentPage: number
+  itemsPerPage: number
+  totalPages: number
+  sortFiled: string
+  sortOrder: 'ASC' | 'DESC'
+  productFilters: {}
+  changeCurrentPage: (data: number) => void
+  changeItemsPerPage: (data: number) => void
+  changeProductFilter: (data: {}) => void
+  changeActiveProduct: (product: ProductData) => void
+  fetchProducts: (paginationData?: PaginationData) => Promise<boolean>
+  fetchAllProducts: (paginationData?: PaginationData) => Promise<boolean>
+  addNewProducts: (attribute: ProductFormBody) => Promise<boolean>
+  editProduct: (productID: string, product: ProductFormBody) => Promise<boolean>
 }
 
 export const productsSlice: StateCreator<ProductsSliceInterface> = (
@@ -35,66 +32,66 @@ export const productsSlice: StateCreator<ProductsSliceInterface> = (
   currentPage: 1,
   itemsPerPage: 15,
   totalPages: 1,
-  sortFiled: "createdAt",
-  sortOrder: "DESC",
+  sortFiled: 'createdAt',
+  sortOrder: 'DESC',
   productFilters: {},
 
   changeCurrentPage: (data: number) => {
-    set({ currentPage: data });
+    set({ currentPage: data })
   },
 
   changeItemsPerPage: (data: number) => {
-    set({ itemsPerPage: data });
+    set({ itemsPerPage: data })
   },
 
   changeProductFilter: (data: {}) => {
-    set({ productFilters: data });
+    set({ productFilters: data })
   },
 
   changeActiveProduct: (product: ProductData) => {
-    set({ activeProduct: product });
+    set({ activeProduct: product })
   },
 
   fetchProducts: async (paginationData?: PaginationData) => {
     const sort = {
       field: get().sortFiled,
       order: get().sortOrder,
-    };
+    }
 
     try {
       const data = await ProductsAPI.getProducts(
         sort,
         paginationData,
         get().productFilters
-      );
+      )
 
       if (data) {
-        set({ currentPageProducts: data.rows });
-        set({ totalPages: Math.ceil(data.count / get().itemsPerPage) });
+        set({ currentPageProducts: data.rows })
+        set({ totalPages: Math.ceil(data.count / get().itemsPerPage) })
       }
 
-      return true;
+      return true
     } catch (error) {
-      console.error("Greška pri dohvatu podataka:", error);
+      console.error('Greška pri dohvatu podataka:', error)
     }
-    return false;
+    return false
   },
 
   fetchAllProducts: async () => {
     const sort = {
       field: get().sortFiled,
       order: get().sortOrder,
-    };
-    try {
-      const data = await ProductsAPI.getProducts(sort);
-      if (data) {
-        set({ allProducts: data.rows });
-      }
-      return true;
-    } catch (error) {
-      console.error("Greška pri dohvatu podataka:", error);
     }
-    return false;
+    try {
+      const data = await ProductsAPI.getProducts(sort)
+      if (data) {
+        set({ allProducts: data.rows })
+      }
+      return true
+    } catch (error) {
+      console.error('Greška pri dohvatu podataka:', error)
+    }
+    return false
   },
 
   addNewProducts: async (product: ProductFormBody) => {
@@ -110,26 +107,26 @@ export const productsSlice: StateCreator<ProductsSliceInterface> = (
       price: product.price,
       weight: product.weight,
       quantity: product.quantity,
-    };
+    }
 
-    if (product.description) _productData.description = product.description;
-    if (product.details) _productData.details = product.details;
+    if (product.description) _productData.description = product.description
+    if (product.details) _productData.details = product.details
     if (product.manufacturerId)
-      _productData.manufacturerId = product.manufacturerId;
+      _productData.manufacturerId = product.manufacturerId
 
     try {
-      const data = await ProductsAPI.addNewProduct(_productData);
+      const data = await ProductsAPI.addNewProduct(_productData)
       if (data) {
         // products.push(data);
         // set({ allProducts: [...products] });
-        set({ activeProduct: data });
-        return true;
+        set({ activeProduct: data })
+        return true
       }
     } catch (error) {
-      console.error("Error adding product:", error);
-      throw error;
+      console.error('Error adding product:', error)
+      throw error
     }
-    return false;
+    return false
   },
 
   editProduct: async (productId: string, product: ProductFormBody) => {
@@ -148,23 +145,23 @@ export const productsSlice: StateCreator<ProductsSliceInterface> = (
       price: product.price,
       weight: product.weight,
       quantity: product.quantity,
-    };
+    }
 
     try {
-      const data = await ProductsAPI.editProducts(productId, _productData);
+      const data = await ProductsAPI.editProducts(productId, _productData)
       if (data) {
         // const index = products.findIndex((product) => product.id === productId);
         // if (index !== -1) {
         //   products[index] = data;
         // }
 
-        set({ activeProduct: data });
-        return true;
+        set({ activeProduct: data })
+        return true
       }
     } catch (error) {
-      console.error("Error editing product:", error);
-      throw error;
+      console.error('Error editing product:', error)
+      throw error
     }
-    return false;
+    return false
   },
-});
+})

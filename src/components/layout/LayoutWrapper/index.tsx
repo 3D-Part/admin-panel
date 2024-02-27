@@ -8,19 +8,19 @@ import SideBar from '../SideBar/SideBar'
 import { useInitialAuthCheck } from '@/shared/hooks/useInitialAuthCheck'
 
 const LayoutWrapper = () => {
-    const pathname = usePathname()
-    const isLoginPage = pathname === URLPartsEnum.Login
+  const pathname = usePathname()
+  const isLoginPage = pathname === URLPartsEnum.Login
 
-    useInitialAuthCheck()
+  useInitialAuthCheck()
 
-    if (isLoginPage) return
+  if (isLoginPage) return
 
-    return (
-        <>
-            <Header />
-            <SideBar />
-        </>
-    )
+  return (
+    <>
+      <Header />
+      <SideBar />
+    </>
+  )
 }
 
 export default LayoutWrapper

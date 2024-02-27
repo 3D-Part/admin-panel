@@ -1,19 +1,19 @@
-import { AttributeData } from "@/shared/types";
-import { Table } from "flowbite-react";
-import React from "react";
+import { AttributeData } from '@/shared/types'
+import { Table } from 'flowbite-react'
+import React from 'react'
 
 type TableItemType = {
-  attribute: AttributeData;
-  onWarningModalOpen: (attribute: AttributeData) => void;
-  openEditModal: (attribute: AttributeData) => void;
-};
+  attribute: AttributeData
+  onWarningModalOpen: (attribute: AttributeData) => void
+  openEditModal: (attribute: AttributeData) => void
+}
 
 export const TableItem: React.FC<TableItemType> = ({
   attribute,
   onWarningModalOpen,
   openEditModal,
 }) => {
-  const { name } = attribute;
+  const { name } = attribute
 
   return (
     <>
@@ -42,5 +42,5 @@ export const TableItem: React.FC<TableItemType> = ({
         </Table.Cell>
       </Table.Row>
     </>
-  );
-};
+  )
+}

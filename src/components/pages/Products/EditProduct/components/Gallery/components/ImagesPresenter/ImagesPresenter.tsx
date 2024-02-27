@@ -1,17 +1,17 @@
-"use client";
+'use client'
 
-import { useProductsStore } from "@/store/store";
-import React from "react";
-import Title from "./components/Title";
-import Img from "./components/Img";
+import { useProductsStore } from '@/store/store'
+import React from 'react'
+import Title from './components/Title'
+import Img from './components/Img'
 
-const S3_URL = process.env.S3_URL;
+const S3_URL = process.env.S3_URL
 
 const ImagesPresenter = () => {
-  const { activeProduct } = useProductsStore();
-  const { images } = activeProduct;
+  const { activeProduct } = useProductsStore()
+  const { images } = activeProduct
 
-  if (images?.length === 0) return;
+  if (images?.length === 0) return
 
   return (
     <div className="flex flex-col align-baseline gap-8 mb-12">
@@ -26,11 +26,11 @@ const ImagesPresenter = () => {
                 isMain={image.isMain}
               />
             </div>
-          );
+          )
         })}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ImagesPresenter;
+export default ImagesPresenter

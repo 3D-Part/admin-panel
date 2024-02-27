@@ -1,18 +1,18 @@
-import "./globals.css";
-import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer } from "react-toastify";
-import ChildrenWrapper from "@/components/layout/ChildrenWrapper";
-import LayoutWrapper from "@/components/layout/LayoutWrapper";
+import './globals.css'
+import 'react-toastify/dist/ReactToastify.css'
+import { ToastContainer } from 'react-toastify'
+import ChildrenWrapper from '@/components/layout/ChildrenWrapper'
+import LayoutWrapper from '@/components/layout/LayoutWrapper'
 
 export const metadata = {
-  title: "3D Part",
-  description: "3D Part Admin Panel",
-};
+  title: '3D Part',
+  description: '3D Part Admin Panel',
+}
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
     <html lang="en" className="dark">
@@ -23,5 +23,5 @@ export default function RootLayout({
         <ToastContainer theme="colored" />
       </body>
     </html>
-  );
+  )
 }

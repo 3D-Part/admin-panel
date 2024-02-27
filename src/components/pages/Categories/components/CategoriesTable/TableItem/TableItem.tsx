@@ -1,19 +1,19 @@
-import { CategoryData } from "@/shared/types";
-import { Table } from "flowbite-react";
-import React from "react";
+import { CategoryData } from '@/shared/types'
+import { Table } from 'flowbite-react'
+import React from 'react'
 
 type TableItemType = {
-  category: CategoryData;
-  onWarningModalOpen: (category: CategoryData) => void;
-  openEditModal: (category: CategoryData) => void;
-};
+  category: CategoryData
+  onWarningModalOpen: (category: CategoryData) => void
+  openEditModal: (category: CategoryData) => void
+}
 
 export const TableItem: React.FC<TableItemType> = ({
   category,
   onWarningModalOpen,
   openEditModal,
 }) => {
-  const { name, slug, category: parentCategory } = category;
+  const { name, slug, category: parentCategory } = category
 
   return (
     <>
@@ -24,7 +24,7 @@ export const TableItem: React.FC<TableItemType> = ({
         >
           <div className="flex justify-start items-center gap-6">{name}</div>
         </Table.Cell>
-        <Table.Cell>{parentCategory ? parentCategory.name : ""}</Table.Cell>
+        <Table.Cell>{parentCategory ? parentCategory.name : ''}</Table.Cell>
         <Table.Cell>{slug}</Table.Cell>
         <Table.Cell>
           <div className="flex justify-end items-center gap-8">
@@ -44,5 +44,5 @@ export const TableItem: React.FC<TableItemType> = ({
         </Table.Cell>
       </Table.Row>
     </>
-  );
-};
+  )
+}

@@ -1,8 +1,8 @@
-import AddNewManufacturer from "@/components/pages/Manufactures/AddNewManufactures/AddNewManufacturer";
-import React from "react";
+import AddNewManufacturer from '@/components/pages/Manufactures/AddNewManufactures/AddNewManufacturer'
+import React from 'react'
 
 const AddNewManufacturerPage = () => {
-  return <AddNewManufacturer />;
-};
+  return <AddNewManufacturer />
+}
 
-export default AddNewManufacturerPage;
+export default AddNewManufacturerPage

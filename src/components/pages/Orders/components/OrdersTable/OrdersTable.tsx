@@ -1,14 +1,14 @@
-"use client"; // This is a client component 👈🏽
+'use client' // This is a client component 👈🏽
 
-import { Pagination, Table } from "flowbite-react";
-import React, { useCallback, useEffect, useState } from "react";
-import { TableItem } from "./TableItem/TableItem";
-import { useOrdersStore } from "@/store/store";
-import { Loader } from "@/components/common";
-import { PaginationData } from "@/shared/types";
+import { Pagination, Table } from 'flowbite-react'
+import React, { useCallback, useEffect, useState } from 'react'
+import { TableItem } from './TableItem/TableItem'
+import { useOrdersStore } from '@/store/store'
+import { Loader } from '@/components/common'
+import { PaginationData } from '@/shared/types'
 
 export const OrdersTable = () => {
-  const [loader, setLoader] = useState(true);
+  const [loader, setLoader] = useState(true)
 
   const {
     currentPageOrders,
@@ -17,31 +17,31 @@ export const OrdersTable = () => {
     fetchOrders,
     changeCurrentPage,
     totalPages,
-  } = useOrdersStore();
+  } = useOrdersStore()
 
   const fetchOrdersData = useCallback(async () => {
-    setLoader(true);
+    setLoader(true)
     const paginationData: PaginationData = {
       offset: (currentPage - 1) * itemsPerPage,
       limit: itemsPerPage,
-    };
-    const data = await fetchOrders(paginationData);
-    if (data) {
-      setLoader(false);
-    } else {
-      setLoader(true);
     }
-  }, [currentPage, fetchOrders, itemsPerPage]);
+    const data = await fetchOrders(paginationData)
+    if (data) {
+      setLoader(false)
+    } else {
+      setLoader(true)
+    }
+  }, [currentPage, fetchOrders, itemsPerPage])
 
   useEffect(() => {
-    fetchOrdersData();
-  }, [currentPage, fetchOrdersData]);
+    fetchOrdersData()
+  }, [currentPage, fetchOrdersData])
 
   useEffect(() => {
     if (currentPage > totalPages && currentPage > 1) {
-      changeCurrentPage(currentPage - 1);
+      changeCurrentPage(currentPage - 1)
     }
-  }, [changeCurrentPage, currentPage, totalPages]);
+  }, [changeCurrentPage, currentPage, totalPages])
 
   return (
     <div>
@@ -59,7 +59,7 @@ export const OrdersTable = () => {
         {!loader && (
           <Table.Body className="divide-y">
             {currentPageOrders.map((order) => {
-              return <TableItem key={order.id} order={order} />;
+              return <TableItem key={order.id} order={order} />
             })}
           </Table.Body>
         )}
@@ -70,10 +70,10 @@ export const OrdersTable = () => {
         className="mt-8"
         currentPage={currentPage}
         onPageChange={(page) => {
-          changeCurrentPage(page);
+          changeCurrentPage(page)
         }}
         totalPages={totalPages}
       />
     </div>
-  );
-};
+  )
+}
