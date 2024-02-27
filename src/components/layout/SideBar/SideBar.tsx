@@ -10,6 +10,7 @@ import {
   HiUsers,
 } from 'react-icons/hi'
 import { MdUnsubscribe } from 'react-icons/md'
+import { IoMdPricetags } from 'react-icons/io'
 
 import { usePathname } from 'next/navigation'
 import { useRouter } from 'next/navigation'
@@ -88,6 +89,12 @@ const SideBar = () => {
       name: 'Orders',
       href: URLPartsEnum.Orders,
       icon: HiDocumentText,
+      open: false,
+    },
+    {
+      name: 'Promo Codes',
+      href: URLPartsEnum.PromoCodes,
+      icon: IoMdPricetags,
       open: false,
     },
     {
