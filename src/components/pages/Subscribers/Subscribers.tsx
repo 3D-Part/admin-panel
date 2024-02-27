@@ -6,32 +6,32 @@ import { SubscribersTable } from './components/SubscribersTable/SubscribersTable
 import { useSubscribersSliceStore } from '@/store/store'
 
 export const Subscribers = () => {
-    const {
-        fetchSubscribers,
-        currentPage,
-        itemsPerPage,
-        totalPages,
-        changeCurrentPage,
-    } = useSubscribersSliceStore()
+  const {
+    fetchSubscribers,
+    currentPage,
+    itemsPerPage,
+    totalPages,
+    changeCurrentPage,
+  } = useSubscribersSliceStore()
 
-    const fetchSubscriberssData = async () => {
-        const paginationData: PaginationData = {
-            offset: (currentPage - 1) * itemsPerPage,
-            limit: itemsPerPage,
-        }
-        await fetchSubscribers(paginationData)
+  const fetchSubscriberssData = async () => {
+    const paginationData: PaginationData = {
+      offset: (currentPage - 1) * itemsPerPage,
+      limit: itemsPerPage,
     }
+    await fetchSubscribers(paginationData)
+  }
 
-    useEffect(() => {
-        if (currentPage > totalPages && currentPage > 1) {
-            changeCurrentPage(currentPage - 1)
-        }
-    }, [changeCurrentPage, currentPage, totalPages])
+  useEffect(() => {
+    if (currentPage > totalPages && currentPage > 1) {
+      changeCurrentPage(currentPage - 1)
+    }
+  }, [changeCurrentPage, currentPage, totalPages])
 
-    return (
-        <div className="w-full">
-            {/* <MSubscribersHeader /> */}
-            <SubscribersTable />
-        </div>
-    )
+  return (
+    <div className="w-full">
+      {/* <MSubscribersHeader /> */}
+      <SubscribersTable />
+    </div>
+  )
 }

@@ -7,14 +7,14 @@ import { isExpired } from 'react-jwt'
 import { URLPartsEnum } from '../enums'
 
 export const useInitialAuthCheck = () => {
-    const router = useRouter()
-    const refreshToken = getCookie('refreshToken')
+  const router = useRouter()
+  const refreshToken = getCookie('refreshToken')
 
-    const isRefreshTokenExpired = isExpired(refreshToken)
+  const isRefreshTokenExpired = isExpired(refreshToken)
 
-    useEffect(() => {
-        if (isRefreshTokenExpired) {
-            router.push(URLPartsEnum.Login)
-        }
-    }, [])
+  useEffect(() => {
+    if (isRefreshTokenExpired) {
+      router.push(URLPartsEnum.Login)
+    }
+  }, [])
 }

@@ -2,60 +2,60 @@ import { create } from 'zustand'
 import { categorySlice, CategorySliceInterface } from './slices/categoriesSlice'
 
 import {
-    manufactureSlice,
-    ManufactureSliceInterface,
+  manufactureSlice,
+  ManufactureSliceInterface,
 } from './slices/manufacturesSlice'
 
 import {
-    attributeSlice,
-    AttributesSliceInterface,
+  attributeSlice,
+  AttributesSliceInterface,
 } from './slices/attributesSlice'
 
 import { productsSlice, ProductsSliceInterface } from './slices/productsSlice'
 
 import {
-    storeManagerSlice,
-    StoreManagerSliceInterface,
+  storeManagerSlice,
+  StoreManagerSliceInterface,
 } from './slices/storeManagerSlice'
 
 import { ordersSlice, OrdersSliceInterface } from './slices/orderSlice'
 import {
-    SubscribersSliceInterface,
-    subscribersSlice,
+  SubscribersSliceInterface,
+  subscribersSlice,
 } from './slices/subscribersSlice'
 
 export const useCategoryStore = create<CategorySliceInterface>()((...a) => ({
-    ...categorySlice(...a),
+  ...categorySlice(...a),
 }))
 
 export const useManufactureStore = create<ManufactureSliceInterface>()(
-    (...a) => ({
-        ...manufactureSlice(...a),
-    })
+  (...a) => ({
+    ...manufactureSlice(...a),
+  })
 )
 
 export const useAttributesStore = create<AttributesSliceInterface>()(
-    (...a) => ({
-        ...attributeSlice(...a),
-    })
+  (...a) => ({
+    ...attributeSlice(...a),
+  })
 )
 
 export const useProductsStore = create<ProductsSliceInterface>()((...a) => ({
-    ...productsSlice(...a),
+  ...productsSlice(...a),
 }))
 
 export const useS3ManagerStore = create<StoreManagerSliceInterface>()(
-    (...a) => ({
-        ...storeManagerSlice(...a),
-    })
+  (...a) => ({
+    ...storeManagerSlice(...a),
+  })
 )
 
 export const useOrdersStore = create<OrdersSliceInterface>()((...a) => ({
-    ...ordersSlice(...a),
+  ...ordersSlice(...a),
 }))
 
 export const useSubscribersSliceStore = create<SubscribersSliceInterface>()(
-    (...a) => ({
-        ...subscribersSlice(...a),
-    })
+  (...a) => ({
+    ...subscribersSlice(...a),
+  })
 )

@@ -4,31 +4,31 @@ import { PaginationData, SortParamsData, SubscribersData } from '@/shared/types'
 const API_BASE_URL = process.env.API_KEY
 
 const getSubscribers = async (
-    sortData: SortParamsData,
-    paginationData?: PaginationData,
-    params = {}
+  sortData: SortParamsData,
+  paginationData?: PaginationData,
+  params = {}
 ) => {
-    const { offset, limit } = paginationData || {}
+  const { offset, limit } = paginationData || {}
 
-    const queryParams = new URLSearchParams()
+  const queryParams = new URLSearchParams()
 
-    if (offset !== undefined && limit !== undefined) {
-        queryParams.append('offset', offset.toString())
-        queryParams.append('limit', limit.toString())
-    }
-    queryParams.append('sort[order]', sortData.order)
-    queryParams.append('sort[field]', sortData.field)
+  if (offset !== undefined && limit !== undefined) {
+    queryParams.append('offset', offset.toString())
+    queryParams.append('limit', limit.toString())
+  }
+  queryParams.append('sort[order]', sortData.order)
+  queryParams.append('sort[field]', sortData.field)
 
-    try {
-        const data = await API.get<SubscribersData>(
-            `${API_BASE_URL}/shop/subscriber/?${queryParams}`,
-            params
-        )
-        return data
-    } catch (error) {
-        console.error('Error fetching subscribers data:', error)
-        return null
-    }
+  try {
+    const data = await API.get<SubscribersData>(
+      `${API_BASE_URL}/shop/subscriber/?${queryParams}`,
+      params
+    )
+    return data
+  } catch (error) {
+    console.error('Error fetching subscribers data:', error)
+    return null
+  }
 }
 
 // const addNewManufacturer = async (
@@ -73,10 +73,10 @@ const getSubscribers = async (
 // };
 
 const SubscribersAPI = {
-    getSubscribers,
-    // addNewManufacturer,
-    // editManufacturer,
-    // removeManufacture,
+  getSubscribers,
+  // addNewManufacturer,
+  // editManufacturer,
+  // removeManufacture,
 }
 
 export default SubscribersAPI

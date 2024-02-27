@@ -8,72 +8,67 @@ import { Loader } from '@/components/common'
 import { PaginationData, ManufacturerData } from '@/shared/types'
 
 export const SubscribersTable = () => {
-    const [loader, setLoader] = useState(true)
+  const [loader, setLoader] = useState(true)
 
-    const {
-        fetchSubscribers,
-        currentPageSubscribers,
-        currentPage,
-        changeCurrentPage,
-        itemsPerPage,
-        totalPages,
-    } = useSubscribersSliceStore()
+  const {
+    fetchSubscribers,
+    currentPageSubscribers,
+    currentPage,
+    changeCurrentPage,
+    itemsPerPage,
+    totalPages,
+  } = useSubscribersSliceStore()
 
-    const fetchSubscribersData = useCallback(async () => {
-        setLoader(true)
-        const paginationData: PaginationData = {
-            offset: (currentPage - 1) * itemsPerPage,
-            limit: itemsPerPage,
-        }
-        const data = await fetchSubscribers(paginationData)
-        if (data) {
-            setLoader(false)
-        } else {
-            setLoader(true)
-        }
-    }, [currentPage, fetchSubscribers, itemsPerPage])
+  const fetchSubscribersData = useCallback(async () => {
+    setLoader(true)
+    const paginationData: PaginationData = {
+      offset: (currentPage - 1) * itemsPerPage,
+      limit: itemsPerPage,
+    }
+    const data = await fetchSubscribers(paginationData)
+    if (data) {
+      setLoader(false)
+    } else {
+      setLoader(true)
+    }
+  }, [currentPage, fetchSubscribers, itemsPerPage])
 
-    // useEffect(() => {
-    //   changeManufactureFilter({});
-    // }, []);
+  // useEffect(() => {
+  //   changeManufactureFilter({});
+  // }, []);
 
-    useEffect(() => {
-        fetchSubscribersData()
-    }, [currentPage, fetchSubscribersData])
+  useEffect(() => {
+    fetchSubscribersData()
+  }, [currentPage, fetchSubscribersData])
 
-    return (
-        <div className="">
-            <Table>
-                <Table.Head>
-                    <Table.HeadCell>Name</Table.HeadCell>
-                    {/* <Table.HeadCell>
+  return (
+    <div className="">
+      <Table>
+        <Table.Head>
+          <Table.HeadCell>Name</Table.HeadCell>
+          {/* <Table.HeadCell>
                         <span className="sr-only">Edit or Remove</span>
                     </Table.HeadCell> */}
-                </Table.Head>
-                {!loader && (
-                    <Table.Body className="divide-y">
-                        {currentPageSubscribers.length > 0 &&
-                            currentPageSubscribers.map((subscriber) => {
-                                return (
-                                    <TableItem
-                                        key={subscriber.id}
-                                        subscriber={subscriber}
-                                    />
-                                )
-                            })}
-                    </Table.Body>
-                )}
-            </Table>
-            {loader && <Loader />}
+        </Table.Head>
+        {!loader && (
+          <Table.Body className="divide-y">
+            {currentPageSubscribers.length > 0 &&
+              currentPageSubscribers.map((subscriber) => {
+                return <TableItem key={subscriber.id} subscriber={subscriber} />
+              })}
+          </Table.Body>
+        )}
+      </Table>
+      {loader && <Loader />}
 
-            <Pagination
-                className="mt-8"
-                currentPage={currentPage}
-                onPageChange={(page) => {
-                    changeCurrentPage(page)
-                }}
-                totalPages={totalPages}
-            />
-        </div>
-    )
+      <Pagination
+        className="mt-8"
+        currentPage={currentPage}
+        onPageChange={(page) => {
+          changeCurrentPage(page)
+        }}
+        totalPages={totalPages}
+      />
+    </div>
+  )
 }
