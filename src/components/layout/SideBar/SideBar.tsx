@@ -96,6 +96,16 @@ const SideBar = () => {
       href: URLPartsEnum.PromoCodes,
       icon: IoMdPricetags,
       open: false,
+      children: [
+        {
+          name: 'All promo code',
+          href: URLPartsEnum.PromoCodes,
+        },
+        {
+          name: 'Add new promo code',
+          href: URLPartsEnum.AddNewPromoCode,
+        },
+      ],
     },
     {
       name: 'Subscribers',

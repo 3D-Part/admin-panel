@@ -22,6 +22,7 @@ export enum URLPartsEnum {
   Subscribers = '/subscribers',
 
   PromoCodes = '/promocodes',
+  AddNewPromoCode = '/promocodes/add-new',
 }
 
 export enum ErrorsEnum {

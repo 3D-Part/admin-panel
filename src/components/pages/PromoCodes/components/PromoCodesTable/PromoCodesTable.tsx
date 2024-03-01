@@ -42,7 +42,7 @@ export const PromoCodesTable = () => {
   }, [currentPage, fetchPromoCodesData])
 
   return (
-    <div className="">
+    <div className="mt-8">
       <Table>
         <Table.Head>
           <Table.HeadCell>Name</Table.HeadCell>

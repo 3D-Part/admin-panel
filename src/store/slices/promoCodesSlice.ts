@@ -1,5 +1,10 @@
 import { StateCreator } from 'zustand'
-import { PaginationData, PromoCode, PromoCodesData } from '@/shared/types'
+import {
+  PaginationData,
+  PromoCode,
+  PromoCodeFormBody,
+  PromoCodesData,
+} from '@/shared/types'
 import PromoCodesAPI from '@/services/promoCodes'
 
 export interface PromoCodesSliceInterface {
@@ -15,8 +20,8 @@ export interface PromoCodesSliceInterface {
   changeItemsPerPage: (data: number) => void
   changeSubscribersFilter: (data: {}) => void
   fetchPromoCodes: (paginationData?: PaginationData) => Promise<boolean>
+  addNewPromoCode: (manufacture: PromoCodeFormBody) => Promise<boolean>
   // allSubscribers: (paginationData?: PaginationData) => Promise<boolean>;
-  // addNewManufacture: (manufacture: ManufacturerFormBody) => Promise<boolean>;
   // editManufacture: (
   //   manufactureId: string,
   //   manufacture: ManufacturerFormBody
@@ -72,66 +77,51 @@ export const promoCodesSlice: StateCreator<PromoCodesSliceInterface> = (
     return false
   },
 
-  // allSubscribers: async () => {
-  //   const sort = {
-  //     field: get().sortFiled,
-  //     order: get().sortOrder,
-  //   };
+  addNewPromoCode: async (promoCode: PromoCodeFormBody) => {
+    const promoCodes = get().allPromoCodes
 
-  //   try {
-  //     const data = await ManufacturesAPI.getManufactures(sort);
-  //     if (data) {
-  //       set({ allSubscribers: data.rows });
-  //     }
-  //     return true;
-  //   } catch (error) {
-  //     console.error("Greška pri dohvatu podataka:", error);
-  //   }
-  //   return false;
-  // },
+    const _promoCodesData: PromoCodeFormBody = {
+      code: promoCode.code,
+      startsAt: promoCode.startsAt,
+      endsAt: promoCode.endsAt,
+      discountPercentage: promoCode.discountPercentage,
+    }
 
-  // addNewManufacture: async (manufacturer: ManufacturerFormBody) => {
-  //   const manufactures = get().allSubscribers;
-
-  //   const _manufacturesData: ManufacturerFormBody = {
-  //     name: manufacturer.name,
-  //   };
-
-  //   try {
-  //     const data = await ManufacturesAPI.addNewManufacturer(_manufacturesData);
-  //     if (data) {
-  //       manufactures.push(data);
-  //       set({ allSubscribers: [...manufactures] });
-  //       return true;
-  //     }
-  //   } catch (error) {
-  //     console.error("Error adding manufacture:", error);
-  //     throw error;
-  //   }
-  //   return false;
-  // },
+    try {
+      const data = await PromoCodesAPI.addNewPromoCode(_promoCodesData)
+      if (data) {
+        promoCodes.push(data)
+        set({ allPromoCodes: [...promoCodes] })
+        return true
+      }
+    } catch (error) {
+      console.error('Error adding manufacture:', error)
+      throw error
+    }
+    return false
+  },
 
   // editManufacture: async (
   //   manufacturerId: string,
   //   manufacturer: ManufacturerFormBody
   // ) => {
-  //   const manufactures = get().allSubscribers;
+  //   const promoCodes = get().allSubscribers;
 
   //   const _PromoCodesData: ManufacturerFormBody = {
   //     name: manufacturer.name,
   //   };
 
   //   try {
-  //     const data = await ManufacturesAPI.editManufacturer(
+  //     const data = await promoCodesAPI.editManufacturer(
   //       manufacturerId,
   //       _PromoCodesData
   //     );
   //     if (data) {
-  //       const index = manufactures.findIndex(
+  //       const index = promoCodes.findIndex(
   //         (manufacturer) => manufacturer.id === manufacturerId
   //       );
   //       if (index !== -1) {
-  //         manufactures[index] = data;
+  //         promoCodes[index] = data;
   //       }
   //       return true;
   //     }

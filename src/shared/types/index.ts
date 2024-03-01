@@ -293,3 +293,10 @@ export interface PromoCodesData {
   count: number
   rows: PromoCode[]
 }
+
+export interface PromoCodeFormBody {
+  code: string
+  startsAt: string
+  endsAt: string
+  discountPercentage: number
+}

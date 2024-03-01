@@ -1,3 +1,4 @@
+import dateTimeFormat from '@/shared/helpers/dateTimeFormat'
 import { Order, OrderProduct } from '@/shared/types'
 import { Button, Modal, Table } from 'flowbite-react'
 import React from 'react'
@@ -66,12 +67,7 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
     products,
   } = order
 
-  const isoDate = createdAt
-  const date = new Date(isoDate)
-  const year = date.toLocaleString('en-US', { year: 'numeric' })
-  const month = date.toLocaleString('en-US', { month: '2-digit' })
-  const day = date.toLocaleString('en-US', { day: '2-digit' })
-  const formattedDate = `${day}.${month}.${year}`
+  const formattedDate = dateTimeFormat(createdAt)
 
   return (
     <Modal dismissible show={isOpen} onClose={onClose} size="4xl">

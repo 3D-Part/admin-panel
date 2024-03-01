@@ -1,5 +1,10 @@
 import { API } from '@/shared/helpers'
-import { PaginationData, SortParamsData, PromoCodesData } from '@/shared/types'
+import {
+  PaginationData,
+  SortParamsData,
+  PromoCodesData,
+  PromoCodeFormBody,
+} from '@/shared/types'
 
 const API_BASE_URL = process.env.API_KEY
 
@@ -31,20 +36,20 @@ const getPromoCodes = async (
   }
 }
 
-// const addNewManufacturer = async (
-//   body: ManufacturerFormBody
-// ): Promise<ManufacturerData | null> => {
-//   try {
-//     const data: ManufacturerData = await API.post(
-//       `${API_BASE_URL}/shop/manufactures/`,
-//       body
-//     );
-//     return data;
-//   } catch (error) {
-//     console.error("Error adding manufacturer:", error);
-//     return null;
-//   }
-// };
+const addNewPromoCode = async (
+  body: PromoCodeFormBody
+): Promise<PromoCodesData | null> => {
+  try {
+    const data: PromoCodesData = await API.post(
+      `${API_BASE_URL}/shop/promotion-codes/`,
+      body
+    )
+    return data
+  } catch (error) {
+    console.error('Error adding promo code:', error)
+    return null
+  }
+}
 
 // const editManufacturer = async (
 //   id: string,
@@ -74,7 +79,7 @@ const getPromoCodes = async (
 
 const PromoCodesAPI = {
   getPromoCodes,
-  // addNewManufacturer,
+  addNewPromoCode,
   // editManufacturer,
   // removeManufacture,
 }

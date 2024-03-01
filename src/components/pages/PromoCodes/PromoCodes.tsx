@@ -4,23 +4,11 @@ import React, { useEffect } from 'react'
 import { PaginationData } from '@/shared/types'
 import { useSubscribersSliceStore } from '@/store/store'
 import { PromoCodesTable } from './components/PromoCodesTable/PromoCodesTable'
+import { PromoCodesHeader } from './components/PromoCodesHeader/PromoCodesHeader'
 
 export const PromoCodes = () => {
-  const {
-    fetchSubscribers,
-    currentPage,
-    itemsPerPage,
-    totalPages,
-    changeCurrentPage,
-  } = useSubscribersSliceStore()
-
-  const fetchSubscriberssData = async () => {
-    const paginationData: PaginationData = {
-      offset: (currentPage - 1) * itemsPerPage,
-      limit: itemsPerPage,
-    }
-    await fetchSubscribers(paginationData)
-  }
+  const { currentPage, totalPages, changeCurrentPage } =
+    useSubscribersSliceStore()
 
   useEffect(() => {
     if (currentPage > totalPages && currentPage > 1) {
@@ -30,7 +18,7 @@ export const PromoCodes = () => {
 
   return (
     <div className="w-full">
-      {/* <MSubscribersHeader /> */}
+      <PromoCodesHeader />
       <PromoCodesTable />
     </div>
   )
