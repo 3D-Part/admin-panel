@@ -38,8 +38,6 @@ const AddNewPromoCode: React.FC<AddNewPromoCodeType> = ({ initialValue }) => {
   const saveFunction = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    console.log('promoCodeDataRef.current:', promoCodeDataRef.current)
-
     if (!promoCodeDataRef.current.code) return
 
     const _promoCode: PromoCodeFormBody = {
