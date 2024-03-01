@@ -275,3 +275,21 @@ export interface SubscribersData {
   count: number
   rows: Subscriber[]
 }
+
+// PROMOCODES
+
+export interface PromoCode {
+  id: string
+  code: string
+  discountPercentage: string
+  startsAt: string
+  endsAt: string
+  createdAt: string
+  updatedAt: string
+  userPromotionCode: any[]
+}
+
+export interface PromoCodesData {
+  count: number
+  rows: PromoCode[]
+}

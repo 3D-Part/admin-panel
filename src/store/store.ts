@@ -1,3 +1,7 @@
+import {
+  promoCodesSlice,
+  PromoCodesSliceInterface,
+} from './slices/promoCodesSlice'
 import { create } from 'zustand'
 import { categorySlice, CategorySliceInterface } from './slices/categoriesSlice'
 
@@ -57,5 +61,11 @@ export const useOrdersStore = create<OrdersSliceInterface>()((...a) => ({
 export const useSubscribersSliceStore = create<SubscribersSliceInterface>()(
   (...a) => ({
     ...subscribersSlice(...a),
+  })
+)
+
+export const usePromoCodesSliceStore = create<PromoCodesSliceInterface>()(
+  (...a) => ({
+    ...promoCodesSlice(...a),
   })
 )
