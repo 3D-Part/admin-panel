@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import React from 'react'
 import { HiArrowCircleLeft } from 'react-icons/hi'
 
-const PromoCodeHeader = () => {
+const PromoCodeHeader = ({ title }) => {
   const router = useRouter()
 
   return (
@@ -18,7 +18,7 @@ const PromoCodeHeader = () => {
       >
         <HiArrowCircleLeft className="text-xl text-white" />
       </Button>
-      <h2 className="text-white text-2xl">Add new promo code:</h2>
+      <h2 className="text-white text-2xl">{title}</h2>
     </div>
   )
 }

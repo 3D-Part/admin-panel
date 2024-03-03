@@ -4,6 +4,7 @@ import {
   SortParamsData,
   PromoCodesData,
   PromoCodeFormBody,
+  PromoCode,
 } from '@/shared/types'
 
 const API_BASE_URL = process.env.API_KEY
@@ -51,37 +52,37 @@ const addNewPromoCode = async (
   }
 }
 
-// const editManufacturer = async (
-//   id: string,
-//   body: ManufacturerFormBody
-// ): Promise<ManufacturerData | null> => {
-//   try {
-//     const data: ManufacturerData = await API.patch(
-//       `${API_BASE_URL}/shop/manufactures/${id}`,
-//       body
-//     );
-//     return data;
-//   } catch (error) {
-//     console.error("Error editing manufacturer:", error);
-//     return null;
-//   }
-// };
+const editPromoCode = async (
+  id: string,
+  body: PromoCodeFormBody
+): Promise<PromoCode | null> => {
+  try {
+    const data: PromoCode = await API.patch(
+      `${API_BASE_URL}/shop/promotion-codes/${id}`,
+      body
+    )
+    return data
+  } catch (error) {
+    console.error('Error editing promo code:', error)
+    return null
+  }
+}
 
-// const removeManufacture = async (id: string): Promise<boolean> => {
-//   try {
-//     await API.remove(`${API_BASE_URL}/shop/manufactures/${id}`);
-//     return true;
-//   } catch (error) {
-//     console.error("Error removing manufactures:", error);
-//     return false;
-//   }
-// };
+const removePromoCode = async (id: string): Promise<boolean> => {
+  try {
+    await API.remove(`${API_BASE_URL}/shop/promotion-codes/${id}`)
+    return true
+  } catch (error) {
+    console.error('Error removing promo code:', error)
+    return false
+  }
+}
 
 const PromoCodesAPI = {
   getPromoCodes,
   addNewPromoCode,
-  // editManufacturer,
-  // removeManufacture,
+  editPromoCode,
+  removePromoCode,
 }
 
 export default PromoCodesAPI

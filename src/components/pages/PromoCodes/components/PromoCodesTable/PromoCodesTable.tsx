@@ -49,9 +49,9 @@ export const PromoCodesTable = () => {
           <Table.HeadCell>Start</Table.HeadCell>
           <Table.HeadCell>End</Table.HeadCell>
           <Table.HeadCell>Discount</Table.HeadCell>
-          {/* <Table.HeadCell>
-                        <span className="sr-only">Edit or Remove</span>
-                    </Table.HeadCell> */}
+          <Table.HeadCell>
+            <span className="sr-only">Edit or Remove</span>
+          </Table.HeadCell>
         </Table.Head>
         {!loader && (
           <Table.Body className="divide-y">

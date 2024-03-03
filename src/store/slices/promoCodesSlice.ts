@@ -8,7 +8,8 @@ import {
 import PromoCodesAPI from '@/services/promoCodes'
 
 export interface PromoCodesSliceInterface {
-  allPromoCodes: PromoCodesData[]
+  allPromoCodes: PromoCode[]
+  activePromoCode: PromoCode
   currentPagePromoCodes: PromoCode[]
   currentPage: number
   itemsPerPage: number
@@ -16,16 +17,16 @@ export interface PromoCodesSliceInterface {
   sortFiled: string
   sortOrder: 'ASC' | 'DESC'
   PromoCodesFilters: {}
+  changeActivePromoCode: (data: PromoCode) => void
   changeCurrentPage: (data: number) => void
   changeItemsPerPage: (data: number) => void
   changeSubscribersFilter: (data: {}) => void
   fetchPromoCodes: (paginationData?: PaginationData) => Promise<boolean>
-  addNewPromoCode: (manufacture: PromoCodeFormBody) => Promise<boolean>
-  // allSubscribers: (paginationData?: PaginationData) => Promise<boolean>;
-  // editManufacture: (
-  //   manufactureId: string,
-  //   manufacture: ManufacturerFormBody
-  // ) => Promise<boolean>;
+  addNewPromoCode: (promoCode: PromoCodeFormBody) => Promise<boolean>
+  editPromoCode: (
+    promoCodeId: string,
+    promoCode: PromoCodeFormBody
+  ) => Promise<boolean>
 }
 
 export const promoCodesSlice: StateCreator<PromoCodesSliceInterface> = (
@@ -33,6 +34,7 @@ export const promoCodesSlice: StateCreator<PromoCodesSliceInterface> = (
   get
 ) => ({
   allPromoCodes: [],
+  activePromoCode: {} as PromoCode,
   currentPagePromoCodes: [],
   currentPage: 1,
   itemsPerPage: 15,
@@ -40,6 +42,10 @@ export const promoCodesSlice: StateCreator<PromoCodesSliceInterface> = (
   sortFiled: 'createdAt',
   sortOrder: 'DESC',
   PromoCodesFilters: {},
+
+  changeActivePromoCode: (data: PromoCode) => {
+    set({ activePromoCode: data })
+  },
 
   changeCurrentPage: (data: number) => {
     set({ currentPage: data })
@@ -90,45 +96,47 @@ export const promoCodesSlice: StateCreator<PromoCodesSliceInterface> = (
     try {
       const data = await PromoCodesAPI.addNewPromoCode(_promoCodesData)
       if (data) {
-        promoCodes.push(data)
+        // promoCodes.push(data)
         set({ allPromoCodes: [...promoCodes] })
         return true
       }
     } catch (error) {
-      console.error('Error adding manufacture:', error)
+      console.error('Error adding promoCode:', error)
       throw error
     }
     return false
   },
 
-  // editManufacture: async (
-  //   manufacturerId: string,
-  //   manufacturer: ManufacturerFormBody
-  // ) => {
-  //   const promoCodes = get().allSubscribers;
+  editPromoCode: async (promoCodeId: string, promoCode: PromoCodeFormBody) => {
+    const promoCodes = get().allPromoCodes
 
-  //   const _PromoCodesData: ManufacturerFormBody = {
-  //     name: manufacturer.name,
-  //   };
+    const _promoCodeData: PromoCodeFormBody = {
+      code: promoCode.code,
+      startsAt: promoCode.startsAt,
+      endsAt: promoCode.endsAt,
+      discountPercentage: promoCode.discountPercentage,
+    }
 
-  //   try {
-  //     const data = await promoCodesAPI.editManufacturer(
-  //       manufacturerId,
-  //       _PromoCodesData
-  //     );
-  //     if (data) {
-  //       const index = promoCodes.findIndex(
-  //         (manufacturer) => manufacturer.id === manufacturerId
-  //       );
-  //       if (index !== -1) {
-  //         promoCodes[index] = data;
-  //       }
-  //       return true;
-  //     }
-  //   } catch (error) {
-  //     console.error("Error editing manufacturer:", error);
-  //     throw error;
-  //   }
-  //   return false;
-  // },
+    try {
+      const data = await PromoCodesAPI.editPromoCode(
+        promoCodeId,
+        _promoCodeData
+      )
+      if (data) {
+        const index = promoCodes.findIndex(
+          (promoCode) => promoCode.id === promoCodeId
+        )
+        if (index !== -1) {
+          promoCodes[index] = data
+        }
+
+        set({ activePromoCode: data })
+        return true
+      }
+    } catch (error) {
+      console.error('Error editing promo code:', error)
+      throw error
+    }
+    return false
+  },
 })

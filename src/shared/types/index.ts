@@ -281,7 +281,7 @@ export interface SubscribersData {
 export interface PromoCode {
   id: string
   code: string
-  discountPercentage: string
+  discountPercentage: number
   startsAt: string
   endsAt: string
   createdAt: string

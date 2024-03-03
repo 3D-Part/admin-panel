@@ -8,17 +8,22 @@ import React, { SyntheticEvent, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import { Loader } from '@/components/common'
 import PromoCodeHeader from '../AddEditPromoCodeHedaer/Header'
+import isoToDatetimeLocal from '@/shared/helpers/isoToDatetimeLocal'
 
-type AddNewPromoCodeType = {
-  initialValue?: PromoCodeFormBody
-}
+const EditPromoCode: React.FC = () => {
+  const { editPromoCode, activePromoCode } = usePromoCodesSliceStore()
 
-const AddNewPromoCode: React.FC<AddNewPromoCodeType> = ({ initialValue }) => {
   const [loader, setLoader] = useState(false)
-  const promoCodeDataRef = useRef<PromoCodeFormBody>({} as PromoCodeFormBody)
+  const promoCodeDataRef = useRef<PromoCodeFormBody>({
+    code: activePromoCode.code,
+    discountPercentage: activePromoCode.discountPercentage,
+    endsAt: activePromoCode.endsAt,
+    startsAt: activePromoCode.startsAt,
+  })
   const formRef = useRef<HTMLFormElement>(null)
 
-  const { addNewPromoCode } = usePromoCodesSliceStore()
+  const startTimeFormated = isoToDatetimeLocal(activePromoCode.startsAt)
+  const endTimeFormated = isoToDatetimeLocal(activePromoCode.endsAt)
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -31,10 +36,10 @@ const AddNewPromoCode: React.FC<AddNewPromoCodeType> = ({ initialValue }) => {
     }
   }
 
-  const resetData = () => {
-    formRef.current && formRef.current.reset()
-    promoCodeDataRef.current = {} as PromoCodeFormBody
-  }
+  // const resetData = () => {
+  //   formRef.current && formRef.current.reset()
+  //   promoCodeDataRef.current = {} as PromoCodeFormBody
+  // }
 
   const saveFunction = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -48,23 +53,25 @@ const AddNewPromoCode: React.FC<AddNewPromoCodeType> = ({ initialValue }) => {
       discountPercentage: promoCodeDataRef.current.discountPercentage,
     }
 
-    const request = await addNewPromoCode(_promoCode)
+    setLoader(true)
+    const request = await editPromoCode(activePromoCode.id, _promoCode)
+    setLoader(false)
 
     if (request) {
-      toast(`${_promoCode.code} is added!`, {
+      toast(`${_promoCode.code} is changed!`, {
         hideProgressBar: true,
         autoClose: 2000,
         type: 'success',
       })
 
-      resetData()
+      // resetData()
     }
   }
 
   if (loader) {
     return (
       <div className="flex flex-col  w-full ">
-        <PromoCodeHeader title="Add new promo code:" />
+        <PromoCodeHeader title="Edit promo code:" />
         <Loader />
       </div>
     )
@@ -72,7 +79,7 @@ const AddNewPromoCode: React.FC<AddNewPromoCodeType> = ({ initialValue }) => {
 
   return (
     <div className="flex flex-col  w-full ">
-      <PromoCodeHeader title="Add new promo code:" />
+      <PromoCodeHeader title="Edit promo code:" />
 
       <form
         ref={formRef}
@@ -90,7 +97,7 @@ const AddNewPromoCode: React.FC<AddNewPromoCodeType> = ({ initialValue }) => {
             id="code"
             required
             type="text"
-            defaultValue={initialValue?.code ? initialValue.code : ''}
+            defaultValue={activePromoCode?.code ? activePromoCode.code : ''}
           />
         </div>
 
@@ -106,8 +113,8 @@ const AddNewPromoCode: React.FC<AddNewPromoCodeType> = ({ initialValue }) => {
             required
             type="text"
             defaultValue={
-              initialValue?.discountPercentage
-                ? initialValue.discountPercentage
+              activePromoCode?.discountPercentage
+                ? activePromoCode.discountPercentage
                 : ''
             }
           />
@@ -124,7 +131,7 @@ const AddNewPromoCode: React.FC<AddNewPromoCodeType> = ({ initialValue }) => {
             id="startsAt"
             required
             type="datetime-local"
-            defaultValue={initialValue?.startsAt ? initialValue.startsAt : ''}
+            defaultValue={startTimeFormated}
           />
         </div>
 
@@ -139,7 +146,7 @@ const AddNewPromoCode: React.FC<AddNewPromoCodeType> = ({ initialValue }) => {
             id="endsAt"
             required
             type="datetime-local"
-            defaultValue={initialValue?.endsAt ? initialValue.endsAt : ''}
+            defaultValue={endTimeFormated}
           />
         </div>
 
@@ -151,4 +158,4 @@ const AddNewPromoCode: React.FC<AddNewPromoCodeType> = ({ initialValue }) => {
   )
 }
 
-export default AddNewPromoCode
+export default EditPromoCode
