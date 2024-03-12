@@ -9,9 +9,13 @@ import React from 'react'
 
 type TableItemType = {
   promocode: PromoCode
+  onWarningModalOpen: (promocode: PromoCode) => void
 }
 
-export const TableItem: React.FC<TableItemType> = ({ promocode }) => {
+export const TableItem: React.FC<TableItemType> = ({
+  promocode,
+  onWarningModalOpen,
+}) => {
   const { startsAt, endsAt, code, discountPercentage, id } = promocode
 
   const startTime = dateTimeFormat(startsAt, true)
@@ -29,19 +33,22 @@ export const TableItem: React.FC<TableItemType> = ({ promocode }) => {
   return (
     <>
       <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-        <Table.Cell className="cursor-pointer whitespace-nowrap font-medium text-gray-900 dark:text-white">
+        <Table.Cell
+          onClick={editPromoCode}
+          className="cursor-pointer whitespace-nowrap font-medium text-gray-900 dark:text-white"
+        >
           <div className="flex justify-start items-center gap-6">{code}</div>
         </Table.Cell>
 
-        <Table.Cell className="cursor-pointer whitespace-nowrap font-medium text-gray-900 dark:text-white">
+        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
           <div className="flex justify-start items-center gap-6">
             {startTime}
           </div>
         </Table.Cell>
-        <Table.Cell className="cursor-pointer whitespace-nowrap font-medium text-gray-900 dark:text-white">
+        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
           <div className="flex justify-start items-center gap-6">{endTime}</div>
         </Table.Cell>
-        <Table.Cell className="cursor-pointer whitespace-nowrap font-medium text-gray-900 dark:text-white">
+        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
           <div className="flex justify-start items-center gap-6">
             {discountPercentage}
           </div>
@@ -54,7 +61,10 @@ export const TableItem: React.FC<TableItemType> = ({ promocode }) => {
             >
               <p>Edit</p>
             </span>
-            <span className="font-medium text-red-500 cursor-pointer hover:underline dark:text-red-500">
+            <span
+              onClick={() => onWarningModalOpen(promocode)}
+              className="font-medium text-red-500 cursor-pointer hover:underline dark:text-red-500"
+            >
               <p>Remove</p>
             </span>
           </div>

@@ -6,7 +6,11 @@ import { useRouter } from 'next/navigation'
 import React from 'react'
 import { HiArrowCircleLeft } from 'react-icons/hi'
 
-const PromoCodeHeader = ({ title }) => {
+type PromoCodeHeaderType = {
+  title: string
+}
+
+const PromoCodeHeader: React.FC<PromoCodeHeaderType> = ({ title }) => {
   const router = useRouter()
 
   return (

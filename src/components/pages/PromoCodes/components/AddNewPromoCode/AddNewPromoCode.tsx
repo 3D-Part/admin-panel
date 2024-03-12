@@ -8,6 +8,8 @@ import React, { SyntheticEvent, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import { Loader } from '@/components/common'
 import PromoCodeHeader from '../AddEditPromoCodeHedaer/Header'
+import { URLPartsEnum } from '@/shared/enums'
+import { useRouter } from 'next/navigation'
 
 type AddNewPromoCodeType = {
   initialValue?: PromoCodeFormBody
@@ -18,7 +20,9 @@ const AddNewPromoCode: React.FC<AddNewPromoCodeType> = ({ initialValue }) => {
   const promoCodeDataRef = useRef<PromoCodeFormBody>({} as PromoCodeFormBody)
   const formRef = useRef<HTMLFormElement>(null)
 
-  const { addNewPromoCode } = usePromoCodesSliceStore()
+  const router = useRouter()
+
+  const { addNewPromoCode, changeActivePromoCode } = usePromoCodesSliceStore()
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -48,14 +52,17 @@ const AddNewPromoCode: React.FC<AddNewPromoCodeType> = ({ initialValue }) => {
       discountPercentage: promoCodeDataRef.current.discountPercentage,
     }
 
-    const request = await addNewPromoCode(_promoCode)
+    const requestData = await addNewPromoCode(_promoCode)
 
-    if (request) {
+    if (requestData) {
       toast(`${_promoCode.code} is added!`, {
         hideProgressBar: true,
         autoClose: 2000,
         type: 'success',
       })
+
+      changeActivePromoCode(requestData)
+      router.push(URLPartsEnum.EditPromoCode)
 
       resetData()
     }

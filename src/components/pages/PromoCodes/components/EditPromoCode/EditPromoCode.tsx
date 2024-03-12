@@ -9,6 +9,7 @@ import { toast } from 'react-toastify'
 import { Loader } from '@/components/common'
 import PromoCodeHeader from '../AddEditPromoCodeHedaer/Header'
 import isoToDatetimeLocal from '@/shared/helpers/isoToDatetimeLocal'
+import AssignUsers from './components/AssignUsers'
 
 const EditPromoCode: React.FC = () => {
   const { editPromoCode, activePromoCode } = usePromoCodesSliceStore()
@@ -149,6 +150,8 @@ const EditPromoCode: React.FC = () => {
             defaultValue={endTimeFormated}
           />
         </div>
+
+        <AssignUsers />
 
         <Button className="mt-6" type="submit">
           Save

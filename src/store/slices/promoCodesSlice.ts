@@ -1,10 +1,5 @@
 import { StateCreator } from 'zustand'
-import {
-  PaginationData,
-  PromoCode,
-  PromoCodeFormBody,
-  PromoCodesData,
-} from '@/shared/types'
+import { PaginationData, PromoCode, PromoCodeFormBody } from '@/shared/types'
 import PromoCodesAPI from '@/services/promoCodes'
 
 export interface PromoCodesSliceInterface {
@@ -22,7 +17,7 @@ export interface PromoCodesSliceInterface {
   changeItemsPerPage: (data: number) => void
   changeSubscribersFilter: (data: {}) => void
   fetchPromoCodes: (paginationData?: PaginationData) => Promise<boolean>
-  addNewPromoCode: (promoCode: PromoCodeFormBody) => Promise<boolean>
+  addNewPromoCode: (promoCode: PromoCodeFormBody) => Promise<PromoCode | false>
   editPromoCode: (
     promoCodeId: string,
     promoCode: PromoCodeFormBody
@@ -96,9 +91,8 @@ export const promoCodesSlice: StateCreator<PromoCodesSliceInterface> = (
     try {
       const data = await PromoCodesAPI.addNewPromoCode(_promoCodesData)
       if (data) {
-        // promoCodes.push(data)
         set({ allPromoCodes: [...promoCodes] })
-        return true
+        return data
       }
     } catch (error) {
       console.error('Error adding promoCode:', error)

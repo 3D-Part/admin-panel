@@ -5,9 +5,15 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { TableItem } from './TableItem/TableItem'
 import { usePromoCodesSliceStore } from '@/store/store'
 import { Loader } from '@/components/common'
-import { PaginationData } from '@/shared/types'
+import { PaginationData, PromoCode } from '@/shared/types'
 
-export const PromoCodesTable = () => {
+type PromoCodesTableType = {
+  onWarningModalOpen: (promocode: PromoCode) => void
+}
+
+export const PromoCodesTable: React.FC<PromoCodesTableType> = ({
+  onWarningModalOpen,
+}) => {
   const [loader, setLoader] = useState(true)
 
   const {
@@ -57,7 +63,13 @@ export const PromoCodesTable = () => {
           <Table.Body className="divide-y">
             {currentPagePromoCodes.length > 0 &&
               currentPagePromoCodes.map((promocode) => {
-                return <TableItem key={promocode.id} promocode={promocode} />
+                return (
+                  <TableItem
+                    onWarningModalOpen={onWarningModalOpen}
+                    key={promocode.id}
+                    promocode={promocode}
+                  />
+                )
               })}
           </Table.Body>
         )}

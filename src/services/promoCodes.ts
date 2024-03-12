@@ -39,9 +39,9 @@ const getPromoCodes = async (
 
 const addNewPromoCode = async (
   body: PromoCodeFormBody
-): Promise<PromoCodesData | null> => {
+): Promise<PromoCode | null> => {
   try {
-    const data: PromoCodesData = await API.post(
+    const data: PromoCode = await API.post(
       `${API_BASE_URL}/shop/promotion-codes/`,
       body
     )
