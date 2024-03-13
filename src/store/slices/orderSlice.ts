@@ -48,7 +48,7 @@ export const ordersSlice: StateCreator<OrdersSliceInterface> = (set, get) => ({
 
       return true
     } catch (error) {
-      console.error('Greška pri dohvatu podataka:', error)
+      console.error('Error with getting data:', error)
     }
     return false
   },
@@ -66,7 +66,7 @@ export const ordersSlice: StateCreator<OrdersSliceInterface> = (set, get) => ({
   //     }
   //     return true;
   //   } catch (error) {
-  //     console.error("Greška pri dohvatu podataka:", error);
+  //     console.error("Error with getting data:", error);
   //   }
   //   return false;
   // },

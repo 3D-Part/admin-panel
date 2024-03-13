@@ -3,7 +3,7 @@ import { PaginationData, User, UsersData } from '@/shared/types'
 import UsersAPI from '@/services/users'
 
 export interface UsersSliceInterface {
-  allUsers: UsersData[]
+  allUsers: User[]
   currentPageUsers: User[]
   currentPage: number
   itemsPerPage: number
@@ -15,7 +15,7 @@ export interface UsersSliceInterface {
   changeItemsPerPage: (data: number) => void
   changeUsersFilter: (data: {}) => void
   fetchUsers: (paginationData?: PaginationData) => Promise<boolean>
-  // allUsers: (paginationData?: PaginationData) => Promise<boolean>;
+  fetchAllUsers: (paginationData?: PaginationData) => Promise<boolean>
   // addNewManufacture: (manufacture: ManufacturerFormBody) => Promise<boolean>;
   // editManufacture: (
   //   manufactureId: string,
@@ -69,23 +69,23 @@ export const usersSlice: StateCreator<UsersSliceInterface> = (set, get) => ({
     return false
   },
 
-  // allUsers: async () => {
-  //   const sort = {
-  //     field: get().sortFiled,
-  //     order: get().sortOrder,
-  //   };
+  fetchAllUsers: async () => {
+    const sort = {
+      field: get().sortFiled,
+      order: get().sortOrder,
+    }
 
-  //   try {
-  //     const data = await ManufacturesAPI.getManufactures(sort);
-  //     if (data) {
-  //       set({ allUsers: data.rows });
-  //     }
-  //     return true;
-  //   } catch (error) {
-  //     console.error("Greška pri dohvatu podataka:", error);
-  //   }
-  //   return false;
-  // },
+    try {
+      const data = await UsersAPI.getUsers(sort)
+      if (data) {
+        set({ allUsers: data.rows })
+      }
+      return true
+    } catch (error) {
+      console.error('Error with getting data:', error)
+    }
+    return false
+  },
 
   // addNewManufacture: async (manufacturer: ManufacturerFormBody) => {
   //   const manufactures = get().allUsers;
