@@ -9,7 +9,7 @@ import { toast } from 'react-toastify'
 import { Loader } from '@/components/common'
 import PromoCodeHeader from '../AddEditPromoCodeHedaer/Header'
 import isoToDatetimeLocal from '@/shared/helpers/isoToDatetimeLocal'
-import AssignUsers from './components/AssignUsers'
+import AssignUsers from './components/AssignUsers/AssignUsers'
 
 const EditPromoCode: React.FC = () => {
   const { editPromoCode, activePromoCode } = usePromoCodesSliceStore()

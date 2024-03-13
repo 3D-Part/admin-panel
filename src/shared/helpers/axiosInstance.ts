@@ -91,8 +91,9 @@ axiosInstance.interceptors.response.use(
         if (response?.accessToken) {
           JWT.changeAccessToken(response?.accessToken)
           // update request with new accessToken
-          originalRequest.headers['Authorization'] =
-            `Bearer ${response.accessToken}`
+          originalRequest.headers[
+            'Authorization'
+          ] = `Bearer ${response.accessToken}`
         }
 
         return axios(originalRequest)
