@@ -264,6 +264,29 @@ export interface OrderFormBody {
   message: string
 }
 
+// USERS
+export interface User {
+  id: string
+  fullName: string
+  email: string
+  password: string
+  image: string | null
+  role: ''
+  provider: string
+  phone: string | null
+  state: string | null
+  city: string | null
+  postCode: string | null
+  street: string | null
+  updatedAt: string
+  createdAt: string
+  orders: any[]
+}
+export interface UsersData {
+  count: number
+  rows: User[]
+}
+
 // SUBSCRIBERS
 export interface Subscriber {
   id: string

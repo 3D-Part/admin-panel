@@ -11,6 +11,7 @@ import {
 } from 'react-icons/hi'
 import { MdUnsubscribe } from 'react-icons/md'
 import { IoMdPricetags } from 'react-icons/io'
+import { FaUsers } from 'react-icons/fa'
 
 import { usePathname } from 'next/navigation'
 import { useRouter } from 'next/navigation'
@@ -108,17 +109,17 @@ const SideBar = () => {
       ],
     },
     {
+      name: 'Users',
+      href: URLPartsEnum.Users,
+      icon: FaUsers,
+      open: false,
+    },
+    {
       name: 'Subscribers',
       href: URLPartsEnum.Subscribers,
       icon: MdUnsubscribe,
       open: false,
     },
-    // {
-    //     name: 'Users',
-    //     href: URLPartsEnum.Users,
-    //     icon: HiUsers,
-    //     open: false,
-    // },
   ]
   return (
     <>

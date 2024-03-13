@@ -28,6 +28,8 @@ import {
   subscribersSlice,
 } from './slices/subscribersSlice'
 
+import { UsersSliceInterface, usersSlice } from './slices/usersSlice'
+
 export const useCategoryStore = create<CategorySliceInterface>()((...a) => ({
   ...categorySlice(...a),
 }))
@@ -63,6 +65,10 @@ export const useSubscribersSliceStore = create<SubscribersSliceInterface>()(
     ...subscribersSlice(...a),
   })
 )
+
+export const useUsersSliceStore = create<UsersSliceInterface>()((...a) => ({
+  ...usersSlice(...a),
+}))
 
 export const usePromoCodesSliceStore = create<PromoCodesSliceInterface>()(
   (...a) => ({
