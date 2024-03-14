@@ -5,6 +5,7 @@ import {
   PromoCodesData,
   PromoCodeFormBody,
   PromoCode,
+  UsersToPromoCode,
 } from '@/shared/types'
 
 const API_BASE_URL = process.env.API_KEY
@@ -78,11 +79,27 @@ const removePromoCode = async (id: string): Promise<boolean> => {
   }
 }
 
+const addUsersToPromoCode = async (
+  body: UsersToPromoCode
+): Promise<PromoCode | null> => {
+  try {
+    const data: PromoCode = await API.post(
+      `${API_BASE_URL}/shop/user-promotion-code/`,
+      body
+    )
+    return data
+  } catch (error) {
+    console.error('Error adding users to promo code:', error)
+    return null
+  }
+}
+
 const PromoCodesAPI = {
   getPromoCodes,
   addNewPromoCode,
   editPromoCode,
   removePromoCode,
+  addUsersToPromoCode,
 }
 
 export default PromoCodesAPI

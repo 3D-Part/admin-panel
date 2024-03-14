@@ -323,3 +323,9 @@ export interface PromoCodeFormBody {
   endsAt: string
   discountPercentage: number
 }
+
+export interface UsersToPromoCode {
+  userIds: string[]
+  promoCodeId: string
+  applyToAllUsers: boolean
+}

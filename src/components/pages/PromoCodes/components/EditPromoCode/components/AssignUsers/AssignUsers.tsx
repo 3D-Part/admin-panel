@@ -17,7 +17,6 @@ const AssignUsers = () => {
 
   return (
     <div>
-      {' '}
       <Button onClick={openSelectModal} color="purple" className="mt-6">
         Assign Users
       </Button>
