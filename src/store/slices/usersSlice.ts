@@ -5,12 +5,14 @@ import UsersAPI from '@/services/users'
 export interface UsersSliceInterface {
   allUsers: User[]
   currentPageUsers: User[]
+  activeUser: User
   currentPage: number
   itemsPerPage: number
   totalPages: number
   sortFiled: string
   sortOrder: 'ASC' | 'DESC'
   usersFilters: {}
+  changeActiveUser: (data: User) => void
   changeCurrentPage: (data: number) => void
   changeItemsPerPage: (data: number) => void
   changeUsersFilter: (data: {}) => void
@@ -26,12 +28,17 @@ export interface UsersSliceInterface {
 export const usersSlice: StateCreator<UsersSliceInterface> = (set, get) => ({
   allUsers: [],
   currentPageUsers: [],
+  activeUser: {} as User,
   currentPage: 1,
   itemsPerPage: 15,
   totalPages: 1,
   sortFiled: 'createdAt',
   sortOrder: 'DESC',
   usersFilters: {},
+
+  changeActiveUser: (data: User) => {
+    set({ activeUser: data })
+  },
 
   changeCurrentPage: (data: number) => {
     set({ currentPage: data })

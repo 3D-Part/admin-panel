@@ -1,18 +1,27 @@
+'use client'
+
 import { User } from '@/shared/types'
+import { useUsersSliceStore } from '@/store/store'
 import { Table } from 'flowbite-react'
-import React from 'react'
+import React, { useState } from 'react'
+import UserDetails from '../../UserDetails/UserDetails'
 
 type TableItemType = {
   user: User
 }
 
 export const TableItem: React.FC<TableItemType> = ({ user }) => {
+  const [isUserDetailsOpen, setIsUserDetailsOpen] = useState(false)
+
   const { fullName, email, phone, city, street } = user
 
   return (
     <>
       <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+        <Table.Cell
+          onClick={() => setIsUserDetailsOpen(true)}
+          className="cursor-pointer whitespace-nowrap font-medium text-gray-900 dark:text-white"
+        >
           <div className="flex justify-start items-center gap-6">
             {fullName}
           </div>
@@ -40,6 +49,12 @@ export const TableItem: React.FC<TableItemType> = ({ user }) => {
             </div>
         </Table.Cell> */}
       </Table.Row>
+
+      <UserDetails
+        isOpen={isUserDetailsOpen}
+        onClose={() => setIsUserDetailsOpen(false)}
+        user={user}
+      />
     </>
   )
 }
