@@ -69,7 +69,6 @@ const SelectUsersModal: React.FC<SelectUsersModalType> = ({
     const { checked, id } = e.target
 
     if (checked) {
-      console.log('id:', id)
       addUserToPromoCode(id)
     } else {
       removeUserFromPromoCode(id)
@@ -121,8 +120,6 @@ const SelectUsersModal: React.FC<SelectUsersModalType> = ({
       const filderUsersIds = activePromoCode.userPromotionCode.map(
         (user) => user.userId
       )
-
-      console.log('filderUsersIds:', filderUsersIds)
 
       activeUsersRef.current = filderUsersIds
       setInitialUsers(activePromoCode.userPromotionCode)
