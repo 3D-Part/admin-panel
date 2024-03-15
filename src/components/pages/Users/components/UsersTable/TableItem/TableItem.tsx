@@ -5,6 +5,7 @@ import { useUsersSliceStore } from '@/store/store'
 import { Table } from 'flowbite-react'
 import React, { useState } from 'react'
 import UserDetails from '../../UserDetails/UserDetails'
+import OrderDetails from '@/components/pages/Orders/components/OrderDetails'
 
 type TableItemType = {
   user: User

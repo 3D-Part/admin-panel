@@ -232,27 +232,33 @@ export interface OrderProduct {
   sku: string
   quantity: number
   price: string
-  total: number
+  total: string
+  image: string
 }
 
 export interface Order {
-  id: string
-  orderNumber: string
-  fullName: string
-  email: string
-  phone: string
-  description: string
   city: string
-  postCode: string
-  street: string
-  products: OrderProduct[]
-  price: string
-  shippingPrice: string
-  discount: string
-  total: string
-  status: string
+  code: string | null
+  companyName: string
+  companyPdv: string
   createdAt: string
+  description: string
+  discount: string
+  email: string
+  fullName: string
+  id: string
+  jib: string
+  orderNumber: string
+  phone: string
+  postCode: string
+  price: string
+  products: OrderProduct[]
+  shippingPrice: string
+  status: string
+  street: string
+  total: string
   updatedAt: string
+  userId: string
 }
 
 export interface OrdersData {
@@ -265,6 +271,7 @@ export interface OrderFormBody {
 }
 
 // USERS
+
 export interface User {
   id: string
   fullName: string
@@ -280,7 +287,7 @@ export interface User {
   street: string | null
   updatedAt: string
   createdAt: string
-  orders: any[]
+  orders: Order[]
 }
 export interface UsersData {
   count: number

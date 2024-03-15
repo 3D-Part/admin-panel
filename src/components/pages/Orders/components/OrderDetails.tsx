@@ -18,7 +18,7 @@ const OrderDetail: React.FC<OrderDetailType> = ({ value, name, vertical }) => {
   return (
     <div
       className={`flex justify-between  gap-4 flex-1 basis-[48%] rounded-lg bg-slate-600 text-white p-3 ${
-        vertical ? 'flex-col items-start' : 'items-center'
+        vertical ? 'flex-col items-start basis-full' : 'items-center'
       }`}
     >
       <p className="font-semibold">{name}</p>
@@ -65,6 +65,9 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
     shippingPrice,
     discount,
     products,
+    companyPdv,
+    companyName,
+    jib,
   } = order
 
   const formattedDate = dateTimeFormat(createdAt)
@@ -88,6 +91,13 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
           <OrderDetail name="Street:" value={street} />
           <OrderDetail name="PostCode:" value={postCode} />
           <OrderDetail name="Phone:" value={phone} />
+
+          {companyName && (
+            <OrderDetail name="Company Name:" value={companyName} />
+          )}
+          {companyPdv && <OrderDetail name="Company PDV:" value={companyPdv} />}
+          {jib && <OrderDetail name="JIB:" value={jib} />}
+
           <OrderDetail
             name="Description:"
             vertical={true}
