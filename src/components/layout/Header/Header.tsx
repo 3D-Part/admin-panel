@@ -7,14 +7,23 @@ import JWT from '@/shared/helpers/jwtToken'
 import { useRouter } from 'next/navigation'
 import { URLPartsEnum } from '@/shared/enums'
 import AuthAPI from '@/services/auth'
+import { useUISliceStore } from '@/store/store'
 
 const SideBar = () => {
   const router = useRouter()
+
+  const { changeIsMobileMenuOpen, isMobileMenuOpen } = useUISliceStore()
+
+  const toggleMobileMenu = () => {
+    changeIsMobileMenuOpen(!isMobileMenuOpen)
+  }
+
   const signOut = async () => {
     await AuthAPI.logout()
     JWT.deleteJwtTokens()
     router.push(URLPartsEnum.Login)
   }
+
   return (
     <>
       <Navbar
@@ -34,7 +43,7 @@ const SideBar = () => {
           </span>
         </Navbar.Brand>
 
-        <div className="flex md:order-2 text-white">
+        <div className="flex gap-8 md:order-2 text-white">
           <Dropdown
             inline
             label={
@@ -54,7 +63,7 @@ const SideBar = () => {
             {/* <Dropdown.Divider /> */}
             <Dropdown.Item onClick={signOut}>Sign out</Dropdown.Item>
           </Dropdown>
-          <Navbar.Toggle />
+          <Navbar.Toggle onClick={toggleMobileMenu} />
         </div>
       </Navbar>
     </>

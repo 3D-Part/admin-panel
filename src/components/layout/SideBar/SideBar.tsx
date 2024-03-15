@@ -7,7 +7,6 @@ import {
   HiShoppingBag,
   HiLibrary,
   HiDocumentText,
-  HiUsers,
 } from 'react-icons/hi'
 import { MdUnsubscribe } from 'react-icons/md'
 import { IoMdPricetags } from 'react-icons/io'
@@ -16,10 +15,14 @@ import { FaUsers } from 'react-icons/fa'
 import { usePathname } from 'next/navigation'
 import { useRouter } from 'next/navigation'
 import { URLPartsEnum } from '@/shared/enums'
+import { useUISliceStore } from '@/store/store'
+import { useEffect } from 'react'
 
 const SideBar = () => {
   const pathname = usePathname()
   const router = useRouter()
+
+  const { isMobileMenuOpen } = useUISliceStore()
 
   const menuItems = [
     {
@@ -124,7 +127,9 @@ const SideBar = () => {
   return (
     <>
       <Sidebar
-        className="fixed top-0 left-0 z-40 w-64 h-screen pt-16 transition-transform -translate-x-full bg-gray:50 border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
+        className={`${
+          isMobileMenuOpen ? '' : '-translate-x-full'
+        } fixed top-0 left-0 z-40 w-64 h-screen pt-16 transition-transform  bg-gray:50 border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700`}
         aria-label="Default sidebar example"
       >
         <Sidebar.Items>

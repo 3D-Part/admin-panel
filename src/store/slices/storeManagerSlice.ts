@@ -16,9 +16,7 @@ export const storeManagerSlice: StateCreator<StoreManagerSliceInterface> = (
   getS3FormData: async () => {
     try {
       const data: S3FormData = await StoreManagerAPI.getS3FormData()
-      // if (data) {
-      //   set({ s3FormData: data });
-      // }
+
       return data
     } catch (error) {
       console.error('Error with getting data:', error)
