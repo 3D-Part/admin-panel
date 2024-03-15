@@ -10,7 +10,7 @@ export const PromoCodesHeader = () => {
   const router = useRouter()
 
   return (
-    <div className="w-full flex justify-between items-center">
+    <div className="w-full flex justify-between items-center flex-wrap gap-4">
       {/* <ManufacturesSearch /> */}
       <Button
         className="cursor-pointer"

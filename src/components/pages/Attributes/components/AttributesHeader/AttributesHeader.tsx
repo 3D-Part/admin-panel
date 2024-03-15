@@ -11,7 +11,7 @@ export const AttributesHeader = () => {
   const router = useRouter()
 
   return (
-    <div className="w-full flex justify-between items-center">
+    <div className="w-full flex justify-between items-center flex-wrap gap-4">
       <AttributesSearch />
       <Button
         className="cursor-pointer"
