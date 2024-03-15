@@ -117,30 +117,32 @@ const UserDetails: React.FC<UserDetailsType> = ({ user, isOpen, onClose }) => {
           /> */}
           </div>
 
-          <div className="mt-8 text-white">
-            <h3 className="font-semibold text-xl mb-4">Products:</h3>
-            <Table>
-              <Table.Head>
-                <Table.HeadCell>Order Number</Table.HeadCell>
-                <Table.HeadCell>Price</Table.HeadCell>
-                <Table.HeadCell>Products number</Table.HeadCell>
-                <Table.HeadCell>Status</Table.HeadCell>
-                <Table.HeadCell>Total</Table.HeadCell>
-              </Table.Head>
+          {orders.length > 0 && (
+            <div className="mt-8 text-white">
+              <h3 className="font-semibold text-xl mb-4">Products:</h3>
+              <Table>
+                <Table.Head>
+                  <Table.HeadCell>Order Number</Table.HeadCell>
+                  <Table.HeadCell>Price</Table.HeadCell>
+                  <Table.HeadCell>Products number</Table.HeadCell>
+                  <Table.HeadCell>Status</Table.HeadCell>
+                  <Table.HeadCell>Total</Table.HeadCell>
+                </Table.Head>
 
-              <Table.Body className="divide-y">
-                {orders.map((order) => {
-                  return (
-                    <OrderWrapper
-                      onClick={selectActiveOrder}
-                      key={order.id}
-                      order={order}
-                    />
-                  )
-                })}
-              </Table.Body>
-            </Table>
-          </div>
+                <Table.Body className="divide-y">
+                  {orders.map((order) => {
+                    return (
+                      <OrderWrapper
+                        onClick={selectActiveOrder}
+                        key={order.id}
+                        order={order}
+                      />
+                    )
+                  })}
+                </Table.Body>
+              </Table>
+            </div>
+          )}
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={onClose}>Close</Button>
