@@ -7,14 +7,20 @@ import React, { useState } from 'react'
 
 type UserDetailType = {
   name: string
-  vertical?: boolean
   value: string | null
+  className?: string
+  vertical?: boolean
 }
 
-const OrderDetail: React.FC<UserDetailType> = ({ value, name, vertical }) => {
+const OrderDetail: React.FC<UserDetailType> = ({
+  value,
+  name,
+  vertical,
+  className = '',
+}) => {
   return (
     <div
-      className={`flex justify-between  gap-4 flex-1 basis-[48%] rounded-lg bg-slate-600 text-white p-3 ${
+      className={`className flex justify-between  gap-4 flex-1 basis-[48%] rounded-lg bg-slate-600 text-white p-3 ${
         vertical ? 'flex-col items-start' : 'items-center'
       }`}
     >
@@ -36,7 +42,7 @@ const OrderWrapper: React.FC<OrderWrapperType> = ({ order, onClick }) => {
       onClick={() => onClick(order)}
       className="bg-white dark:border-gray-700 dark:bg-gray-800"
     >
-      <Table.Cell>{orderNumber}</Table.Cell>
+      <Table.Cell className="cursor-pointer">{orderNumber}</Table.Cell>
       <Table.Cell>{price}</Table.Cell>
       <Table.Cell>{products.length}</Table.Cell>
       <Table.Cell>{status}</Table.Cell>
@@ -89,7 +95,11 @@ const UserDetails: React.FC<UserDetailsType> = ({ user, isOpen, onClose }) => {
         </Modal.Header>
         <Modal.Body>
           <div className="flex flex-wrap gap-4">
-            <OrderDetail name="Full name:" value={fullName} />
+            <OrderDetail
+              className="cursor-pointer"
+              name="Full name:"
+              value={fullName}
+            />
             <OrderDetail name="Email:" value={email} />
             {/* <OrderDetail name="Password:" value={password} /> */}
             <OrderDetail name="Phone:" value={phone} />

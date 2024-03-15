@@ -167,7 +167,7 @@ const SelectUsersModal: React.FC<SelectUsersModalType> = ({
           <Dropdown
             className="h-auto max-h-[400px] overflow-y-auto"
             dismissOnClick={false}
-            label="Attributes"
+            label="Users"
           >
             {allUsers.map((user) => {
               const checked = initialUsers?.some(
@@ -183,7 +183,7 @@ const SelectUsersModal: React.FC<SelectUsersModalType> = ({
                       onChange={handleInputChange}
                       id={user.id}
                     />
-                    <Label htmlFor="at1">{user.id}</Label>
+                    <Label htmlFor="at1">{user.fullName}</Label>
                   </div>
                 </Item>
               )

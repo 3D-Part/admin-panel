@@ -81,16 +81,16 @@ const removePromoCode = async (id: string): Promise<boolean> => {
 
 const addUsersToPromoCode = async (
   body: UsersToPromoCode
-): Promise<PromoCode | null> => {
+): Promise<boolean> => {
   try {
     const data: PromoCode = await API.patch(
       `${API_BASE_URL}/shop/user-promotion-code/`,
       body
     )
-    return data
+    return true
   } catch (error) {
     console.error('Error adding users to promo code:', error)
-    return null
+    return false
   }
 }
 
