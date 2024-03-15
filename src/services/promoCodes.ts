@@ -83,7 +83,7 @@ const addUsersToPromoCode = async (
   body: UsersToPromoCode
 ): Promise<PromoCode | null> => {
   try {
-    const data: PromoCode = await API.post(
+    const data: PromoCode = await API.patch(
       `${API_BASE_URL}/shop/user-promotion-code/`,
       body
     )

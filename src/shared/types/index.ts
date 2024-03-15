@@ -329,3 +329,12 @@ export interface UsersToPromoCode {
   promoCodeId: string
   applyToAllUsers: boolean
 }
+
+export interface PromoCodeUsers {
+  createdAt: string
+  id: string
+  isRedeemed: boolean
+  promoCodeId: string
+  updatedAt: string
+  userId: string
+}

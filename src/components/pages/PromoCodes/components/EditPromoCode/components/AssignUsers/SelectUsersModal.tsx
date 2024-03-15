@@ -2,7 +2,8 @@
 
 import { Loader } from '@/components/common'
 import PromoCodesAPI from '@/services/promoCodes'
-import { UsersToPromoCode } from '@/shared/types'
+import { URLPartsEnum } from '@/shared/enums'
+import { PromoCodeUsers, UsersToPromoCode } from '@/shared/types'
 import { usePromoCodesSliceStore, useUsersSliceStore } from '@/store/store'
 import {
   Button,
@@ -12,7 +13,9 @@ import {
   Modal,
   ToggleSwitch,
 } from 'flowbite-react'
+import { useRouter } from 'next/navigation'
 import React, { useEffect, useRef, useState } from 'react'
+import { toast } from 'react-toastify'
 
 type SelectUsersModalType = {
   isOpen: boolean
@@ -25,12 +28,15 @@ const SelectUsersModal: React.FC<SelectUsersModalType> = ({
 }) => {
   const [applyToAll, setApplyToAll] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [initialUsers, setInitialUsers] = useState<PromoCodeUsers[]>([])
+
+  const { activePromoCode } = usePromoCodesSliceStore()
+
+  const router = useRouter()
 
   const activeUsersRef = useRef<string[]>([])
 
   const { addUsersToPromoCode } = PromoCodesAPI
-
-  const { activePromoCode } = usePromoCodesSliceStore()
 
   const { id: promoCodeId } = activePromoCode
 
@@ -63,6 +69,7 @@ const SelectUsersModal: React.FC<SelectUsersModalType> = ({
     const { checked, id } = e.target
 
     if (checked) {
+      console.log('id:', id)
       addUserToPromoCode(id)
     } else {
       removeUserFromPromoCode(id)
@@ -92,9 +99,46 @@ const SelectUsersModal: React.FC<SelectUsersModalType> = ({
       }
     }
 
+    setLoading(true)
     const responseData = await addUsersToPromoCode(data)
-    console.log('responseData:', responseData)
+    setLoading(false)
+    if (responseData) {
+      toast('Users added to promo code', {
+        hideProgressBar: true,
+        autoClose: 2000,
+        type: 'success',
+      })
+    }
+    onClose()
   }
+
+  const setInitialUsersData = () => {
+    if (!activePromoCode.userPromotionCode) return
+
+    if (activePromoCode.userPromotionCode?.length === allUsers.length) {
+      setApplyToAll(true)
+    } else {
+      const filderUsersIds = activePromoCode.userPromotionCode.map(
+        (user) => user.userId
+      )
+
+      console.log('filderUsersIds:', filderUsersIds)
+
+      activeUsersRef.current = filderUsersIds
+      setInitialUsers(activePromoCode.userPromotionCode)
+    }
+  }
+
+  useEffect(() => {
+    if (!activePromoCode.id) {
+      router.push(URLPartsEnum.PromoCodes)
+      // rediredt to pormo code
+    }
+  }, [activePromoCode])
+
+  useEffect(() => {
+    setInitialUsersData()
+  }, [allUsers])
 
   useEffect(() => {
     getAllUsers()
@@ -129,20 +173,20 @@ const SelectUsersModal: React.FC<SelectUsersModalType> = ({
             label="Attributes"
           >
             {allUsers.map((user) => {
-              // const checked = activePromoCode.?.some(
-              //   (initSelectedUser) => initSelectedUser.attribute.id === user.id
-              // )
+              const checked = initialUsers?.some(
+                (initSelectedUser) => initSelectedUser.userId === user.id
+              )
 
               return (
                 <Item key={user.id}>
                   <div className="flex items-center gap-2">
                     <Checkbox
                       name={user.fullName}
-                      defaultChecked={false}
+                      defaultChecked={checked}
                       onChange={handleInputChange}
                       id={user.id}
                     />
-                    <Label htmlFor="at1">{user.fullName}</Label>
+                    <Label htmlFor="at1">{user.id}</Label>
                   </div>
                 </Item>
               )
@@ -164,13 +208,18 @@ const SelectUsersModal: React.FC<SelectUsersModalType> = ({
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={assignUser}>Assign</Button>
-        <Button color="gray" onClick={onClose}>
+        <Button isProcessing={loading} disabled={loading} onClick={assignUser}>
+          Assign
+        </Button>
+        <Button
+          isProcessing={loading}
+          disabled={loading}
+          color="gray"
+          onClick={onClose}
+        >
           Cancel
         </Button>
       </Modal.Footer>
-
-      {/* {loading && <Loader />} */}
     </Modal>
   )
 }
