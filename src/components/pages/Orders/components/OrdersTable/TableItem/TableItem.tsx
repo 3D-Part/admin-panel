@@ -1,6 +1,6 @@
 import { Order } from '@/shared/types'
 import { Table } from 'flowbite-react'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import OrderStatus from '../../OrderStatus/OrderStatus'
 import { BiMessageDetail } from 'react-icons/bi'
 import OrderContactForm from '../../OrderContactForm'

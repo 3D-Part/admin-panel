@@ -1,9 +1,10 @@
 'use client'
 
 import React, { useEffect } from 'react'
-import { PaginationData, ManufacturerData } from '@/shared/types'
+import { PaginationData } from '@/shared/types'
 import { SubscribersTable } from './components/SubscribersTable/SubscribersTable'
 import { useSubscribersSliceStore } from '@/store/store'
+import { SubscribersHeader } from './components/SubscribersHeader/SubscribersHeader'
 
 export const Subscribers = () => {
   const {
@@ -30,7 +31,7 @@ export const Subscribers = () => {
 
   return (
     <div className="w-full">
-      {/* <MSubscribersHeader /> */}
+      <SubscribersHeader />
       <SubscribersTable />
     </div>
   )

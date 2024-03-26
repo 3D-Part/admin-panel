@@ -1,5 +1,10 @@
 import { API } from '@/shared/helpers'
-import { PaginationData, SortParamsData, SubscribersData } from '@/shared/types'
+import {
+  PaginationData,
+  SortParamsData,
+  SubscribersData,
+  SubscribersEmailBody,
+} from '@/shared/types'
 
 const API_BASE_URL = process.env.API_KEY
 
@@ -31,52 +36,24 @@ const getSubscribers = async (
   }
 }
 
-// const addNewManufacturer = async (
-//   body: ManufacturerFormBody
-// ): Promise<ManufacturerData | null> => {
-//   try {
-//     const data: ManufacturerData = await API.post(
-//       `${API_BASE_URL}/shop/manufactures/`,
-//       body
-//     );
-//     return data;
-//   } catch (error) {
-//     console.error("Error adding manufacturer:", error);
-//     return null;
-//   }
-// };
-
-// const editManufacturer = async (
-//   id: string,
-//   body: ManufacturerFormBody
-// ): Promise<ManufacturerData | null> => {
-//   try {
-//     const data: ManufacturerData = await API.patch(
-//       `${API_BASE_URL}/shop/manufactures/${id}`,
-//       body
-//     );
-//     return data;
-//   } catch (error) {
-//     console.error("Error editing manufacturer:", error);
-//     return null;
-//   }
-// };
-
-// const removeManufacture = async (id: string): Promise<boolean> => {
-//   try {
-//     await API.remove(`${API_BASE_URL}/shop/manufactures/${id}`);
-//     return true;
-//   } catch (error) {
-//     console.error("Error removing manufactures:", error);
-//     return false;
-//   }
-// };
+const sendMailToAllSubscribers = async (
+  body: SubscribersEmailBody
+): Promise<any | null> => {
+  try {
+    const data: any = await API.post(
+      `${API_BASE_URL}/shop/subscriber/send-newsletter`,
+      body
+    )
+    return data
+  } catch (error) {
+    console.error('Error sending message to all subscribers:', error)
+    return null
+  }
+}
 
 const SubscribersAPI = {
   getSubscribers,
-  // addNewManufacturer,
-  // editManufacturer,
-  // removeManufacture,
+  sendMailToAllSubscribers,
 }
 
 export default SubscribersAPI

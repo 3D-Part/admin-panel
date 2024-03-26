@@ -306,6 +306,12 @@ export interface SubscribersData {
   rows: Subscriber[]
 }
 
+export interface SubscribersEmailBody {
+  subject: string
+  headline: string
+  content: string
+}
+
 // PROMOCODES
 
 export interface PromoCode {
