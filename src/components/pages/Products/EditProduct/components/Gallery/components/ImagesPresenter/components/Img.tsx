@@ -116,6 +116,7 @@ const Img: React.FC<ImgType> = ({ src, id, isMain }) => {
         onSave={changeFavoriteImage}
         onClose={() => setIsFavoriteModal(false)}
         message="Set this as main image?"
+        buttonColor="blue"
       />
     </div>
   )
