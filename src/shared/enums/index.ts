@@ -24,6 +24,10 @@ export enum URLPartsEnum {
   PromoCodes = '/promocodes',
   AddNewPromoCode = '/promocodes/add-new',
   EditPromoCode = '/promocodes/edit',
+
+  Sales = '/sales',
+  AddNewSale = '/sales/add-new',
+  EditSale = '/sales/edit',
 }
 
 export enum ErrorsEnum {

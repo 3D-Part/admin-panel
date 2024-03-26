@@ -10,7 +10,7 @@ import {
 } from 'react-icons/hi'
 import { MdUnsubscribe } from 'react-icons/md'
 import { IoMdPricetags } from 'react-icons/io'
-import { FaUsers } from 'react-icons/fa'
+import { FaUsers, FaShopify } from 'react-icons/fa'
 
 import { usePathname } from 'next/navigation'
 import { useRouter } from 'next/navigation'
@@ -115,6 +115,13 @@ const SideBar = () => {
       ],
     },
     {
+      name: 'Sales',
+      // href: URLPartsEnum.Sales,
+      icon: FaShopify,
+      open: false,
+    },
+
+    {
       name: 'Users',
       href: URLPartsEnum.Users,
       icon: FaUsers,
@@ -175,9 +182,11 @@ const SideBar = () => {
                     // href={menuItem.href}
                     onClick={() => {
                       closeMobileMenu()
-                      router.push(menuItem.href, {
-                        // shallow: true,
-                      })
+                      if (menuItem.href) {
+                        router.push(menuItem.href, {
+                          // shallow: true,
+                        })
+                      }
                     }}
                     icon={menuItem.icon}
                   >

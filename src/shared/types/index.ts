@@ -351,3 +351,22 @@ export interface PromoCodeUsers {
   updatedAt: string
   userId: string
 }
+
+// SALES
+export interface Sale {
+  id: string
+  startsAt: string
+  endsAt: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface SalesData {
+  count: number
+  rows: PromoCode[]
+}
+
+export interface SaleFormBody {
+  startsAt: string
+  endsAt: string
+}

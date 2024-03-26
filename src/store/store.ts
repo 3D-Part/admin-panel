@@ -30,6 +30,7 @@ import {
 
 import { UsersSliceInterface, usersSlice } from './slices/usersSlice'
 import { UISliceInterface, UISlice } from './slices/uiSlice'
+import { SalesSliceInterface, salesSlice } from './slices/salesSlice'
 
 export const useCategoryStore = create<CategorySliceInterface>()((...a) => ({
   ...categorySlice(...a),
@@ -76,6 +77,9 @@ export const usePromoCodesSliceStore = create<PromoCodesSliceInterface>()(
     ...promoCodesSlice(...a),
   })
 )
+export const useSalesSliceStore = create<SalesSliceInterface>()((...a) => ({
+  ...salesSlice(...a),
+}))
 
 export const useUISliceStore = create<UISliceInterface>()((...a) => ({
   ...UISlice(...a),

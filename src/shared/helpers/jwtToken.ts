@@ -1,6 +1,10 @@
 import { LoginResponseData } from '../types'
 
 const changeAccessToken = (token: string) => {
+  const expirationDate = new Date(0)
+  const accessTokenCookieName = 'accessToken'
+
+  document.cookie = `${accessTokenCookieName}=;expires=${expirationDate.toUTCString()}; path=/; secure; samesite=strict`
   document.cookie = `accessToken=${token}; SameSite=Strict`
 }
 
