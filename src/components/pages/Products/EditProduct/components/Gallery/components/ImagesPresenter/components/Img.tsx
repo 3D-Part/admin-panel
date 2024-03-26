@@ -73,7 +73,7 @@ const Img: React.FC<ImgType> = ({ src, id, isMain }) => {
   }
 
   return (
-    <div className="group relative flex justify-center items-center border border-gray-800 rounded-lg w-52 h-52">
+    <div className="group relative flex justify-center items-center border border-gray-800 rounded-lg w-40 h-40 md:w-52 md:h-52">
       <Image
         className="object-cover w-full h-full rounded-lg"
         src={src}

@@ -9,7 +9,6 @@ export const UISlice: StateCreator<UISliceInterface> = (set, get) => ({
   isMobileMenuOpen: false,
 
   changeIsMobileMenuOpen: (value: boolean) => {
-    console.log('value:', value)
     set({ isMobileMenuOpen: value })
   },
 })

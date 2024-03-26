@@ -25,7 +25,7 @@ export const TabsMenu = () => {
   }
 
   return (
-    <div className="flex flex-col w-full ">
+    <div className="flex flex-col w-full">
       <Tabs.Group>
         <Tabs.Item onClick={() => setActiveTab(1)} active={activeTab === 1}>
           <HiUserCircle className="text-2xl" />

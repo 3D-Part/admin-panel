@@ -19,8 +19,11 @@ axiosInstance.interceptors.request.use(
   (config) => {
     const token = getCookie('accessToken')
     // If a token exists, add it to the Authorization header
-    if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`
+
+    if (!config.url?.includes('amazon')) {
+      if (token) {
+        config.headers['Authorization'] = `Bearer ${token}`
+      }
     }
 
     return config

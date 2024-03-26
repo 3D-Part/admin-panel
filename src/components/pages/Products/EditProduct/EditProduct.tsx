@@ -21,7 +21,7 @@ export const EditProduct = () => {
 
   return (
     <div className="w-full">
-      <div className="w-full flex justify-between gap-4 items-center mb-12 ">
+      <div className="w-full flex-wrap flex justify-between gap-4 items-center mb-12 ">
         <h2 className="text-white text-4xl font-bold">{activeProduct.name}</h2>
         <Button href={URLPartsEnum.AddNewProduct}>
           Add new <HiPlus className="ml-2" />

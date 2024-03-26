@@ -64,7 +64,7 @@ const AddAttributeForm: React.FC<AddAttributeFormType> = ({
   return (
     <div>
       <form onSubmit={onSubmit}>
-        <div className="w-full flex gap-4 justify-start items-center mt-8">
+        <div className="w-full flex flex-wrap gap-4 justify-start items-center mt-8">
           <h3 className="text-lg leading-none tracking-tight text-gray-800 dark:text-white">
             Enter value ({attribute.name}):{' '}
           </h3>
