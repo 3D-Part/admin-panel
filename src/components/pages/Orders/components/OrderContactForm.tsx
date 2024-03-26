@@ -62,13 +62,13 @@ const OrderContactForm: React.FC<ModalType> = ({
     setIsModalOpen(false)
     setIsWarningModalOpen(false)
 
-    // if (response) {
-    toast(`Message is sent!`, {
-      hideProgressBar: true,
-      autoClose: 2000,
-      type: 'success',
-    })
-    // }
+    if (response !== null) {
+      toast(`Message is sent!`, {
+        hideProgressBar: true,
+        autoClose: 2000,
+        type: 'success',
+      })
+    }
   }
 
   return (
@@ -115,6 +115,7 @@ const OrderContactForm: React.FC<ModalType> = ({
           onClose={() => setIsWarningModalOpen(false)}
           message={`Do you want to send message to ${initialValue?.email}`}
           isLoading={loading}
+          buttonColor="blue"
         />
       )}
     </>

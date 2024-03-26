@@ -8,6 +8,15 @@ type ModalType = {
   onSave: () => void
   onClose: () => void
   message?: string
+  buttonColor?:
+    | 'blue'
+    | 'gray'
+    | 'dark'
+    | 'light'
+    | 'success'
+    | 'failure'
+    | 'warning'
+    | 'purple'
   isLoading?: boolean
 }
 
@@ -16,6 +25,7 @@ const WarningModal: React.FC<ModalType> = ({
   onSave,
   onClose,
   isLoading = false,
+  buttonColor = 'failure',
   message = 'Are you sure you want to delete?',
 }) => {
   return (
@@ -32,7 +42,7 @@ const WarningModal: React.FC<ModalType> = ({
               <Button
                 isProcessing={isLoading}
                 disabled={isLoading}
-                color="failure"
+                color={buttonColor}
                 onClick={onSave}
               >
                 <span>Yes, I am sure</span>

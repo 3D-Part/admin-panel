@@ -55,19 +55,19 @@ const SubscribersContactForm: React.FC<ModalType> = ({
 
     const _body = emailDataRef.current
 
-    await sendMailToAllSubscribers(_body)
-
+    const response = await sendMailToAllSubscribers(_body)
+    console.log('response:', response)
     setLoading(false)
     setIsModalOpen(false)
     setIsWarningModalOpen(false)
 
-    // if (response) {
-    toast(`Email is sent!`, {
-      hideProgressBar: true,
-      autoClose: 2000,
-      type: 'success',
-    })
-    // }
+    if (response !== null) {
+      toast(`Email is sent!`, {
+        hideProgressBar: true,
+        autoClose: 2000,
+        type: 'success',
+      })
+    }
   }
 
   return (
@@ -146,6 +146,7 @@ const SubscribersContactForm: React.FC<ModalType> = ({
           onClose={() => setIsWarningModalOpen(false)}
           message="Do you want to send email to subscribers?"
           isLoading={loading}
+          buttonColor="blue"
         />
       )}
     </>
