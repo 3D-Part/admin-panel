@@ -16,13 +16,16 @@ import { usePathname } from 'next/navigation'
 import { useRouter } from 'next/navigation'
 import { URLPartsEnum } from '@/shared/enums'
 import { useUISliceStore } from '@/store/store'
-import { useEffect } from 'react'
 
 const SideBar = () => {
   const pathname = usePathname()
   const router = useRouter()
 
-  const { isMobileMenuOpen } = useUISliceStore()
+  const { changeIsMobileMenuOpen, isMobileMenuOpen } = useUISliceStore()
+
+  const closeMobileMenu = () => {
+    changeIsMobileMenuOpen(false)
+  }
 
   const menuItems = [
     {
@@ -149,11 +152,12 @@ const SideBar = () => {
                           className="cursor-pointer"
                           key={item.name}
                           // href={item.href}
-                          onClick={() =>
+                          onClick={() => {
+                            closeMobileMenu()
                             router.push(item.href, {
                               // shallow: true,
                             })
-                          }
+                          }}
                           active={pathname === item.href}
                         >
                           {item.name}
@@ -169,11 +173,12 @@ const SideBar = () => {
                     key={menuItem.name}
                     active={pathname === menuItem.href}
                     // href={menuItem.href}
-                    onClick={() =>
+                    onClick={() => {
+                      closeMobileMenu()
                       router.push(menuItem.href, {
                         // shallow: true,
                       })
-                    }
+                    }}
                     icon={menuItem.icon}
                   >
                     {menuItem.name}

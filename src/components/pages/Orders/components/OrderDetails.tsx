@@ -107,21 +107,23 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
 
         <div className="mt-8 text-white">
           <h3 className="font-semibold text-xl mb-4">Products:</h3>
-          <Table>
-            <Table.Head>
-              <Table.HeadCell>Name</Table.HeadCell>
-              <Table.HeadCell>Price</Table.HeadCell>
-              <Table.HeadCell>Quantity</Table.HeadCell>
-              <Table.HeadCell>Sku</Table.HeadCell>
-              <Table.HeadCell>Total</Table.HeadCell>
-            </Table.Head>
+          <div className="w-full overflow-x-auto">
+            <Table>
+              <Table.Head>
+                <Table.HeadCell>Name</Table.HeadCell>
+                <Table.HeadCell>Price</Table.HeadCell>
+                <Table.HeadCell>Quantity</Table.HeadCell>
+                <Table.HeadCell>Sku</Table.HeadCell>
+                <Table.HeadCell>Total</Table.HeadCell>
+              </Table.Head>
 
-            <Table.Body className="divide-y">
-              {products.map((product) => {
-                return <ProductWrapper key={product.id} product={product} />
-              })}
-            </Table.Body>
-          </Table>
+              <Table.Body className="divide-y">
+                {products.map((product) => {
+                  return <ProductWrapper key={product.id} product={product} />
+                })}
+              </Table.Body>
+            </Table>
+          </div>
         </div>
       </Modal.Body>
       <Modal.Footer>

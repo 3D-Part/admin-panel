@@ -45,25 +45,27 @@ export const OrdersTable = () => {
 
   return (
     <div>
-      <Table>
-        <Table.Head>
-          <Table.HeadCell>Name</Table.HeadCell>
-          <Table.HeadCell>Email</Table.HeadCell>
-          <Table.HeadCell>City</Table.HeadCell>
-          <Table.HeadCell>Date</Table.HeadCell>
-          <Table.HeadCell>Price</Table.HeadCell>
-          <Table.HeadCell>Status</Table.HeadCell>
-          <Table.HeadCell></Table.HeadCell>
-        </Table.Head>
+      <div className="overflow-x-auto">
+        <Table>
+          <Table.Head>
+            <Table.HeadCell>Name</Table.HeadCell>
+            <Table.HeadCell>Email</Table.HeadCell>
+            <Table.HeadCell>City</Table.HeadCell>
+            <Table.HeadCell>Date</Table.HeadCell>
+            <Table.HeadCell>Price</Table.HeadCell>
+            <Table.HeadCell>Status</Table.HeadCell>
+            <Table.HeadCell></Table.HeadCell>
+          </Table.Head>
 
-        {!loader && (
-          <Table.Body className="divide-y">
-            {currentPageOrders.map((order) => {
-              return <TableItem key={order.id} order={order} />
-            })}
-          </Table.Body>
-        )}
-      </Table>
+          {!loader && (
+            <Table.Body className="divide-y">
+              {currentPageOrders.map((order) => {
+                return <TableItem key={order.id} order={order} />
+              })}
+            </Table.Body>
+          )}
+        </Table>
+      </div>
       {loader && <Loader />}
 
       <Pagination

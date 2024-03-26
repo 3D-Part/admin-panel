@@ -55,35 +55,37 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
   }, [changeCurrentPage, currentPage, totalPages])
 
   return (
-    <div className="mt-8 overflow-x-auto">
-      <Table>
-        <Table.Head>
-          {/* <Table.HeadCell /> */}
-          <Table.HeadCell>Name</Table.HeadCell>
-          <Table.HeadCell>Category</Table.HeadCell>
-          <Table.HeadCell>manufacturer</Table.HeadCell>
-          <Table.HeadCell>Sku</Table.HeadCell>
-          <Table.HeadCell>Price</Table.HeadCell>
-          <Table.HeadCell>Quantity</Table.HeadCell>
-          <Table.HeadCell>
-            <span className="sr-only">Edit</span>
-          </Table.HeadCell>
-        </Table.Head>
+    <div className="mt-8">
+      <div className="overflow-x-auto">
+        <Table>
+          <Table.Head>
+            {/* <Table.HeadCell /> */}
+            <Table.HeadCell>Name</Table.HeadCell>
+            <Table.HeadCell>Category</Table.HeadCell>
+            <Table.HeadCell>manufacturer</Table.HeadCell>
+            <Table.HeadCell>Sku</Table.HeadCell>
+            <Table.HeadCell>Price</Table.HeadCell>
+            <Table.HeadCell>Quantity</Table.HeadCell>
+            <Table.HeadCell>
+              <span className="sr-only">Edit</span>
+            </Table.HeadCell>
+          </Table.Head>
 
-        {!loader && (
-          <Table.Body className="divide-y">
-            {currentPageProducts.map((product) => {
-              return (
-                <TableItem
-                  key={product.id}
-                  product={product}
-                  onWarningModalOpen={onWarningModalOpen}
-                />
-              )
-            })}
-          </Table.Body>
-        )}
-      </Table>
+          {!loader && (
+            <Table.Body className="divide-y">
+              {currentPageProducts.map((product) => {
+                return (
+                  <TableItem
+                    key={product.id}
+                    product={product}
+                    onWarningModalOpen={onWarningModalOpen}
+                  />
+                )
+              })}
+            </Table.Body>
+          )}
+        </Table>
+      </div>
       {loader && <Loader />}
 
       <Pagination

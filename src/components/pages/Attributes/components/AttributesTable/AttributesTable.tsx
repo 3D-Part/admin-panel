@@ -52,29 +52,31 @@ export const AttributesTable: React.FC<AttributesTableType> = ({
 
   return (
     <div className="mt-8">
-      <Table>
-        <Table.Head>
-          <Table.HeadCell>Name</Table.HeadCell>
-          <Table.HeadCell>
-            <span className="sr-only">Edit or Remove</span>
-          </Table.HeadCell>
-        </Table.Head>
-        {!loader && (
-          <Table.Body className="divide-y">
-            {currentPageAttributes.length > 0 &&
-              currentPageAttributes.map((attribute) => {
-                return (
-                  <TableItem
-                    key={attribute.id}
-                    attribute={attribute}
-                    onWarningModalOpen={onWarningModalOpen}
-                    openEditModal={openEditModal}
-                  />
-                )
-              })}
-          </Table.Body>
-        )}
-      </Table>
+      <div className="overflow-x-auto">
+        <Table>
+          <Table.Head>
+            <Table.HeadCell>Name</Table.HeadCell>
+            <Table.HeadCell>
+              <span className="sr-only">Edit or Remove</span>
+            </Table.HeadCell>
+          </Table.Head>
+          {!loader && (
+            <Table.Body className="divide-y">
+              {currentPageAttributes.length > 0 &&
+                currentPageAttributes.map((attribute) => {
+                  return (
+                    <TableItem
+                      key={attribute.id}
+                      attribute={attribute}
+                      onWarningModalOpen={onWarningModalOpen}
+                      openEditModal={openEditModal}
+                    />
+                  )
+                })}
+            </Table.Body>
+          )}
+        </Table>
+      </div>
       {loader && <Loader />}
 
       <Pagination

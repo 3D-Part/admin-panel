@@ -49,31 +49,33 @@ export const PromoCodesTable: React.FC<PromoCodesTableType> = ({
 
   return (
     <div className="mt-8">
-      <Table>
-        <Table.Head>
-          <Table.HeadCell>Name</Table.HeadCell>
-          <Table.HeadCell>Start</Table.HeadCell>
-          <Table.HeadCell>End</Table.HeadCell>
-          <Table.HeadCell>Discount</Table.HeadCell>
-          <Table.HeadCell>
-            <span className="sr-only">Edit or Remove</span>
-          </Table.HeadCell>
-        </Table.Head>
-        {!loader && (
-          <Table.Body className="divide-y">
-            {currentPagePromoCodes.length > 0 &&
-              currentPagePromoCodes.map((promocode) => {
-                return (
-                  <TableItem
-                    onWarningModalOpen={onWarningModalOpen}
-                    key={promocode.id}
-                    promocode={promocode}
-                  />
-                )
-              })}
-          </Table.Body>
-        )}
-      </Table>
+      <div className="overflow-x-auto">
+        <Table>
+          <Table.Head>
+            <Table.HeadCell>Name</Table.HeadCell>
+            <Table.HeadCell>Start</Table.HeadCell>
+            <Table.HeadCell>End</Table.HeadCell>
+            <Table.HeadCell>Discount</Table.HeadCell>
+            <Table.HeadCell>
+              <span className="sr-only">Edit or Remove</span>
+            </Table.HeadCell>
+          </Table.Head>
+          {!loader && (
+            <Table.Body className="divide-y">
+              {currentPagePromoCodes.length > 0 &&
+                currentPagePromoCodes.map((promocode) => {
+                  return (
+                    <TableItem
+                      onWarningModalOpen={onWarningModalOpen}
+                      key={promocode.id}
+                      promocode={promocode}
+                    />
+                  )
+                })}
+            </Table.Body>
+          )}
+        </Table>
+      </div>
       {loader && <Loader />}
 
       <Pagination

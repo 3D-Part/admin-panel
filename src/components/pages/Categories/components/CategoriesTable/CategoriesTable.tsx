@@ -52,31 +52,33 @@ export const CategoriesTable: React.FC<CategoriesTableType> = ({
 
   return (
     <div className="mt-8">
-      <Table>
-        <Table.Head>
-          <Table.HeadCell>Name</Table.HeadCell>
-          <Table.HeadCell>Parent</Table.HeadCell>
-          <Table.HeadCell>URL Slug</Table.HeadCell>
-          <Table.HeadCell>
-            <span className="sr-only">Edit or Remove</span>
-          </Table.HeadCell>
-        </Table.Head>
-        {!loader && (
-          <Table.Body className="divide-y">
-            {currentPageCategories.length > 0 &&
-              currentPageCategories.map((category) => {
-                return (
-                  <TableItem
-                    key={category.id}
-                    category={category}
-                    onWarningModalOpen={onWarningModalOpen}
-                    openEditModal={openEditModal}
-                  />
-                )
-              })}
-          </Table.Body>
-        )}
-      </Table>
+      <div className="overflow-x-auto">
+        <Table>
+          <Table.Head>
+            <Table.HeadCell>Name</Table.HeadCell>
+            <Table.HeadCell>Parent</Table.HeadCell>
+            <Table.HeadCell>URL Slug</Table.HeadCell>
+            <Table.HeadCell>
+              <span className="sr-only">Edit or Remove</span>
+            </Table.HeadCell>
+          </Table.Head>
+          {!loader && (
+            <Table.Body className="divide-y">
+              {currentPageCategories.length > 0 &&
+                currentPageCategories.map((category) => {
+                  return (
+                    <TableItem
+                      key={category.id}
+                      category={category}
+                      onWarningModalOpen={onWarningModalOpen}
+                      openEditModal={openEditModal}
+                    />
+                  )
+                })}
+            </Table.Body>
+          )}
+        </Table>
+      </div>
       {loader && <Loader />}
 
       <Pagination

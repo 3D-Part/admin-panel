@@ -43,26 +43,28 @@ export const UsersTable = () => {
 
   return (
     <div className="">
-      <Table>
-        <Table.Head>
-          <Table.HeadCell>Name</Table.HeadCell>
-          <Table.HeadCell>Email</Table.HeadCell>
-          <Table.HeadCell>Phone</Table.HeadCell>
-          <Table.HeadCell>City</Table.HeadCell>
-          <Table.HeadCell>street</Table.HeadCell>
-          {/* <Table.HeadCell>
+      <div className="overflow-x-auto">
+        <Table>
+          <Table.Head>
+            <Table.HeadCell>Name</Table.HeadCell>
+            <Table.HeadCell>Email</Table.HeadCell>
+            <Table.HeadCell>Phone</Table.HeadCell>
+            <Table.HeadCell>City</Table.HeadCell>
+            <Table.HeadCell>street</Table.HeadCell>
+            {/* <Table.HeadCell>
                         <span className="sr-only">Edit or Remove</span>
                     </Table.HeadCell> */}
-        </Table.Head>
-        {!loader && (
-          <Table.Body className="divide-y">
-            {currentPageUsers.length > 0 &&
-              currentPageUsers.map((user) => {
-                return <TableItem key={user.id} user={user} />
-              })}
-          </Table.Body>
-        )}
-      </Table>
+          </Table.Head>
+          {!loader && (
+            <Table.Body className="divide-y">
+              {currentPageUsers.length > 0 &&
+                currentPageUsers.map((user) => {
+                  return <TableItem key={user.id} user={user} />
+                })}
+            </Table.Body>
+          )}
+        </Table>
+      </div>
       {loader && <Loader />}
 
       <Pagination
