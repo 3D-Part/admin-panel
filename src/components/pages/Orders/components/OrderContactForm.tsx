@@ -49,14 +49,13 @@ const OrderContactForm: React.FC<ModalType> = ({
   const sendEmail = async () => {
     if (!initialValue) return
 
-    let response
     setLoading(true)
 
     const _body = {
       message: declineMessageRef.current,
     }
 
-    response = await orderContactMessage(initialValue.id, _body)
+    const response = await orderContactMessage(initialValue.id, _body)
 
     setLoading(false)
     setIsModalOpen(false)
