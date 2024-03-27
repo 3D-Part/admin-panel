@@ -363,7 +363,12 @@ export interface Sale {
 
 export interface SalesData {
   count: number
-  rows: PromoCode[]
+  rows: Sale[]
+}
+
+export interface SalesFormData {
+  startsAt: string
+  endsAt: string
 }
 
 export interface SaleFormBody {

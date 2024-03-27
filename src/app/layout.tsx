@@ -3,6 +3,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import { ToastContainer } from 'react-toastify'
 import ChildrenWrapper from '@/components/layout/ChildrenWrapper'
 import LayoutWrapper from '@/components/layout/LayoutWrapper'
+import SalesModal from '@/components/common/SalesModal/SalesModal'
 
 export const metadata = {
   title: '3D Part',
@@ -21,6 +22,7 @@ export default function RootLayout({
         <ChildrenWrapper>{children}</ChildrenWrapper>
 
         <ToastContainer theme="colored" />
+        <SalesModal />
       </body>
     </html>
   )
