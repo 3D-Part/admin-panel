@@ -355,23 +355,26 @@ export interface PromoCodeUsers {
 // SALES
 export interface Sale {
   id: string
+  name: string
   startsAt: string
   endsAt: string
   createdAt: string
   updatedAt: string
 }
 
-export interface SalesData {
-  count: number
-  rows: Sale[]
-}
-
 export interface SalesFormData {
+  name: string
   startsAt: string
   endsAt: string
 }
 
 export interface SaleFormBody {
+  name: string
   startsAt: string
   endsAt: string
+}
+
+export interface SalesData {
+  count: number
+  rows: Sale[]
 }

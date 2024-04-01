@@ -21,15 +21,10 @@ const SideBar = () => {
   const pathname = usePathname()
   const router = useRouter()
 
-  const { changeIsMobileMenuOpen, isMobileMenuOpen, changeIsSalesModalOpen } =
-    useUISliceStore()
+  const { changeIsMobileMenuOpen, isMobileMenuOpen } = useUISliceStore()
 
   const closeMobileMenu = () => {
     changeIsMobileMenuOpen(false)
-  }
-
-  const openSalesModal = () => {
-    changeIsSalesModalOpen(true)
   }
 
   const menuItems = [
@@ -121,8 +116,8 @@ const SideBar = () => {
     },
     {
       name: 'Sales',
-      // href: URLPartsEnum.Sales,
-      onClick: openSalesModal,
+      href: URLPartsEnum.Sales,
+      // onClick: openSalesModal,
       icon: FaShopify,
       open: false,
     },
@@ -189,7 +184,6 @@ const SideBar = () => {
                     onClick={() => {
                       closeMobileMenu()
                       if (menuItem.href) router.push(menuItem.href)
-                      if (menuItem.onClick) menuItem.onClick()
                     }}
                     icon={menuItem.icon}
                   >

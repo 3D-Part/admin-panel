@@ -55,6 +55,14 @@ axiosInstance.interceptors.response.use(
       activeErrorMessage = error.message
     }
 
+    const errorUrl = error.response.config.url
+
+    if (
+      errorUrl.includes('/shop/sale/get-active-sale') &&
+      error.response.status === 404
+    )
+      return
+
     toast(activeErrorMessage, {
       hideProgressBar: true,
       autoClose: 2000,

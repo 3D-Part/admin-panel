@@ -1,15 +1,38 @@
 import { API } from '@/shared/helpers'
 import {
-  PaginationData,
-  SortParamsData,
-  SalesData,
   Sale,
   SaleFormBody,
+  SalesData,
+  PaginationData,
+  SortParamsData,
+  PromoCodesData,
 } from '@/shared/types'
 
 const API_BASE_URL = process.env.API_KEY
 
-const getSales = async (
+// const getAllSales = async (): Promise<SalesData> => {
+//   try {
+//     const data = await API.get<SalesData>(`${API_BASE_URL}/shop/sale`)
+//     return data
+//   } catch (error) {
+//     console.error('Error fetching sale data:', error)
+//     return {} as SalesData
+//   }
+// }
+
+const getActiveSale = async (): Promise<Sale | null> => {
+  try {
+    const data = await API.get<Sale>(
+      `${API_BASE_URL}/shop/sale/get-active-sale`
+    )
+    return data
+  } catch (error) {
+    console.error('Error fetching sale data:', error)
+    return null
+  }
+}
+
+const getAllSales = async (
   sortData: SortParamsData,
   paginationData?: PaginationData,
   params = {}
@@ -27,7 +50,7 @@ const getSales = async (
 
   try {
     const data = await API.get<SalesData>(
-      `${API_BASE_URL}/shop/sale/get-active-sale/?${queryParams}`,
+      `${API_BASE_URL}/shop/sale/?${queryParams}`,
       params
     )
     return data
@@ -60,15 +83,15 @@ const editSale = async (
   }
 }
 
-// const removePromoCode = async (id: string): Promise<boolean> => {
-//   try {
-//     await API.remove(`${API_BASE_URL}/shop/promotion-codes/${id}`)
-//     return true
-//   } catch (error) {
-//     console.error('Error removing promo code:', error)
-//     return false
-//   }
-// }
+const removeSale = async (id: string): Promise<boolean> => {
+  try {
+    await API.remove(`${API_BASE_URL}/shop/sale/${id}`)
+    return true
+  } catch (error) {
+    console.error('Error removing sale:', error)
+    return false
+  }
+}
 
 // const addUsersToPromoCode = async (
 //   body: UsersToPromoCode
@@ -86,10 +109,11 @@ const editSale = async (
 // }
 
 const SalesAPI = {
-  getSales,
+  getAllSales,
+  getActiveSale,
   addNewSale,
   editSale,
-  // removePromoCode,
+  removeSale,
   // addUsersToPromoCode,
 }
 

@@ -1,10 +1,9 @@
 import { StateCreator } from 'zustand'
-import { PaginationData, PromoCode, Sale, SaleFormBody } from '@/shared/types'
+import { PaginationData, Sale, SaleFormBody, SalesData } from '@/shared/types'
 import { SalesAPI } from '@/services'
 
 export interface SalesSliceInterface {
-  allSales: Sale[]
-  activeSales: Sale
+  activeSale: Sale | null
   currentPageSales: Sale[]
   currentPage: number
   itemsPerPage: number
@@ -12,18 +11,19 @@ export interface SalesSliceInterface {
   sortFiled: string
   sortOrder: 'ASC' | 'DESC'
   SalesFilters: {}
-  changeActiveSales: (data: Sale) => void
+  changeActiveSale: (data: Sale) => void
   changeCurrentPage: (data: number) => void
   changeItemsPerPage: (data: number) => void
-  changeSubscribersFilter: (data: {}) => void
+  changeSalesFilter: (data: {}) => void
   fetchSales: (paginationData?: PaginationData) => Promise<boolean>
-  addNewSale: (promoCode: SaleFormBody) => Promise<Sale | false>
-  editSale: (saleId: string, sale: SaleFormBody) => Promise<boolean>
+  fetchActiveSale: () => Promise<Sale | null>
+  addNewSale: (sale: SaleFormBody) => Promise<Sale | null>
+  editSale: (saleId: string, sale: SaleFormBody) => Promise<Sale | null>
+  removeSale: (saleId: string) => Promise<boolean>
 }
 
 export const salesSlice: StateCreator<SalesSliceInterface> = (set, get) => ({
-  allSales: [],
-  activeSales: {} as Sale,
+  activeSale: null,
   currentPageSales: [],
   currentPage: 1,
   itemsPerPage: 15,
@@ -32,8 +32,8 @@ export const salesSlice: StateCreator<SalesSliceInterface> = (set, get) => ({
   sortOrder: 'DESC',
   SalesFilters: {},
 
-  changeActiveSales: (data: Sale) => {
-    set({ activeSales: data })
+  changeActiveSale: (data: Sale) => {
+    set({ activeSale: data })
   },
 
   changeCurrentPage: (data: number) => {
@@ -44,7 +44,7 @@ export const salesSlice: StateCreator<SalesSliceInterface> = (set, get) => ({
     set({ itemsPerPage: data })
   },
 
-  changeSubscribersFilter: (data: {}) => {
+  changeSalesFilter: (data: {}) => {
     set({ SalesFilters: data })
   },
 
@@ -55,7 +55,7 @@ export const salesSlice: StateCreator<SalesSliceInterface> = (set, get) => ({
     }
 
     try {
-      const data = await SalesAPI.getSales(
+      const data = await SalesAPI.getAllSales(
         sort,
         paginationData,
         get().SalesFilters
@@ -63,19 +63,30 @@ export const salesSlice: StateCreator<SalesSliceInterface> = (set, get) => ({
       if (data) {
         set({ currentPageSales: data.rows })
         set({ totalPages: Math.ceil(data.count / get().itemsPerPage) })
+        return true
       }
-
-      return true
     } catch (error) {
-      console.error('Error with getting data:', error)
+      console.error('Error with getting sales:', error)
     }
     return false
   },
 
-  addNewSale: async (sale: SaleFormBody) => {
-    const sales = get().allSales
+  fetchActiveSale: async (): Promise<Sale | null> => {
+    try {
+      const data = await SalesAPI.getActiveSale()
+      if (data) {
+        set({ activeSale: data })
+        return data
+      }
+    } catch (error) {
+      console.error('Error with getting data:', error)
+    }
+    return null
+  },
 
+  addNewSale: async (sale: SaleFormBody) => {
     const _salesData: SaleFormBody = {
+      name: sale.name,
       startsAt: sale.startsAt,
       endsAt: sale.endsAt,
     }
@@ -83,37 +94,44 @@ export const salesSlice: StateCreator<SalesSliceInterface> = (set, get) => ({
     try {
       const data = await SalesAPI.addNewSale(_salesData)
       if (data) {
-        set({ allSales: [...sales] })
+        set({ activeSale: data })
         return data
       }
     } catch (error) {
       console.error('Error adding sale:', error)
       throw error
     }
-    return false
+    return null
   },
 
   editSale: async (saleId: string, sale: SaleFormBody) => {
-    const sales = get().allSales
-
-    const _saleData: SaleFormBody = {
+    const _salesData: SaleFormBody = {
+      name: sale.name,
       startsAt: sale.startsAt,
       endsAt: sale.endsAt,
     }
-
     try {
-      const data = await SalesAPI.editSale(saleId, _saleData)
+      const data = await SalesAPI.editSale(saleId, _salesData)
       if (data) {
-        const index = sales.findIndex((sale) => sale.id === saleId)
-        if (index !== -1) {
-          sales[index] = data
-        }
-
-        set({ activeSales: data })
-        return true
+        set({ activeSale: data })
+        return data
       }
     } catch (error) {
       console.error('Error editing sale:', error)
+      throw error
+    }
+    return null
+  },
+
+  removeSale: async (saleId: string) => {
+    try {
+      const data = await SalesAPI.removeSale(saleId)
+      if (data) {
+        set({ activeSale: null })
+        return true
+      }
+    } catch (error) {
+      console.error('Error removing sale:', error)
       throw error
     }
     return false
