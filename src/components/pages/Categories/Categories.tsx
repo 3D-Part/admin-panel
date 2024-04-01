@@ -75,7 +75,7 @@ export const Categories = () => {
         type: 'success',
       })
       fetchCategoriesData()
-      fetchAllCategories()
+      // fetchAllCategories()
     }
     setIsWarningModalOpen(false)
   }
@@ -105,9 +105,9 @@ export const Categories = () => {
     }
   }, [changeCurrentPage, currentPage, totalPages])
 
-  useEffect(() => {
-    fetchAllCategories()
-  }, [fetchAllCategories])
+  // useEffect(() => {
+  //   fetchAllCategories()
+  // }, [fetchAllCategories])
 
   return (
     <div className="w-full">
