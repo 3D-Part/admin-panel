@@ -79,7 +79,7 @@ export const Manufactures = () => {
         type: 'success',
       })
       fetchManufacturesData()
-      fetchAllManufactures()
+      // fetchAllManufactures()
     }
     setIsWarningModalOpen(false)
   }
@@ -112,9 +112,9 @@ export const Manufactures = () => {
     }
   }, [changeCurrentPage, currentPage, totalPages])
 
-  useEffect(() => {
-    fetchAllManufactures()
-  }, [fetchAllManufactures])
+  // useEffect(() => {
+  //   fetchAllManufactures()
+  // }, [fetchAllManufactures])
 
   return (
     <div className="w-full">
