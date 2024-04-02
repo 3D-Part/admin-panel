@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { ErrorCodeEnum, ErrorsEnum, URLPartsEnum } from '../enums'
+import { ErrorCodeEnum, URLPartsEnum } from '../enums'
 import { AuthAPI } from '@/services'
 import getCookie from '@/shared/helpers/getCookies'
 import JWT from './jwtToken'

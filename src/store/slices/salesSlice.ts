@@ -4,6 +4,7 @@ import { SalesAPI } from '@/services'
 
 export interface SalesSliceInterface {
   activeSale: Sale | null
+  allSales: Sale[]
   currentPageSales: Sale[]
   currentPage: number
   itemsPerPage: number
@@ -16,6 +17,7 @@ export interface SalesSliceInterface {
   changeItemsPerPage: (data: number) => void
   changeSalesFilter: (data: {}) => void
   fetchSales: (paginationData?: PaginationData) => Promise<boolean>
+  fetchAllSales: () => Promise<boolean>
   fetchActiveSale: () => Promise<Sale | null>
   addNewSale: (sale: SaleFormBody) => Promise<Sale | null>
   editSale: (saleId: string, sale: SaleFormBody) => Promise<Sale | null>
@@ -24,6 +26,7 @@ export interface SalesSliceInterface {
 
 export const salesSlice: StateCreator<SalesSliceInterface> = (set, get) => ({
   activeSale: null,
+  allSales: [],
   currentPageSales: [],
   currentPage: 1,
   itemsPerPage: 15,
@@ -55,7 +58,7 @@ export const salesSlice: StateCreator<SalesSliceInterface> = (set, get) => ({
     }
 
     try {
-      const data = await SalesAPI.getAllSales(
+      const data = await SalesAPI.getSales(
         sort,
         paginationData,
         get().SalesFilters
@@ -67,6 +70,25 @@ export const salesSlice: StateCreator<SalesSliceInterface> = (set, get) => ({
       }
     } catch (error) {
       console.error('Error with getting sales:', error)
+    }
+    return false
+  },
+
+  fetchAllSales: async () => {
+    const sort = {
+      field: get().sortFiled,
+      order: get().sortOrder,
+    }
+
+    try {
+      const data = await SalesAPI.getSales(sort, get().SalesFilters)
+
+      if (data) {
+        set({ allSales: data.rows })
+        return true
+      }
+    } catch (error) {
+      console.error('Error with getting all sales:', error)
     }
     return false
   },

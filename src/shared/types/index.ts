@@ -166,6 +166,7 @@ export interface ProductData {
   price: number
   updatedAt: string
   category: ProductCategory
+  productOnSale: [] // TODO add type
   manufacturer: {
     id: string
     name: string
@@ -378,3 +379,11 @@ export interface SalesData {
   count: number
   rows: Sale[]
 }
+
+export interface ProductOnSaleData {
+  discountedPrice: number
+  productId: string
+  saleId: string
+}
+
+export type ProductsOnSaleFormData = ProductOnSaleData[]

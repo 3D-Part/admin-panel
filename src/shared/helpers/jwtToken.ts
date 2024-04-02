@@ -1,13 +1,5 @@
 import { LoginResponseData } from '../types'
 
-const changeAccessToken = (token: string) => {
-  const expirationDate = new Date(0)
-  const accessTokenCookieName = 'accessToken'
-
-  document.cookie = `${accessTokenCookieName}=;expires=${expirationDate.toUTCString()}; path=/; secure; samesite=strict`
-  document.cookie = `accessToken=${token}; SameSite=Strict`
-}
-
 const deleteJwtTokens = () => {
   const accessTokenCookieName = 'accessToken'
   const refreshTokenCookieName = 'refreshToken'
@@ -19,9 +11,16 @@ const deleteJwtTokens = () => {
   document.cookie = `${refreshTokenCookieName}=;expires=${expirationDate.toUTCString()}; path=/; secure; samesite=strict`
 }
 
+const changeAccessToken = (token: string) => {
+  const expirationDate = new Date(0)
+  const accessTokenCookieName = 'accessToken'
+
+  document.cookie = `${accessTokenCookieName}=;expires=${expirationDate.toUTCString()}; path=/; secure; samesite=strict`
+  document.cookie = `accessToken=${token}; SameSite=Strict`
+}
+
 const addJwtTokens = (data: LoginResponseData) => {
   deleteJwtTokens()
-  // document.cookie = `accessToken=${data.accessToken}; HttpOnly; SameSite=Strict`
   document.cookie = `accessToken=${data.accessToken}; SameSite=Strict`
   document.cookie = `refreshToken=${data.refreshToken}; SameSite=Strict`
 }

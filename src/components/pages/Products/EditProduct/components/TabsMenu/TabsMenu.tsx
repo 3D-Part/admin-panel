@@ -9,20 +9,15 @@ import Gallery from '../Gallery/Gallery'
 import ProductAttributes from '../ProductAttributes/ProductAttributes'
 
 export const TabsMenu = () => {
-  const [activeTab, setActiveTab] = useState(1)
+  const [activeTab, setActiveTab] = useState<1 | 2 | 3>(1)
 
-  const ActiveComponent = () => {
-    switch (activeTab) {
-      case 1:
-        return <GeneralInfo />
-      case 2:
-        return <Gallery />
-      case 3:
-        return <ProductAttributes />
-      default:
-        break
-    }
+  const components = {
+    1: <GeneralInfo />,
+    2: <Gallery />,
+    3: <ProductAttributes />,
   }
+
+  const ActiveComponent = components[activeTab]
 
   return (
     <div className="flex flex-col w-full">
@@ -41,7 +36,7 @@ export const TabsMenu = () => {
         </Tabs.Item>
       </Tabs.Group>
 
-      <ActiveComponent />
+      {ActiveComponent}
     </div>
   )
 }

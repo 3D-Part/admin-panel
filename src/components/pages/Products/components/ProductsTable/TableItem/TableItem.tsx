@@ -1,7 +1,7 @@
 import { URLPartsEnum } from '@/shared/enums'
 
 import { PaginationData, ProductData, ProductFormBody } from '@/shared/types'
-import { useProductsStore } from '@/store/store'
+import { useProductsStore, useUISliceStore } from '@/store/store'
 import { Avatar, Dropdown, Table } from 'flowbite-react'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
@@ -24,6 +24,8 @@ export const TableItem: React.FC<TableItemType> = ({
 
   const router = useRouter()
 
+  const { changeIsAddProductsOnSaleModalOpen } = useUISliceStore()
+
   const {
     changeActiveProduct,
     addNewProducts,
@@ -31,6 +33,11 @@ export const TableItem: React.FC<TableItemType> = ({
     itemsPerPage,
     fetchProducts,
   } = useProductsStore()
+
+  const addProductOnSale = () => {
+    changeActiveProduct(product)
+    changeIsAddProductsOnSaleModalOpen(true)
+  }
 
   // Make this function global
   const fetchProductsData = async () => {
@@ -116,6 +123,11 @@ export const TableItem: React.FC<TableItemType> = ({
               <Dropdown.Item onClick={duplicateProduct}>
                 <span className="font-medium text-cyan-600 cursor-pointer hover:underline dark:text-cyan-500">
                   <p>Duplicate</p>
+                </span>
+              </Dropdown.Item>
+              <Dropdown.Item onClick={addProductOnSale}>
+                <span className="font-medium text-cyan-600 cursor-pointer hover:underline dark:text-cyan-500">
+                  <p>Add on sale</p>
                 </span>
               </Dropdown.Item>
               <Dropdown.Item onClick={() => onWarningModalOpen(product)}>
