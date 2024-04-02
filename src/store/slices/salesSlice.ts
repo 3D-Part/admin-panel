@@ -80,8 +80,17 @@ export const salesSlice: StateCreator<SalesSliceInterface> = (set, get) => ({
       order: get().sortOrder,
     }
 
+    const currentDate = new Date()
+    const filters = {
+      filters: {
+        endsAt: {
+          gt: `%${currentDate}%`,
+        },
+      },
+    }
+
     try {
-      const data = await SalesAPI.getSales(sort, get().SalesFilters)
+      const data = await SalesAPI.getSales(sort, get().SalesFilters, filters)
 
       if (data) {
         set({ allSales: data.rows })

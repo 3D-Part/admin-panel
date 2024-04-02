@@ -49,33 +49,6 @@ const getSales = async (
     return null
   }
 }
-// const getAllSales = async (
-//   sortData: SortParamsData,
-//   paginationData?: PaginationData,
-//   params = {}
-// ) => {
-//   const { offset, limit } = paginationData || {}
-
-//   const queryParams = new URLSearchParams()
-
-//   if (offset !== undefined && limit !== undefined) {
-//     queryParams.append('offset', offset.toString())
-//     queryParams.append('limit', limit.toString())
-//   }
-//   queryParams.append('sort[order]', sortData.order)
-//   queryParams.append('sort[field]', sortData.field)
-
-//   try {
-//     const data = await API.get<SalesData>(
-//       `${API_BASE_URL}/shop/sale/?${queryParams}`,
-//       params
-//     )
-//     return data
-//   } catch (error) {
-//     console.error('Error fetching sales data:', error)
-//     return null
-//   }
-// }
 
 const addNewSale = async (body: SaleFormBody): Promise<Sale | null> => {
   try {
