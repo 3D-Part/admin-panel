@@ -81,6 +81,8 @@ export const salesSlice: StateCreator<SalesSliceInterface> = (set, get) => ({
     }
 
     const currentDate = new Date()
+
+    // TODO move filter from here
     const filters = {
       filters: {
         endsAt: {
