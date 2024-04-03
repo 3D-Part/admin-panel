@@ -1,7 +1,7 @@
 'use client'
 
 import isoToDatetimeLocal from '@/shared/helpers/isoToDatetimeLocal'
-import { SalesFormData } from '@/shared/types'
+import { PaginationData, SalesFormData } from '@/shared/types'
 import { useSalesSliceStore, useUISliceStore } from '@/store/store'
 import { Button, Label, Modal, TextInput } from 'flowbite-react'
 import React, { useRef, useState } from 'react'
@@ -11,7 +11,14 @@ const EditSaleModal = () => {
   const [loading, setLoading] = useState(false)
 
   const { changeIsSaleEditModalOpen, isSaleEditModalOpen } = useUISliceStore()
-  const { activeSale, editSale, removeSale } = useSalesSliceStore()
+  const {
+    activeSale,
+    editSale,
+    removeSale,
+    currentPage,
+    itemsPerPage,
+    fetchSales,
+  } = useSalesSliceStore()
 
   const salesDataRef = useRef<SalesFormData>({} as SalesFormData)
   const formRef = useRef<HTMLFormElement>(null)
@@ -22,6 +29,15 @@ const EditSaleModal = () => {
   const endTimeFormated = isoToDatetimeLocal(
     activeSale?.endsAt ? activeSale?.endsAt : ''
   )
+
+  const fetchSalesData = async () => {
+    const paginationData: PaginationData = {
+      offset: (currentPage - 1) * itemsPerPage,
+      limit: itemsPerPage,
+    }
+    const data = await fetchSales(paginationData)
+    setLoading(false)
+  }
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -75,7 +91,9 @@ const EditSaleModal = () => {
       })
 
       resetData()
-      setLoading(false)
+      // setLoading(false)
+      fetchSalesData()
+      changeIsSaleEditModalOpen(false)
     }
   }
 
@@ -137,7 +155,7 @@ const EditSaleModal = () => {
             />
           </div>
 
-          {activeSale && activeSale.productOnSale.length > 0 && (
+          {activeSale && activeSale?.productOnSale?.length > 0 && (
             <div className="w-full ">
               <div className="mb-2 block">
                 <Label value="Products on sale" />
