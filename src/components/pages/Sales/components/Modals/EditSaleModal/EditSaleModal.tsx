@@ -4,7 +4,7 @@ import isoToDatetimeLocal from '@/shared/helpers/isoToDatetimeLocal'
 import { PaginationData, SalesFormData } from '@/shared/types'
 import { useSalesSliceStore, useUISliceStore } from '@/store/store'
 import { Button, Label, Modal, TextInput } from 'flowbite-react'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 
 const EditSaleModal = () => {
@@ -74,7 +74,9 @@ const EditSaleModal = () => {
       })
     }
 
+    await fetchSalesData()
     setLoading(false)
+    changeIsSaleEditModalOpen(false)
   }
 
   const onRemove = async () => {
@@ -96,6 +98,17 @@ const EditSaleModal = () => {
       changeIsSaleEditModalOpen(false)
     }
   }
+
+  useEffect(() => {
+    resetData()
+    if (activeSale?.id) {
+      salesDataRef.current = {
+        name: activeSale.name,
+        startsAt: activeSale.startsAt,
+        endsAt: activeSale.endsAt,
+      }
+    }
+  }, [activeSale])
 
   return (
     <Modal dismissible show={isSaleEditModalOpen} onClose={closeModal}>
