@@ -56,7 +56,6 @@ const SubscribersContactForm: React.FC<ModalType> = ({
     const _body = emailDataRef.current
 
     const response = await sendMailToAllSubscribers(_body)
-    console.log('response:', response)
     setLoading(false)
     setIsModalOpen(false)
     setIsWarningModalOpen(false)
