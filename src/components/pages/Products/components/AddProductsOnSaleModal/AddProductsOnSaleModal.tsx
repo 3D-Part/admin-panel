@@ -30,11 +30,18 @@ const AddProductsOnSaleModal = () => {
   const changeActiveSaleData = (saleId: string) => {
     const selectedSale = allSales.find((sale) => sale.id === saleId)
 
-    if (!selectedSale) return
-    changeActiveSale(selectedSale)
+    if (selectedSale) {
+      changeActiveSale(selectedSale)
+    } else {
+      changeActiveSale({} as Sale)
+    }
   }
 
   const checkIsProductInSelectedSale = () => {
+    if (!activeSale?.id) {
+      setProductOnSelectedSale(null)
+      return
+    }
     const productOnSale = activeSale?.productOnSale.find((product) => {
       return product.productId === activeProduct.id
     })
@@ -45,6 +52,11 @@ const AddProductsOnSaleModal = () => {
       setProductOnSelectedSale(null)
     }
   }
+
+  useEffect(() => {
+    if (!isAddProductsOnSaleModalOpen) return
+    checkIsProductInSelectedSale()
+  }, [activeSale])
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -60,7 +72,7 @@ const AddProductsOnSaleModal = () => {
 
     if (name === 'saleId') {
       changeActiveSaleData(value)
-      checkIsProductInSelectedSale()
+      // checkIsProductInSelectedSale()
     }
   }
 
@@ -83,7 +95,6 @@ const AddProductsOnSaleModal = () => {
     let response
     response = await SalesAPI.addProductOnSale(body)
 
-    console.log('response:', response)
     if (response) {
       toast('Product is added on sale', {
         hideProgressBar: true,
