@@ -97,6 +97,20 @@ const addProductOnSale = async (body: ProductsOnSaleFormData) => {
   }
 }
 
+const updateProductOnSale = async (body: ProductsOnSaleFormData) => {
+  try {
+    const data = await API.patch(
+      `${API_BASE_URL}/shop/products-on-sale-bulk`,
+      body
+    )
+    console.log('data:', data)
+    return data
+  } catch (error) {
+    console.error('Error adding product on sale:', error)
+    return null
+  }
+}
+
 // const addUsersToPromoCode = async (
 //   body: UsersToPromoCode
 // ): Promise<boolean> => {
@@ -119,6 +133,7 @@ const SalesAPI = {
   editSale,
   removeSale,
   addProductOnSale,
+  updateProductOnSale,
 }
 
 export default SalesAPI

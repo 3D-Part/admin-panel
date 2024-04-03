@@ -136,6 +136,29 @@ const EditSaleModal = () => {
               defaultValue={endTimeFormated}
             />
           </div>
+
+          {activeSale && activeSale.productOnSale.length > 0 && (
+            <div className="w-full ">
+              <div className="mb-2 block">
+                <Label value="Products on sale" />
+              </div>
+              <div className="flex items-center gap-2 flex-wrap">
+                {activeSale.productOnSale.map((product) => {
+                  return (
+                    <p className="dark:text-white text-sm" key={product.id}>
+                      <b>{product.product.name}</b>
+                      <span className="line-through text-red-400 ml-2 mr-1">
+                        {product.product.price}
+                      </span>
+                      <span className="text-green-400">
+                        {product.discountedPrice},
+                      </span>
+                    </p>
+                  )
+                })}
+              </div>
+            </div>
+          )}
         </form>
       </Modal.Body>
       <Modal.Footer>

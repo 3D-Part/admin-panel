@@ -354,6 +354,16 @@ export interface PromoCodeUsers {
 }
 
 // SALES
+
+export interface ProductOnSale {
+  createdAt: string
+  discountedPrice: string
+  id: string
+  product: ProductData
+  productId: string
+  saleId: string
+  updatedAt: string
+}
 export interface Sale {
   id: string
   name: string
@@ -361,6 +371,7 @@ export interface Sale {
   endsAt: string
   createdAt: string
   updatedAt: string
+  productOnSale: ProductOnSale[]
 }
 
 export interface SalesFormData {

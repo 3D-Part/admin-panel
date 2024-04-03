@@ -1,10 +1,6 @@
 'use client'
 
-import {
-  PaginationData,
-  ProductOnSaleData,
-  SalesFormData,
-} from '@/shared/types'
+import { ProductOnSale, ProductOnSaleData, Sale } from '@/shared/types'
 import {
   useProductsStore,
   useSalesSliceStore,
@@ -19,14 +15,36 @@ import { toast } from 'react-toastify'
 const AddProductsOnSaleModal = () => {
   const [loading, setLoading] = useState(false)
 
+  const [productOnSelectedSale, setProductOnSelectedSale] =
+    useState<ProductOnSale | null>(null)
+
   const { activeProduct } = useProductsStore()
 
   const { changeIsAddProductsOnSaleModalOpen, isAddProductsOnSaleModalOpen } =
     useUISliceStore()
-  const { allSales } = useSalesSliceStore()
+  const { allSales, activeSale, changeActiveSale } = useSalesSliceStore()
 
   const salesDataRef = useRef<ProductOnSaleData>({} as ProductOnSaleData)
   const formRef = useRef<HTMLFormElement>(null)
+
+  const changeActiveSaleData = (saleId: string) => {
+    const selectedSale = allSales.find((sale) => sale.id === saleId)
+
+    if (!selectedSale) return
+    changeActiveSale(selectedSale)
+  }
+
+  const checkIsProductInSelectedSale = () => {
+    const productOnSale = activeSale?.productOnSale.find((product) => {
+      return product.productId === activeProduct.id
+    })
+
+    if (productOnSale) {
+      setProductOnSelectedSale(productOnSale)
+    } else {
+      setProductOnSelectedSale(null)
+    }
+  }
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -39,11 +57,17 @@ const AddProductsOnSaleModal = () => {
       ...salesDataRef.current,
       [name]: _value,
     }
+
+    if (name === 'saleId') {
+      changeActiveSaleData(value)
+      checkIsProductInSelectedSale()
+    }
   }
 
   const resetData = () => {
     formRef.current && formRef.current.reset()
     salesDataRef.current = {} as ProductOnSaleData
+    setProductOnSelectedSale(null)
   }
 
   const closeModal = () => {
@@ -52,13 +76,13 @@ const AddProductsOnSaleModal = () => {
 
   const onSave = async () => {
     salesDataRef.current.productId = activeProduct.id
-    console.log('salesDataRef.current:', salesDataRef.current)
 
     setLoading(true)
 
     const body = [salesDataRef.current]
+    let response
+    response = await SalesAPI.addProductOnSale(body)
 
-    const response = await SalesAPI.addProductOnSale(body)
     console.log('response:', response)
     if (response) {
       toast('Product is added on sale', {
@@ -92,7 +116,14 @@ const AddProductsOnSaleModal = () => {
           {/* SALES */}
           <div className="w-full" id="select">
             <div className="mb-2 block">
-              <Label htmlFor="saleId" value="Sale" />
+              <Label
+                htmlFor="saleId"
+                value={`Sale ${
+                  productOnSelectedSale
+                    ? '(product is already in this sale)'
+                    : ''
+                }`}
+              />
             </div>
             <Select
               onChange={handleInputChange}
@@ -121,7 +152,11 @@ const AddProductsOnSaleModal = () => {
               id="discountedPrice"
               required
               type="text"
-              defaultValue=""
+              defaultValue={
+                productOnSelectedSale
+                  ? productOnSelectedSale.discountedPrice
+                  : ''
+              }
             />
           </div>
         </form>
