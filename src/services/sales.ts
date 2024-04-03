@@ -6,6 +6,8 @@ import {
   PaginationData,
   SortParamsData,
   ProductsOnSaleFormData,
+  PatchProductsOnSaleFormData,
+  DeleteProductsOnSaleFormData,
 } from '@/shared/types'
 
 const API_BASE_URL = process.env.API_KEY
@@ -89,7 +91,6 @@ const addProductOnSale = async (body: ProductsOnSaleFormData) => {
       `${API_BASE_URL}/shop/products-on-sale-bulk`,
       body
     )
-    console.log('data:', data)
     return data
   } catch (error) {
     console.error('Error adding product on sale:', error)
@@ -97,17 +98,29 @@ const addProductOnSale = async (body: ProductsOnSaleFormData) => {
   }
 }
 
-const updateProductOnSale = async (body: ProductsOnSaleFormData) => {
+const updateProductOnSale = async (body: PatchProductsOnSaleFormData) => {
   try {
     const data = await API.patch(
       `${API_BASE_URL}/shop/products-on-sale-bulk`,
       body
     )
-    console.log('data:', data)
     return data
   } catch (error) {
-    console.error('Error adding product on sale:', error)
+    console.error('Error editing product on sale:', error)
     return null
+  }
+}
+
+const deleteProductOnSale = async (body: DeleteProductsOnSaleFormData) => {
+  try {
+    const data = await API.remove(
+      `${API_BASE_URL}/shop/products-on-sale-bulk`,
+      body
+    )
+    return true
+  } catch (error) {
+    console.error('Error editing product on sale:', error)
+    return false
   }
 }
 
@@ -134,6 +147,7 @@ const SalesAPI = {
   removeSale,
   addProductOnSale,
   updateProductOnSale,
+  deleteProductOnSale,
 }
 
 export default SalesAPI

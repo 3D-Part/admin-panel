@@ -391,6 +391,7 @@ export interface SalesData {
   rows: Sale[]
 }
 
+// POST product on sale
 export interface ProductOnSaleData {
   discountedPrice: number
   productId: string
@@ -398,3 +399,16 @@ export interface ProductOnSaleData {
 }
 
 export type ProductsOnSaleFormData = ProductOnSaleData[]
+
+// PATCH product on sale
+export interface PatchProductOnSaleData {
+  id: string
+  discountedPrice: number
+}
+
+export type PatchProductsOnSaleFormData = PatchProductOnSaleData[]
+
+// DELETE product on sale
+export type DeleteProductsOnSaleFormData = {
+  ids: string[]
+}

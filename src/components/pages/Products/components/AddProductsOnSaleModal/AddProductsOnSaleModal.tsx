@@ -1,6 +1,12 @@
 'use client'
 
-import { ProductOnSale, ProductOnSaleData, Sale } from '@/shared/types'
+import {
+  DeleteProductsOnSaleFormData,
+  PatchProductOnSaleData,
+  ProductOnSale,
+  ProductOnSaleData,
+  Sale,
+} from '@/shared/types'
 import {
   useProductsStore,
   useSalesSliceStore,
@@ -22,7 +28,8 @@ const AddProductsOnSaleModal = () => {
 
   const { changeIsAddProductsOnSaleModalOpen, isAddProductsOnSaleModalOpen } =
     useUISliceStore()
-  const { allSales, activeSale, changeActiveSale } = useSalesSliceStore()
+  const { allSales, activeSale, changeActiveSale, fetchAllSales } =
+    useSalesSliceStore()
 
   const salesDataRef = useRef<ProductOnSaleData>({} as ProductOnSaleData)
   const formRef = useRef<HTMLFormElement>(null)
@@ -91,20 +98,54 @@ const AddProductsOnSaleModal = () => {
 
     setLoading(true)
 
-    const body = [salesDataRef.current]
     let response
-    response = await SalesAPI.addProductOnSale(body)
+    let message = ''
+    if (productOnSelectedSale) {
+      const patchBody: PatchProductOnSaleData[] = [
+        {
+          id: productOnSelectedSale.id,
+          discountedPrice: salesDataRef.current.discountedPrice,
+        },
+      ]
+      message = 'Product on sale is changed'
+      response = await SalesAPI.updateProductOnSale(patchBody)
+    } else {
+      const addBody = [salesDataRef.current]
+      message = 'Product is added on sale'
+      response = await SalesAPI.addProductOnSale(addBody)
+    }
 
     if (response) {
-      toast('Product is added on sale', {
+      toast(message, {
         hideProgressBar: true,
         autoClose: 2000,
         type: 'success',
       })
     }
-    // fetchSalesData()
+    await fetchAllSales()
     setLoading(false)
     changeIsAddProductsOnSaleModalOpen(false)
+  }
+
+  const onDelete = async () => {
+    if (!productOnSelectedSale) return
+    setLoading(true)
+
+    const body: DeleteProductsOnSaleFormData = {
+      ids: [productOnSelectedSale.id],
+    }
+
+    const response = await SalesAPI.deleteProductOnSale(body)
+    if (response) {
+      toast('Product is remove from sale', {
+        hideProgressBar: true,
+        autoClose: 2000,
+        type: 'warning',
+      })
+    }
+    changeActiveSale({} as Sale)
+    await fetchAllSales()
+    setLoading(false)
   }
 
   useEffect(() => {
@@ -176,6 +217,16 @@ const AddProductsOnSaleModal = () => {
         <Button isProcessing={loading} disabled={loading} onClick={onSave}>
           Save
         </Button>
+        {productOnSelectedSale && (
+          <Button
+            color="red"
+            isProcessing={loading}
+            disabled={loading}
+            onClick={onDelete}
+          >
+            Remove
+          </Button>
+        )}
 
         <Button disabled={loading} color="gray" onClick={closeModal}>
           Cancel
