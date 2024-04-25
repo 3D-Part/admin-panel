@@ -82,7 +82,6 @@ const GeneralInfo = () => {
 
   const onSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log('productDataRef.current.name:', productDataRef.current.name)
     if (!productDataRef.current.name) return
 
     productDataRef.current.isPublished = isPublished
