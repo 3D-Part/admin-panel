@@ -82,6 +82,7 @@ const GeneralInfo = () => {
 
   const onSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
+    console.log('productDataRef.current.name:', productDataRef.current.name)
     if (!productDataRef.current.name) return
 
     productDataRef.current.isPublished = isPublished
@@ -89,6 +90,7 @@ const GeneralInfo = () => {
     productDataRef.current.isRecommended = isRecommended
 
     const request = await editProduct(activeProduct.id, productDataRef.current)
+    console.log('request:', request)
     if (request) {
       toast(`${productDataRef.current.name} is changed!`, {
         hideProgressBar: true,
@@ -96,7 +98,7 @@ const GeneralInfo = () => {
         type: 'success',
       })
 
-      resetData()
+      // resetData()
     }
   }
 
