@@ -8,7 +8,6 @@ import { ProductsAPI } from '@/services'
 import { PaginationData, ProductData } from '@/shared/types'
 import { ProductsOverviewHeader } from './components/ProductsHeader/ProductsHeader'
 import { ProductsTable } from './components/ProductsTable/ProductsTable'
-import AddProductsOnSaleModal from './components/AddProductsOnSaleModal/AddProductsOnSaleModal'
 
 export const Products = () => {
   const [isWarningModalOpen, setIsWarningModalOpen] = useState(false)

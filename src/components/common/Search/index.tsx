@@ -72,8 +72,9 @@ const Search: React.FC<SearchProps> = ({
         />
       </div>
       {query && (
-        <div onClick={reset} className="text-gray-400 text-xl cursor-pointer">
-          <IoCloseCircleOutline />
+        <div onClick={reset} className="text-cyan-700 text-sm cursor-pointer">
+          {/* <IoCloseCircleOutline /> */}
+          reset
         </div>
       )}
     </form>

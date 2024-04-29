@@ -3,11 +3,13 @@
 import { Search } from '@/components/common'
 import { PaginationData } from '@/shared/types'
 import { useProductsStore } from '@/store/store'
-import { Spinner } from 'flowbite-react'
-import React, { useCallback, useState } from 'react'
+import { Dropdown, Spinner } from 'flowbite-react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 const ProductsSearch = () => {
   const [loader, setLoader] = useState(false)
+
+  const [searchBy, setSearchBy] = useState<'name' | 'sku'>('name')
 
   const {
     itemsPerPage,
@@ -22,7 +24,7 @@ const ProductsSearch = () => {
 
       const filters = {
         filters: {
-          name: {
+          [searchBy]: {
             like: `%${value}%`,
           },
         },
@@ -42,11 +44,23 @@ const ProductsSearch = () => {
         setLoader(true)
       }
     },
-    [changeCurrentPage, fetchProducts, itemsPerPage]
+    [changeCurrentPage, fetchProducts, itemsPerPage, searchBy]
   )
 
   return (
-    <div className="flex gap-8 items-center">
+    <div className="flex gap-2 items-center">
+      <Dropdown dismissOnClick label={searchBy}>
+        <Dropdown.Item onClick={() => setSearchBy('name')}>
+          <span className="font-medium text-cyan-600 cursor-pointer hover:underline dark:text-cyan-500">
+            <p>NAME</p>
+          </span>
+        </Dropdown.Item>
+        <Dropdown.Item onClick={() => setSearchBy('sku')}>
+          <span className="font-medium text-cyan-600 cursor-pointer hover:underline dark:text-cyan-500">
+            <p>SKU</p>
+          </span>
+        </Dropdown.Item>
+      </Dropdown>
       <Search getData={fetchProductsData} />
       {loader && <Spinner aria-label="Loading..." size="lg" />}
     </div>
