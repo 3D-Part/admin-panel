@@ -63,11 +63,14 @@ axiosInstance.interceptors.response.use(
     )
       return
 
-    toast(activeErrorMessage, {
-      hideProgressBar: true,
-      autoClose: 2000,
-      type: 'error',
-    })
+    if (_errorResponse?.data?.key !== 'UNAUTHORIZED_ERROR') {
+      toast(activeErrorMessage, {
+        hideProgressBar: true,
+        autoClose: 2000,
+        type: 'error',
+      })
+    }
+
     // if (originalRequest._retry) {
     //     console.log('sada bi trebalo da preki i ne posalje request')
     //     return
