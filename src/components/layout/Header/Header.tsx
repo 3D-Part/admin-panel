@@ -31,7 +31,7 @@ const SideBar = () => {
         fluid
         rounded
       >
-        <Navbar.Brand href="/">
+        <Navbar.Brand href="/products">
           <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
             <Image
               src="/assets/img/logo.png"
