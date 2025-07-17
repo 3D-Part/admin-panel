@@ -286,6 +286,8 @@ export interface User {
   city: string | null
   postCode: string | null
   street: string | null
+  availablePoints: number
+  usedPoints: number
   updatedAt: string
   createdAt: string
   orders: Order[]

@@ -4,7 +4,7 @@ import { Search } from '@/components/common'
 import { PaginationData } from '@/shared/types'
 import { useProductsStore } from '@/store/store'
 import { Dropdown, Spinner } from 'flowbite-react'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 
 const ProductsSearch = () => {
   const [loader, setLoader] = useState(false)
@@ -49,7 +49,7 @@ const ProductsSearch = () => {
 
   return (
     <div className="flex gap-2 items-center">
-      <Dropdown dismissOnClick label={searchBy}>
+      <Dropdown dismissOnClick label={searchBy.toUpperCase()}>
         <Dropdown.Item onClick={() => setSearchBy('name')}>
           <span className="font-medium text-cyan-600 cursor-pointer hover:underline dark:text-cyan-500">
             <p>NAME</p>

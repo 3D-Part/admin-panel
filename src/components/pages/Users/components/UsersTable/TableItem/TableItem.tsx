@@ -1,11 +1,9 @@
 'use client'
 
 import { User } from '@/shared/types'
-import { useUsersSliceStore } from '@/store/store'
 import { Table } from 'flowbite-react'
 import React, { useState } from 'react'
 import UserDetails from '../../UserDetails/UserDetails'
-import OrderDetails from '@/components/pages/Orders/components/OrderDetails'
 
 type TableItemType = {
   user: User
@@ -14,7 +12,8 @@ type TableItemType = {
 export const TableItem: React.FC<TableItemType> = ({ user }) => {
   const [isUserDetailsOpen, setIsUserDetailsOpen] = useState(false)
 
-  const { fullName, email, phone, city, street } = user
+  const { fullName, email, phone, city, street, availablePoints, usedPoints } =
+    user
 
   return (
     <>
@@ -38,6 +37,16 @@ export const TableItem: React.FC<TableItemType> = ({ user }) => {
         </Table.Cell>
         <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
           <div className="flex justify-start items-center gap-6">{street}</div>
+        </Table.Cell>
+        <Table.Cell className="whitespace-nowrap  font-medium text-gray-900 dark:text-white">
+          <div className="flex justify-start items-center gap-6">
+            {availablePoints}
+          </div>
+        </Table.Cell>
+        <Table.Cell className="whitespace-nowrap  font-medium text-gray-900 dark:text-white">
+          <div className="flex justify-start items-center gap-6">
+            {usedPoints}
+          </div>
         </Table.Cell>
         {/* <Table.Cell>
             <div className="flex justify-end items-center gap-8">
