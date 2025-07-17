@@ -97,6 +97,16 @@ const SideBar = () => {
       href: URLPartsEnum.Orders,
       icon: HiDocumentText,
       open: false,
+      children: [
+        {
+          name: 'All orders',
+          href: URLPartsEnum.Orders,
+        },
+        {
+          name: 'Order Emails',
+          href: URLPartsEnum.OrderEmails,
+        },
+      ],
     },
     {
       name: 'Promo Codes',

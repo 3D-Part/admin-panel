@@ -44,6 +44,9 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
     }
   }, [currentPage, fetchProducts, itemsPerPage])
 
+  const loaderBg =
+    currentPageProducts.length > 0 ? 'bg-black/30' : 'bg-transparent'
+
   useEffect(() => {
     fetchProductsData()
   }, [currentPage, fetchProductsData])
@@ -56,7 +59,7 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
 
   return (
     <div className="mt-8">
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto relative min-h-[100px]">
         <Table>
           <Table.Head>
             {/* <Table.HeadCell /> */}
@@ -71,31 +74,51 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
             </Table.HeadCell>
           </Table.Head>
 
-          {!loader && (
-            <Table.Body className="divide-y">
-              {currentPageProducts.map((product) => {
-                return (
-                  <TableItem
-                    key={product.id}
-                    product={product}
-                    onWarningModalOpen={onWarningModalOpen}
-                  />
-                )
-              })}
-            </Table.Body>
-          )}
+          {/* {!loader && ( */}
+          <Table.Body className="divide-y">
+            {currentPageProducts.map((product) => {
+              return (
+                <TableItem
+                  key={product.id}
+                  product={product}
+                  onWarningModalOpen={onWarningModalOpen}
+                />
+              )
+            })}
+          </Table.Body>
+          {/* )} */}
         </Table>
+        {loader && (
+          <div
+            className={`absolute inset-0 flex items-center justify-center ${loaderBg}`}
+          >
+            <Loader />
+          </div>
+        )}
       </div>
-      {loader && <Loader />}
 
-      <Pagination
+      {/* <Pagination
         className="mt-8"
         currentPage={currentPage}
         onPageChange={(page) => {
           changeCurrentPage(page)
         }}
         totalPages={totalPages}
-      />
+      /> */}
+
+      <div className="flex justify-between gap-4 items-center w-full mt-8">
+        <Pagination
+          currentPage={currentPage}
+          onPageChange={(page) => {
+            changeCurrentPage(page)
+          }}
+          totalPages={totalPages}
+        />
+
+        <p className="text-gray-400 text-sm">
+          Total: {totalPages * itemsPerPage}
+        </p>
+      </div>
     </div>
   )
 }
