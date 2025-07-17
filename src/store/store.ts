@@ -24,6 +24,10 @@ import {
 
 import { ordersSlice, OrdersSliceInterface } from './slices/orderSlice'
 import {
+  ordersEmailsSlice,
+  OrdersEmailsSliceInterface,
+} from './slices/orderEmailsSlice'
+import {
   SubscribersSliceInterface,
   subscribersSlice,
 } from './slices/subscribersSlice'
@@ -61,6 +65,12 @@ export const useS3ManagerStore = create<StoreManagerSliceInterface>()(
 export const useOrdersStore = create<OrdersSliceInterface>()((...a) => ({
   ...ordersSlice(...a),
 }))
+
+export const useOrdersEmailsStore = create<OrdersEmailsSliceInterface>()(
+  (...a) => ({
+    ...ordersEmailsSlice(...a),
+  })
+)
 
 export const useSubscribersSliceStore = create<SubscribersSliceInterface>()(
   (...a) => ({

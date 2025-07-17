@@ -271,6 +271,13 @@ export interface OrderFormBody {
   message: string
 }
 
+export type OrderEmail = string
+
+export interface OrdersEmailsData {
+  count: number
+  rows: OrderEmail[]
+}
+
 // USERS
 
 export interface User {

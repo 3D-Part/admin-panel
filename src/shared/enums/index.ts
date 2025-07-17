@@ -16,6 +16,7 @@ export enum URLPartsEnum {
   AddNewAttribute = '/attributes/add-new',
 
   Orders = '/orders',
+  OrderEmails = '/orders/emails',
 
   Users = '/users',
 

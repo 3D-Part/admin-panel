@@ -1,34 +1,34 @@
+import OrderEmailsAPI from '@/services/ordersEmails'
 import { StateCreator } from 'zustand'
-import { PaginationData, SubscribersData, Subscriber } from '@/shared/types'
-import SubscribersAPI from '@/services/subscibers'
+import { PaginationData, OrdersEmailsData, OrderEmail } from '@/shared/types'
 
-export interface SubscribersSliceInterface {
-  allSubscribers: SubscribersData[]
-  currentPageSubscribers: Subscriber[]
+export interface OrdersEmailsSliceInterface {
+  allEmails: OrdersEmailsData[]
+  currentPageEmails: OrderEmail[]
   currentPage: number
   itemsPerPage: number
   totalPages: number
   sortFiled: string
   sortOrder: 'ASC' | 'DESC'
-  subscribersFilters: {}
+  emailsFilters: {}
   changeCurrentPage: (data: number) => void
   changeItemsPerPage: (data: number) => void
-  changeSubscribersFilter: (data: {}) => void
-  fetchSubscribers: (paginationData?: PaginationData) => Promise<boolean>
+  changeEmailsFilter: (data: {}) => void
+  fetchOrdersEmails: (paginationData?: PaginationData) => Promise<boolean>
 }
 
-export const subscribersSlice: StateCreator<SubscribersSliceInterface> = (
+export const ordersEmailsSlice: StateCreator<OrdersEmailsSliceInterface> = (
   set,
   get
 ) => ({
-  allSubscribers: [],
-  currentPageSubscribers: [],
+  allEmails: [],
+  currentPageEmails: [],
   currentPage: 1,
   itemsPerPage: 15,
   totalPages: 1,
   sortFiled: 'createdAt',
   sortOrder: 'DESC',
-  subscribersFilters: {},
+  emailsFilters: {},
 
   changeCurrentPage: (data: number) => {
     set({ currentPage: data })
@@ -38,24 +38,24 @@ export const subscribersSlice: StateCreator<SubscribersSliceInterface> = (
     set({ itemsPerPage: data })
   },
 
-  changeSubscribersFilter: (data: {}) => {
-    set({ subscribersFilters: data })
+  changeEmailsFilter: (data: {}) => {
+    set({ emailsFilters: data })
   },
 
-  fetchSubscribers: async (paginationData?: PaginationData) => {
+  fetchOrdersEmails: async (paginationData?: PaginationData) => {
     const sort = {
       field: get().sortFiled,
       order: get().sortOrder,
     }
 
     try {
-      const data = await SubscribersAPI.getSubscribers(
+      const data = await OrderEmailsAPI.getOrdersEmails(
         sort,
         paginationData,
-        get().subscribersFilters
+        get().emailsFilters
       )
       if (data) {
-        set({ currentPageSubscribers: data.rows })
+        set({ currentPageEmails: data.rows })
         set({ totalPages: Math.ceil(data.count / get().itemsPerPage) })
       }
 

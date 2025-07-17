@@ -15,13 +15,13 @@ export const Subscribers = () => {
     changeCurrentPage,
   } = useSubscribersSliceStore()
 
-  const fetchSubscriberssData = async () => {
-    const paginationData: PaginationData = {
-      offset: (currentPage - 1) * itemsPerPage,
-      limit: itemsPerPage,
-    }
-    await fetchSubscribers(paginationData)
-  }
+  // const fetchSubscriberssData = async () => {
+  //   const paginationData: PaginationData = {
+  //     offset: (currentPage - 1) * itemsPerPage,
+  //     limit: itemsPerPage,
+  //   }
+  //   await fetchSubscribers(paginationData)
+  // }
 
   useEffect(() => {
     if (currentPage > totalPages && currentPage > 1) {

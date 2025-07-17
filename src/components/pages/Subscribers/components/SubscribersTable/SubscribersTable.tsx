@@ -1,11 +1,11 @@
 'use client' // This is a client component 👈🏽
 
-import { Pagination, Table } from 'flowbite-react'
 import React, { useCallback, useEffect, useState } from 'react'
+import { Pagination, Table } from 'flowbite-react'
 import { TableItem } from './TableItem/TableItem'
-import { useManufactureStore, useSubscribersSliceStore } from '@/store/store'
+import { useSubscribersSliceStore } from '@/store/store'
 import { Loader } from '@/components/common'
-import { PaginationData, ManufacturerData } from '@/shared/types'
+import { PaginationData } from '@/shared/types'
 
 export const SubscribersTable = () => {
   const [loader, setLoader] = useState(true)
@@ -37,38 +37,56 @@ export const SubscribersTable = () => {
   //   changeManufactureFilter({});
   // }, []);
 
+  const loaderBg =
+    currentPageSubscribers.length > 0 ? 'bg-black/30' : 'bg-transparent'
+
   useEffect(() => {
     fetchSubscribersData()
   }, [currentPage, fetchSubscribersData])
 
   return (
     <div className="mt-8">
-      <Table>
-        <Table.Head>
-          <Table.HeadCell>Name</Table.HeadCell>
-          {/* <Table.HeadCell>
+      <div className="relative overflow-x-auto min-h-[100px]">
+        <Table>
+          <Table.Head>
+            <Table.HeadCell>Name</Table.HeadCell>
+            {/* <Table.HeadCell>
                         <span className="sr-only">Edit or Remove</span>
                     </Table.HeadCell> */}
-        </Table.Head>
-        {!loader && (
+          </Table.Head>
+          {/* {!loader && ( */}
           <Table.Body className="divide-y">
             {currentPageSubscribers.length > 0 &&
               currentPageSubscribers.map((subscriber) => {
                 return <TableItem key={subscriber.id} subscriber={subscriber} />
               })}
           </Table.Body>
-        )}
-      </Table>
-      {loader && <Loader />}
+          {/* )} */}
+        </Table>
 
-      <Pagination
-        className="mt-8"
-        currentPage={currentPage}
-        onPageChange={(page) => {
-          changeCurrentPage(page)
-        }}
-        totalPages={totalPages}
-      />
+        {loader && (
+          <div
+            className={`absolute inset-0 flex items-center justify-center ${loaderBg}`}
+          >
+            <Loader />
+          </div>
+        )}
+      </div>
+
+      <div className="flex justify-between gap-4 items-center w-full">
+        <Pagination
+          className="mt-8"
+          currentPage={currentPage}
+          onPageChange={(page) => {
+            changeCurrentPage(page)
+          }}
+          totalPages={totalPages}
+        />
+
+        <p className="text-white/50 text-sm">
+          Total: {totalPages * itemsPerPage}
+        </p>
+      </div>
     </div>
   )
 }
