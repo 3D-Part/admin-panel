@@ -12,7 +12,7 @@ type UserDetailType = {
   vertical?: boolean
 }
 
-const OrderDetail: React.FC<UserDetailType> = ({
+const UserDetail: React.FC<UserDetailType> = ({
   value,
   name,
   vertical,
@@ -65,7 +65,6 @@ const UserDetails: React.FC<UserDetailsType> = ({ user, isOpen, onClose }) => {
     id,
     fullName,
     email,
-    password,
     role,
     provider,
     phone,
@@ -74,6 +73,8 @@ const UserDetails: React.FC<UserDetailsType> = ({ user, isOpen, onClose }) => {
     postCode,
     street,
     orders,
+    availablePoints,
+    usedPoints,
   } = user
 
   const selectActiveOrder = (activeOrder: Order) => {
@@ -95,31 +96,31 @@ const UserDetails: React.FC<UserDetailsType> = ({ user, isOpen, onClose }) => {
         </Modal.Header>
         <Modal.Body>
           <div className="flex flex-wrap gap-4">
-            <OrderDetail
+            <UserDetail
               className="cursor-pointer"
               name="Full name:"
               value={fullName}
             />
-            <OrderDetail name="Email:" value={email} />
-            {/* <OrderDetail name="Password:" value={password} /> */}
-            <OrderDetail name="Phone:" value={phone} />
-            <OrderDetail name="State:" value={state} />
-            <OrderDetail name="City:" value={city} />
-            <OrderDetail name="Street:" value={street} />
-            <OrderDetail name="PostCode:" value={postCode} />
-            <OrderDetail name="Role:" value={role} />
-            <OrderDetail name="Provider:" value={provider} />
-
-            {/* <OrderDetail
-            name="Description:"
-            vertical={true}
-            value={description}
-          /> */}
+            <UserDetail name="Email:" value={email} />
+            <UserDetail name="Phone:" value={phone} />
+            <UserDetail name="State:" value={state} />
+            <UserDetail name="City:" value={city} />
+            <UserDetail name="Street:" value={street} />
+            <UserDetail name="Post Code:" value={postCode} />
+            <UserDetail name="Role:" value={role} />
+            <UserDetail name="Provider:" value={provider} />
+            <div className="flex w-full gap-4">
+              <UserDetail
+                name="Available points:"
+                value={String(availablePoints)}
+              />
+              <UserDetail name="Used points:" value={String(usedPoints)} />
+            </div>
           </div>
 
           {orders.length > 0 && (
             <div className="mt-8 text-white">
-              <h3 className="font-semibold text-xl mb-4">Products:</h3>
+              <h3 className="font-semibold text-xl mb-4">Orders:</h3>
               <Table>
                 <Table.Head>
                   <Table.HeadCell>Order Number</Table.HeadCell>

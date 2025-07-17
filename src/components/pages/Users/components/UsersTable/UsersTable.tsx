@@ -50,7 +50,9 @@ export const UsersTable = () => {
             <Table.HeadCell>Email</Table.HeadCell>
             <Table.HeadCell>Phone</Table.HeadCell>
             <Table.HeadCell>City</Table.HeadCell>
-            <Table.HeadCell>street</Table.HeadCell>
+            <Table.HeadCell>Street</Table.HeadCell>
+            <Table.HeadCell>Points</Table.HeadCell>
+            <Table.HeadCell>Used points</Table.HeadCell>
             {/* <Table.HeadCell>
                         <span className="sr-only">Edit or Remove</span>
                     </Table.HeadCell> */}
