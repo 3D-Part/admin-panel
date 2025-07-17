@@ -114,6 +114,7 @@ const UserDetails: React.FC<UserDetailsType> = ({ user, isOpen, onClose }) => {
                 name="Available points:"
                 value={String(availablePoints)}
               />
+
               <UserDetail name="Used points:" value={String(usedPoints)} />
             </div>
           </div>
