@@ -25,6 +25,7 @@ const EmailsTable = () => {
       offset: (currentPage - 1) * itemsPerPage,
       limit: itemsPerPage,
     }
+
     const data = await fetchOrdersEmails(paginationData)
     if (data) {
       setLoader(false)
