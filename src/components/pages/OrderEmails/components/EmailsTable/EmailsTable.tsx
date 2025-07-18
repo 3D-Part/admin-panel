@@ -41,6 +41,8 @@ const EmailsTable = () => {
     fetchOrdersEmailsData()
   }, [currentPage, fetchOrdersEmailsData])
 
+  console.log('Tests')
+
   return (
     <div>
       <div className="relative overflow-x-auto min-h-[100px]">
