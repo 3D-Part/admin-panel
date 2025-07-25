@@ -23,6 +23,7 @@ export const SalesTable: React.FC<SalesTableType> = ({
     changeCurrentPage,
     itemsPerPage,
     totalPages,
+    count,
   } = useSalesSliceStore()
 
   const fetchPromoCodesData = useCallback(async () => {
@@ -96,9 +97,7 @@ export const SalesTable: React.FC<SalesTableType> = ({
           totalPages={totalPages}
         />
 
-        <p className="text-white/50 text-sm">
-          Total: {totalPages * itemsPerPage}
-        </p>
+        <p className="text-white/50 text-sm">Total: {count}</p>
       </div>
     </div>
   )

@@ -25,7 +25,7 @@ export const ManufacturesTable: React.FC<ManufacturesTableType> = ({
     changeCurrentPage,
     itemsPerPage,
     totalPages,
-    changeManufactureFilter,
+    count,
   } = useManufactureStore()
 
   const fetchManufacturesData = useCallback(async () => {
@@ -98,9 +98,7 @@ export const ManufacturesTable: React.FC<ManufacturesTableType> = ({
           totalPages={totalPages}
         />
 
-        <p className="text-white/50 text-sm">
-          Total: {totalPages * itemsPerPage}
-        </p>
+        <p className="text-white/50 text-sm">Total: {count}</p>
       </div>
     </div>
   )

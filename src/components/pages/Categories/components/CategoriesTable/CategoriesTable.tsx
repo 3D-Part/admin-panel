@@ -25,6 +25,7 @@ export const CategoriesTable: React.FC<CategoriesTableType> = ({
     changeCurrentPage,
     itemsPerPage,
     totalPages,
+    count,
     changeCategoryFilter,
   } = useCategoryStore()
 
@@ -100,9 +101,7 @@ export const CategoriesTable: React.FC<CategoriesTableType> = ({
           totalPages={totalPages}
         />
 
-        <p className="text-white/50 text-sm">
-          Total: {totalPages * itemsPerPage}
-        </p>
+        <p className="text-white/50 text-sm">Total: {count}</p>
       </div>
     </div>
   )

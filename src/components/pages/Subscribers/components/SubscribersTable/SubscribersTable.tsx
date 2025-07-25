@@ -17,6 +17,7 @@ export const SubscribersTable = () => {
     changeCurrentPage,
     itemsPerPage,
     totalPages,
+    count,
   } = useSubscribersSliceStore()
 
   const fetchSubscribersData = useCallback(async () => {
@@ -83,9 +84,7 @@ export const SubscribersTable = () => {
           totalPages={totalPages}
         />
 
-        <p className="text-white/50 text-sm">
-          Total: {totalPages * itemsPerPage}
-        </p>
+        <p className="text-white/50 text-sm">Total: {count}</p>
       </div>
     </div>
   )

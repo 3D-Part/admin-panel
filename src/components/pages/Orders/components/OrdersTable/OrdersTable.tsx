@@ -17,6 +17,7 @@ export const OrdersTable = () => {
     fetchOrders,
     changeCurrentPage,
     totalPages,
+    count,
   } = useOrdersStore()
 
   const fetchOrdersData = useCallback(async () => {
@@ -88,9 +89,7 @@ export const OrdersTable = () => {
           totalPages={totalPages}
         />
 
-        <p className="text-white/50 text-sm">
-          Total: {totalPages * itemsPerPage}
-        </p>
+        <p className="text-white/50 text-sm">Total: {count}</p>
       </div>
     </div>
   )

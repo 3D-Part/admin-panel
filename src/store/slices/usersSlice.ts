@@ -9,6 +9,7 @@ export interface UsersSliceInterface {
   currentPage: number
   itemsPerPage: number
   totalPages: number
+  count: number
   sortFiled: string
   sortOrder: 'ASC' | 'DESC'
   usersFilters: {}
@@ -32,6 +33,7 @@ export const usersSlice: StateCreator<UsersSliceInterface> = (set, get) => ({
   currentPage: 1,
   itemsPerPage: 15,
   totalPages: 1,
+  count: 0,
   sortFiled: 'createdAt',
   sortOrder: 'DESC',
   usersFilters: {},
@@ -67,6 +69,7 @@ export const usersSlice: StateCreator<UsersSliceInterface> = (set, get) => ({
       if (data) {
         set({ currentPageUsers: data.rows })
         set({ totalPages: Math.ceil(data.count / get().itemsPerPage) })
+        set({ count: data.count })
       }
 
       return true

@@ -23,6 +23,7 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
     fetchProducts,
     changeCurrentPage,
     totalPages,
+    count,
     changeProductFilter,
   } = useProductsStore()
 
@@ -115,9 +116,7 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
           totalPages={totalPages}
         />
 
-        <p className="text-gray-400 text-sm">
-          Total: {totalPages * itemsPerPage}
-        </p>
+        <p className="text-white/50 text-sm">Total: {count}</p>
       </div>
     </div>
   )

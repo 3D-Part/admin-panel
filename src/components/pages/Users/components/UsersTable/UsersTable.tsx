@@ -17,6 +17,7 @@ export const UsersTable = () => {
     changeCurrentPage,
     itemsPerPage,
     totalPages,
+    count,
   } = useUsersSliceStore()
 
   const fetchUsersData = useCallback(async () => {
@@ -88,9 +89,7 @@ export const UsersTable = () => {
           totalPages={totalPages}
         />
 
-        <p className="text-white/50 text-sm">
-          Total: {totalPages * itemsPerPage}
-        </p>
+        <p className="text-white/50 text-sm">Total: {count}</p>
       </div>
     </div>
   )

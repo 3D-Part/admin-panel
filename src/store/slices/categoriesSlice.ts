@@ -8,6 +8,7 @@ export interface CategorySliceInterface {
   currentPage: number
   itemsPerPage: number
   totalPages: number
+  count: number
   sortFiled: string
   sortOrder: 'ASC' | 'DESC'
   categoryFilters: {}
@@ -34,6 +35,7 @@ export const categorySlice: StateCreator<CategorySliceInterface> = (
   currentPage: 1,
   itemsPerPage: 15,
   totalPages: 1,
+  count: 0,
   sortFiled: 'createdAt',
   sortOrder: 'DESC',
   categoryFilters: {},
@@ -64,6 +66,7 @@ export const categorySlice: StateCreator<CategorySliceInterface> = (
       if (data) {
         set({ currentPageCategories: data.rows })
         set({ totalPages: Math.ceil(data.count / get().itemsPerPage) })
+        set({ count: data.count })
       }
 
       return true

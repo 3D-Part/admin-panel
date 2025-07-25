@@ -3,11 +3,12 @@ import { StateCreator } from 'zustand'
 import { PaginationData, OrdersEmailsData, OrderEmail } from '@/shared/types'
 
 export interface OrdersEmailsSliceInterface {
-  allEmails: OrdersEmailsData[]
+  allEmails: OrderEmail[]
   currentPageEmails: OrderEmail[]
   currentPage: number
   itemsPerPage: number
   totalPages: number
+  count: number
   sortFiled: string
   sortOrder: 'ASC' | 'DESC'
   emailsFilters: {}
@@ -26,6 +27,7 @@ export const ordersEmailsSlice: StateCreator<OrdersEmailsSliceInterface> = (
   currentPage: 1,
   itemsPerPage: 15,
   totalPages: 1,
+  count: 0,
   sortFiled: 'createdAt',
   sortOrder: 'DESC',
   emailsFilters: {},
@@ -57,6 +59,7 @@ export const ordersEmailsSlice: StateCreator<OrdersEmailsSliceInterface> = (
       if (data) {
         set({ currentPageEmails: data.rows })
         set({ totalPages: Math.ceil(data.count / get().itemsPerPage) })
+        set({ count: data.count })
       }
 
       return true

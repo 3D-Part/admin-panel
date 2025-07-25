@@ -17,6 +17,7 @@ export const EmployeesTable = () => {
     changeCurrentPage,
     itemsPerPage,
     totalPages,
+    count,
   } = useEmployeesSliceStore()
 
   const fetchEmployeesData = useCallback(async () => {
@@ -73,9 +74,7 @@ export const EmployeesTable = () => {
           totalPages={totalPages}
         />
 
-        <p className="text-white/50 text-sm">
-          Total: {totalPages * itemsPerPage}
-        </p>
+        <p className="text-white/50 text-sm">Total: {count}</p>
       </div>
     </div>
   )

@@ -9,6 +9,7 @@ export interface PromoCodesSliceInterface {
   currentPage: number
   itemsPerPage: number
   totalPages: number
+  count: number
   sortFiled: string
   sortOrder: 'ASC' | 'DESC'
   PromoCodesFilters: {}
@@ -17,7 +18,9 @@ export interface PromoCodesSliceInterface {
   changeItemsPerPage: (data: number) => void
   changeSubscribersFilter: (data: {}) => void
   fetchPromoCodes: (paginationData?: PaginationData) => Promise<boolean>
-  addNewPromoCode: (promoCode: PromoCodeFormBody) => Promise<PromoCode | false>
+  addNewPromoCode: (
+    promoCode: PromoCodeFormBody
+  ) => Promise<PromoCode | boolean>
   editPromoCode: (
     promoCodeId: string,
     promoCode: PromoCodeFormBody
@@ -34,6 +37,7 @@ export const promoCodesSlice: StateCreator<PromoCodesSliceInterface> = (
   currentPage: 1,
   itemsPerPage: 15,
   totalPages: 1,
+  count: 0,
   sortFiled: 'createdAt',
   sortOrder: 'DESC',
   PromoCodesFilters: {},
@@ -69,6 +73,7 @@ export const promoCodesSlice: StateCreator<PromoCodesSliceInterface> = (
       if (data) {
         set({ currentPagePromoCodes: data.rows })
         set({ totalPages: Math.ceil(data.count / get().itemsPerPage) })
+        set({ count: data.count })
       }
 
       return true

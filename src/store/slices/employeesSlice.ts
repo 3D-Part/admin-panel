@@ -9,6 +9,7 @@ export interface EmployeesSliceInterface {
   currentPage: number
   itemsPerPage: number
   totalPages: number
+  count: number
   sortFiled: string
   sortOrder: 'ASC' | 'DESC'
   employeesFilters: {}
@@ -30,6 +31,7 @@ export const employeesSlice: StateCreator<EmployeesSliceInterface> = (
   currentPage: 1,
   itemsPerPage: 15,
   totalPages: 1,
+  count: 0,
   sortFiled: 'createdAt',
   sortOrder: 'DESC',
   employeesFilters: {},
@@ -65,6 +67,7 @@ export const employeesSlice: StateCreator<EmployeesSliceInterface> = (
       if (data) {
         set({ currentPageEmployees: data.rows })
         set({ totalPages: Math.ceil(data.count / get().itemsPerPage) })
+        set({ count: data.count })
       }
 
       return true

@@ -25,6 +25,7 @@ export const AttributesTable: React.FC<AttributesTableType> = ({
     changeCurrentPage,
     itemsPerPage,
     totalPages,
+    count,
     changeAttributeFilter,
   } = useAttributesStore()
 
@@ -98,9 +99,7 @@ export const AttributesTable: React.FC<AttributesTableType> = ({
           totalPages={totalPages}
         />
 
-        <p className="text-white/50 text-sm">
-          Total: {totalPages * itemsPerPage}
-        </p>
+        <p className="text-white/50 text-sm">Total: {count}</p>
       </div>
     </div>
   )

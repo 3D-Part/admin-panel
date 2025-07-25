@@ -17,6 +17,7 @@ const EmailsTable = () => {
     changeCurrentPage,
     itemsPerPage,
     totalPages,
+    count,
   } = useOrdersEmailsStore()
 
   const fetchOrdersEmailsData = useCallback(async () => {
@@ -77,9 +78,7 @@ const EmailsTable = () => {
           totalPages={totalPages}
         />
 
-        <p className="text-white/50 text-sm">
-          Total: {totalPages * itemsPerPage}
-        </p>
+        <p className="text-white/50 text-sm">Total: {count}</p>
       </div>
     </div>
   )

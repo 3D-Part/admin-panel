@@ -12,6 +12,7 @@ export interface AttributesSliceInterface {
   currentPage: number
   itemsPerPage: number
   totalPages: number
+  count: number
   sortFiled: string
   sortOrder: 'ASC' | 'DESC'
   attributeFilters: {}
@@ -36,6 +37,7 @@ export const attributeSlice: StateCreator<AttributesSliceInterface> = (
   currentPage: 1,
   itemsPerPage: 15,
   totalPages: 1,
+  count: 0,
   sortFiled: 'createdAt',
   sortOrder: 'DESC',
   attributeFilters: {},
@@ -67,6 +69,7 @@ export const attributeSlice: StateCreator<AttributesSliceInterface> = (
       if (data) {
         set({ currentPageAttributes: data.rows })
         set({ totalPages: Math.ceil(data.count / get().itemsPerPage) })
+        set({ count: data.count })
       }
 
       return true

@@ -9,6 +9,7 @@ export interface SalesSliceInterface {
   currentPage: number
   itemsPerPage: number
   totalPages: number
+  count: number
   sortFiled: string
   sortOrder: 'ASC' | 'DESC'
   SalesFilters: {}
@@ -31,6 +32,7 @@ export const salesSlice: StateCreator<SalesSliceInterface> = (set, get) => ({
   currentPage: 1,
   itemsPerPage: 15,
   totalPages: 1,
+  count: 0,
   sortFiled: 'createdAt',
   sortOrder: 'DESC',
   SalesFilters: {},
@@ -66,6 +68,7 @@ export const salesSlice: StateCreator<SalesSliceInterface> = (set, get) => ({
       if (data) {
         set({ currentPageSales: data.rows })
         set({ totalPages: Math.ceil(data.count / get().itemsPerPage) })
+        set({ count: data.count })
         return true
       }
     } catch (error) {
