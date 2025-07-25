@@ -1,6 +1,7 @@
 'use client'
 
 import { PromoCodeFormBody } from '@/shared/types'
+
 import { usePromoCodesSliceStore } from '@/store/store'
 import { Button, Label, TextInput } from 'flowbite-react'
 
@@ -61,7 +62,8 @@ const AddNewPromoCode: React.FC<AddNewPromoCodeType> = ({ initialValue }) => {
         type: 'success',
       })
 
-      changeActivePromoCode(requestData)
+      if (typeof requestData === 'object') changeActivePromoCode(requestData)
+
       router.push(URLPartsEnum.EditPromoCode)
 
       resetData()
