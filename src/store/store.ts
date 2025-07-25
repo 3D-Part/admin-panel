@@ -39,6 +39,10 @@ import {
   EmployeesSliceInterface,
   employeesSlice,
 } from './slices/employeesSlice'
+import {
+  CurrentUserSliceInterface,
+  currentUserSlice,
+} from './slices/currentUserSlice'
 
 export const useCategoryStore = create<CategorySliceInterface>()((...a) => ({
   ...categorySlice(...a),
@@ -102,5 +106,11 @@ export const useUISliceStore = create<UISliceInterface>()((...a) => ({
 export const useEmployeesSliceStore = create<EmployeesSliceInterface>()(
   (...a) => ({
     ...employeesSlice(...a),
+  })
+)
+
+export const useCurrentUserStore = create<CurrentUserSliceInterface>()(
+  (...a) => ({
+    ...currentUserSlice(...a),
   })
 )

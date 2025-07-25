@@ -4,6 +4,7 @@ import {
   GetNewAccessTokenResponseData,
   LoginData,
   LoginResponseData,
+  User,
 } from '@/shared/types'
 
 const API_BASE_URL = process.env.API_KEY
@@ -21,6 +22,7 @@ const login = async (body: LoginData): Promise<LoginResponseData | null> => {
     return null
   }
 }
+
 const logout = async () => {
   try {
     await API.post(`${API_BASE_URL}/auth/logout/`)
@@ -39,10 +41,20 @@ const getNewAccessToken = async (body: {
   }
 }
 
+const getCurrentUser = async (): Promise<User | null> => {
+  try {
+    const data = await API.get<User>(`${API_BASE_URL}/users/profile`)
+    return data
+  } catch (error) {
+    return null
+  }
+}
+
 const AuthAPI = {
   login,
   logout,
   getNewAccessToken,
+  getCurrentUser,
 }
 
 export default AuthAPI

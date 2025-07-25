@@ -7,10 +7,11 @@ import JWT from '@/shared/helpers/jwtToken'
 import { useRouter } from 'next/navigation'
 import { URLPartsEnum } from '@/shared/enums'
 import AuthAPI from '@/services/auth'
-import { useUISliceStore } from '@/store/store'
+import { useUISliceStore, useCurrentUserStore } from '@/store/store'
 
 const SideBar = () => {
   const router = useRouter()
+  const { currentUser, clearCurrentUser } = useCurrentUserStore()
 
   const { changeIsMobileMenuOpen, isMobileMenuOpen } = useUISliceStore()
 
@@ -21,6 +22,7 @@ const SideBar = () => {
   const signOut = async () => {
     await AuthAPI.logout()
     JWT.deleteJwtTokens()
+    clearCurrentUser()
     router.push(URLPartsEnum.Login)
   }
 
@@ -55,9 +57,11 @@ const SideBar = () => {
             }
           >
             <Dropdown.Header>
-              <span className="block text-sm">Novak Djokovic</span>
+              <span className="block text-sm">
+                {currentUser?.fullName || 'User'}
+              </span>
               <span className="block truncate text-sm font-medium">
-                novakdjokovic@3dpart.com
+                {currentUser?.email || 'user@example.com'}
               </span>
             </Dropdown.Header>
             {/* <Dropdown.Divider /> */}

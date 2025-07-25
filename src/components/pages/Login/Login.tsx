@@ -1,15 +1,17 @@
 'use client'
 import { Button, Label, TextInput } from 'flowbite-react'
 import { useRouter } from 'next/navigation'
-import { LoginData, LoginResponseData } from '@/shared/types'
+import { LoginData } from '@/shared/types'
 import { SyntheticEvent, useRef } from 'react'
 import AuthAPI from '@/services/auth'
+import { useCurrentUserStore } from '@/store/store'
 
 const Login = () => {
   const formDataRef = useRef<LoginData>({} as LoginData)
+  const { setCurrentUser, setLoading } = useCurrentUserStore()
 
   const router = useRouter()
-  const { login } = AuthAPI
+  const { login, getCurrentUser } = AuthAPI
 
   const onSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -25,6 +27,13 @@ const Login = () => {
     const data = await login(loginBody)
 
     if (data) {
+      // Fetch current user data after successful login
+      setLoading(true)
+      const userData = await getCurrentUser()
+      if (userData) {
+        setCurrentUser(userData)
+      }
+      setLoading(false)
       router.push('products')
     }
   }
