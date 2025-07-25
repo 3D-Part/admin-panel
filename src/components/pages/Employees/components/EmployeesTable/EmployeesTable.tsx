@@ -47,6 +47,7 @@ export const EmployeesTable = () => {
         <Table>
           <Table.Head>
             <Table.HeadCell>Name</Table.HeadCell>
+            <Table.HeadCell>Email</Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y">
             {currentPageEmployees.length > 0 &&
