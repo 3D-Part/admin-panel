@@ -29,6 +29,8 @@ export enum URLPartsEnum {
   Sales = '/sales',
   AddNewSale = '/sales/add-new',
   EditSale = '/sales/edit',
+
+  Employees = '/employees',
 }
 
 export enum ErrorsEnum {

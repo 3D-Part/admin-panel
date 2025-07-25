@@ -1,0 +1,82 @@
+'use client'
+
+import { Pagination, Table } from 'flowbite-react'
+import React, { useCallback, useEffect, useState } from 'react'
+import { TableItem } from './TableItem/TableItem'
+import { useEmployeesSliceStore } from '@/store/store'
+import { Loader } from '@/components/common'
+import { PaginationData } from '@/shared/types'
+
+export const EmployeesTable = () => {
+  const [loader, setLoader] = useState(true)
+
+  const {
+    fetchEmployees,
+    currentPageEmployees,
+    currentPage,
+    changeCurrentPage,
+    itemsPerPage,
+    totalPages,
+  } = useEmployeesSliceStore()
+
+  const fetchEmployeesData = useCallback(async () => {
+    setLoader(true)
+    const paginationData: PaginationData = {
+      offset: (currentPage - 1) * itemsPerPage,
+      limit: itemsPerPage,
+    }
+    const data = await fetchEmployees(paginationData)
+    if (data) {
+      setLoader(false)
+    } else {
+      setLoader(true)
+    }
+  }, [currentPage, fetchEmployees, itemsPerPage])
+
+  const loaderBg =
+    currentPageEmployees.length > 0 ? 'bg-black/30' : 'bg-transparent'
+
+  useEffect(() => {
+    fetchEmployeesData()
+  }, [currentPage, fetchEmployeesData])
+
+  return (
+    <div className="">
+      <div className="relative overflow-x-auto min-h-[100px]">
+        <Table>
+          <Table.Head>
+            <Table.HeadCell>Name</Table.HeadCell>
+          </Table.Head>
+          <Table.Body className="divide-y">
+            {currentPageEmployees.length > 0 &&
+              currentPageEmployees.map((employee) => {
+                return <TableItem key={employee.id} employee={employee} />
+              })}
+          </Table.Body>
+        </Table>
+        {loader && (
+          <div
+            className={`absolute inset-0 flex items-center justify-center ${loaderBg}`}
+          >
+            <Loader />
+          </div>
+        )}
+      </div>
+
+      <div className="flex justify-between gap-4 items-center w-full">
+        <Pagination
+          className="mt-8"
+          currentPage={currentPage}
+          onPageChange={(page) => {
+            changeCurrentPage(page)
+          }}
+          totalPages={totalPages}
+        />
+
+        <p className="text-white/50 text-sm">
+          Total: {totalPages * itemsPerPage}
+        </p>
+      </div>
+    </div>
+  )
+}

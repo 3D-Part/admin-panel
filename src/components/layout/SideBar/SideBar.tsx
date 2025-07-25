@@ -11,6 +11,7 @@ import {
 import { MdUnsubscribe } from 'react-icons/md'
 import { IoMdPricetags } from 'react-icons/io'
 import { FaUsers, FaShopify } from 'react-icons/fa'
+import { FaUsersCog } from 'react-icons/fa'
 
 import { usePathname } from 'next/navigation'
 import { useRouter } from 'next/navigation'
@@ -136,6 +137,13 @@ const SideBar = () => {
       name: 'Users',
       href: URLPartsEnum.Users,
       icon: FaUsers,
+      open: false,
+    },
+
+    {
+      name: 'Employees',
+      href: URLPartsEnum.Employees,
+      icon: FaUsersCog,
       open: false,
     },
     {
