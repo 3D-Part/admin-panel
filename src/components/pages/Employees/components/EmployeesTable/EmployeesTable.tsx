@@ -42,7 +42,7 @@ export const EmployeesTable = () => {
   }, [currentPage, fetchEmployeesData])
 
   return (
-    <div className="">
+    <div className="mt-8">
       <div className="relative overflow-x-auto min-h-[100px]">
         <Table>
           <Table.Head>

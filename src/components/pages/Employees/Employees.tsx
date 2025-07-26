@@ -2,11 +2,15 @@
 
 import React, { useEffect } from 'react'
 import { EmployeesTable } from '@/components/pages/Employees/components/EmployeesTable/EmployeesTable'
-import { useEmployeesSliceStore } from '@/store/store'
+import { EmployeesHeader } from '@/components/pages/Employees/components/EmployeesHeader/EmployeesHeader'
+import CreateEmployeeModal from '@/components/pages/Employees/components/CreateEmployeeModal/CreateEmployeeModal'
+import { useEmployeesSliceStore, useUISliceStore } from '@/store/store'
 
 export const Employees = () => {
   const { currentPage, totalPages, changeCurrentPage } =
     useEmployeesSliceStore()
+  const { isEmployeeAddNewModalOpen, changeIsEmployeeAddNewModalOpen } =
+    useUISliceStore()
 
   useEffect(() => {
     if (currentPage > totalPages && currentPage > 1) {
@@ -14,9 +18,21 @@ export const Employees = () => {
     }
   }, [changeCurrentPage, currentPage, totalPages])
 
+  const handleEmployeeCreated = () => {
+    // Refresh the employees list or handle success
+    // You can add a refresh function here if needed
+  }
+
   return (
     <div className="w-full">
+      <EmployeesHeader />
       <EmployeesTable />
+
+      <CreateEmployeeModal
+        isOpen={isEmployeeAddNewModalOpen}
+        onClose={() => changeIsEmployeeAddNewModalOpen(false)}
+        onSuccess={handleEmployeeCreated}
+      />
     </div>
   )
 }

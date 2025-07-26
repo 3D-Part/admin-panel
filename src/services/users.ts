@@ -1,5 +1,10 @@
 import { API } from '@/shared/helpers'
-import { PaginationData, SortParamsData, UsersData } from '@/shared/types'
+import {
+  PaginationData,
+  SortParamsData,
+  UsersData,
+  CreateEmployeeData,
+} from '@/shared/types'
 
 const API_BASE_URL = process.env.API_KEY
 
@@ -31,8 +36,21 @@ const getUsers = async (
   }
 }
 
+const createEmployee = async (
+  employeeData: CreateEmployeeData
+): Promise<boolean> => {
+  try {
+    await API.post(`${API_BASE_URL}/users/employee`, employeeData)
+    return true
+  } catch (error) {
+    console.error('Error creating employee:', error)
+    return false
+  }
+}
+
 const UsersAPI = {
   getUsers,
+  createEmployee,
   // addNewManufacturer,
   // editManufacturer,
   // removeManufacture,

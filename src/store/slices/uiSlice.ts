@@ -5,10 +5,12 @@ export interface UISliceInterface {
   isSaleEditModalOpen: boolean
   isSaleAddNewModalOpen: boolean
   isAddProductsOnSaleModalOpen: boolean
+  isEmployeeAddNewModalOpen: boolean
   changeIsMobileMenuOpen: (value: boolean) => void
   changeIsSaleEditModalOpen: (value: boolean) => void
   changeIsSaleAddNewModalOpen: (value: boolean) => void
   changeIsAddProductsOnSaleModalOpen: (value: boolean) => void
+  changeIsEmployeeAddNewModalOpen: (value: boolean) => void
 }
 
 export const UISlice: StateCreator<UISliceInterface> = (set, get) => ({
@@ -16,6 +18,7 @@ export const UISlice: StateCreator<UISliceInterface> = (set, get) => ({
   isSaleEditModalOpen: false,
   isSaleAddNewModalOpen: false,
   isAddProductsOnSaleModalOpen: false,
+  isEmployeeAddNewModalOpen: false,
 
   changeIsMobileMenuOpen: (value: boolean) => {
     set({ isMobileMenuOpen: value })
@@ -28,5 +31,8 @@ export const UISlice: StateCreator<UISliceInterface> = (set, get) => ({
   },
   changeIsAddProductsOnSaleModalOpen: (value: boolean) => {
     set({ isAddProductsOnSaleModalOpen: value })
+  },
+  changeIsEmployeeAddNewModalOpen: (value: boolean) => {
+    set({ isEmployeeAddNewModalOpen: value })
   },
 })

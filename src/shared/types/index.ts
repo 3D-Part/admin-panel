@@ -421,3 +421,30 @@ export type PatchProductsOnSaleFormData = PatchProductOnSaleData[]
 export type DeleteProductsOnSaleFormData = {
   ids: string[]
 }
+
+export enum PermissionEnum {
+  PRODUCT_READ = 'PRODUCT_READ',
+  PRODUCT_WRITE = 'PRODUCT_WRITE',
+  CATEGORY_READ = 'CATEGORY_READ',
+  CATEGORY_WRITE = 'CATEGORY_WRITE',
+  MANUFACTURER_READ = 'MANUFACTURER_READ',
+  MANUFACTURER_WRITE = 'MANUFACTURER_WRITE',
+  ATTRIBUTES_READ = 'ATTRIBUTES_READ',
+  ATTRIBUTES_WRITE = 'ATTRIBUTES_WRITE',
+  ORDERS_READ = 'ORDERS_READ',
+  ORDERS_WRITE = 'ORDERS_WRITE',
+  PROMO_CODE_READ = 'PROMO_CODE_READ',
+  PROMO_CODE_WRITE = 'PROMO_CODE_WRITE',
+  SALE_READ = 'SALE_READ',
+  SALE_WRITE = 'SALE_WRITE',
+  USER_READ = 'USER_READ',
+  EMPLOYEE_READ = 'EMPLOYEE_READ',
+  EMPLOYEE_WRITE = 'EMPLOYEE_WRITE',
+}
+
+export interface CreateEmployeeData {
+  email: string
+  fullName: string
+  role: 'employee'
+  permissions: PermissionEnum[]
+}
