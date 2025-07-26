@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 export enum URLPartsEnum {
   Login = '/login',
+  Verify = '/auth/verify',
 
   Categories = '/categories',
   AddNewCategory = '/categories/add-new',

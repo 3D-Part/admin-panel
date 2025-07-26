@@ -50,11 +50,21 @@ const getCurrentUser = async (): Promise<User | null> => {
   }
 }
 
+const verifyEmail = async (code: string): Promise<boolean> => {
+  try {
+    await API.post(`${API_BASE_URL}/auth/verify`, { code })
+    return true
+  } catch (error) {
+    return false
+  }
+}
+
 const AuthAPI = {
   login,
   logout,
   getNewAccessToken,
   getCurrentUser,
+  verifyEmail,
 }
 
 export default AuthAPI

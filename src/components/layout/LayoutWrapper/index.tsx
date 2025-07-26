@@ -12,13 +12,14 @@ import AuthAPI from '@/services/auth'
 const LayoutWrapper = () => {
   const pathname = usePathname()
   const isLoginPage = pathname === URLPartsEnum.Login
+  const isVerifyPage = pathname === URLPartsEnum.Verify
   const { currentUser, setCurrentUser, setLoading } = useCurrentUserStore()
 
   useInitialAuthCheck()
 
   useEffect(() => {
     // Initialize current user data if not already loaded and user is logged in
-    if (!currentUser && !isLoginPage) {
+    if (!currentUser && !isLoginPage && !isVerifyPage) {
       const initializeCurrentUser = async () => {
         setLoading(true)
         const userData = await AuthAPI.getCurrentUser()
@@ -30,9 +31,9 @@ const LayoutWrapper = () => {
 
       initializeCurrentUser()
     }
-  }, [currentUser, isLoginPage, setCurrentUser, setLoading])
+  }, [currentUser, isLoginPage, isVerifyPage, setCurrentUser, setLoading])
 
-  if (isLoginPage) return
+  if (isLoginPage || isVerifyPage) return
 
   return (
     <>
