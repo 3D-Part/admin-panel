@@ -9,6 +9,7 @@ import {
   ErrorState,
   PasswordForm,
 } from '@/components/pages/AuthVerify/components'
+import { URLPartsEnum } from '@/shared/enums'
 
 const VerifyPage = () => {
   const router = useRouter()
@@ -46,7 +47,7 @@ const VerifyPage = () => {
 
         // Redirect to homepage after 2 seconds
         setTimeout(() => {
-          router.push('/')
+          router.push(URLPartsEnum.Login)
         }, 2000)
       } else {
         setError('Account activation failed. Please try again.')
@@ -65,8 +66,8 @@ const VerifyPage = () => {
     setIsLoading(false)
   }
 
-  const handleGoHome = () => {
-    router.push('/')
+  const handleGoLogin = () => {
+    router.push(URLPartsEnum.Login)
   }
 
   // Show error if no token provided
@@ -75,7 +76,7 @@ const VerifyPage = () => {
       <ErrorState
         error="No verification token provided"
         onRetry={handleRetry}
-        onGoHome={handleGoHome}
+        onGoLogin={handleGoLogin}
       />
     )
   }

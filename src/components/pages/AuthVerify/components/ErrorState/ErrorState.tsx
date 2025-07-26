@@ -3,13 +3,13 @@ import React from 'react'
 interface ErrorStateProps {
   error: string
   onRetry: () => void
-  onGoHome: () => void
+  onGoLogin: () => void
 }
 
 const ErrorState: React.FC<ErrorStateProps> = ({
   error,
   onRetry,
-  onGoHome,
+  onGoLogin,
 }) => {
   return (
     <div className="h-full flex-1 flex items-center justify-center">
@@ -54,7 +54,7 @@ const ErrorState: React.FC<ErrorStateProps> = ({
             Try Again
           </button>
           <button
-            onClick={onGoHome}
+            onClick={onGoLogin}
             className="w-full bg-gray-100 text-gray-700 py-3 px-6 rounded-xl font-semibold hover:bg-gray-200 transform hover:scale-105 transition-all duration-200 border border-gray-200"
           >
             <svg
@@ -70,7 +70,7 @@ const ErrorState: React.FC<ErrorStateProps> = ({
                 d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
               />
             </svg>
-            Go to Homepage
+            Go to Login page
           </button>
         </div>
       </div>
