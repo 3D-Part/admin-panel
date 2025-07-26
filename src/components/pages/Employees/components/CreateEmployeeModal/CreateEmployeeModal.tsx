@@ -237,7 +237,7 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
               Select the permissions this employee should have:
             </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-96 overflow-y-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-y-auto">
               {permissionGroups.map((group) => (
                 <div
                   key={group.title}
