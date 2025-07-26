@@ -1,10 +1,10 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { useRouter, usePathname } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import Image from 'next/image'
-import getCookie from '@/shared/helpers/getCookies'
-import { isExpired } from 'react-jwt'
+import { useCurrentUserStore } from '@/store/store'
+import AuthAPI from '@/services/auth'
 import { URLPartsEnum } from '@/shared/enums'
 
 interface AuthCheckProps {
@@ -12,31 +12,51 @@ interface AuthCheckProps {
 }
 
 const AuthCheck: React.FC<AuthCheckProps> = ({ children }) => {
-  const router = useRouter()
   const pathname = usePathname()
   const [isChecking, setIsChecking] = useState(true)
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const { currentUser, setCurrentUser, setLoading } = useCurrentUserStore()
+
+  const isExcludedPage =
+    pathname === URLPartsEnum.Login || pathname === URLPartsEnum.Verify
 
   useEffect(() => {
-    const checkAuth = () => {
-      const refreshToken = getCookie('refreshToken')
-      const isRefreshTokenExpired = isExpired(refreshToken)
-      const isExcludedPage =
-        pathname === URLPartsEnum.Login || pathname === URLPartsEnum.Verify
-
-      if (isRefreshTokenExpired && !isExcludedPage) {
-        router.push(URLPartsEnum.Login)
+    const checkAuth = async () => {
+      // If it's an excluded page, don't check auth
+      if (isExcludedPage) {
+        setIsChecking(false)
         return
       }
 
-      setIsAuthenticated(true)
-      setIsChecking(false)
+      // If we already have current user data, we're authenticated
+      if (currentUser) {
+        setIsChecking(false)
+        return
+      }
+
+      try {
+        setLoading(true)
+        // Try to get current user data
+        const userData = await AuthAPI.getCurrentUser()
+
+        if (userData) {
+          setCurrentUser(userData)
+          setIsChecking(false)
+        } else {
+          // If we can't get user data, redirect to login
+          window.location.href = URLPartsEnum.Login
+        }
+      } catch (error) {
+        // If there's an error getting user data, redirect to login
+        window.location.href = URLPartsEnum.Login
+      } finally {
+        setLoading(false)
+      }
     }
 
     // Small delay to prevent flash
     const timer = setTimeout(checkAuth, 100)
     return () => clearTimeout(timer)
-  }, [pathname, router])
+  }, [pathname, currentUser, setCurrentUser, setLoading, isExcludedPage])
 
   if (isChecking) {
     return (
@@ -46,8 +66,8 @@ const AuthCheck: React.FC<AuthCheckProps> = ({ children }) => {
             <Image
               src="/assets/img/logo.png"
               alt="3D Part Logo"
-              width={400}
-              height={400}
+              width={160}
+              height={160}
               className="w-full h-full object-contain"
             />
           </div>
