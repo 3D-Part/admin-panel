@@ -4,6 +4,7 @@ import { ToastContainer } from 'react-toastify'
 import ChildrenWrapper from '@/components/layout/ChildrenWrapper'
 import LayoutWrapper from '@/components/layout/LayoutWrapper'
 import AddProductsOnSaleModal from '@/components/pages/Products/components/AddProductsOnSaleModal/AddProductsOnSaleModal'
+import AuthCheck from '@/components/common/AuthCheck'
 
 export const metadata = {
   title: '3D Part',
@@ -18,8 +19,10 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className="bg-white dark:bg-gray-900">
-        <LayoutWrapper />
-        <ChildrenWrapper>{children}</ChildrenWrapper>
+        <AuthCheck>
+          <LayoutWrapper />
+          <ChildrenWrapper>{children}</ChildrenWrapper>
+        </AuthCheck>
 
         <ToastContainer theme="colored" />
         <AddProductsOnSaleModal />

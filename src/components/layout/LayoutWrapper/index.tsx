@@ -5,7 +5,6 @@ import { usePathname } from 'next/navigation'
 import React, { useEffect } from 'react'
 import Header from '../Header/Header'
 import SideBar from '../SideBar/SideBar'
-import { useInitialAuthCheck } from '@/shared/hooks/useInitialAuthCheck'
 import { useCurrentUserStore } from '@/store/store'
 import AuthAPI from '@/services/auth'
 
@@ -14,8 +13,6 @@ const LayoutWrapper = () => {
   const isLoginPage = pathname === URLPartsEnum.Login
   const isVerifyPage = pathname === URLPartsEnum.Verify
   const { currentUser, setCurrentUser, setLoading } = useCurrentUserStore()
-
-  useInitialAuthCheck()
 
   useEffect(() => {
     // Initialize current user data if not already loaded and user is logged in
