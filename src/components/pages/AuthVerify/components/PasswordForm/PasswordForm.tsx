@@ -25,10 +25,10 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ onSubmit, isLoading }) => {
       return
     }
 
-    if (password.length < 6) {
+    if (password.length < 8) {
       setErrors((prev) => ({
         ...prev,
-        password: 'Password must be at least 6 characters',
+        password: 'Password must be at least 8 characters',
       }))
       return
     }
@@ -97,7 +97,7 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ onSubmit, isLoading }) => {
                   ? 'border-red-500 focus:ring-red-500'
                   : 'border-gray-300 dark:border-gray-600'
               }`}
-              placeholder="Enter your password"
+              placeholder="Enter your password (min 8 characters)"
               disabled={isLoading}
             />
             {errors.password && (
