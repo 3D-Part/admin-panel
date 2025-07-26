@@ -50,9 +50,12 @@ const getCurrentUser = async (): Promise<User | null> => {
   }
 }
 
-const verifyEmail = async (code: string): Promise<boolean> => {
+const acceptVerification = async (
+  code: string,
+  password: string
+): Promise<boolean> => {
   try {
-    await API.post(`${API_BASE_URL}/auth/verify`, { code })
+    await API.post(`${API_BASE_URL}/auth/accept`, { code, password })
     return true
   } catch (error) {
     return false
@@ -64,7 +67,7 @@ const AuthAPI = {
   logout,
   getNewAccessToken,
   getCurrentUser,
-  verifyEmail,
+  acceptVerification,
 }
 
 export default AuthAPI

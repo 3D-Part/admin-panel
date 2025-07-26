@@ -7,77 +7,86 @@ import {
   LoadingState,
   SuccessState,
   ErrorState,
+  PasswordForm,
 } from '@/components/pages/AuthVerify/components'
 
 const VerifyPage = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [isSuccess, setIsSuccess] = useState(false)
 
+  // Extract token from URL on component mount
   useEffect(() => {
-    const verifyToken = async () => {
-      const token = searchParams.get('token')
+    const token = searchParams.get('token')
+    if (!token) {
+      setError('No verification token provided')
+    }
+  }, [searchParams])
 
+  const handlePasswordSubmit = async (password: string) => {
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      const token = searchParams.get('token')
       if (!token) {
         setError('No verification token provided')
         setIsLoading(false)
         return
       }
 
-      try {
-        const success = await AuthAPI.verifyEmail(token)
+      // Single request: accept with token and password
+      const acceptSuccess = await AuthAPI.acceptVerification(token, password)
 
-        if (success) {
-          setIsSuccess(true)
-          setIsLoading(false)
+      if (acceptSuccess) {
+        setIsSuccess(true)
+        setIsLoading(false)
 
-          // Redirect to homepage after 2 seconds
-          setTimeout(() => {
-            router.push('/')
-          }, 2000)
-        } else {
-          setError('Verification failed. Please try again.')
-          setIsLoading(false)
-        }
-      } catch (error: any) {
-        setError('Verification failed. Please try again.')
+        // Redirect to homepage after 2 seconds
+        setTimeout(() => {
+          router.push('/')
+        }, 2000)
+      } else {
+        setError('Account activation failed. Please try again.')
         setIsLoading(false)
       }
+    } catch (error: any) {
+      setError('Verification failed. Please try again.')
+      setIsLoading(false)
     }
-
-    verifyToken()
-  }, [searchParams, router])
+  }
 
   const handleRetry = () => {
-    setIsLoading(true)
     setError(null)
-    // Reload the page to retry
-    window.location.reload()
+    // Reset to password form
+    setIsSuccess(false)
+    setIsLoading(false)
   }
 
   const handleGoHome = () => {
     router.push('/')
   }
 
-  return <SuccessState />
-
-  if (isLoading) {
-    return <LoadingState />
+  // Show error if no token provided
+  if (!searchParams.get('token')) {
+    return (
+      <ErrorState
+        error="No verification token provided"
+        onRetry={handleRetry}
+        onGoHome={handleGoHome}
+      />
+    )
   }
 
+  // Show success state
   if (isSuccess) {
     return <SuccessState />
   }
 
-  return (
-    <ErrorState
-      error={error || 'Verification failed'}
-      onRetry={handleRetry}
-      onGoHome={handleGoHome}
-    />
-  )
+  // Show password form (default state)
+  return <PasswordForm onSubmit={handlePasswordSubmit} isLoading={isLoading} />
 }
 
 export default VerifyPage
