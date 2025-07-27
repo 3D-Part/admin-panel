@@ -43,6 +43,7 @@ import {
   CurrentUserSliceInterface,
   currentUserSlice,
 } from './slices/currentUserSlice'
+import { ThemeSliceInterface, themeSlice } from './slices/themeSlice'
 
 export const useCategoryStore = create<CategorySliceInterface>()((...a) => ({
   ...categorySlice(...a),
@@ -114,3 +115,7 @@ export const useCurrentUserStore = create<CurrentUserSliceInterface>()(
     ...currentUserSlice(...a),
   })
 )
+
+export const useThemeStore = create<ThemeSliceInterface>()((...a) => ({
+  ...themeSlice(...a),
+}))

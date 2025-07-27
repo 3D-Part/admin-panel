@@ -60,7 +60,7 @@ const AuthCheck: React.FC<AuthCheckProps> = ({ children }) => {
 
   if (isChecking) {
     return (
-      <div className="h-[100dvh] flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+      <div className="h-[100dvh] flex items-center justify-center bg-gray-900">
         <div className="text-center">
           <div className="w-40 h-40 mx-auto mb-6 animate-pulse">
             <Image

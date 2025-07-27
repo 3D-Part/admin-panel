@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation'
 import { URLPartsEnum } from '@/shared/enums'
 import AuthAPI from '@/services/auth'
 import { useUISliceStore, useCurrentUserStore } from '@/store/store'
+import ThemeSwitcher from '@/components/common/ThemeSwitcher'
 
 const SideBar = () => {
   const router = useRouter()
@@ -45,7 +46,8 @@ const SideBar = () => {
           </span>
         </Navbar.Brand>
 
-        <div className="flex gap-8 md:order-2 text-white">
+        <div className="flex gap-4 md:order-2 text-white">
+          <ThemeSwitcher />
           <Dropdown
             inline
             label={

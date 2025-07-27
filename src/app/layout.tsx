@@ -5,6 +5,7 @@ import ChildrenWrapper from '@/components/layout/ChildrenWrapper'
 import LayoutWrapper from '@/components/layout/LayoutWrapper'
 import AddProductsOnSaleModal from '@/components/pages/Products/components/AddProductsOnSaleModal/AddProductsOnSaleModal'
 import AuthCheck from '@/components/common/AuthCheck'
+import ThemeProvider from '@/components/common/ThemeProvider'
 
 export const metadata = {
   title: '3D Part',
@@ -17,15 +18,17 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <body className="bg-white dark:bg-gray-900">
-        <AuthCheck>
-          <LayoutWrapper />
-          <ChildrenWrapper>{children}</ChildrenWrapper>
-        </AuthCheck>
+        <ThemeProvider>
+          <AuthCheck>
+            <LayoutWrapper />
+            <ChildrenWrapper>{children}</ChildrenWrapper>
+          </AuthCheck>
 
-        <ToastContainer theme="colored" />
-        <AddProductsOnSaleModal />
+          <ToastContainer theme="colored" />
+          <AddProductsOnSaleModal />
+        </ThemeProvider>
       </body>
     </html>
   )
