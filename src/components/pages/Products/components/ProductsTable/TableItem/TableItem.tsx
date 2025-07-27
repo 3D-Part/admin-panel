@@ -95,48 +95,99 @@ export const TableItem: React.FC<TableItemType> = ({
           onClick={editProduct}
           className="cursor-pointer whitespace-nowrap font-medium table-cell"
         >
-          <div className="flex justify-start items-center gap-6">
+          <div className="flex justify-start items-center gap-4">
             <Avatar
               alt="product"
               placeholderInitials="3D"
               img={activeImageId}
               size="md"
               rounded
-              className="custom_avatar_img "
+              className="rounded-xl shadow-md border-2 border-gray-200 dark:border-gray-700"
             />
-            {name}
+            <span className="font-semibold text-gray-900 dark:text-white">
+              {name}
+            </span>
           </div>
         </Table.Cell>
         <Table.Cell className="table-cell">
-          {category ? category.name : '/'}
+          {category ? (
+            <span className="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400">
+              {category.name}
+            </span>
+          ) : (
+            <span className="text-gray-400 dark:text-gray-500">—</span>
+          )}
         </Table.Cell>
         <Table.Cell className="table-cell">
-          {manufacturer ? manufacturer.name : ''}
+          {manufacturer ? (
+            <span className="text-gray-700 dark:text-gray-300">
+              {manufacturer.name}
+            </span>
+          ) : (
+            <span className="text-gray-400 dark:text-gray-500">—</span>
+          )}
         </Table.Cell>
-        <Table.Cell className="table-cell">{sku}</Table.Cell>
-        <Table.Cell className="table-cell">{price}KM</Table.Cell>
-        <Table.Cell className="table-cell">{quantity}</Table.Cell>
         <Table.Cell className="table-cell">
-          <div className="flex justify-end items-center gap-8">
-            <Dropdown inline arrowIcon={false} label={<HiDotsVertical />}>
-              <Dropdown.Item onClick={editProduct}>
-                <span className="font-medium table-action-link cursor-pointer hover:underline">
-                  <p>Edit</p>
+          <span className="font-mono text-sm text-gray-600 dark:text-gray-400">
+            {sku}
+          </span>
+        </Table.Cell>
+        <Table.Cell className="table-cell">
+          <span className="font-semibold text-green-600 dark:text-green-400">
+            {price} KM
+          </span>
+        </Table.Cell>
+        <Table.Cell className="table-cell">
+          <span
+            className={`font-medium ${
+              quantity > 0
+                ? 'text-green-600 dark:text-green-400'
+                : 'text-red-600 dark:text-red-400'
+            }`}
+          >
+            {quantity}
+          </span>
+        </Table.Cell>
+        <Table.Cell className="table-cell">
+          <div className="flex justify-end items-center">
+            <Dropdown
+              inline
+              arrowIcon={false}
+              label={
+                <HiDotsVertical className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors duration-200" />
+              }
+              className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg"
+            >
+              <Dropdown.Item
+                onClick={editProduct}
+                className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
+              >
+                <span className="font-medium table-action-link cursor-pointer">
+                  Edit
                 </span>
               </Dropdown.Item>
-              <Dropdown.Item onClick={duplicateProduct}>
-                <span className="font-medium table-action-link cursor-pointer hover:underline">
-                  <p>Duplicate</p>
+              <Dropdown.Item
+                onClick={duplicateProduct}
+                className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
+              >
+                <span className="font-medium table-action-link cursor-pointer">
+                  Duplicate
                 </span>
               </Dropdown.Item>
-              <Dropdown.Item onClick={addProductOnSale}>
-                <span className="font-medium table-action-link cursor-pointer hover:underline">
-                  <p>Add on sale</p>
+              <Dropdown.Item
+                onClick={addProductOnSale}
+                className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
+              >
+                <span className="font-medium table-action-link cursor-pointer">
+                  Add on sale
                 </span>
               </Dropdown.Item>
-              <Dropdown.Item onClick={() => onWarningModalOpen(product)}>
-                <span className="font-medium table-action-danger cursor-pointer hover:underline">
-                  <p>Remove</p>
+              <Dropdown.Item
+                onClick={() => onWarningModalOpen(product)}
+                className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
+              >
+                <span className="font-medium table-action-danger cursor-pointer">
+                  Remove
                 </span>
               </Dropdown.Item>
             </Dropdown>

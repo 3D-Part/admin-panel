@@ -47,7 +47,7 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
 
   const loaderBg =
     currentPageProducts.length > 0
-      ? 'bg-white/50 dark:bg-black/30'
+      ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm'
       : 'bg-transparent'
 
   useEffect(() => {
@@ -63,22 +63,22 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
   return (
     <div className="mt-8">
       <div className="overflow-x-auto relative min-h-[100px] table-container">
-        <Table>
+        <Table className="w-full">
           <Table.Head className="table-header">
             {/* <Table.HeadCell /> */}
             <Table.HeadCell className="table-cell">Name</Table.HeadCell>
             <Table.HeadCell className="table-cell">Category</Table.HeadCell>
-            <Table.HeadCell className="table-cell">manufacturer</Table.HeadCell>
-            <Table.HeadCell className="table-cell">Sku</Table.HeadCell>
+            <Table.HeadCell className="table-cell">Manufacturer</Table.HeadCell>
+            <Table.HeadCell className="table-cell">SKU</Table.HeadCell>
             <Table.HeadCell className="table-cell">Price</Table.HeadCell>
             <Table.HeadCell className="table-cell">Quantity</Table.HeadCell>
             <Table.HeadCell className="table-cell">
-              <span className="sr-only">Edit</span>
+              <span className="sr-only">Actions</span>
             </Table.HeadCell>
           </Table.Head>
 
           {/* {!loader && ( */}
-          <Table.Body className="divide-y">
+          <Table.Body className="divide-y divide-gray-100 dark:divide-gray-800">
             {currentPageProducts.map((product) => {
               return (
                 <TableItem
@@ -93,7 +93,7 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
         </Table>
         {loader && (
           <div
-            className={`absolute inset-0 flex items-center justify-center ${loaderBg}`}
+            className={`absolute inset-0 flex items-center justify-center ${loaderBg} rounded-xl`}
           >
             <Loader />
           </div>
@@ -109,7 +109,7 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
         totalPages={totalPages}
       /> */}
 
-      <div className="flex justify-between gap-4 items-center w-full mt-8">
+      <div className="flex justify-between gap-4 items-center w-full mt-8 p-4 bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800">
         <Pagination
           currentPage={currentPage}
           onPageChange={(page) => {

@@ -158,7 +158,7 @@ const SideBar = () => {
       <Sidebar
         className={`${
           isMobileMenuOpen ? '' : '-translate-x-full'
-        } fixed top-0 left-0 z-40 w-64 h-screen pt-16 transition-transform  bg-gray:50 border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700`}
+        } fixed top-0 left-0 z-40 w-64 h-screen pt-16 transition-transform sidebar-custom-bg border-r border-gray-600 md:translate-x-0`}
         aria-label="Default sidebar example"
       >
         <Sidebar.Items>
