@@ -35,7 +35,9 @@ export const OrdersTable = () => {
   }, [currentPage, fetchOrders, itemsPerPage])
 
   const loaderBg =
-    currentPageOrders.length > 0 ? 'bg-black/30' : 'bg-transparent'
+    currentPageOrders.length > 0
+      ? 'bg-white/50 dark:bg-black/30'
+      : 'bg-transparent'
 
   useEffect(() => {
     fetchOrdersData()
@@ -49,16 +51,16 @@ export const OrdersTable = () => {
 
   return (
     <div>
-      <div className="overflow-x-auto relative min-h-[100px]">
+      <div className="overflow-x-auto relative min-h-[100px] table-container">
         <Table>
-          <Table.Head>
-            <Table.HeadCell>Name</Table.HeadCell>
-            <Table.HeadCell>Email</Table.HeadCell>
-            <Table.HeadCell>City</Table.HeadCell>
-            <Table.HeadCell>Date</Table.HeadCell>
-            <Table.HeadCell>Price</Table.HeadCell>
-            <Table.HeadCell>Status</Table.HeadCell>
-            <Table.HeadCell></Table.HeadCell>
+          <Table.Head className="table-header">
+            <Table.HeadCell className="table-cell">Name</Table.HeadCell>
+            <Table.HeadCell className="table-cell">Email</Table.HeadCell>
+            <Table.HeadCell className="table-cell">City</Table.HeadCell>
+            <Table.HeadCell className="table-cell">Date</Table.HeadCell>
+            <Table.HeadCell className="table-cell">Price</Table.HeadCell>
+            <Table.HeadCell className="table-cell">Status</Table.HeadCell>
+            <Table.HeadCell className="table-cell"></Table.HeadCell>
           </Table.Head>
 
           {/* {!loader && ( */}
@@ -89,7 +91,7 @@ export const OrdersTable = () => {
           totalPages={totalPages}
         />
 
-        <p className="text-white/50 text-sm">Total: {count}</p>
+        <p className="table-total-text text-sm">Total: {count}</p>
       </div>
     </div>
   )

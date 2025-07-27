@@ -45,7 +45,9 @@ export const SalesTable: React.FC<SalesTableType> = ({
   // }, []);
 
   const loaderBg =
-    currentPageSales.length > 0 ? 'bg-black/30' : 'bg-transparent'
+    currentPageSales.length > 0
+      ? 'bg-white/50 dark:bg-black/30'
+      : 'bg-transparent'
 
   useEffect(() => {
     fetchPromoCodesData()
@@ -53,13 +55,13 @@ export const SalesTable: React.FC<SalesTableType> = ({
 
   return (
     <div className="mt-8">
-      <div className="relative overflow-x-auto min-h-[100px]">
+      <div className="relative overflow-x-auto min-h-[100px] table-container">
         <Table>
-          <Table.Head>
-            <Table.HeadCell>Name</Table.HeadCell>
-            <Table.HeadCell>Start</Table.HeadCell>
-            <Table.HeadCell>End</Table.HeadCell>
-            <Table.HeadCell>
+          <Table.Head className="table-header">
+            <Table.HeadCell className="table-cell">Name</Table.HeadCell>
+            <Table.HeadCell className="table-cell">Start</Table.HeadCell>
+            <Table.HeadCell className="table-cell">End</Table.HeadCell>
+            <Table.HeadCell className="table-cell">
               <span className="sr-only">Edit or Remove</span>
             </Table.HeadCell>
           </Table.Head>
@@ -97,7 +99,7 @@ export const SalesTable: React.FC<SalesTableType> = ({
           totalPages={totalPages}
         />
 
-        <p className="text-white/50 text-sm">Total: {count}</p>
+        <p className="table-total-text text-sm">Total: {count}</p>
       </div>
     </div>
   )

@@ -9,8 +9,8 @@ type TableItemType = {
 export const TableItem: React.FC<TableItemType> = ({ email }) => {
   return (
     <>
-      <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-        <Table.Cell className="cursor-pointer whitespace-nowrap font-medium text-gray-900 dark:text-white">
+      <Table.Row className="table-row">
+        <Table.Cell className="cursor-pointer whitespace-nowrap font-medium table-cell">
           <div className="flex justify-start items-center gap-6">{email}</div>
         </Table.Cell>
       </Table.Row>

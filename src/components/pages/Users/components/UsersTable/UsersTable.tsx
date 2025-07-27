@@ -39,7 +39,9 @@ export const UsersTable = () => {
   // }, []);
 
   const loaderBg =
-    currentPageUsers.length > 0 ? 'bg-black/30' : 'bg-transparent'
+    currentPageUsers.length > 0
+      ? 'bg-white/50 dark:bg-black/30'
+      : 'bg-transparent'
 
   useEffect(() => {
     fetchUsersData()
@@ -47,16 +49,16 @@ export const UsersTable = () => {
 
   return (
     <div className="">
-      <div className="relative overflow-x-auto min-h-[100px]">
+      <div className="relative overflow-x-auto min-h-[100px] table-container">
         <Table>
-          <Table.Head>
-            <Table.HeadCell>Name</Table.HeadCell>
-            <Table.HeadCell>Email</Table.HeadCell>
-            <Table.HeadCell>Phone</Table.HeadCell>
-            <Table.HeadCell>City</Table.HeadCell>
-            <Table.HeadCell>Street</Table.HeadCell>
-            <Table.HeadCell>Points</Table.HeadCell>
-            <Table.HeadCell>Used points</Table.HeadCell>
+          <Table.Head className="table-header">
+            <Table.HeadCell className="table-cell">Name</Table.HeadCell>
+            <Table.HeadCell className="table-cell">Email</Table.HeadCell>
+            <Table.HeadCell className="table-cell">Phone</Table.HeadCell>
+            <Table.HeadCell className="table-cell">City</Table.HeadCell>
+            <Table.HeadCell className="table-cell">Street</Table.HeadCell>
+            <Table.HeadCell className="table-cell">Points</Table.HeadCell>
+            <Table.HeadCell className="table-cell">Used points</Table.HeadCell>
             {/* <Table.HeadCell>
                         <span className="sr-only">Edit or Remove</span>
                     </Table.HeadCell> */}
@@ -89,7 +91,7 @@ export const UsersTable = () => {
           totalPages={totalPages}
         />
 
-        <p className="text-white/50 text-sm">Total: {count}</p>
+        <p className="table-total-text text-sm">Total: {count}</p>
       </div>
     </div>
   )

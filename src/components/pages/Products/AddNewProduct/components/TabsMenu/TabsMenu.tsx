@@ -10,7 +10,7 @@ export const TabsMenu = () => {
   return (
     <div className="flex w-full ">
       <Tabs.Group
-        className="gap-5 text-white justify-start flex-1"
+        className="gap-5 text-gray-700 dark:text-white justify-start flex-1"
         aria-label="Default tabs"
         style="default"
       >

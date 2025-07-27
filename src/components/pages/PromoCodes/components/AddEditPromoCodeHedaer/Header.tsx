@@ -16,13 +16,12 @@ const PromoCodeHeader: React.FC<PromoCodeHeaderType> = ({ title }) => {
   return (
     <div className="w-full flex items-center  justify-start gap-4 mb-10">
       <Button
-        color="light"
         className="cursor-pointer"
         onClick={() => router.push(URLPartsEnum.PromoCodes)}
       >
         <HiArrowCircleLeft className="text-xl text-white" />
       </Button>
-      <h2 className="text-white text-2xl">{title}</h2>
+      <h2 className="text-gray-900 dark:text-white text-2xl">{title}</h2>
     </div>
   )
 }

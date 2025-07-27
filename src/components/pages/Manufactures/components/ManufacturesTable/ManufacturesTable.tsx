@@ -43,7 +43,9 @@ export const ManufacturesTable: React.FC<ManufacturesTableType> = ({
   }, [currentPage, fetchManufactures, itemsPerPage])
 
   const loaderBg =
-    currentPageManufactures.length > 0 ? 'bg-black/30' : 'bg-transparent'
+    currentPageManufactures.length > 0
+      ? 'bg-white/50 dark:bg-black/30'
+      : 'bg-transparent'
 
   // useEffect(() => {
   //   changeManufactureFilter({});
@@ -55,11 +57,11 @@ export const ManufacturesTable: React.FC<ManufacturesTableType> = ({
 
   return (
     <div className="mt-8">
-      <div className="overflow-x-auto relative min-h-[100px]">
+      <div className="overflow-x-auto relative min-h-[100px] table-container">
         <Table>
-          <Table.Head>
-            <Table.HeadCell>Name</Table.HeadCell>
-            <Table.HeadCell>
+          <Table.Head className="table-header">
+            <Table.HeadCell className="table-cell">Name</Table.HeadCell>
+            <Table.HeadCell className="table-cell">
               <span className="sr-only">Edit or Remove</span>
             </Table.HeadCell>
           </Table.Head>
@@ -98,7 +100,7 @@ export const ManufacturesTable: React.FC<ManufacturesTableType> = ({
           totalPages={totalPages}
         />
 
-        <p className="text-white/50 text-sm">Total: {count}</p>
+        <p className="table-total-text text-sm">Total: {count}</p>
       </div>
     </div>
   )

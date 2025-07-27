@@ -14,7 +14,7 @@ const AttributesPresenter = () => {
 
   return (
     <div>
-      <h2 className="text-white text-3xl font-bold mb-6">
+      <h2 className="text-gray-900 dark:text-white text-3xl font-bold mb-6">
         Product attributes:
       </h2>
       <div className="flex flex-wrap gap-5 justify-start">

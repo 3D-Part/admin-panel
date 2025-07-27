@@ -20,12 +20,14 @@ const UserDetail: React.FC<UserDetailType> = ({
 }) => {
   return (
     <div
-      className={`className flex justify-between  gap-4 flex-1 basis-[48%] rounded-lg bg-slate-600 text-white p-3 ${
+      className={`className flex justify-between  gap-4 flex-1 basis-[48%] rounded-lg bg-gray-100 dark:bg-slate-600 text-gray-900 dark:text-white p-3 ${
         vertical ? 'flex-col items-start' : 'items-center'
       }`}
     >
       <p className="font-semibold">{name}</p>
-      <span className="text-gray-300">{value ? value : '-'}</span>
+      <span className="text-gray-600 dark:text-gray-300">
+        {value ? value : '-'}
+      </span>
     </div>
   )
 }
@@ -120,7 +122,7 @@ const UserDetails: React.FC<UserDetailsType> = ({ user, isOpen, onClose }) => {
           </div>
 
           {orders.length > 0 && (
-            <div className="mt-8 text-white">
+            <div className="mt-8 text-gray-900 dark:text-white">
               <h3 className="font-semibold text-xl mb-4">Orders:</h3>
               <Table>
                 <Table.Head>

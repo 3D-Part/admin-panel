@@ -30,12 +30,12 @@ const SideBar = () => {
   return (
     <>
       <Navbar
-        className="fixed top-0 z-50 w-full bg-gray-800 border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700"
+        className="fixed top-0 z-50 w-full rounded-t-none bg-gray-800 border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700"
         fluid
         rounded
       >
         <Navbar.Brand href="/products">
-          <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
+          <span className="self-center whitespace-nowrap text-xl font-semibold text-gray-900 dark:text-white">
             <Image
               src="/assets/img/logo.png"
               alt="me"

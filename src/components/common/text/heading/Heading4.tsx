@@ -7,7 +7,7 @@ const Heading4: React.FC<TextComponentInterface> = ({
 }) => {
   return (
     <h1
-      className={`text-[28px] font-semibold leading-9 lg:text-2xl lg:leading-8 ${className}`}
+      className={`text-[28px] font-semibold leading-9 lg:text-2xl lg:leading-8 text-gray-900 dark:text-white ${className}`}
     >
       {children}
     </h1>

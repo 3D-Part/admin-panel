@@ -46,7 +46,9 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
   }, [currentPage, fetchProducts, itemsPerPage])
 
   const loaderBg =
-    currentPageProducts.length > 0 ? 'bg-black/30' : 'bg-transparent'
+    currentPageProducts.length > 0
+      ? 'bg-white/50 dark:bg-black/30'
+      : 'bg-transparent'
 
   useEffect(() => {
     fetchProductsData()
@@ -60,17 +62,17 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
 
   return (
     <div className="mt-8">
-      <div className="overflow-x-auto relative min-h-[100px]">
+      <div className="overflow-x-auto relative min-h-[100px] table-container">
         <Table>
-          <Table.Head>
+          <Table.Head className="table-header">
             {/* <Table.HeadCell /> */}
-            <Table.HeadCell>Name</Table.HeadCell>
-            <Table.HeadCell>Category</Table.HeadCell>
-            <Table.HeadCell>manufacturer</Table.HeadCell>
-            <Table.HeadCell>Sku</Table.HeadCell>
-            <Table.HeadCell>Price</Table.HeadCell>
-            <Table.HeadCell>Quantity</Table.HeadCell>
-            <Table.HeadCell>
+            <Table.HeadCell className="table-cell">Name</Table.HeadCell>
+            <Table.HeadCell className="table-cell">Category</Table.HeadCell>
+            <Table.HeadCell className="table-cell">manufacturer</Table.HeadCell>
+            <Table.HeadCell className="table-cell">Sku</Table.HeadCell>
+            <Table.HeadCell className="table-cell">Price</Table.HeadCell>
+            <Table.HeadCell className="table-cell">Quantity</Table.HeadCell>
+            <Table.HeadCell className="table-cell">
               <span className="sr-only">Edit</span>
             </Table.HeadCell>
           </Table.Head>
@@ -116,7 +118,7 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
           totalPages={totalPages}
         />
 
-        <p className="text-white/50 text-sm">Total: {count}</p>
+        <p className="table-total-text text-sm">Total: {count}</p>
       </div>
     </div>
   )

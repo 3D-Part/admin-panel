@@ -17,12 +17,12 @@ type OrderDetailType = {
 const OrderDetail: React.FC<OrderDetailType> = ({ value, name, vertical }) => {
   return (
     <div
-      className={`flex justify-between  gap-4 flex-1 basis-[48%] rounded-lg bg-slate-600 text-white p-3 ${
+      className={`flex justify-between  gap-4 flex-1 basis-[48%] rounded-lg bg-gray-100 dark:bg-slate-600 text-gray-900 dark:text-white p-3 ${
         vertical ? 'flex-col items-start basis-full' : 'items-center'
       }`}
     >
       <p className="font-semibold">{name}</p>
-      <span className="text-gray-300">{value}</span>
+      <span className="text-gray-600 dark:text-gray-300">{value}</span>
     </div>
   )
 }
@@ -105,7 +105,7 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
           />
         </div>
 
-        <div className="mt-8 text-white">
+        <div className="mt-8 text-gray-900 dark:text-white">
           <h3 className="font-semibold text-xl mb-4">Products:</h3>
           <div className="w-full overflow-x-auto">
             <Table>

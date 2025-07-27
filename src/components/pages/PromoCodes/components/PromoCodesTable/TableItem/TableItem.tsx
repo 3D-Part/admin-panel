@@ -32,23 +32,23 @@ export const TableItem: React.FC<TableItemType> = ({
 
   return (
     <>
-      <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+      <Table.Row className="table-row">
         <Table.Cell
           onClick={editPromoCode}
-          className="cursor-pointer whitespace-nowrap font-medium text-gray-900 dark:text-white"
+          className="cursor-pointer whitespace-nowrap font-medium table-cell"
         >
           <div className="flex justify-start items-center gap-6">{code}</div>
         </Table.Cell>
 
-        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+        <Table.Cell className="whitespace-nowrap font-medium table-cell">
           <div className="flex justify-start items-center gap-6">
             {startTime}
           </div>
         </Table.Cell>
-        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+        <Table.Cell className="whitespace-nowrap font-medium table-cell">
           <div className="flex justify-start items-center gap-6">{endTime}</div>
         </Table.Cell>
-        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+        <Table.Cell className="whitespace-nowrap font-medium table-cell">
           <div className="flex justify-start items-center gap-6">
             {discountPercentage}
           </div>
@@ -57,13 +57,13 @@ export const TableItem: React.FC<TableItemType> = ({
           <div className="flex justify-end items-center gap-8">
             <span
               onClick={editPromoCode}
-              className="font-medium text-cyan-600 cursor-pointer hover:underline dark:text-cyan-500"
+              className="font-medium table-action-link cursor-pointer hover:underline"
             >
               <p>Edit</p>
             </span>
             <span
               onClick={() => onWarningModalOpen(promocode)}
-              className="font-medium text-red-500 cursor-pointer hover:underline dark:text-red-500"
+              className="font-medium table-action-danger cursor-pointer hover:underline"
             >
               <p>Remove</p>
             </span>

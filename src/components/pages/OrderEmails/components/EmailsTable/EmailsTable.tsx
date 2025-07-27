@@ -36,7 +36,9 @@ const EmailsTable = () => {
   }, [currentPage, fetchOrdersEmails, itemsPerPage])
 
   const loaderBg =
-    currentPageEmails.length > 0 ? 'bg-black/30' : 'bg-transparent'
+    currentPageEmails.length > 0
+      ? 'bg-white/50 dark:bg-black/30'
+      : 'bg-transparent'
 
   useEffect(() => {
     fetchOrdersEmailsData()
@@ -44,10 +46,10 @@ const EmailsTable = () => {
 
   return (
     <div>
-      <div className="relative overflow-x-auto min-h-[100px]">
+      <div className="relative overflow-x-auto min-h-[100px] table-container">
         <Table>
-          <Table.Head>
-            <Table.HeadCell>Email</Table.HeadCell>
+          <Table.Head className="table-header">
+            <Table.HeadCell className="table-cell">Email</Table.HeadCell>
           </Table.Head>
           {/* {!loader && ( */}
           <Table.Body className="divide-y">
@@ -78,7 +80,7 @@ const EmailsTable = () => {
           totalPages={totalPages}
         />
 
-        <p className="text-white/50 text-sm">Total: {count}</p>
+        <p className="table-total-text text-sm">Total: {count}</p>
       </div>
     </div>
   )

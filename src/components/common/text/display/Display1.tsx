@@ -6,7 +6,7 @@ const Display1: React.FC<TextComponentInterface> = ({
 }) => {
   return (
     <p
-      className={`text-[64px] font-extrabold leading-[84px] lg:text-[56px] lg:leading-[72px] ${className}`}
+      className={`text-[64px] font-extrabold leading-[84px] lg:text-[56px] lg:leading-[72px] text-gray-900 dark:text-white ${className}`}
     >
       {children}
     </p>

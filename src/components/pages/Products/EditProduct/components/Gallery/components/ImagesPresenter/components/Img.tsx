@@ -82,7 +82,7 @@ const Img: React.FC<ImgType> = ({ src, id, isMain }) => {
         alt={id}
       />
 
-      <div className="z-10 transition-all ease-in-out absolute top-0 left-0 w-full h-full flex items-center justify-center gap-4 rounded-lg bg-black/[.92] opacity-0 group-hover:opacity-100 ">
+      <div className="z-10 transition-all ease-in-out absolute top-0 left-0 w-full h-full flex items-center justify-center gap-4 rounded-lg bg-gray-700/90 dark:bg-black/90 opacity-0 group-hover:opacity-100 ">
         {!isMain && (
           <HiStar
             onClick={() => setIsFavoriteModal(true)}

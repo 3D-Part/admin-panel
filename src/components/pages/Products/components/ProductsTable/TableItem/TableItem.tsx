@@ -90,10 +90,10 @@ export const TableItem: React.FC<TableItemType> = ({
 
   return (
     <>
-      <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+      <Table.Row className="table-row">
         <Table.Cell
           onClick={editProduct}
-          className="cursor-pointer whitespace-nowrap font-medium text-gray-900 dark:text-white"
+          className="cursor-pointer whitespace-nowrap font-medium table-cell"
         >
           <div className="flex justify-start items-center gap-6">
             <Avatar
@@ -107,31 +107,35 @@ export const TableItem: React.FC<TableItemType> = ({
             {name}
           </div>
         </Table.Cell>
-        <Table.Cell>{category ? category.name : '/'}</Table.Cell>
-        <Table.Cell>{manufacturer ? manufacturer.name : ''}</Table.Cell>
-        <Table.Cell>{sku}</Table.Cell>
-        <Table.Cell>{price}KM</Table.Cell>
-        <Table.Cell>{quantity}</Table.Cell>
-        <Table.Cell>
+        <Table.Cell className="table-cell">
+          {category ? category.name : '/'}
+        </Table.Cell>
+        <Table.Cell className="table-cell">
+          {manufacturer ? manufacturer.name : ''}
+        </Table.Cell>
+        <Table.Cell className="table-cell">{sku}</Table.Cell>
+        <Table.Cell className="table-cell">{price}KM</Table.Cell>
+        <Table.Cell className="table-cell">{quantity}</Table.Cell>
+        <Table.Cell className="table-cell">
           <div className="flex justify-end items-center gap-8">
             <Dropdown inline arrowIcon={false} label={<HiDotsVertical />}>
               <Dropdown.Item onClick={editProduct}>
-                <span className="font-medium text-cyan-600 cursor-pointer hover:underline dark:text-cyan-500">
+                <span className="font-medium table-action-link cursor-pointer hover:underline">
                   <p>Edit</p>
                 </span>
               </Dropdown.Item>
               <Dropdown.Item onClick={duplicateProduct}>
-                <span className="font-medium text-cyan-600 cursor-pointer hover:underline dark:text-cyan-500">
+                <span className="font-medium table-action-link cursor-pointer hover:underline">
                   <p>Duplicate</p>
                 </span>
               </Dropdown.Item>
               <Dropdown.Item onClick={addProductOnSale}>
-                <span className="font-medium text-cyan-600 cursor-pointer hover:underline dark:text-cyan-500">
+                <span className="font-medium table-action-link cursor-pointer hover:underline">
                   <p>Add on sale</p>
                 </span>
               </Dropdown.Item>
               <Dropdown.Item onClick={() => onWarningModalOpen(product)}>
-                <span className="font-medium text-red-500 cursor-pointer hover:underline dark:text-red-500">
+                <span className="font-medium table-action-danger cursor-pointer hover:underline">
                   <p>Remove</p>
                 </span>
               </Dropdown.Item>

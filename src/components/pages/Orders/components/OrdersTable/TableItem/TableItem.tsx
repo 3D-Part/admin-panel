@@ -27,7 +27,7 @@ export const TableItem: React.FC<TableItemType> = ({ order }) => {
 
   return (
     <>
-      <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+      <Table.Row className="table-row">
         <Table.Cell
           className="cursor-pointer"
           onClick={() => setIsOrderDetailsOpen(true)}

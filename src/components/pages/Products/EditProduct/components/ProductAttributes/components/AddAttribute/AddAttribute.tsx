@@ -53,7 +53,7 @@ const AddAttribute = () => {
   if (loader) return <Loader />
   if (!allAttributes.length)
     return (
-      <div className="mt-4 text-white text-xl">
+      <div className="mt-4 text-gray-900 dark:text-white text-xl">
         There is no attributes available
       </div>
     )

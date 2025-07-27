@@ -35,7 +35,9 @@ export const EmployeesTable = () => {
   }, [currentPage, fetchEmployees, itemsPerPage])
 
   const loaderBg =
-    currentPageEmployees.length > 0 ? 'bg-black/30' : 'bg-transparent'
+    currentPageEmployees.length > 0
+      ? 'bg-white/50 dark:bg-black/30'
+      : 'bg-transparent'
 
   useEffect(() => {
     fetchEmployeesData()
@@ -43,11 +45,11 @@ export const EmployeesTable = () => {
 
   return (
     <div className="mt-8">
-      <div className="relative overflow-x-auto min-h-[100px]">
+      <div className="relative overflow-x-auto min-h-[100px] table-container">
         <Table>
-          <Table.Head>
-            <Table.HeadCell>Name</Table.HeadCell>
-            <Table.HeadCell>Email</Table.HeadCell>
+          <Table.Head className="table-header">
+            <Table.HeadCell className="table-cell">Name</Table.HeadCell>
+            <Table.HeadCell className="table-cell">Email</Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y">
             {currentPageEmployees.length > 0 &&
@@ -75,7 +77,7 @@ export const EmployeesTable = () => {
           totalPages={totalPages}
         />
 
-        <p className="text-white/50 text-sm">Total: {count}</p>
+        <p className="table-total-text text-sm">Total: {count}</p>
       </div>
     </div>
   )

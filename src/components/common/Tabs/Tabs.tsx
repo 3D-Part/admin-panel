@@ -3,7 +3,7 @@ import React, { ReactNode } from 'react'
 
 const Group = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex text-center flex-wrap border-b border-gray-200 dark:border-gray-700 gap-5 text-white justify-start mb-4">
+    <div className="flex text-center flex-wrap border-b border-gray-200 dark:border-gray-700 gap-5 text-gray-700 dark:text-white justify-start mb-4">
       {children}
     </div>
   )

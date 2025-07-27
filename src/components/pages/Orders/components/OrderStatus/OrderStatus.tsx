@@ -1,4 +1,3 @@
-import { OrderStatusEnum } from '@/shared/enums'
 import React, { useEffect } from 'react'
 import { Badge } from 'flowbite-react'
 import getOrderStatusStyle from '@/shared/helpers/getOrderStatusStyle'

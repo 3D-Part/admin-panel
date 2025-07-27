@@ -44,7 +44,9 @@ export const CategoriesTable: React.FC<CategoriesTableType> = ({
   }, [currentPage, fetchCategories, itemsPerPage])
 
   const loaderBg =
-    currentPageCategories.length > 0 ? 'bg-black/30' : 'bg-transparent'
+    currentPageCategories.length > 0
+      ? 'bg-white/50 dark:bg-black/30'
+      : 'bg-transparent'
 
   useEffect(() => {
     changeCategoryFilter({})
@@ -56,13 +58,13 @@ export const CategoriesTable: React.FC<CategoriesTableType> = ({
 
   return (
     <div className="mt-8">
-      <div className="overflow-x-auto relative min-h-[100px]">
+      <div className="overflow-x-auto relative min-h-[100px] table-container">
         <Table>
-          <Table.Head>
-            <Table.HeadCell>Name</Table.HeadCell>
-            <Table.HeadCell>Parent</Table.HeadCell>
-            <Table.HeadCell>URL Slug</Table.HeadCell>
-            <Table.HeadCell>
+          <Table.Head className="table-header">
+            <Table.HeadCell className="table-cell">Name</Table.HeadCell>
+            <Table.HeadCell className="table-cell">Parent</Table.HeadCell>
+            <Table.HeadCell className="table-cell">URL Slug</Table.HeadCell>
+            <Table.HeadCell className="table-cell">
               <span className="sr-only">Edit or Remove</span>
             </Table.HeadCell>
           </Table.Head>
@@ -101,7 +103,7 @@ export const CategoriesTable: React.FC<CategoriesTableType> = ({
           totalPages={totalPages}
         />
 
-        <p className="text-white/50 text-sm">Total: {count}</p>
+        <p className="table-total-text text-sm">Total: {count}</p>
       </div>
     </div>
   )
