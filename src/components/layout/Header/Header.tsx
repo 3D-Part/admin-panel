@@ -30,7 +30,7 @@ const SideBar = () => {
   return (
     <>
       <Navbar
-        className="fixed top-0 z-50 w-full header-custom-bg border-b border-gray-600 shadow-sm"
+        className="fixed top-0 z-50 w-full header-custom-bg border-b border-gray-600 shadow-sm rounded-none"
         fluid
         rounded
       >

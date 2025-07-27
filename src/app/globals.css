@@ -66,23 +66,31 @@
 
   /* Force sidebar background color */
   .sidebar-custom-bg {
-    background-color: #1d2536 !important;
+    background-color: #ffffff !important;
   }
 
   /* Override Flowbite sidebar internal div */
   .sidebar-custom-bg .bg-gray-50,
   .sidebar-custom-bg .dark\\:bg-gray-800 {
-    background-color: #1d2536 !important;
+    background-color: #ffffff !important;
   }
 
   /* Force header background color */
   .header-custom-bg {
     background-color: #1d2536 !important;
   }
+
+  body
+    > nav.-translate-x-full.\!rounded-none.fixed.top-0.left-0.z-40.w-64.h-screen.pt-16.transition-transform.sidebar-custom-bg.border-r-0\.5.border-gray-200.md\:translate-x-0
+    > div {
+    background-color: #1d2536 !important;
+    border-radius: none !important;
+  }
+
   body
     > nav.-translate-x-full.fixed.top-0.left-0.z-40.w-64.h-screen.pt-16.transition-transform.sidebar-custom-bg.border-r.border-gray-600.md\:translate-x-0
     > div {
-    background-color: #1d2536 !important;
+    background-color: #ffffff !important;
   }
 }
 
