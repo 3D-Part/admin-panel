@@ -39,6 +39,68 @@
     @apply text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-colors duration-200;
   }
 
+  /* Responsive table styles */
+  .table-desktop {
+    @apply hidden md:table;
+  }
+
+  .table-mobile {
+    @apply block md:hidden;
+  }
+
+  .mobile-card-container {
+    @apply space-y-3 p-4;
+  }
+
+  .mobile-card {
+    @apply bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-200;
+  }
+
+  .mobile-card-header {
+    @apply flex justify-between items-center mb-3 pb-3 border-b border-gray-200 dark:border-gray-700;
+  }
+
+  .mobile-card-content {
+    @apply space-y-2;
+  }
+
+  .mobile-card-item {
+    @apply flex justify-between items-center py-1;
+  }
+
+  .mobile-card-label {
+    @apply text-sm font-medium text-gray-600 dark:text-gray-400;
+  }
+
+  .mobile-card-value {
+    @apply text-sm text-gray-900 dark:text-white font-medium;
+  }
+
+  .mobile-card-actions {
+    @apply flex justify-end items-center gap-2 mt-3 pt-3 border-t border-gray-200 dark:border-gray-700;
+  }
+
+  /* Mobile pagination styles */
+  .mobile-pagination-container {
+    @apply flex flex-col gap-4 items-center w-full mt-6 p-4 bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800;
+  }
+
+  .mobile-pagination {
+    @apply w-full justify-center;
+  }
+
+  .mobile-pagination .pagination {
+    @apply flex items-center justify-center gap-1;
+  }
+
+  .mobile-pagination .pagination button {
+    @apply min-w-[40px] h-[40px] flex items-center justify-center text-sm font-medium;
+  }
+
+  .mobile-pagination .pagination button:disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
+
   /* Text component styles for better light/dark theme support */
   .text-heading {
     @apply text-gray-900 dark:text-white;

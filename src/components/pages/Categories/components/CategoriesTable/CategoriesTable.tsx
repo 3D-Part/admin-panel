@@ -4,7 +4,11 @@ import { Pagination, Table } from 'flowbite-react'
 import React, { useCallback, useEffect, useState } from 'react'
 import { TableItem } from './TableItem/TableItem'
 import { useCategoryStore } from '@/store/store'
-import { Loader } from '@/components/common'
+import {
+  Loader,
+  ResponsiveTableWrapper,
+  MobileCardBuilder,
+} from '@/components/common'
 import { PaginationData, CategoryData } from '@/shared/types'
 
 type CategoriesTableType = {
@@ -26,7 +30,6 @@ export const CategoriesTable: React.FC<CategoriesTableType> = ({
     itemsPerPage,
     totalPages,
     count,
-    changeCategoryFilter,
   } = useCategoryStore()
 
   const fetchCategoriesData = useCallback(async () => {
@@ -49,15 +52,59 @@ export const CategoriesTable: React.FC<CategoriesTableType> = ({
       : 'bg-transparent'
 
   useEffect(() => {
-    changeCategoryFilter({})
-  }, [])
-
-  useEffect(() => {
     fetchCategoriesData()
   }, [currentPage, fetchCategoriesData])
 
+  // Generate mobile cards
+  const mobileCards = currentPageCategories.map((category) => {
+    const { name, slug, category: parentCategory } = category
+
+    return (
+      <MobileCardBuilder
+        key={category.id}
+        title={name}
+        subtitle={slug}
+        onClick={() => openEditModal(category)}
+        items={[
+          {
+            label: 'Parent Category',
+            value: parentCategory ? (
+              <span className="text-gray-700 dark:text-gray-300">
+                {parentCategory.name}
+              </span>
+            ) : (
+              <span className="text-gray-400 dark:text-gray-500">—</span>
+            ),
+          },
+        ]}
+        actions={
+          <div className="flex justify-end items-center gap-4">
+            <span
+              onClick={() => openEditModal(category)}
+              className="font-medium table-action-link cursor-pointer hover:underline"
+            >
+              Edit
+            </span>
+            <span
+              onClick={() => onWarningModalOpen(category)}
+              className="font-medium table-action-danger cursor-pointer hover:underline"
+            >
+              Remove
+            </span>
+          </div>
+        }
+      />
+    )
+  })
+
   return (
-    <div className="mt-8">
+    <ResponsiveTableWrapper
+      mobileCards={mobileCards}
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onPageChange={(page) => changeCurrentPage(page)}
+      count={count}
+    >
       <div className="overflow-x-auto relative min-h-[100px] table-container">
         <Table>
           <Table.Head className="table-header">
@@ -105,6 +152,6 @@ export const CategoriesTable: React.FC<CategoriesTableType> = ({
 
         <p className="table-total-text text-sm">Total: {count}</p>
       </div>
-    </div>
+    </ResponsiveTableWrapper>
   )
 }

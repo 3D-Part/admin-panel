@@ -1,8 +1,12 @@
 'use client'
 
 import React, { useCallback, useEffect, useState } from 'react'
-import { Loader } from '@/components/common'
-import { PaginationData } from '@/shared/types'
+import {
+  Loader,
+  ResponsiveTableWrapper,
+  MobileCardBuilder,
+} from '@/components/common'
+import { PaginationData, OrderEmail } from '@/shared/types'
 import { useOrdersEmailsStore } from '@/store/store'
 import { Pagination, Table } from 'flowbite-react'
 import { TableItem } from './TableItem'
@@ -44,8 +48,31 @@ const EmailsTable = () => {
     fetchOrdersEmailsData()
   }, [currentPage, fetchOrdersEmailsData])
 
+  // Generate mobile cards
+  const mobileCards = currentPageEmails.map((email: OrderEmail) => {
+    return (
+      <MobileCardBuilder
+        key={email}
+        title={email}
+        subtitle="Order Email"
+        items={[
+          {
+            label: 'Email',
+            value: email,
+          },
+        ]}
+      />
+    )
+  })
+
   return (
-    <div>
+    <ResponsiveTableWrapper
+      mobileCards={mobileCards}
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onPageChange={(page) => changeCurrentPage(page)}
+      count={count}
+    >
       <div className="relative overflow-x-auto min-h-[100px] table-container">
         <Table>
           <Table.Head className="table-header">
@@ -82,7 +109,7 @@ const EmailsTable = () => {
 
         <p className="table-total-text text-sm">Total: {count}</p>
       </div>
-    </div>
+    </ResponsiveTableWrapper>
   )
 }
 

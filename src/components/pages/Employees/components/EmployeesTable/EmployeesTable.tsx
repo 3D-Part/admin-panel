@@ -4,8 +4,12 @@ import { Pagination, Table } from 'flowbite-react'
 import React, { useCallback, useEffect, useState } from 'react'
 import { TableItem } from './TableItem/TableItem'
 import { useEmployeesSliceStore } from '@/store/store'
-import { Loader } from '@/components/common'
-import { PaginationData } from '@/shared/types'
+import {
+  Loader,
+  ResponsiveTableWrapper,
+  MobileCardBuilder,
+} from '@/components/common'
+import { PaginationData, User } from '@/shared/types'
 
 export const EmployeesTable = () => {
   const [loader, setLoader] = useState(true)
@@ -43,8 +47,33 @@ export const EmployeesTable = () => {
     fetchEmployeesData()
   }, [currentPage, fetchEmployeesData])
 
+  // Generate mobile cards
+  const mobileCards = currentPageEmployees.map((employee: User) => {
+    const { fullName, email } = employee
+
+    return (
+      <MobileCardBuilder
+        key={employee.id}
+        title={fullName}
+        subtitle={email}
+        items={[
+          {
+            label: 'Email',
+            value: email,
+          },
+        ]}
+      />
+    )
+  })
+
   return (
-    <div className="mt-8">
+    <ResponsiveTableWrapper
+      mobileCards={mobileCards}
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onPageChange={(page) => changeCurrentPage(page)}
+      count={count}
+    >
       <div className="relative overflow-x-auto min-h-[100px] table-container">
         <Table>
           <Table.Head className="table-header">
@@ -79,6 +108,6 @@ export const EmployeesTable = () => {
 
         <p className="table-total-text text-sm">Total: {count}</p>
       </div>
-    </div>
+    </ResponsiveTableWrapper>
   )
 }

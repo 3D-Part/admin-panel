@@ -4,11 +4,24 @@ import { Pagination, Table } from 'flowbite-react'
 import React, { useCallback, useEffect, useState } from 'react'
 import { TableItem } from './TableItem/TableItem'
 import { useOrdersStore } from '@/store/store'
-import { Loader } from '@/components/common'
-import { PaginationData } from '@/shared/types'
+import {
+  Loader,
+  ResponsiveTableWrapper,
+  MobileCardBuilder,
+} from '@/components/common'
+import { PaginationData, Order } from '@/shared/types'
+import OrderStatus from '../OrderStatus/OrderStatus'
+import { BiMessageDetail } from 'react-icons/bi'
+import OrderDetails from '../OrderDetails'
+import OrderContactForm from '../OrderContactForm'
+import OrderEditModal from '../OrderEditModal/OrderEditModal'
 
 export const OrdersTable = () => {
   const [loader, setLoader] = useState(true)
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
+  const [isOrderDetailsOpen, setIsOrderDetailsOpen] = useState(false)
+  const [isFormModalOpen, setIsFormModalOpen] = useState(false)
+  const [isOrderStatusModalOpen, setIsOrderStatusModalOpen] = useState(false)
 
   const {
     currentPageOrders,
@@ -49,50 +62,175 @@ export const OrdersTable = () => {
     }
   }, [changeCurrentPage, currentPage, totalPages])
 
-  return (
-    <div>
-      <div className="overflow-x-auto relative min-h-[100px] table-container">
-        <Table>
-          <Table.Head className="table-header">
-            <Table.HeadCell className="table-cell">Name</Table.HeadCell>
-            <Table.HeadCell className="table-cell">Email</Table.HeadCell>
-            <Table.HeadCell className="table-cell">City</Table.HeadCell>
-            <Table.HeadCell className="table-cell">Date</Table.HeadCell>
-            <Table.HeadCell className="table-cell">Price</Table.HeadCell>
-            <Table.HeadCell className="table-cell">Status</Table.HeadCell>
-            <Table.HeadCell className="table-cell"></Table.HeadCell>
-          </Table.Head>
+  const handleOrderClick = (order: Order) => {
+    setSelectedOrder(order)
+    setIsOrderDetailsOpen(true)
+  }
 
-          {/* {!loader && ( */}
-          <Table.Body className="divide-y">
-            {currentPageOrders.map((order) => {
-              return <TableItem key={order.id} order={order} />
-            })}
-          </Table.Body>
-          {/* )} */}
-        </Table>
+  const handleMessageClick = (order: Order) => {
+    setSelectedOrder(order)
+    setIsFormModalOpen(true)
+  }
 
-        {loader && (
+  const handleStatusClick = (order: Order) => {
+    setSelectedOrder(order)
+    setIsOrderStatusModalOpen(true)
+  }
+
+  // Generate mobile cards
+  const mobileCards = currentPageOrders.map((order) => {
+    const { fullName, email, city, price, status, createdAt } = order
+
+    const isoDate = createdAt
+    const date = new Date(isoDate)
+    const year = date.toLocaleString('en-US', { year: 'numeric' })
+    const month = date.toLocaleString('en-US', { month: '2-digit' })
+    const day = date.toLocaleString('en-US', { day: '2-digit' })
+    const formattedDate = `${day}.${month}.${year}`
+
+    return (
+      <MobileCardBuilder
+        key={order.id}
+        title={fullName}
+        subtitle={email}
+        onClick={() => handleOrderClick(order)}
+        items={[
+          {
+            label: 'City',
+            value: city || (
+              <span className="text-gray-400 dark:text-gray-500">—</span>
+            ),
+          },
+          {
+            label: 'Date',
+            value: formattedDate,
+          },
+          {
+            label: 'Price',
+            value: (
+              <span className="font-semibold text-green-600 dark:text-green-400">
+                {price} KM
+              </span>
+            ),
+          },
+          {
+            label: 'Status',
+            value: (
+              <div
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleStatusClick(order)
+                }}
+                className="cursor-pointer"
+              >
+                <OrderStatus status={status} />
+              </div>
+            ),
+          },
+        ]}
+        actions={
           <div
-            className={`absolute inset-0 flex items-center justify-center ${loaderBg}`}
+            className="flex justify-end items-center gap-2"
+            onClick={(e) => e.stopPropagation()}
           >
-            <Loader />
+            <div
+              className="text-xl cursor-pointer text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+              onClick={() => handleMessageClick(order)}
+            >
+              <BiMessageDetail />
+            </div>
           </div>
-        )}
-      </div>
+        }
+      />
+    )
+  })
 
-      <div className="flex justify-between gap-4 items-center w-full">
-        <Pagination
-          className="mt-8"
-          currentPage={currentPage}
-          onPageChange={(page) => {
-            changeCurrentPage(page)
-          }}
-          totalPages={totalPages}
-        />
+  return (
+    <>
+      <ResponsiveTableWrapper
+        mobileCards={mobileCards}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={(page) => changeCurrentPage(page)}
+        count={count}
+      >
+        <div className="overflow-x-auto relative min-h-[100px] table-container">
+          <Table>
+            <Table.Head className="table-header">
+              <Table.HeadCell className="table-cell">Name</Table.HeadCell>
+              <Table.HeadCell className="table-cell">Email</Table.HeadCell>
+              <Table.HeadCell className="table-cell">City</Table.HeadCell>
+              <Table.HeadCell className="table-cell">Date</Table.HeadCell>
+              <Table.HeadCell className="table-cell">Price</Table.HeadCell>
+              <Table.HeadCell className="table-cell">Status</Table.HeadCell>
+              <Table.HeadCell className="table-cell"></Table.HeadCell>
+            </Table.Head>
 
-        <p className="table-total-text text-sm">Total: {count}</p>
-      </div>
-    </div>
+            {/* {!loader && ( */}
+            <Table.Body className="divide-y">
+              {currentPageOrders.map((order) => {
+                return <TableItem key={order.id} order={order} />
+              })}
+            </Table.Body>
+            {/* )} */}
+          </Table>
+
+          {loader && (
+            <div
+              className={`absolute inset-0 flex items-center justify-center ${loaderBg}`}
+            >
+              <Loader />
+            </div>
+          )}
+        </div>
+
+        <div className="flex justify-between gap-4 items-center w-full">
+          <Pagination
+            className="mt-8"
+            currentPage={currentPage}
+            onPageChange={(page) => {
+              changeCurrentPage(page)
+            }}
+            totalPages={totalPages}
+          />
+
+          <p className="table-total-text text-sm">Total: {count}</p>
+        </div>
+      </ResponsiveTableWrapper>
+
+      {/* Mobile Modals */}
+      {selectedOrder && (
+        <>
+          <OrderDetails
+            isOpen={isOrderDetailsOpen}
+            onClose={() => {
+              setIsOrderDetailsOpen(false)
+              setSelectedOrder(null)
+            }}
+            order={selectedOrder}
+          />
+
+          <OrderContactForm
+            isOpen={isFormModalOpen}
+            onClose={() => {
+              setIsFormModalOpen(false)
+              setSelectedOrder(null)
+            }}
+            initialValue={selectedOrder}
+            setIsModalOpen={setIsFormModalOpen}
+          />
+
+          <OrderEditModal
+            isOpen={isOrderStatusModalOpen}
+            onClose={() => {
+              setIsOrderStatusModalOpen(false)
+              setSelectedOrder(null)
+            }}
+            initialValue={selectedOrder}
+            setIsModalOpen={setIsOrderStatusModalOpen}
+          />
+        </>
+      )}
+    </>
   )
 }

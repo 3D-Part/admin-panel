@@ -4,7 +4,11 @@ import { Pagination, Table } from 'flowbite-react'
 import React, { useCallback, useEffect, useState } from 'react'
 import { TableItem } from './TableItem/TableItem'
 import { useAttributesStore } from '@/store/store'
-import { Loader } from '@/components/common'
+import {
+  Loader,
+  ResponsiveTableWrapper,
+  MobileCardBuilder,
+} from '@/components/common'
 import { PaginationData, AttributeData } from '@/shared/types'
 
 type AttributesTableType = {
@@ -26,7 +30,6 @@ export const AttributesTable: React.FC<AttributesTableType> = ({
     itemsPerPage,
     totalPages,
     count,
-    changeAttributeFilter,
   } = useAttributesStore()
 
   const fetchAttributesData = useCallback(async () => {
@@ -49,15 +52,47 @@ export const AttributesTable: React.FC<AttributesTableType> = ({
       : 'bg-transparent'
 
   useEffect(() => {
-    changeAttributeFilter({})
-  }, [])
-
-  useEffect(() => {
     fetchAttributesData()
   }, [currentPage, fetchAttributesData])
 
+  // Generate mobile cards
+  const mobileCards = currentPageAttributes.map((attribute) => {
+    const { name } = attribute
+
+    return (
+      <MobileCardBuilder
+        key={attribute.id}
+        title={name}
+        onClick={() => openEditModal(attribute)}
+        items={[]}
+        actions={
+          <div className="flex justify-end items-center gap-4">
+            <span
+              onClick={() => openEditModal(attribute)}
+              className="font-medium table-action-link cursor-pointer hover:underline"
+            >
+              Edit
+            </span>
+            <span
+              onClick={() => onWarningModalOpen(attribute)}
+              className="font-medium table-action-danger cursor-pointer hover:underline"
+            >
+              Remove
+            </span>
+          </div>
+        }
+      />
+    )
+  })
+
   return (
-    <div className="mt-8">
+    <ResponsiveTableWrapper
+      mobileCards={mobileCards}
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onPageChange={(page) => changeCurrentPage(page)}
+      count={count}
+    >
       <div className="overflow-x-auto relative bg-transparent min-h-[100px] table-container">
         <Table>
           <Table.Head className="table-header">
@@ -103,6 +138,6 @@ export const AttributesTable: React.FC<AttributesTableType> = ({
 
         <p className="table-total-text text-sm">Total: {count}</p>
       </div>
-    </div>
+    </ResponsiveTableWrapper>
   )
 }

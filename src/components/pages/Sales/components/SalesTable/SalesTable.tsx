@@ -3,9 +3,15 @@
 import { Pagination, Table } from 'flowbite-react'
 import React, { useCallback, useEffect, useState } from 'react'
 import { TableItem } from './TableItem/TableItem'
-import { useSalesSliceStore } from '@/store/store'
-import { Loader } from '@/components/common'
-import { PaginationData, PromoCode, Sale } from '@/shared/types'
+import { useSalesSliceStore, useUISliceStore } from '@/store/store'
+import {
+  Loader,
+  ResponsiveTableWrapper,
+  MobileCardBuilder,
+} from '@/components/common'
+import { PaginationData, Sale } from '@/shared/types'
+import dateTimeFormat from '@/shared/helpers/dateTimeFormat'
+import EditSaleModal from '../Modals/EditSaleModal/EditSaleModal'
 
 type SalesTableType = {
   onWarningModalOpen: (sale: Sale) => void
@@ -15,6 +21,7 @@ export const SalesTable: React.FC<SalesTableType> = ({
   onWarningModalOpen,
 }) => {
   const [loader, setLoader] = useState(true)
+  const { changeIsSaleEditModalOpen, isSaleEditModalOpen } = useUISliceStore()
 
   const {
     fetchSales,
@@ -24,6 +31,7 @@ export const SalesTable: React.FC<SalesTableType> = ({
     itemsPerPage,
     totalPages,
     count,
+    changeActiveSale,
   } = useSalesSliceStore()
 
   const fetchPromoCodesData = useCallback(async () => {
@@ -40,10 +48,6 @@ export const SalesTable: React.FC<SalesTableType> = ({
     }
   }, [currentPage, fetchSales, itemsPerPage])
 
-  // useEffect(() => {
-  //   changeManufactureFilter({});
-  // }, []);
-
   const loaderBg =
     currentPageSales.length > 0
       ? 'bg-white/50 dark:bg-black/30'
@@ -53,54 +57,123 @@ export const SalesTable: React.FC<SalesTableType> = ({
     fetchPromoCodesData()
   }, [currentPage, fetchPromoCodesData])
 
-  return (
-    <div className="mt-8">
-      <div className="relative overflow-x-auto min-h-[100px] table-container">
-        <Table>
-          <Table.Head className="table-header">
-            <Table.HeadCell className="table-cell">Name</Table.HeadCell>
-            <Table.HeadCell className="table-cell">Start</Table.HeadCell>
-            <Table.HeadCell className="table-cell">End</Table.HeadCell>
-            <Table.HeadCell className="table-cell">
-              <span className="sr-only">Edit or Remove</span>
-            </Table.HeadCell>
-          </Table.Head>
-          {/* {!loader && ( */}
-          <Table.Body className="divide-y">
-            {currentPageSales.length > 0 &&
-              currentPageSales.map((sale) => {
-                return (
-                  <TableItem
-                    onWarningModalOpen={onWarningModalOpen}
-                    key={sale.id}
-                    sale={sale}
-                  />
-                )
-              })}
-          </Table.Body>
-          {/* )} */}
-        </Table>
-        {loader && (
+  const handleEditSale = (sale: Sale) => {
+    changeActiveSale(sale)
+    changeIsSaleEditModalOpen(true)
+  }
+
+  // Generate mobile cards
+  const mobileCards = currentPageSales.map((sale) => {
+    const { startsAt, endsAt, name } = sale
+
+    const startTime = dateTimeFormat(startsAt, true)
+    const endTime = dateTimeFormat(endsAt, true)
+
+    return (
+      <MobileCardBuilder
+        key={sale.id}
+        title={name}
+        onClick={() => handleEditSale(sale)}
+        items={[
+          {
+            label: 'Start Date',
+            value: (
+              <span className="text-gray-700 dark:text-gray-300">
+                {startTime}
+              </span>
+            ),
+          },
+          {
+            label: 'End Date',
+            value: (
+              <span className="text-gray-700 dark:text-gray-300">
+                {endTime}
+              </span>
+            ),
+          },
+        ]}
+        actions={
           <div
-            className={`absolute inset-0 flex items-center justify-center ${loaderBg}`}
+            className="flex justify-end items-center gap-4"
+            onClick={(e) => e.stopPropagation()}
           >
-            <Loader />
+            <span
+              onClick={() => handleEditSale(sale)}
+              className="font-medium table-action-link cursor-pointer hover:underline"
+            >
+              Edit
+            </span>
+            <span
+              onClick={() => onWarningModalOpen(sale)}
+              className="font-medium table-action-danger cursor-pointer hover:underline"
+            >
+              Remove
+            </span>
           </div>
-        )}
-      </div>
+        }
+      />
+    )
+  })
 
-      <div className="flex justify-between gap-4 items-center w-full">
-        <Pagination
-          className="mt-8"
-          currentPage={currentPage}
-          onPageChange={(page) => {
-            changeCurrentPage(page)
-          }}
-          totalPages={totalPages}
-        />
+  return (
+    <>
+      <ResponsiveTableWrapper
+        mobileCards={mobileCards}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={(page) => changeCurrentPage(page)}
+        count={count}
+      >
+        <div className="relative overflow-x-auto min-h-[100px] table-container">
+          <Table>
+            <Table.Head className="table-header">
+              <Table.HeadCell className="table-cell">Name</Table.HeadCell>
+              <Table.HeadCell className="table-cell">Start</Table.HeadCell>
+              <Table.HeadCell className="table-cell">End</Table.HeadCell>
+              <Table.HeadCell className="table-cell">
+                <span className="sr-only">Edit or Remove</span>
+              </Table.HeadCell>
+            </Table.Head>
+            {/* {!loader && ( */}
+            <Table.Body className="divide-y">
+              {currentPageSales.length > 0 &&
+                currentPageSales.map((sale) => {
+                  return (
+                    <TableItem
+                      onWarningModalOpen={onWarningModalOpen}
+                      key={sale.id}
+                      sale={sale}
+                    />
+                  )
+                })}
+            </Table.Body>
+            {/* )} */}
+          </Table>
+          {loader && (
+            <div
+              className={`absolute inset-0 flex items-center justify-center ${loaderBg}`}
+            >
+              <Loader />
+            </div>
+          )}
+        </div>
 
-        <p className="table-total-text text-sm">Total: {count}</p>
-      </div>
-    </div>
+        <div className="flex justify-between gap-4 items-center w-full">
+          <Pagination
+            className="mt-8"
+            currentPage={currentPage}
+            onPageChange={(page) => {
+              changeCurrentPage(page)
+            }}
+            totalPages={totalPages}
+          />
+
+          <p className="table-total-text text-sm">Total: {count}</p>
+        </div>
+      </ResponsiveTableWrapper>
+
+      {/* Mobile Edit Modal */}
+      <EditSaleModal />
+    </>
   )
 }

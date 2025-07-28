@@ -1,0 +1,1 @@
+export { MobilePagination } from './MobilePagination'

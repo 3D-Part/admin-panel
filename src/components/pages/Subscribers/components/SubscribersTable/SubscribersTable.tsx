@@ -4,8 +4,12 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { Pagination, Table } from 'flowbite-react'
 import { TableItem } from './TableItem/TableItem'
 import { useSubscribersSliceStore } from '@/store/store'
-import { Loader } from '@/components/common'
-import { PaginationData } from '@/shared/types'
+import {
+  Loader,
+  ResponsiveTableWrapper,
+  MobileCardBuilder,
+} from '@/components/common'
+import { PaginationData, Subscriber } from '@/shared/types'
 
 export const SubscribersTable = () => {
   const [loader, setLoader] = useState(true)
@@ -47,8 +51,33 @@ export const SubscribersTable = () => {
     fetchSubscribersData()
   }, [currentPage, fetchSubscribersData])
 
+  // Generate mobile cards
+  const mobileCards = currentPageSubscribers.map((subscriber: Subscriber) => {
+    const { email } = subscriber
+
+    return (
+      <MobileCardBuilder
+        key={subscriber.id}
+        title={email}
+        subtitle="Subscriber"
+        items={[
+          {
+            label: 'Email',
+            value: email,
+          },
+        ]}
+      />
+    )
+  })
+
   return (
-    <div className="mt-8">
+    <ResponsiveTableWrapper
+      mobileCards={mobileCards}
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onPageChange={(page) => changeCurrentPage(page)}
+      count={count}
+    >
       <div className="relative overflow-x-auto min-h-[100px] table-container">
         <Table>
           <Table.Head className="table-header">
@@ -88,6 +117,6 @@ export const SubscribersTable = () => {
 
         <p className="table-total-text text-sm">Total: {count}</p>
       </div>
-    </div>
+    </ResponsiveTableWrapper>
   )
 }
