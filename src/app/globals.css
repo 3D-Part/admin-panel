@@ -41,7 +41,7 @@
 
   /* Responsive table styles */
   .table-desktop {
-    @apply hidden md:table;
+    @apply hidden md:table w-full;
   }
 
   .table-mobile {
