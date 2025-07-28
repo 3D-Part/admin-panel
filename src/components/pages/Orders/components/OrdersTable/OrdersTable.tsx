@@ -184,9 +184,8 @@ export const OrdersTable = () => {
           )}
         </div>
 
-        <div className="flex justify-between gap-4 items-center w-full">
+        <div className="flex justify-between gap-4 items-center w-full mt-8 p-4 bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800">
           <Pagination
-            className="mt-8"
             currentPage={currentPage}
             onPageChange={(page) => {
               changeCurrentPage(page)

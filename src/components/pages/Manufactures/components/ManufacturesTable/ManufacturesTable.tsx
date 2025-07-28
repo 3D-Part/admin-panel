@@ -4,7 +4,11 @@ import { Pagination, Table } from 'flowbite-react'
 import React, { useCallback, useEffect, useState } from 'react'
 import { TableItem } from './TableItem/TableItem'
 import { useManufactureStore } from '@/store/store'
-import { Loader } from '@/components/common'
+import {
+  Loader,
+  ResponsiveTableWrapper,
+  MobileCardBuilder,
+} from '@/components/common'
 import { PaginationData, ManufacturerData } from '@/shared/types'
 
 type ManufacturesTableType = {
@@ -55,8 +59,46 @@ export const ManufacturesTable: React.FC<ManufacturesTableType> = ({
     fetchManufacturesData()
   }, [currentPage, fetchManufacturesData])
 
+  // Generate mobile cards
+  const mobileCards = currentPageManufactures.map(
+    (manufacture: ManufacturerData) => {
+      const { name } = manufacture
+
+      return (
+        <MobileCardBuilder
+          key={manufacture.id}
+          title={name}
+          onClick={() => openEditModal(manufacture)}
+          items={[]}
+          actions={
+            <div className="flex justify-end items-center gap-4">
+              <span
+                onClick={() => openEditModal(manufacture)}
+                className="font-medium table-action-link cursor-pointer hover:underline"
+              >
+                Edit
+              </span>
+              <span
+                onClick={() => onWarningModalOpen(manufacture)}
+                className="font-medium table-action-danger cursor-pointer hover:underline"
+              >
+                Remove
+              </span>
+            </div>
+          }
+        />
+      )
+    }
+  )
+
   return (
-    <div className="mt-8">
+    <ResponsiveTableWrapper
+      mobileCards={mobileCards}
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onPageChange={(page) => changeCurrentPage(page)}
+      count={count}
+    >
       <div className="overflow-x-auto relative min-h-[100px] table-container">
         <Table>
           <Table.Head className="table-header">
@@ -90,9 +132,8 @@ export const ManufacturesTable: React.FC<ManufacturesTableType> = ({
         )}
       </div>
 
-      <div className="flex justify-between gap-4 items-center w-full">
+      <div className="flex justify-between gap-4 items-center w-full mt-8 p-4 bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800">
         <Pagination
-          className="mt-8"
           currentPage={currentPage}
           onPageChange={(page) => {
             changeCurrentPage(page)
@@ -102,6 +143,6 @@ export const ManufacturesTable: React.FC<ManufacturesTableType> = ({
 
         <p className="table-total-text text-sm">Total: {count}</p>
       </div>
-    </div>
+    </ResponsiveTableWrapper>
   )
 }
