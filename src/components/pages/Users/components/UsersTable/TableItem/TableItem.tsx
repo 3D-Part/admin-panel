@@ -20,23 +20,23 @@ export const TableItem: React.FC<TableItemType> = ({ user }) => {
       <Table.Row className="table-row">
         <Table.Cell
           onClick={() => setIsUserDetailsOpen(true)}
-          className="cursor-pointer whitespace-nowrap font-medium table-cell"
+          className="cursor-pointer whitespace-nowrap font-medium table-cell w-1/6"
         >
           <div className="flex justify-start items-center gap-6">
             {fullName}
           </div>
         </Table.Cell>
-        <Table.Cell className="whitespace-nowrap font-medium table-cell">
+        <Table.Cell className="whitespace-nowrap font-medium table-cell w-2/5">
           <div className="flex justify-start items-center gap-6 ">{email}</div>
         </Table.Cell>
-        <Table.Cell className="whitespace-nowrap font-medium table-cell">
+        <Table.Cell className="whitespace-nowrap font-medium table-cell w-1/8">
           <div className="flex justify-start items-center gap-6">{phone}</div>
         </Table.Cell>
-        <Table.Cell className="whitespace-nowrap font-medium table-cell">
+        <Table.Cell className="whitespace-nowrap font-medium table-cell w-1/8">
           <div className="flex justify-start items-center gap-6">{city}</div>
         </Table.Cell>
 
-        <Table.Cell className="whitespace-nowrap font-medium table-cell">
+        <Table.Cell className="whitespace-nowrap font-medium table-cell w-1/6">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1">
               <span className="font-semibold text-green-600 dark:text-green-400">

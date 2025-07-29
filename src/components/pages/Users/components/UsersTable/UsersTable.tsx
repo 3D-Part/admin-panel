@@ -134,18 +134,18 @@ export const UsersTable = () => {
       count={count}
     >
       <div className="table-container">
-        <Table className="w-full table-fixed">
+        <Table className="w-full">
           <Table.Head className="table-header">
-            <Table.HeadCell className="table-cell">Name</Table.HeadCell>
-            <Table.HeadCell className="table-cell">Email</Table.HeadCell>
-            <Table.HeadCell className="table-cell">Phone</Table.HeadCell>
-            <Table.HeadCell className="table-cell">City</Table.HeadCell>
-            <Table.HeadCell className="table-cell">Points</Table.HeadCell>
+            <Table.HeadCell className="table-cell w-1/6">Name</Table.HeadCell>
+            <Table.HeadCell className="table-cell w-2/5">Email</Table.HeadCell>
+            <Table.HeadCell className="table-cell w-1/8">Phone</Table.HeadCell>
+            <Table.HeadCell className="table-cell w-1/8">City</Table.HeadCell>
+            <Table.HeadCell className="table-cell w-1/6">Points</Table.HeadCell>
           </Table.Head>
         </Table>
 
         <div className="table-body-container relative">
-          <Table className="w-full table-fixed">
+          <Table className="w-full">
             <Table.Body className="divide-y divide-gray-100 dark:divide-gray-800">
               {currentPageUsers.map((user) => {
                 return <TableItem key={user.id} user={user} />
