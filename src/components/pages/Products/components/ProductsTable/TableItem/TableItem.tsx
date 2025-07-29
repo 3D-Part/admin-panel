@@ -104,7 +104,10 @@ export const TableItem: React.FC<TableItemType> = ({
               rounded
               className="rounded-xl shadow-md border-2 border-gray-200 dark:border-gray-700"
             />
-            <span className="font-semibold text-gray-900 dark:text-white">
+            <span
+              title={name}
+              className="flex-1 font-semibold text-gray-900 dark:text-white overflow-hidden truncate"
+            >
               {name}
             </span>
           </div>
