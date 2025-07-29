@@ -110,7 +110,7 @@ export const Categories = () => {
   // }, [fetchAllCategories])
 
   return (
-    <div className="w-full">
+    <div className="w-full flex flex-col h-full overflow-hidden">
       <CategoriesHeader />
       <CategoriesTable
         onWarningModalOpen={onWarningModalOpen}

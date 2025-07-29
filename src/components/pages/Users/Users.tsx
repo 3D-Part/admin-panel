@@ -14,7 +14,7 @@ export const Users = () => {
   }, [changeCurrentPage, currentPage, totalPages])
 
   return (
-    <div className="w-full">
+    <div className="w-full flex flex-col h-full overflow-hidden">
       {/* <MSubscribersHeader /> */}
       <UsersTable />
     </div>

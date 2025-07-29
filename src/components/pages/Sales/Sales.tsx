@@ -70,7 +70,7 @@ export const Sales = () => {
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full flex flex-col h-full overflow-hidden">
       <SalesHeader />
       <SalesTable onWarningModalOpen={onWarningModalOpen} />
 

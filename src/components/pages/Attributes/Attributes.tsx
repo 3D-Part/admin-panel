@@ -114,7 +114,7 @@ export const Attributes = () => {
   }, [fetchAllAttributes])
 
   return (
-    <div className="w-full">
+    <div className="w-full flex flex-col h-full overflow-hidden">
       <AttributesHeader />
       <AttributesTable
         onWarningModalOpen={onWarningModalOpen}

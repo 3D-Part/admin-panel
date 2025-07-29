@@ -6,7 +6,7 @@ import EmailsTable from './components/EmailsTable/EmailsTable'
 
 const OrderEmails = () => {
   return (
-    <div className="w-full">
+    <div className="w-full flex flex-col h-full overflow-hidden">
       <EmailsTable />
     </div>
   )

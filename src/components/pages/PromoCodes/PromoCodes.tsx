@@ -73,7 +73,7 @@ export const PromoCodes = () => {
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full flex flex-col h-full overflow-hidden">
       <PromoCodesHeader />
       <PromoCodesTable onWarningModalOpen={onWarningModalOpen} />
 

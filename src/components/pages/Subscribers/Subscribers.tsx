@@ -30,7 +30,7 @@ export const Subscribers = () => {
   }, [changeCurrentPage, currentPage, totalPages])
 
   return (
-    <div className="w-full">
+    <div className="w-full flex flex-col h-full overflow-hidden">
       <SubscribersHeader />
       <SubscribersTable />
     </div>
