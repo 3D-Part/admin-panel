@@ -39,7 +39,7 @@ const CategoryEditModal: React.FC<ModalType> = ({
     categoryAttributeIds.current = attributes
   }
 
-  const { allCategories } = useCategoryStore()
+  const { allCategories, fetchAllCategories } = useCategoryStore()
   const { addCategoryAttributesBulk, removeCategoryAttributesBulk } =
     CategoryAttributeAPI
 
@@ -116,6 +116,11 @@ const CategoryEditModal: React.FC<ModalType> = ({
 
     categoryDataRef.current = initialValue
   }, [initialValue])
+
+  useEffect(() => {
+    if (allCategories.length > 0) return
+    fetchAllCategories()
+  }, [fetchAllCategories, allCategories])
 
   if (!isOpen) return null
 
