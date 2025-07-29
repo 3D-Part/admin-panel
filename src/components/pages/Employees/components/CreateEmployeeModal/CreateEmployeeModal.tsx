@@ -32,9 +32,37 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
     (permission: PermissionEnum) => {
       setSelectedPermissions((prev) => {
         if (prev.includes(permission)) {
-          return prev.filter((p) => p !== permission)
+          // If removing a permission, also remove its dependent permission
+          let newPermissions = prev.filter((p) => p !== permission)
+
+          // If removing a WRITE permission, also remove the corresponding READ permission
+          if (permission.endsWith('_WRITE')) {
+            const correspondingRead = permission.replace(
+              '_WRITE',
+              '_READ'
+            ) as PermissionEnum
+            newPermissions = newPermissions.filter(
+              (p) => p !== correspondingRead
+            )
+          }
+
+          return newPermissions
         } else {
-          return [...prev, permission]
+          // If adding a permission, also add its dependent permission
+          let newPermissions = [...prev, permission]
+
+          // If adding a WRITE permission, also add the corresponding READ permission
+          if (permission.endsWith('_WRITE')) {
+            const correspondingRead = permission.replace(
+              '_WRITE',
+              '_READ'
+            ) as PermissionEnum
+            if (!newPermissions.includes(correspondingRead)) {
+              newPermissions.push(correspondingRead)
+            }
+          }
+
+          return newPermissions
         }
       })
 
