@@ -12,7 +12,7 @@
 /* Modern table styles for better light/dark theme support */
 @layer components {
   .table-container {
-    @apply bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden flex flex-col h-full;
+    @apply relative bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden flex flex-col h-full;
   }
 
   .table-container table {
