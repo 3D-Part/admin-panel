@@ -6,6 +6,7 @@ import LayoutWrapper from '@/components/layout/LayoutWrapper'
 import AddProductsOnSaleModal from '@/components/pages/Products/components/AddProductsOnSaleModal/AddProductsOnSaleModal'
 import AuthCheck from '@/components/common/AuthCheck'
 import ThemeProvider from '@/components/common/ThemeProvider'
+import PermissionGuard from '@/components/common/PermissionGuard'
 
 export const metadata = {
   title: '3D Part',
@@ -22,8 +23,10 @@ export default function RootLayout({
       <body className="flex flex-col bg-white dark:bg-gray-900 h-auto md:h-screen md:overflow-hidden">
         <ThemeProvider>
           <AuthCheck>
-            <LayoutWrapper />
-            <ChildrenWrapper>{children}</ChildrenWrapper>
+            <PermissionGuard>
+              <LayoutWrapper />
+              <ChildrenWrapper>{children}</ChildrenWrapper>
+            </PermissionGuard>
           </AuthCheck>
 
           <ToastContainer theme="colored" />

@@ -5,6 +5,7 @@ export enum URLPartsEnum {
 
   Categories = '/categories',
   AddNewCategory = '/categories/add-new',
+  EditCategory = '/categories/edit',
 
   Products = '/products',
   AddNewProduct = '/products/add-new',
@@ -12,9 +13,11 @@ export enum URLPartsEnum {
 
   Manufacturers = '/manufacturers',
   AddNewManufacturer = '/manufacturers/add-new',
+  EditManufacturer = '/manufacturers/edit',
 
   Attributes = '/attributes',
   AddNewAttribute = '/attributes/add-new',
+  EditAttribute = '/attributes/edit',
 
   Orders = '/orders',
   OrderEmails = '/orders/emails',
