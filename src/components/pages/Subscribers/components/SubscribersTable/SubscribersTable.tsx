@@ -82,13 +82,6 @@ export const SubscribersTable = () => {
         <Table className="w-full table-fixed">
           <Table.Head className="table-header">
             <Table.HeadCell className="table-cell">Email</Table.HeadCell>
-            <Table.HeadCell className="table-cell">
-              Subscribed Date
-            </Table.HeadCell>
-            <Table.HeadCell className="table-cell">Status</Table.HeadCell>
-            <Table.HeadCell className="table-cell">
-              <span className="sr-only">Actions</span>
-            </Table.HeadCell>
           </Table.Head>
         </Table>
 
