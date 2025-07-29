@@ -118,72 +118,60 @@ export const UsersTable = () => {
   })
 
   return (
-    <>
-      <ResponsiveTableWrapper
-        mobileCards={mobileCards}
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={(page) => changeCurrentPage(page)}
-        count={count}
-      >
-        <div className="relative overflow-x-auto min-h-[100px] table-container">
-          <Table>
-            <Table.Head className="table-header">
-              <Table.HeadCell className="table-cell">Name</Table.HeadCell>
-              <Table.HeadCell className="table-cell">Email</Table.HeadCell>
-              <Table.HeadCell className="table-cell">Phone</Table.HeadCell>
-              <Table.HeadCell className="table-cell">City</Table.HeadCell>
-              <Table.HeadCell className="table-cell">Street</Table.HeadCell>
-              <Table.HeadCell className="table-cell">Points</Table.HeadCell>
-              <Table.HeadCell className="table-cell">
-                Used points
-              </Table.HeadCell>
-              {/* <Table.HeadCell>
-                        <span className="sr-only">Edit or Remove</span>
-                    </Table.HeadCell> */}
-            </Table.Head>
-            {/* {!loader && ( */}
-            <Table.Body className="divide-y">
-              {currentPageUsers.length > 0 &&
-                currentPageUsers.map((user) => {
-                  return <TableItem key={user.id} user={user} />
-                })}
+    <ResponsiveTableWrapper
+      mobileCards={mobileCards}
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onPageChange={(page) => changeCurrentPage(page)}
+      count={count}
+    >
+      <div className="table-container">
+        <Table className="w-full">
+          <Table.Head className="table-header">
+            <Table.HeadCell className="table-cell">Name</Table.HeadCell>
+            <Table.HeadCell className="table-cell">Email</Table.HeadCell>
+            <Table.HeadCell className="table-cell">Phone</Table.HeadCell>
+            <Table.HeadCell className="table-cell">City</Table.HeadCell>
+            <Table.HeadCell className="table-cell">Street</Table.HeadCell>
+            <Table.HeadCell className="table-cell">
+              Available Points
+            </Table.HeadCell>
+            <Table.HeadCell className="table-cell">Used Points</Table.HeadCell>
+            <Table.HeadCell className="table-cell">
+              <span className="sr-only">Actions</span>
+            </Table.HeadCell>
+          </Table.Head>
+        </Table>
+
+        <div className="table-body-container relative">
+          <Table className="w-full">
+            <Table.Body className="divide-y divide-gray-100 dark:divide-gray-800">
+              {currentPageUsers.map((user) => {
+                return <TableItem key={user.id} user={user} />
+              })}
             </Table.Body>
-            {/* )} */}
           </Table>
           {loader && (
             <div
-              className={`absolute inset-0 flex items-center justify-center ${loaderBg}`}
+              className={`absolute inset-0 flex items-center justify-center ${loaderBg} rounded-xl`}
             >
               <Loader />
             </div>
           )}
         </div>
+      </div>
 
-        <div className="flex justify-between gap-4 items-center w-full mt-8 p-4 bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800">
-          <Pagination
-            currentPage={currentPage}
-            onPageChange={(page) => {
-              changeCurrentPage(page)
-            }}
-            totalPages={totalPages}
-          />
-
-          <p className="table-total-text text-sm">Total: {count}</p>
-        </div>
-      </ResponsiveTableWrapper>
-
-      {/* Mobile User Details Modal */}
-      {selectedUser && (
-        <UserDetails
-          isOpen={isUserDetailsOpen}
-          onClose={() => {
-            setIsUserDetailsOpen(false)
-            setSelectedUser(null)
+      <div className="flex justify-between gap-4 items-center w-full mt-8 p-4 bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800">
+        <Pagination
+          currentPage={currentPage}
+          onPageChange={(page) => {
+            changeCurrentPage(page)
           }}
-          user={selectedUser}
+          totalPages={totalPages}
         />
-      )}
-    </>
+
+        <p className="table-total-text text-sm">Total: {count}</p>
+      </div>
+    </ResponsiveTableWrapper>
   )
 }

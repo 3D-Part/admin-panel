@@ -19,7 +19,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-white dark:bg-gray-900">
+      <body className="flex flex-col bg-white dark:bg-gray-900 h-auto md:h-screen md:overflow-hidden">
         <ThemeProvider>
           <AuthCheck>
             <LayoutWrapper />

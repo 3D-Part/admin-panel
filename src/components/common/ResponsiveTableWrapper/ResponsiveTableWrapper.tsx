@@ -1,10 +1,5 @@
 import React from 'react'
-import {
-  ResponsiveTable,
-  MobileTableCard,
-  MobileCardItem,
-} from '../ResponsiveTable'
-import { Pagination } from 'flowbite-react'
+import { MobileTableCard, MobileCardItem } from '../ResponsiveTable'
 import { MobilePagination } from '../MobilePagination'
 
 interface ResponsiveTableWrapperProps {
@@ -28,9 +23,11 @@ export const ResponsiveTableWrapper: React.FC<ResponsiveTableWrapperProps> = ({
   count,
 }) => {
   return (
-    <div className={`mt-8 ${className}`}>
+    <div
+      className={`flex flex-col mt-8 flex-1 overflow-hidden h-full ${className}`}
+    >
       {/* Desktop Table */}
-      <div className="table-desktop">{children}</div>
+      <div className="table-desktop flex-1">{children}</div>
 
       {/* Mobile Cards */}
       <div className="table-mobile">

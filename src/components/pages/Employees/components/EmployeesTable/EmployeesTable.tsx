@@ -74,26 +74,35 @@ export const EmployeesTable = () => {
       onPageChange={(page) => changeCurrentPage(page)}
       count={count}
     >
-      <div className="relative overflow-x-auto min-h-[100px] table-container">
-        <Table>
+      <div className="table-container">
+        <Table className="w-full">
           <Table.Head className="table-header">
             <Table.HeadCell className="table-cell">Name</Table.HeadCell>
             <Table.HeadCell className="table-cell">Email</Table.HeadCell>
+            <Table.HeadCell className="table-cell">Role</Table.HeadCell>
+            <Table.HeadCell className="table-cell">Status</Table.HeadCell>
+            <Table.HeadCell className="table-cell">
+              <span className="sr-only">Actions</span>
+            </Table.HeadCell>
           </Table.Head>
-          <Table.Body className="divide-y">
-            {currentPageEmployees.length > 0 &&
-              currentPageEmployees.map((employee) => {
+        </Table>
+
+        <div className="table-body-container relative">
+          <Table className="w-full">
+            <Table.Body className="divide-y divide-gray-100 dark:divide-gray-800">
+              {currentPageEmployees.map((employee) => {
                 return <TableItem key={employee.id} employee={employee} />
               })}
-          </Table.Body>
-        </Table>
-        {loader && (
-          <div
-            className={`absolute inset-0 flex items-center justify-center ${loaderBg}`}
-          >
-            <Loader />
-          </div>
-        )}
+            </Table.Body>
+          </Table>
+          {loader && (
+            <div
+              className={`absolute inset-0 flex items-center justify-center ${loaderBg} rounded-xl`}
+            >
+              <Loader />
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="flex justify-between gap-4 items-center w-full mt-8 p-4 bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800">

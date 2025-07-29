@@ -188,16 +188,12 @@ const GeneralInfo = () => {
     <form
       ref={formRef}
       onSubmit={onSubmit}
-      className="flex items-start max-w-2xl flex-col gap-4"
+      className="flex items-start max-w-2xl flex-col gap-6 pb-8"
     >
       {/* NAME */}
       <div className="w-full">
         <div className="mb-2 block">
-          <Label
-            className="text-base"
-            htmlFor="name"
-            defaultValue="Product name"
-          />
+          <Label className="text-base" htmlFor="name" value="Product name" />
         </div>
         <TextInput
           name="name"
@@ -240,22 +236,6 @@ const GeneralInfo = () => {
         />
       </div>
 
-      {/* WEIGHT */}
-      <div className="w-full">
-        <div className="mb-2 block">
-          <Label className="text-base" htmlFor="weight" value="Weight" />
-        </div>
-        <TextInput
-          onChange={handleInputChange}
-          id="weight"
-          name="weight"
-          required
-          type="number"
-          step="0.01"
-          defaultValue={activeProduct.weight ? activeProduct.weight : ''}
-        />
-      </div>
-
       {/* QUANTITY */}
       <div className="w-full">
         <div className="mb-2 block">
@@ -267,22 +247,21 @@ const GeneralInfo = () => {
           name="quantity"
           required
           type="number"
-          defaultValue={activeProduct.quantity ? activeProduct.quantity : ''}
+          defaultValue={activeProduct.quantity}
         />
       </div>
 
       {/* CATEGORY */}
-      <div className="w-full" id="select">
+      <div className="w-full">
         <div className="mb-2 block">
-          <Label htmlFor="categoryId" value="Category" />
+          <Label className="text-base" htmlFor="categoryId" value="Category" />
         </div>
-
         <Select
           onChange={handleInputChange}
-          name="categoryId"
           id="categoryId"
-          defaultValue={parentCategory}
+          name="categoryId"
           required
+          defaultValue={activeProduct.categoryId}
         >
           <option value={''}>None</option>
           {allCategories.map((category) => {
@@ -334,12 +313,6 @@ const GeneralInfo = () => {
           rows={6}
           defaultValue={activeProduct.description}
         />
-        {/* <TextEditor
-          handleEditorChange={handleDescriptionChange}
-          placeholder="Product description..."
-          id="description"
-          defaultValue={activeProduct.description}
-        /> */}
       </div>
 
       {/* DETAILS */}
@@ -347,14 +320,6 @@ const GeneralInfo = () => {
         <div className="mb-2 block">
           <Label className="text-base" htmlFor="details" value="Details" />
         </div>
-        {/* <Textarea
-          onChange={handleInputChange}
-          id="details"
-          name="details"
-          placeholder="Product details..."
-          rows={6}
-          defaultValue={activeProduct.details}
-        /> */}
         <TextEditor
           handleEditorChange={handleDetailsChange}
           placeholder="Product details..."
@@ -363,28 +328,31 @@ const GeneralInfo = () => {
         />
       </div>
 
-      {/* IS PUBLISHED */}
-      <ToggleSwitch
-        checked={isPublished}
-        label="Published"
-        onChange={changeIsPublished}
-      />
+      {/* TOGGLE SWITCHES */}
+      <div className="w-full space-y-4">
+        {/* IS PUBLISHED */}
+        <ToggleSwitch
+          checked={isPublished}
+          label="Published"
+          onChange={changeIsPublished}
+        />
 
-      {/* IS PUBLISHED */}
-      <ToggleSwitch
-        checked={isMostSold}
-        label="Most sold"
-        onChange={changeIsMostSold}
-      />
+        {/* IS MOST SOLD */}
+        <ToggleSwitch
+          checked={isMostSold}
+          label="Most sold"
+          onChange={changeIsMostSold}
+        />
 
-      {/* IS RECOMMENDED */}
-      <ToggleSwitch
-        checked={isRecommended}
-        label="Recommended"
-        onChange={changeIsRecommended}
-      />
+        {/* IS RECOMMENDED */}
+        <ToggleSwitch
+          checked={isRecommended}
+          label="Recommended"
+          onChange={changeIsRecommended}
+        />
+      </div>
 
-      <Button className="mt-4" type="submit">
+      <Button className="mt-6" type="submit">
         Save changes
       </Button>
     </form>

@@ -34,9 +34,9 @@ export const TabsMenu = () => {
   ]
 
   return (
-    <div className="w-full">
-      {/* Modern Tabs Header */}
-      <div className="mb-8">
+    <div className="w-full h-full flex flex-col">
+      {/* Fixed Tabs Header */}
+      <div className="flex-shrink-0 mb-8">
         <div className="flex flex-wrap gap-2 border-b border-gray-200 dark:border-gray-700">
           {tabs.map((tab) => {
             const IconComponent = tab.icon
@@ -75,8 +75,8 @@ export const TabsMenu = () => {
         </div>
       </div>
 
-      {/* Tab Content with Animation */}
-      <div className="relative">
+      {/* Scrollable Tab Content */}
+      <div className="flex-1 overflow-y-auto overflow-x-hidden">
         <div className="transition-all duration-300 ease-in-out">
           {tabs[activeTab].content}
         </div>

@@ -154,7 +154,7 @@ const GeneralInfo = () => {
     <form
       ref={formRef}
       onSubmit={onSubmit}
-      className="flex items-start max-w-2xl flex-col gap-4"
+      className="flex items-start max-w-2xl flex-col gap-6 pb-8"
     >
       {/* NAME */}
       <div className="w-full">
@@ -199,21 +199,6 @@ const GeneralInfo = () => {
         />
       </div>
 
-      {/* WEIGHT */}
-      <div className="w-full">
-        <div className="mb-2 block">
-          <Label className="text-base" htmlFor="weight" value="Weight" />
-        </div>
-        <TextInput
-          onChange={handleInputChange}
-          id="weight"
-          name="weight"
-          required
-          type="number"
-          step="0.01"
-        />
-      </div>
-
       {/* QUANTITY */}
       <div className="w-full">
         <div className="mb-2 block">
@@ -223,21 +208,20 @@ const GeneralInfo = () => {
           onChange={handleInputChange}
           id="quantity"
           name="quantity"
-          type="number"
-          defaultValue={0}
           required
+          type="number"
         />
       </div>
 
       {/* CATEGORY */}
-      <div className="w-full" id="select">
+      <div className="w-full">
         <div className="mb-2 block">
-          <Label htmlFor="category" value="Category" />
+          <Label className="text-base" htmlFor="categoryId" value="Category" />
         </div>
         <Select
           onChange={handleInputChange}
+          id="categoryId"
           name="categoryId"
-          id="category"
           required
         >
           <option value={''}>None</option>
@@ -308,28 +292,31 @@ const GeneralInfo = () => {
         />
       </div>
 
-      {/* IS PUBLISHED */}
-      <ToggleSwitch
-        checked={isPublished}
-        label="Published"
-        onChange={changeIsPublished}
-      />
+      {/* TOGGLE SWITCHES */}
+      <div className="w-full space-y-4">
+        {/* IS PUBLISHED */}
+        <ToggleSwitch
+          checked={isPublished}
+          label="Published"
+          onChange={changeIsPublished}
+        />
 
-      {/* IS MOST SOLD */}
-      <ToggleSwitch
-        checked={isMostSold}
-        label="Most sold"
-        onChange={changeIsMostSold}
-      />
+        {/* IS MOST SOLD */}
+        <ToggleSwitch
+          checked={isMostSold}
+          label="Most sold"
+          onChange={changeIsMostSold}
+        />
 
-      {/* IS RECOMMENDED */}
-      <ToggleSwitch
-        checked={isRecommended}
-        label="Recommended"
-        onChange={changeIsRecommended}
-      />
+        {/* IS RECOMMENDED */}
+        <ToggleSwitch
+          checked={isRecommended}
+          label="Recommended"
+          onChange={changeIsRecommended}
+        />
+      </div>
 
-      <Button className="mt-4" type="submit">
+      <Button className="mt-6" type="submit">
         Save
       </Button>
     </form>

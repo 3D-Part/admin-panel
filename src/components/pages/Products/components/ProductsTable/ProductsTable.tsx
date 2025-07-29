@@ -249,7 +249,7 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
       onPageChange={(page) => changeCurrentPage(page)}
       count={count}
     >
-      <div className="overflow-x-auto relative min-h-[100px] table-container">
+      <div className="table-container">
         <Table className="w-full">
           <Table.Head className="table-header">
             {/* <Table.HeadCell /> */}
@@ -263,28 +263,30 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
               <span className="sr-only">Actions</span>
             </Table.HeadCell>
           </Table.Head>
-
-          {/* {!loader && ( */}
-          <Table.Body className="divide-y divide-gray-100 dark:divide-gray-800">
-            {currentPageProducts.map((product) => {
-              return (
-                <TableItem
-                  key={product.id}
-                  product={product}
-                  onWarningModalOpen={onWarningModalOpen}
-                />
-              )
-            })}
-          </Table.Body>
-          {/* )} */}
         </Table>
-        {loader && (
-          <div
-            className={`absolute inset-0 flex items-center justify-center ${loaderBg} rounded-xl`}
-          >
-            <Loader />
-          </div>
-        )}
+
+        <div className="table-body-container relative">
+          <Table className="w-full">
+            <Table.Body className="divide-y divide-gray-100 dark:divide-gray-800">
+              {currentPageProducts.map((product) => {
+                return (
+                  <TableItem
+                    key={product.id}
+                    product={product}
+                    onWarningModalOpen={onWarningModalOpen}
+                  />
+                )
+              })}
+            </Table.Body>
+          </Table>
+          {loader && (
+            <div
+              className={`absolute inset-0 flex items-center justify-center ${loaderBg} rounded-xl`}
+            >
+              <Loader />
+            </div>
+          )}
+        </div>
       </div>
 
       {/* <Pagination

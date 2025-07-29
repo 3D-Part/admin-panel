@@ -26,9 +26,12 @@ export const EditProduct = () => {
   }, [activeProduct, router])
 
   return (
-    <div className="w-full">
-      <div className="w-full flex-wrap flex justify-between gap-4 items-center mb-12 ">
-        <h2 className="text-gray-900 dark:text-white text-4xl font-bold">{activeProduct.name}</h2>
+    <div className="w-full h-full flex flex-col">
+      {/* Fixed Header */}
+      <div className="flex-shrink-0 w-full flex-wrap flex justify-between gap-4 items-center mb-8">
+        <h2 className="text-gray-900 dark:text-white text-4xl font-bold">
+          {activeProduct.name}
+        </h2>
         <div className="flex items-center gap-4">
           <Button color="purple" onClick={test}>
             Add on sale <HiPlus className="ml-2" />
@@ -38,7 +41,11 @@ export const EditProduct = () => {
           </Button>
         </div>
       </div>
-      <TabsMenu />
+
+      {/* Scrollable Content */}
+      <div className="flex-1 overflow-hidden">
+        <TabsMenu />
+      </div>
     </div>
   )
 }
