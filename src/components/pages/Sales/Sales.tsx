@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 import { PaginationData, PromoCode, Sale } from '@/shared/types'
-import { useSalesSliceStore } from '@/store/store'
+import { useSalesSliceStore, useCurrentUserStore } from '@/store/store'
 import { SalesTable } from './components/SalesTable/SalesTable'
 import { WarningModal } from '@/components/common'
 import { toast } from 'react-toastify'
@@ -10,6 +10,8 @@ import { SalesHeader } from './components/SalesHeader/SalesHeader'
 import AddNewSaleModal from './components/Modals/AddNewSaleModal/AddNewSaleModal'
 import EditSaleModal from './components/Modals/EditSaleModal/EditSaleModal'
 import { SalesAPI } from '@/services'
+import { hasPermission } from '@/shared/helpers/permissions'
+import { PermissionEnum } from '@/shared/types'
 
 export const Sales = () => {
   const [isWarningModalOpen, setIsWarningModalOpen] = useState(false)
@@ -26,6 +28,14 @@ export const Sales = () => {
     totalPages,
   } = useSalesSliceStore()
 
+  const { currentUser } = useCurrentUserStore()
+
+  const hasWritePermission = hasPermission(
+    currentUser?.permissions,
+    PermissionEnum.SALE_WRITE,
+    currentUser?.role
+  )
+
   useEffect(() => {
     if (currentPage > totalPages && currentPage > 1) {
       changeCurrentPage(currentPage - 1)
@@ -41,6 +51,9 @@ export const Sales = () => {
   }
 
   const onWarningModalOpen = (sale: Sale) => {
+    if (!hasWritePermission) {
+      return
+    }
     setIsWarningModalOpen(true)
     activeSaleRef.current = sale
   }

@@ -3,7 +3,11 @@
 import { Pagination, Table } from 'flowbite-react'
 import React, { useCallback, useEffect, useState } from 'react'
 import { TableItem } from './TableItem/TableItem'
-import { useSalesSliceStore, useUISliceStore } from '@/store/store'
+import {
+  useSalesSliceStore,
+  useUISliceStore,
+  useCurrentUserStore,
+} from '@/store/store'
 import {
   Loader,
   ResponsiveTableWrapper,
@@ -12,6 +16,8 @@ import {
 import { PaginationData, Sale } from '@/shared/types'
 import dateTimeFormat from '@/shared/helpers/dateTimeFormat'
 import EditSaleModal from '../Modals/EditSaleModal/EditSaleModal'
+import { hasPermission } from '@/shared/helpers/permissions'
+import { PermissionEnum } from '@/shared/types'
 
 type SalesTableType = {
   onWarningModalOpen: (sale: Sale) => void
@@ -33,6 +39,14 @@ export const SalesTable: React.FC<SalesTableType> = ({
     count,
     changeActiveSale,
   } = useSalesSliceStore()
+
+  const { currentUser } = useCurrentUserStore()
+
+  const hasWritePermission = hasPermission(
+    currentUser?.permissions,
+    PermissionEnum.SALE_WRITE,
+    currentUser?.role
+  )
 
   const fetchPromoCodesData = useCallback(async () => {
     setLoader(true)
@@ -58,6 +72,9 @@ export const SalesTable: React.FC<SalesTableType> = ({
   }, [currentPage, fetchPromoCodesData])
 
   const handleEditSale = (sale: Sale) => {
+    if (!hasWritePermission) {
+      return
+    }
     changeActiveSale(sale)
     changeIsSaleEditModalOpen(true)
   }
@@ -73,7 +90,7 @@ export const SalesTable: React.FC<SalesTableType> = ({
       <MobileCardBuilder
         key={sale.id}
         title={name}
-        onClick={() => handleEditSale(sale)}
+        onClick={hasWritePermission ? () => handleEditSale(sale) : undefined}
         items={[
           {
             label: 'Start Date',
@@ -93,23 +110,25 @@ export const SalesTable: React.FC<SalesTableType> = ({
           },
         ]}
         actions={
-          <div
-            className="flex justify-end items-center gap-4"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <span
-              onClick={() => handleEditSale(sale)}
-              className="font-medium table-action-link cursor-pointer hover:underline"
+          hasWritePermission ? (
+            <div
+              className="flex justify-end items-center gap-4"
+              onClick={(e) => e.stopPropagation()}
             >
-              Edit
-            </span>
-            <span
-              onClick={() => onWarningModalOpen(sale)}
-              className="font-medium table-action-danger cursor-pointer hover:underline"
-            >
-              Remove
-            </span>
-          </div>
+              <span
+                onClick={() => handleEditSale(sale)}
+                className="font-medium table-action-link cursor-pointer hover:underline"
+              >
+                Edit
+              </span>
+              <span
+                onClick={() => onWarningModalOpen(sale)}
+                className="font-medium table-action-danger cursor-pointer hover:underline"
+              >
+                Remove
+              </span>
+            </div>
+          ) : null
         }
       />
     )

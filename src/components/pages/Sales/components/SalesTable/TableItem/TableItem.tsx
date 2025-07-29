@@ -2,10 +2,16 @@
 
 import dateTimeFormat from '@/shared/helpers/dateTimeFormat'
 import { Sale } from '@/shared/types'
-import { useSalesSliceStore, useUISliceStore } from '@/store/store'
+import {
+  useSalesSliceStore,
+  useUISliceStore,
+  useCurrentUserStore,
+} from '@/store/store'
 import { Table } from 'flowbite-react'
 import { useRouter } from 'next/navigation'
 import React from 'react'
+import { hasPermission } from '@/shared/helpers/permissions'
+import { PermissionEnum } from '@/shared/types'
 
 type TableItemType = {
   sale: Sale
@@ -26,8 +32,18 @@ export const TableItem: React.FC<TableItemType> = ({
   const router = useRouter()
 
   const { changeActiveSale } = useSalesSliceStore()
+  const { currentUser } = useCurrentUserStore()
+
+  const hasWritePermission = hasPermission(
+    currentUser?.permissions,
+    PermissionEnum.SALE_WRITE,
+    currentUser?.role
+  )
 
   const editSale = () => {
+    if (!hasWritePermission) {
+      return
+    }
     changeActiveSale(sale)
     changeIsSaleEditModalOpen(true)
   }
@@ -36,8 +52,10 @@ export const TableItem: React.FC<TableItemType> = ({
     <>
       <Table.Row className="table-row">
         <Table.Cell
-          onClick={editSale}
-          className="cursor-pointer whitespace-nowrap font-medium table-cell"
+          onClick={hasWritePermission ? editSale : undefined}
+          className={`whitespace-nowrap font-medium table-cell ${
+            hasWritePermission ? 'cursor-pointer' : ''
+          }`}
         >
           <div className="flex justify-start items-center gap-6">{name}</div>
         </Table.Cell>
@@ -56,20 +74,22 @@ export const TableItem: React.FC<TableItemType> = ({
           </div>
         </Table.Cell> */}
         <Table.Cell>
-          <div className="flex justify-end items-center gap-8">
-            <span
-              onClick={editSale}
-              className="font-medium table-action-link cursor-pointer hover:underline"
-            >
-              <p>Edit</p>
-            </span>
-            <span
-              onClick={() => onWarningModalOpen(sale)}
-              className="font-medium table-action-danger cursor-pointer hover:underline"
-            >
-              <p>Remove</p>
-            </span>
-          </div>
+          {hasWritePermission && (
+            <div className="flex justify-end items-center gap-8">
+              <span
+                onClick={editSale}
+                className="font-medium table-action-link cursor-pointer hover:underline"
+              >
+                <p>Edit</p>
+              </span>
+              <span
+                onClick={() => onWarningModalOpen(sale)}
+                className="font-medium table-action-danger cursor-pointer hover:underline"
+              >
+                <p>Remove</p>
+              </span>
+            </div>
+          )}
         </Table.Cell>
       </Table.Row>
     </>
