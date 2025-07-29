@@ -6,6 +6,7 @@ export interface EmployeesSliceInterface {
   allEmployees: User[]
   currentPageEmployees: User[]
   activeEmployee: User
+  selectedEmployee: User | null
   currentPage: number
   itemsPerPage: number
   totalPages: number
@@ -14,6 +15,7 @@ export interface EmployeesSliceInterface {
   sortOrder: 'ASC' | 'DESC'
   employeesFilters: {}
   changeActiveEmployee: (data: User) => void
+  changeSelectedEmployee: (data: User | null) => void
   changeCurrentPage: (data: number) => void
   changeItemsPerPage: (data: number) => void
   changeEmployeesFilter: (data: {}) => void
@@ -28,6 +30,7 @@ export const employeesSlice: StateCreator<EmployeesSliceInterface> = (
   allEmployees: [],
   currentPageEmployees: [],
   activeEmployee: {} as User,
+  selectedEmployee: null,
   currentPage: 1,
   itemsPerPage: 15,
   totalPages: 1,
@@ -38,6 +41,10 @@ export const employeesSlice: StateCreator<EmployeesSliceInterface> = (
 
   changeActiveEmployee: (data: User) => {
     set({ activeEmployee: data })
+  },
+
+  changeSelectedEmployee: (data: User | null) => {
+    set({ selectedEmployee: data })
   },
 
   changeCurrentPage: (data: number) => {

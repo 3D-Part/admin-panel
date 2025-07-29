@@ -54,7 +54,7 @@ const editEmployee = async (
   employeeData: EditEmployeeData
 ): Promise<boolean> => {
   try {
-    await API.patch(`${API_BASE_URL}/users/employee/${id}`, employeeData)
+    await API.put(`${API_BASE_URL}/users/employee/${id}`, employeeData)
     return true
   } catch (error) {
     console.error('Error editing employee:', error)
