@@ -2,10 +2,12 @@
 import { URLPartsEnum } from '@/shared/enums'
 import dateTimeFormat from '@/shared/helpers/dateTimeFormat'
 import { PromoCode } from '@/shared/types'
-import { usePromoCodesSliceStore } from '@/store/store'
+import { usePromoCodesSliceStore, useCurrentUserStore } from '@/store/store'
 import { Table } from 'flowbite-react'
 import { useRouter } from 'next/navigation'
 import React from 'react'
+import { hasPermission } from '@/shared/helpers/permissions'
+import { PermissionEnum } from '@/shared/types'
 
 type TableItemType = {
   promocode: PromoCode
@@ -24,8 +26,18 @@ export const TableItem: React.FC<TableItemType> = ({
   const router = useRouter()
 
   const { changeActivePromoCode } = usePromoCodesSliceStore()
+  const { currentUser } = useCurrentUserStore()
+
+  const hasWritePermission = hasPermission(
+    currentUser?.permissions,
+    PermissionEnum.PROMO_CODE_WRITE,
+    currentUser?.role
+  )
 
   const editPromoCode = () => {
+    if (!hasWritePermission) {
+      return
+    }
     changeActivePromoCode(promocode)
     router.push(URLPartsEnum.EditPromoCode)
   }
@@ -34,8 +46,10 @@ export const TableItem: React.FC<TableItemType> = ({
     <>
       <Table.Row className="table-row">
         <Table.Cell
-          onClick={editPromoCode}
-          className="cursor-pointer whitespace-nowrap font-medium table-cell"
+          onClick={hasWritePermission ? editPromoCode : undefined}
+          className={`whitespace-nowrap font-medium table-cell ${
+            hasWritePermission ? 'cursor-pointer' : ''
+          }`}
         >
           <div className="flex justify-start items-center gap-6">{code}</div>
         </Table.Cell>
@@ -56,20 +70,22 @@ export const TableItem: React.FC<TableItemType> = ({
         </Table.Cell>
 
         <Table.Cell>
-          <div className="flex justify-end items-center gap-8">
-            <span
-              onClick={editPromoCode}
-              className="font-medium table-action-link cursor-pointer hover:underline"
-            >
-              <p>Edit</p>
-            </span>
-            <span
-              onClick={() => onWarningModalOpen(promocode)}
-              className="font-medium table-action-danger cursor-pointer hover:underline"
-            >
-              <p>Remove</p>
-            </span>
-          </div>
+          {hasWritePermission && (
+            <div className="flex justify-end items-center gap-8">
+              <span
+                onClick={editPromoCode}
+                className="font-medium table-action-link cursor-pointer hover:underline"
+              >
+                <p>Edit</p>
+              </span>
+              <span
+                onClick={() => onWarningModalOpen(promocode)}
+                className="font-medium table-action-danger cursor-pointer hover:underline"
+              >
+                <p>Remove</p>
+              </span>
+            </div>
+          )}
         </Table.Cell>
       </Table.Row>
     </>

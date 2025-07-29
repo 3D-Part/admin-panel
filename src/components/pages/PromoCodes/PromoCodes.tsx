@@ -5,12 +5,15 @@ import { PaginationData, PromoCode } from '@/shared/types'
 import {
   usePromoCodesSliceStore,
   useSubscribersSliceStore,
+  useCurrentUserStore,
 } from '@/store/store'
 import { PromoCodesTable } from './components/PromoCodesTable/PromoCodesTable'
 import { PromoCodesHeader } from './components/PromoCodesHeader/PromoCodesHeader'
 import { WarningModal } from '@/components/common'
 import PromoCodesAPI from '@/services/promoCodes'
 import { toast } from 'react-toastify'
+import { hasPermission } from '@/shared/helpers/permissions'
+import { PermissionEnum } from '@/shared/types'
 
 export const PromoCodes = () => {
   const [isWarningModalOpen, setIsWarningModalOpen] = useState(false)
@@ -27,6 +30,14 @@ export const PromoCodes = () => {
     totalPages,
   } = usePromoCodesSliceStore()
 
+  const { currentUser } = useCurrentUserStore()
+
+  const hasWritePermission = hasPermission(
+    currentUser?.permissions,
+    PermissionEnum.PROMO_CODE_WRITE,
+    currentUser?.role
+  )
+
   useEffect(() => {
     if (currentPage > totalPages && currentPage > 1) {
       changeCurrentPage(currentPage - 1)
@@ -42,6 +53,9 @@ export const PromoCodes = () => {
   }
 
   const onWarningModalOpen = (promoCode: PromoCode) => {
+    if (!hasWritePermission) {
+      return
+    }
     setIsWarningModalOpen(true)
     activePromoCodeRef.current = promoCode
   }

@@ -152,6 +152,7 @@ export const OrdersTable = () => {
       totalPages={totalPages}
       onPageChange={(page) => changeCurrentPage(page)}
       count={count}
+      className="mt-0"
     >
       <div className="table-container">
         <Table className="w-full table-fixed">

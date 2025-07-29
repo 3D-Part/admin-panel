@@ -3,7 +3,7 @@
 import { Pagination, Table } from 'flowbite-react'
 import React, { useCallback, useEffect, useState } from 'react'
 import { TableItem } from './TableItem/TableItem'
-import { usePromoCodesSliceStore } from '@/store/store'
+import { usePromoCodesSliceStore, useCurrentUserStore } from '@/store/store'
 import {
   Loader,
   ResponsiveTableWrapper,
@@ -13,6 +13,8 @@ import { PaginationData, PromoCode } from '@/shared/types'
 import dateTimeFormat from '@/shared/helpers/dateTimeFormat'
 import { useRouter } from 'next/navigation'
 import { URLPartsEnum } from '@/shared/enums'
+import { hasPermission } from '@/shared/helpers/permissions'
+import { PermissionEnum } from '@/shared/types'
 
 type PromoCodesTableType = {
   onWarningModalOpen: (promocode: PromoCode) => void
@@ -34,6 +36,14 @@ export const PromoCodesTable: React.FC<PromoCodesTableType> = ({
     count,
     changeActivePromoCode,
   } = usePromoCodesSliceStore()
+
+  const { currentUser } = useCurrentUserStore()
+
+  const hasWritePermission = hasPermission(
+    currentUser?.permissions,
+    PermissionEnum.PROMO_CODE_WRITE,
+    currentUser?.role
+  )
 
   const fetchPromoCodesData = useCallback(async () => {
     setLoader(true)
@@ -63,6 +73,9 @@ export const PromoCodesTable: React.FC<PromoCodesTableType> = ({
   }, [currentPage, fetchPromoCodesData])
 
   const handleEditPromoCode = (promocode: PromoCode) => {
+    if (!hasWritePermission) {
+      return
+    }
     changeActivePromoCode(promocode)
     router.push(URLPartsEnum.EditPromoCode)
   }
@@ -79,7 +92,9 @@ export const PromoCodesTable: React.FC<PromoCodesTableType> = ({
         key={promocode.id}
         title={code}
         subtitle={`${discountPercentage}% discount`}
-        onClick={() => handleEditPromoCode(promocode)}
+        onClick={
+          hasWritePermission ? () => handleEditPromoCode(promocode) : undefined
+        }
         items={[
           {
             label: 'Start Date',
@@ -107,23 +122,25 @@ export const PromoCodesTable: React.FC<PromoCodesTableType> = ({
           },
         ]}
         actions={
-          <div
-            className="flex justify-end items-center gap-4"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <span
-              onClick={() => handleEditPromoCode(promocode)}
-              className="font-medium table-action-link cursor-pointer hover:underline"
+          hasWritePermission ? (
+            <div
+              className="flex justify-end items-center gap-4"
+              onClick={(e) => e.stopPropagation()}
             >
-              Edit
-            </span>
-            <span
-              onClick={() => onWarningModalOpen(promocode)}
-              className="font-medium table-action-danger cursor-pointer hover:underline"
-            >
-              Remove
-            </span>
-          </div>
+              <span
+                onClick={() => handleEditPromoCode(promocode)}
+                className="font-medium table-action-link cursor-pointer hover:underline"
+              >
+                Edit
+              </span>
+              <span
+                onClick={() => onWarningModalOpen(promocode)}
+                className="font-medium table-action-danger cursor-pointer hover:underline"
+              >
+                Remove
+              </span>
+            </div>
+          ) : null
         }
       />
     )
