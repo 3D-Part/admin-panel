@@ -1,12 +1,18 @@
 import { URLPartsEnum } from '@/shared/enums'
 
 import { PaginationData, ProductData, ProductFormBody } from '@/shared/types'
-import { useProductsStore, useUISliceStore } from '@/store/store'
+import {
+  useProductsStore,
+  useUISliceStore,
+  useCurrentUserStore,
+} from '@/store/store'
 import { Avatar, Dropdown, Table } from 'flowbite-react'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { HiDotsVertical } from 'react-icons/hi'
 import { toast } from 'react-toastify'
+import { hasPermission } from '@/shared/helpers/permissions'
+import { PermissionEnum } from '@/shared/types'
 
 type TableItemType = {
   product: ProductData
@@ -23,6 +29,7 @@ export const TableItem: React.FC<TableItemType> = ({
   const { name, category, manufacturer, sku, price, quantity, images } = product
 
   const router = useRouter()
+  const { currentUser } = useCurrentUserStore()
 
   const { changeIsAddProductsOnSaleModalOpen } = useUISliceStore()
 
@@ -33,6 +40,13 @@ export const TableItem: React.FC<TableItemType> = ({
     itemsPerPage,
     fetchProducts,
   } = useProductsStore()
+
+  // Check if user has write permission for products
+  const hasWritePermission = hasPermission(
+    currentUser?.permissions,
+    PermissionEnum.PRODUCT_WRITE,
+    currentUser?.role
+  )
 
   const addProductOnSale = () => {
     changeActiveProduct(product)
@@ -76,6 +90,10 @@ export const TableItem: React.FC<TableItemType> = ({
   }
 
   const editProduct = () => {
+    // Only allow edit if user has write permission
+    if (!hasWritePermission) {
+      return
+    }
     changeActiveProduct(product)
     router.push(URLPartsEnum.EditProduct)
   }
@@ -92,8 +110,10 @@ export const TableItem: React.FC<TableItemType> = ({
     <>
       <Table.Row className="table-row">
         <Table.Cell
-          onClick={editProduct}
-          className="cursor-pointer whitespace-nowrap font-medium table-cell w-1/3"
+          onClick={hasWritePermission ? editProduct : undefined}
+          className={`whitespace-nowrap font-medium table-cell w-1/3 ${
+            hasWritePermission ? 'cursor-pointer' : ''
+          }`}
         >
           <div className="flex justify-start items-center gap-4">
             <Avatar
@@ -152,49 +172,51 @@ export const TableItem: React.FC<TableItemType> = ({
           </span>
         </Table.Cell>
         <Table.Cell className="table-cell w-1/12">
-          <div className="flex justify-end items-center">
-            <Dropdown
-              inline
-              arrowIcon={false}
-              label={
-                <HiDotsVertical className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors duration-200" />
-              }
-              className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg"
-            >
-              <Dropdown.Item
-                onClick={editProduct}
-                className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
+          {hasWritePermission && (
+            <div className="flex justify-end items-center">
+              <Dropdown
+                inline
+                arrowIcon={false}
+                label={
+                  <HiDotsVertical className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors duration-200" />
+                }
+                className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg"
               >
-                <span className="font-medium table-action-link cursor-pointer">
-                  Edit
-                </span>
-              </Dropdown.Item>
-              <Dropdown.Item
-                onClick={duplicateProduct}
-                className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
-              >
-                <span className="font-medium table-action-link cursor-pointer">
-                  Duplicate
-                </span>
-              </Dropdown.Item>
-              <Dropdown.Item
-                onClick={addProductOnSale}
-                className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
-              >
-                <span className="font-medium table-action-link cursor-pointer">
-                  Add on sale
-                </span>
-              </Dropdown.Item>
-              <Dropdown.Item
-                onClick={() => onWarningModalOpen(product)}
-                className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
-              >
-                <span className="font-medium table-action-danger cursor-pointer">
-                  Remove
-                </span>
-              </Dropdown.Item>
-            </Dropdown>
-          </div>
+                <Dropdown.Item
+                  onClick={editProduct}
+                  className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
+                >
+                  <span className="font-medium table-action-link cursor-pointer">
+                    Edit
+                  </span>
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={duplicateProduct}
+                  className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
+                >
+                  <span className="font-medium table-action-link cursor-pointer">
+                    Duplicate
+                  </span>
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={addProductOnSale}
+                  className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
+                >
+                  <span className="font-medium table-action-link cursor-pointer">
+                    Add on sale
+                  </span>
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => onWarningModalOpen(product)}
+                  className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
+                >
+                  <span className="font-medium table-action-danger cursor-pointer">
+                    Remove
+                  </span>
+                </Dropdown.Item>
+              </Dropdown>
+            </div>
+          )}
         </Table.Cell>
       </Table.Row>
     </>

@@ -3,7 +3,11 @@
 import { Pagination, Table } from 'flowbite-react'
 import React, { useCallback, useEffect, useState } from 'react'
 import { TableItem } from './TableItem/TableItem'
-import { useProductsStore } from '@/store/store'
+import {
+  useProductsStore,
+  useUISliceStore,
+  useCurrentUserStore,
+} from '@/store/store'
 import {
   Loader,
   ResponsiveTableWrapper,
@@ -13,9 +17,10 @@ import { PaginationData, ProductData, ProductFormBody } from '@/shared/types'
 import { HiDotsVertical } from 'react-icons/hi'
 import { Dropdown } from 'flowbite-react'
 import { useRouter } from 'next/navigation'
-import { useUISliceStore } from '@/store/store'
 import { URLPartsEnum } from '@/shared/enums'
 import { toast } from 'react-toastify'
+import { hasPermission } from '@/shared/helpers/permissions'
+import { PermissionEnum } from '@/shared/types'
 
 type ProductsTableType = {
   onWarningModalOpen: (product: ProductData) => void
@@ -29,6 +34,7 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
   const [loader, setLoader] = useState(true)
 
   const router = useRouter()
+  const { currentUser } = useCurrentUserStore()
 
   const {
     currentPageProducts,
@@ -44,6 +50,13 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
   } = useProductsStore()
 
   const { changeIsAddProductsOnSaleModalOpen } = useUISliceStore()
+
+  // Check if user has write permission for products
+  const hasWritePermission = hasPermission(
+    currentUser?.permissions,
+    PermissionEnum.PRODUCT_WRITE,
+    currentUser?.role
+  )
 
   useEffect(() => {
     changeProductFilter({})
@@ -119,6 +132,10 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
     }
 
     const editProduct = () => {
+      // Only allow edit if user has write permission
+      if (!hasWritePermission) {
+        return
+      }
       changeActiveProduct(product)
       router.push(URLPartsEnum.EditProduct)
     }
@@ -128,47 +145,49 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
         className="flex justify-end items-center gap-2"
         onClick={(e) => e.stopPropagation()}
       >
-        <Dropdown
-          inline
-          arrowIcon={false}
-          label={
-            <HiDotsVertical className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors duration-200" />
-          }
-          className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg"
-        >
-          <Dropdown.Item
-            onClick={editProduct}
-            className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
+        {hasWritePermission && (
+          <Dropdown
+            inline
+            arrowIcon={false}
+            label={
+              <HiDotsVertical className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors duration-200" />
+            }
+            className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg"
           >
-            <span className="font-medium table-action-link cursor-pointer">
-              Edit
-            </span>
-          </Dropdown.Item>
-          <Dropdown.Item
-            onClick={duplicateProduct}
-            className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
-          >
-            <span className="font-medium table-action-link cursor-pointer">
-              Duplicate
-            </span>
-          </Dropdown.Item>
-          <Dropdown.Item
-            onClick={addProductOnSale}
-            className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
-          >
-            <span className="font-medium table-action-link cursor-pointer">
-              Add on sale
-            </span>
-          </Dropdown.Item>
-          <Dropdown.Item
-            onClick={() => onWarningModalOpen(product)}
-            className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
-          >
-            <span className="font-medium table-action-danger cursor-pointer">
-              Remove
-            </span>
-          </Dropdown.Item>
-        </Dropdown>
+            <Dropdown.Item
+              onClick={editProduct}
+              className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
+            >
+              <span className="font-medium table-action-link cursor-pointer">
+                Edit
+              </span>
+            </Dropdown.Item>
+            <Dropdown.Item
+              onClick={duplicateProduct}
+              className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
+            >
+              <span className="font-medium table-action-link cursor-pointer">
+                Duplicate
+              </span>
+            </Dropdown.Item>
+            <Dropdown.Item
+              onClick={addProductOnSale}
+              className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
+            >
+              <span className="font-medium table-action-link cursor-pointer">
+                Add on sale
+              </span>
+            </Dropdown.Item>
+            <Dropdown.Item
+              onClick={() => onWarningModalOpen(product)}
+              className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
+            >
+              <span className="font-medium table-action-danger cursor-pointer">
+                Remove
+              </span>
+            </Dropdown.Item>
+          </Dropdown>
+        )}
       </div>
     )
   }
@@ -181,6 +200,10 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
     const activeImageId = mainImage ? `${S3_URL}/${mainImage.imageId}` : ''
 
     const editProduct = () => {
+      // Only allow edit if user has write permission
+      if (!hasWritePermission) {
+        return
+      }
       changeActiveProduct(product)
       router.push(URLPartsEnum.EditProduct)
     }
@@ -190,7 +213,7 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
         key={product.id}
         title={name}
         subtitle={sku}
-        onClick={editProduct}
+        onClick={hasWritePermission ? editProduct : undefined}
         items={[
           {
             label: 'Category',
