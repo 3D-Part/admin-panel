@@ -97,8 +97,6 @@ export const AttributesTable: React.FC<AttributesTableType> = ({
         <Table className="w-full table-fixed">
           <Table.Head className="table-header">
             <Table.HeadCell className="table-cell">Name</Table.HeadCell>
-            <Table.HeadCell className="table-cell">Type</Table.HeadCell>
-            <Table.HeadCell className="table-cell">Required</Table.HeadCell>
             <Table.HeadCell className="table-cell">
               <span className="sr-only">Actions</span>
             </Table.HeadCell>

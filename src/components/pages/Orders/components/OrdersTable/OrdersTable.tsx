@@ -156,11 +156,11 @@ export const OrdersTable = () => {
       <div className="table-container">
         <Table className="w-full table-fixed">
           <Table.Head className="table-header">
-            <Table.HeadCell className="table-cell">Order ID</Table.HeadCell>
             <Table.HeadCell className="table-cell">Customer</Table.HeadCell>
+            <Table.HeadCell className="table-cell">City</Table.HeadCell>
             <Table.HeadCell className="table-cell">Date</Table.HeadCell>
-            <Table.HeadCell className="table-cell">Status</Table.HeadCell>
             <Table.HeadCell className="table-cell">Total</Table.HeadCell>
+            <Table.HeadCell className="table-cell">Status</Table.HeadCell>
             <Table.HeadCell className="table-cell">
               <span className="sr-only">Actions</span>
             </Table.HeadCell>

@@ -12,7 +12,7 @@ type TableItemType = {
 }
 
 export const TableItem: React.FC<TableItemType> = ({ order }) => {
-  const { fullName, email, city, price, status, createdAt } = order
+  const { fullName, email, city, price, status, createdAt, id } = order
 
   const [isFormModalOpen, setIsFormModalOpen] = useState(false)
   const [isOrderStatusModalOpen, setIsOrderStatusModalOpen] = useState(false)
@@ -34,7 +34,6 @@ export const TableItem: React.FC<TableItemType> = ({ order }) => {
         >
           {fullName}
         </Table.Cell>
-        <Table.Cell>{email}</Table.Cell>
         <Table.Cell>{city}</Table.Cell>
         <Table.Cell>{formattedDate}</Table.Cell>
         <Table.Cell>{price}KM</Table.Cell>

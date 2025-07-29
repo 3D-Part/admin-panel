@@ -76,13 +76,7 @@ const EmailsTable = () => {
       <div className="table-container">
         <Table className="w-full table-fixed">
           <Table.Head className="table-header">
-            <Table.HeadCell className="table-cell">Subject</Table.HeadCell>
-            <Table.HeadCell className="table-cell">Recipient</Table.HeadCell>
-            <Table.HeadCell className="table-cell">Sent Date</Table.HeadCell>
-            <Table.HeadCell className="table-cell">Status</Table.HeadCell>
-            <Table.HeadCell className="table-cell">
-              <span className="sr-only">Actions</span>
-            </Table.HeadCell>
+            <Table.HeadCell className="table-cell">Email</Table.HeadCell>
           </Table.Head>
         </Table>
 

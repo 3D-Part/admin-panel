@@ -42,17 +42,19 @@ export const TableItem: React.FC<TableItemType> = ({
 
         <Table.Cell className="whitespace-nowrap font-medium table-cell">
           <div className="flex justify-start items-center gap-6">
+            {discountPercentage}
+          </div>
+        </Table.Cell>
+
+        <Table.Cell className="whitespace-nowrap font-medium table-cell">
+          <div className="flex justify-start items-center gap-6">
             {startTime}
           </div>
         </Table.Cell>
         <Table.Cell className="whitespace-nowrap font-medium table-cell">
           <div className="flex justify-start items-center gap-6">{endTime}</div>
         </Table.Cell>
-        <Table.Cell className="whitespace-nowrap font-medium table-cell">
-          <div className="flex justify-start items-center gap-6">
-            {discountPercentage}
-          </div>
-        </Table.Cell>
+
         <Table.Cell>
           <div className="flex justify-end items-center gap-8">
             <span

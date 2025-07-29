@@ -144,7 +144,6 @@ export const PromoCodesTable: React.FC<PromoCodesTableType> = ({
             <Table.HeadCell className="table-cell">Discount</Table.HeadCell>
             <Table.HeadCell className="table-cell">Start Date</Table.HeadCell>
             <Table.HeadCell className="table-cell">End Date</Table.HeadCell>
-            <Table.HeadCell className="table-cell">Status</Table.HeadCell>
             <Table.HeadCell className="table-cell">
               <span className="sr-only">Actions</span>
             </Table.HeadCell>

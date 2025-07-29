@@ -25,7 +25,6 @@ export const TableItem: React.FC<TableItemType> = ({
           <div className="flex justify-start items-center gap-6">{name}</div>
         </Table.Cell>
         <Table.Cell>{parentCategory ? parentCategory.name : ''}</Table.Cell>
-        <Table.Cell>{slug}</Table.Cell>
         <Table.Cell>
           <div className="flex justify-end items-center gap-8">
             <span

@@ -109,10 +109,8 @@ export const CategoriesTable: React.FC<CategoriesTableType> = ({
         <Table className="w-full table-fixed">
           <Table.Head className="table-header">
             <Table.HeadCell className="table-cell">Name</Table.HeadCell>
-            <Table.HeadCell className="table-cell">Description</Table.HeadCell>
-            <Table.HeadCell className="table-cell">
-              Products Count
-            </Table.HeadCell>
+            <Table.HeadCell className="table-cell">Category</Table.HeadCell>
+
             <Table.HeadCell className="table-cell">
               <span className="sr-only">Actions</span>
             </Table.HeadCell>
