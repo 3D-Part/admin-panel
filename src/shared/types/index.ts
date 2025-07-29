@@ -456,3 +456,9 @@ export interface CreateEmployeeData {
   role: 'employee'
   permissions: PermissionEnum[]
 }
+
+export interface EditEmployeeData {
+  email: string
+  fullName: string
+  permissions: PermissionEnum[]
+}

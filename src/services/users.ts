@@ -4,6 +4,7 @@ import {
   SortParamsData,
   UsersData,
   CreateEmployeeData,
+  EditEmployeeData,
 } from '@/shared/types'
 
 const API_BASE_URL = process.env.API_KEY
@@ -48,9 +49,23 @@ const createEmployee = async (
   }
 }
 
+const editEmployee = async (
+  id: string,
+  employeeData: EditEmployeeData
+): Promise<boolean> => {
+  try {
+    await API.patch(`${API_BASE_URL}/users/employee/${id}`, employeeData)
+    return true
+  } catch (error) {
+    console.error('Error editing employee:', error)
+    return false
+  }
+}
+
 const UsersAPI = {
   getUsers,
   createEmployee,
+  editEmployee,
   // addNewManufacturer,
   // editManufacturer,
   // removeManufacture,
