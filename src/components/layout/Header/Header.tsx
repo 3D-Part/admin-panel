@@ -34,7 +34,7 @@ const SideBar = () => {
         fluid
         rounded
       >
-        <Navbar.Brand href="/products">
+        <Navbar.Brand href="/">
           <span className="self-center whitespace-nowrap text-xl font-semibold text-gray-900 dark:text-white">
             <Image
               src="/assets/img/logo.png"
@@ -51,11 +51,9 @@ const SideBar = () => {
           <Dropdown
             inline
             label={
-              <Avatar
-                alt="User settings"
-                img="https://www.atptour.com/-/media/alias/player-headshot/D643"
-                rounded
-              />
+              <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-base font-bold">
+                {(currentUser?.fullName?.charAt(0) || '3D').toUpperCase()}
+              </div>
             }
           >
             <Dropdown.Header>

@@ -280,13 +280,20 @@ export interface OrdersEmailsData {
 
 // USERS
 
+export type UserPermissions = {
+  createdAt: string
+  id: string
+  permission: PermissionEnum
+  updatedAt: string
+  userId: string
+}
 export interface User {
   id: string
   fullName: string
   email: string
   password: string
   image: string | null
-  role: ''
+  role: string
   provider: string
   phone: string | null
   state: string | null
@@ -298,6 +305,7 @@ export interface User {
   updatedAt: string
   createdAt: string
   orders: Order[]
+  permissions: UserPermissions
 }
 export interface UsersData {
   count: number

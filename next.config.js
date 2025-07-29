@@ -18,16 +18,16 @@ const nextConfig = {
 
   async redirects() {
     return [
-      {
-        source: '/home',
-        destination: '/products',
-        statusCode: 301,
-      },
-      {
-        source: '/',
-        destination: '/products',
-        statusCode: 301,
-      },
+      // {
+      //   source: '/home',
+      //   destination: '/products',
+      //   statusCode: 301,
+      // },
+      // {
+      //   source: '/',
+      //   destination: '/products',
+      //   statusCode: 301,
+      // },
       {
         source: '/my-index',
         destination: '/index',
