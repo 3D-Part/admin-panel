@@ -10,7 +10,6 @@ import {
   MobileCardBuilder,
 } from '@/components/common'
 import { PaginationData, ProductData, ProductFormBody } from '@/shared/types'
-import { Avatar } from 'flowbite-react'
 import { HiDotsVertical } from 'react-icons/hi'
 import { Dropdown } from 'flowbite-react'
 import { useRouter } from 'next/navigation'
@@ -250,22 +249,28 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
       count={count}
     >
       <div className="table-container">
-        <Table className="w-full table-fixed">
+        <Table className="w-full">
           <Table.Head className="table-header">
-            <Table.HeadCell className="table-cell">Name</Table.HeadCell>
-            <Table.HeadCell className="table-cell">Category</Table.HeadCell>
-            <Table.HeadCell className="table-cell">Manufacturer</Table.HeadCell>
-            <Table.HeadCell className="table-cell">SKU</Table.HeadCell>
-            <Table.HeadCell className="table-cell">Price</Table.HeadCell>
-            <Table.HeadCell className="table-cell">Quantity</Table.HeadCell>
-            <Table.HeadCell className="table-cell">
+            <Table.HeadCell className="table-cell w-1/3">Name</Table.HeadCell>
+            <Table.HeadCell className="table-cell w-1/6">
+              Category
+            </Table.HeadCell>
+            <Table.HeadCell className="table-cell w-1/6">
+              Manufacturer
+            </Table.HeadCell>
+            <Table.HeadCell className="table-cell w-1/6">SKU</Table.HeadCell>
+            <Table.HeadCell className="table-cell w-1/12">Price</Table.HeadCell>
+            <Table.HeadCell className="table-cell w-1/12">
+              Quantity
+            </Table.HeadCell>
+            <Table.HeadCell className="table-cell w-1/12">
               <span className="sr-only">Actions</span>
             </Table.HeadCell>
           </Table.Head>
         </Table>
 
         <div className="table-body-container relative">
-          <Table className="w-full table-fixed">
+          <Table className="w-full">
             <Table.Body className="divide-y divide-gray-100 dark:divide-gray-800">
               {currentPageProducts.map((product) => {
                 return (

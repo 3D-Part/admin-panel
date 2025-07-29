@@ -93,7 +93,7 @@ export const TableItem: React.FC<TableItemType> = ({
       <Table.Row className="table-row">
         <Table.Cell
           onClick={editProduct}
-          className="cursor-pointer whitespace-nowrap font-medium table-cell"
+          className="cursor-pointer whitespace-nowrap font-medium table-cell w-1/3"
         >
           <div className="flex justify-start items-center gap-4">
             <Avatar
@@ -109,7 +109,7 @@ export const TableItem: React.FC<TableItemType> = ({
             </span>
           </div>
         </Table.Cell>
-        <Table.Cell className="table-cell">
+        <Table.Cell className="table-cell w-1/6">
           {category ? (
             <span className="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400">
               {category.name}
@@ -118,7 +118,7 @@ export const TableItem: React.FC<TableItemType> = ({
             <span className="text-gray-400 dark:text-gray-500">—</span>
           )}
         </Table.Cell>
-        <Table.Cell className="table-cell">
+        <Table.Cell className="table-cell w-1/6">
           {manufacturer ? (
             <span className="text-gray-700 dark:text-gray-300">
               {manufacturer.name}
@@ -127,17 +127,17 @@ export const TableItem: React.FC<TableItemType> = ({
             <span className="text-gray-400 dark:text-gray-500">—</span>
           )}
         </Table.Cell>
-        <Table.Cell className="table-cell">
+        <Table.Cell className="table-cell w-1/6">
           <span className="font-mono text-sm text-gray-600 dark:text-gray-400">
             {sku}
           </span>
         </Table.Cell>
-        <Table.Cell className="table-cell">
+        <Table.Cell className="table-cell w-1/12">
           <span className="font-semibold text-green-600 dark:text-green-400">
             {price} KM
           </span>
         </Table.Cell>
-        <Table.Cell className="table-cell">
+        <Table.Cell className="table-cell w-1/12">
           <span
             className={`font-medium ${
               quantity > 0
@@ -148,7 +148,7 @@ export const TableItem: React.FC<TableItemType> = ({
             {quantity}
           </span>
         </Table.Cell>
-        <Table.Cell className="table-cell">
+        <Table.Cell className="table-cell w-1/12">
           <div className="flex justify-end items-center">
             <Dropdown
               inline
