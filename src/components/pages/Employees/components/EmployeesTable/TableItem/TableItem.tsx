@@ -19,6 +19,7 @@ export const TableItem: React.FC<TableItemType> = ({ employee }) => {
       <Table.Cell className="whitespace-nowrap font-medium table-cell">
         <div className="flex justify-start items-center gap-6">{email}</div>
       </Table.Cell>
+      <Table.Cell className="whitespace-nowrap font-medium table-cell"></Table.Cell>
     </Table.Row>
   )
 }

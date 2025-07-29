@@ -79,8 +79,6 @@ export const EmployeesTable = () => {
           <Table.Head className="table-header">
             <Table.HeadCell className="table-cell">Name</Table.HeadCell>
             <Table.HeadCell className="table-cell">Email</Table.HeadCell>
-            <Table.HeadCell className="table-cell">Role</Table.HeadCell>
-            <Table.HeadCell className="table-cell">Status</Table.HeadCell>
             <Table.HeadCell className="table-cell">
               <span className="sr-only">Actions</span>
             </Table.HeadCell>
