@@ -138,7 +138,7 @@ export const PromoCodesTable: React.FC<PromoCodesTableType> = ({
       count={count}
     >
       <div className="table-container">
-        <Table className="w-full table-fixed">
+        <Table className="w-full">
           <Table.Head className="table-header">
             <Table.HeadCell className="table-cell">Code</Table.HeadCell>
             <Table.HeadCell className="table-cell">Discount</Table.HeadCell>
@@ -151,7 +151,7 @@ export const PromoCodesTable: React.FC<PromoCodesTableType> = ({
         </Table>
 
         <div className="table-body-container relative">
-          <Table className="w-full table-fixed">
+          <Table className="w-full">
             <Table.Body className="divide-y divide-gray-100 dark:divide-gray-800">
               {currentPagePromoCodes.map((promoCode) => {
                 return (

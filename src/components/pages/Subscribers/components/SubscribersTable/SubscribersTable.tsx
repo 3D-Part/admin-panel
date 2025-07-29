@@ -79,14 +79,14 @@ export const SubscribersTable = () => {
       count={count}
     >
       <div className="table-container">
-        <Table className="w-full table-fixed">
+        <Table className="w-full">
           <Table.Head className="table-header">
             <Table.HeadCell className="table-cell">Email</Table.HeadCell>
           </Table.Head>
         </Table>
 
         <div className="table-body-container relative">
-          <Table className="w-full table-fixed">
+          <Table className="w-full">
             <Table.Body className="divide-y divide-gray-100 dark:divide-gray-800">
               {currentPageSubscribers.map((subscriber) => {
                 return <TableItem key={subscriber.id} subscriber={subscriber} />

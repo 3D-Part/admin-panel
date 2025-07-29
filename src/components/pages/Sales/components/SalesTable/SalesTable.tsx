@@ -124,7 +124,7 @@ export const SalesTable: React.FC<SalesTableType> = ({
       count={count}
     >
       <div className="table-container">
-        <Table className="w-full table-fixed">
+        <Table className="w-full">
           <Table.Head className="table-header">
             <Table.HeadCell className="table-cell">Name</Table.HeadCell>
             <Table.HeadCell className="table-cell">Start Date</Table.HeadCell>
@@ -136,7 +136,7 @@ export const SalesTable: React.FC<SalesTableType> = ({
         </Table>
 
         <div className="table-body-container relative">
-          <Table className="w-full table-fixed">
+          <Table className="w-full">
             <Table.Body className="divide-y divide-gray-100 dark:divide-gray-800">
               {currentPageSales.map((sale) => {
                 return (
