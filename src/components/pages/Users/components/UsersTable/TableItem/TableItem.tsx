@@ -27,7 +27,7 @@ export const TableItem: React.FC<TableItemType> = ({ user }) => {
           </div>
         </Table.Cell>
         <Table.Cell className="whitespace-nowrap font-medium table-cell">
-          <div className="flex justify-start items-center gap-6">{email}</div>
+          <div className="flex justify-start items-center gap-6 ">{email}</div>
         </Table.Cell>
         <Table.Cell className="whitespace-nowrap font-medium table-cell">
           <div className="flex justify-start items-center gap-6">{phone}</div>
@@ -35,19 +35,29 @@ export const TableItem: React.FC<TableItemType> = ({ user }) => {
         <Table.Cell className="whitespace-nowrap font-medium table-cell">
           <div className="flex justify-start items-center gap-6">{city}</div>
         </Table.Cell>
+
         <Table.Cell className="whitespace-nowrap font-medium table-cell">
-          <div className="flex justify-start items-center gap-6">{street}</div>
-        </Table.Cell>
-        <Table.Cell className="whitespace-nowrap font-medium table-cell">
-          <div className="flex justify-start items-center gap-6">
-            {availablePoints}
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1">
+              <span className="font-semibold text-green-600 dark:text-green-400">
+                {availablePoints}
+              </span>
+              <span className="text-gray-500 dark:text-gray-400 text-xs">
+                available
+              </span>
+            </div>
+            <div className="w-px h-4 bg-gray-300 dark:bg-gray-600"></div>
+            <div className="flex items-center gap-1">
+              <span className="font-medium text-blue-600 dark:text-blue-400">
+                {usedPoints}
+              </span>
+              <span className="text-gray-400 dark:text-gray-500 text-xs">
+                used
+              </span>
+            </div>
           </div>
         </Table.Cell>
-        <Table.Cell className="whitespace-nowrap font-medium table-cell">
-          <div className="flex justify-start items-center gap-6">
-            {usedPoints}
-          </div>
-        </Table.Cell>
+
         {/* <Table.Cell>
             <div className="flex justify-end items-center gap-8">
                 <span className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">

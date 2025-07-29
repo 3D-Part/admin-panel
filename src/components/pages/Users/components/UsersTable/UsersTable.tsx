@@ -97,19 +97,27 @@ export const UsersTable = () => {
             ),
           },
           {
-            label: 'Available Points',
+            label: 'Points',
             value: (
-              <span className="font-semibold text-green-600 dark:text-green-400">
-                {availablePoints}
-              </span>
-            ),
-          },
-          {
-            label: 'Used Points',
-            value: (
-              <span className="font-semibold text-blue-600 dark:text-blue-400">
-                {usedPoints}
-              </span>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-1">
+                  <span className="font-semibold text-green-600 dark:text-green-400">
+                    {availablePoints}
+                  </span>
+                  <span className="text-gray-500 dark:text-gray-400 text-xs">
+                    available
+                  </span>
+                </div>
+                <div className="w-px h-4 bg-gray-300 dark:bg-gray-600"></div>
+                <div className="flex items-center gap-1">
+                  <span className="font-medium text-blue-600 dark:text-blue-400">
+                    {usedPoints}
+                  </span>
+                  <span className="text-gray-400 dark:text-gray-500 text-xs">
+                    used
+                  </span>
+                </div>
+              </div>
             ),
           },
         ]}
@@ -132,14 +140,7 @@ export const UsersTable = () => {
             <Table.HeadCell className="table-cell">Email</Table.HeadCell>
             <Table.HeadCell className="table-cell">Phone</Table.HeadCell>
             <Table.HeadCell className="table-cell">City</Table.HeadCell>
-            <Table.HeadCell className="table-cell">Street</Table.HeadCell>
-            <Table.HeadCell className="table-cell">
-              Available Points
-            </Table.HeadCell>
-            <Table.HeadCell className="table-cell">Used Points</Table.HeadCell>
-            <Table.HeadCell className="table-cell">
-              <span className="sr-only">Actions</span>
-            </Table.HeadCell>
+            <Table.HeadCell className="table-cell">Points</Table.HeadCell>
           </Table.Head>
         </Table>
 
