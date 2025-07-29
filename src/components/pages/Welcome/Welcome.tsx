@@ -2,6 +2,10 @@
 
 import React from 'react'
 import { useCurrentUserStore } from '@/store/store'
+import {
+  hasAnyPermission,
+  PERMISSION_GROUPS,
+} from '@/shared/helpers/permissions'
 
 export const Welcome = () => {
   const { currentUser } = useCurrentUserStore()
@@ -10,9 +14,109 @@ export const Welcome = () => {
     return null
   }
 
+  // Get user's available features based on permissions
+  const getAvailableFeatures = () => {
+    const features = []
+
+    if (
+      hasAnyPermission(
+        currentUser.permissions,
+        PERMISSION_GROUPS.PRODUCTS,
+        currentUser.role
+      )
+    ) {
+      features.push('Products Management')
+    }
+    if (
+      hasAnyPermission(
+        currentUser.permissions,
+        PERMISSION_GROUPS.CATEGORIES,
+        currentUser.role
+      )
+    ) {
+      features.push('Categories Management')
+    }
+    if (
+      hasAnyPermission(
+        currentUser.permissions,
+        PERMISSION_GROUPS.MANUFACTURERS,
+        currentUser.role
+      )
+    ) {
+      features.push('Manufacturers Management')
+    }
+    if (
+      hasAnyPermission(
+        currentUser.permissions,
+        PERMISSION_GROUPS.ATTRIBUTES,
+        currentUser.role
+      )
+    ) {
+      features.push('Attributes Management')
+    }
+    if (
+      hasAnyPermission(
+        currentUser.permissions,
+        PERMISSION_GROUPS.ORDERS,
+        currentUser.role
+      )
+    ) {
+      features.push('Orders Management')
+    }
+    if (
+      hasAnyPermission(
+        currentUser.permissions,
+        PERMISSION_GROUPS.PROMO_CODES,
+        currentUser.role
+      )
+    ) {
+      features.push('Promo Codes Management')
+    }
+    if (
+      hasAnyPermission(
+        currentUser.permissions,
+        PERMISSION_GROUPS.SALES,
+        currentUser.role
+      )
+    ) {
+      features.push('Sales Management')
+    }
+    if (
+      hasAnyPermission(
+        currentUser.permissions,
+        PERMISSION_GROUPS.USERS,
+        currentUser.role
+      )
+    ) {
+      features.push('Users Management')
+    }
+    if (
+      hasAnyPermission(
+        currentUser.permissions,
+        PERMISSION_GROUPS.EMPLOYEES,
+        currentUser.role
+      )
+    ) {
+      features.push('Employees Management')
+    }
+    if (
+      hasAnyPermission(
+        currentUser.permissions,
+        PERMISSION_GROUPS.SUBSCRIBERS,
+        currentUser.role
+      )
+    ) {
+      features.push('Subscribers Management')
+    }
+
+    return features
+  }
+
+  const availableFeatures = getAvailableFeatures()
+
   return (
-    <div className="w-full flex flex-col h-full overflow-hidden">
-      <div className="flex-1 flex items-center justify-center p-8">
+    <div className="w-full flex flex-col h-full overflow-hidden md:overflow-y-auto">
+      <div className="flex-1 flex items-center justify-center">
         <div className="max-w-4xl mx-auto text-center">
           {/* Welcome Header */}
           <div className="mb-8">
@@ -38,6 +142,9 @@ export const Welcome = () => {
             <p className="text-gray-600 dark:text-gray-300">
               {currentUser.email}
             </p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+              Role: {currentUser.role}
+            </p>
           </div>
 
           {/* Welcome Message */}
@@ -50,41 +157,72 @@ export const Welcome = () => {
               You&apos;re now logged into the 3D Part Admin Panel. Use the
               sidebar navigation to access the features.
             </p>
+
+            {/* Admin Special Message */}
+            {currentUser.role === 'admin' && (
+              <div className="mb-6 p-4 bg-gradient-to-r from-purple-100 to-blue-100 dark:from-purple-900 dark:to-blue-900 rounded-lg border border-purple-200 dark:border-purple-700">
+                <div className="flex items-center justify-center gap-2 mb-2">
+                  <span className="text-2xl">👑</span>
+                  <span className="font-semibold text-purple-800 dark:text-purple-200">
+                    Administrator Access
+                  </span>
+                </div>
+                <p className="text-purple-700 dark:text-purple-300 text-sm">
+                  As an administrator, you have full access to all features and
+                  can manage all aspects of the system.
+                </p>
+              </div>
+            )}
+
+            {/* Available Features */}
+            {availableFeatures.length > 0 && (
+              <div className="mt-6">
+                <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                  Your Available Features:
+                </h4>
+                <div className="flex flex-wrap justify-center gap-2">
+                  {availableFeatures.map((feature, index) => (
+                    <span
+                      key={index}
+                      className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium"
+                    >
+                      {feature}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* System Status */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-              <div className="text-3xl font-bold text-green-600 dark:text-green-400 mb-2">
-                ✅
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
-                System Online
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                All services running
+              <div className="text-3xl mb-2">📊</div>
+              <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                System Status
+              </h4>
+              <p className="text-green-600 dark:text-green-400 font-medium">
+                All Systems Operational
               </p>
             </div>
+
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-              <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">
-                🔐
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
-                Secure Access
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Your session is protected
+              <div className="text-3xl mb-2">🔒</div>
+              <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                Security
+              </h4>
+              <p className="text-green-600 dark:text-green-400 font-medium">
+                Authentication Active
               </p>
             </div>
+
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
-              <div className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2">
-                ⚡
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
-                Fast & Reliable
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300">
-                Optimized performance
+              <div className="text-3xl mb-2">⚡</div>
+              <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                Performance
+              </h4>
+              <p className="text-green-600 dark:text-green-400 font-medium">
+                Optimal Performance
               </p>
             </div>
           </div>

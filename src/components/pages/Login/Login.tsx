@@ -34,7 +34,7 @@ const Login = () => {
         setCurrentUser(userData)
       }
       setLoading(false)
-      router.push('products')
+      router.push('/')
     }
   }
 

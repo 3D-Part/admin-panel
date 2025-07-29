@@ -305,7 +305,7 @@ export interface User {
   updatedAt: string
   createdAt: string
   orders: Order[]
-  permissions: UserPermissions
+  permissions: UserPermissions[]
 }
 export interface UsersData {
   count: number
