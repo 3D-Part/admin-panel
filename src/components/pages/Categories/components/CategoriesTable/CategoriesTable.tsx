@@ -3,13 +3,15 @@
 import { Pagination, Table } from 'flowbite-react'
 import React, { useCallback, useEffect, useState } from 'react'
 import { TableItem } from './TableItem/TableItem'
-import { useCategoryStore } from '@/store/store'
+import { useCategoryStore, useCurrentUserStore } from '@/store/store'
 import {
   Loader,
   ResponsiveTableWrapper,
   MobileCardBuilder,
 } from '@/components/common'
 import { PaginationData, CategoryData } from '@/shared/types'
+import { hasPermission } from '@/shared/helpers/permissions'
+import { PermissionEnum } from '@/shared/types'
 
 type CategoriesTableType = {
   onWarningModalOpen: (category: CategoryData) => void
@@ -31,6 +33,14 @@ export const CategoriesTable: React.FC<CategoriesTableType> = ({
     totalPages,
     count,
   } = useCategoryStore()
+
+  const { currentUser } = useCurrentUserStore()
+
+  const hasWritePermission = hasPermission(
+    currentUser?.permissions,
+    PermissionEnum.CATEGORY_WRITE,
+    currentUser?.role
+  )
 
   const fetchCategoriesData = useCallback(async () => {
     setLoader(true)
@@ -63,7 +73,7 @@ export const CategoriesTable: React.FC<CategoriesTableType> = ({
       <MobileCardBuilder
         key={category.id}
         title={name}
-        onClick={() => openEditModal(category)}
+        onClick={hasWritePermission ? () => openEditModal(category) : undefined}
         items={[
           {
             label: 'Parent Category',
@@ -77,20 +87,22 @@ export const CategoriesTable: React.FC<CategoriesTableType> = ({
           },
         ]}
         actions={
-          <div className="flex justify-end items-center gap-4">
-            <span
-              onClick={() => openEditModal(category)}
-              className="font-medium table-action-link cursor-pointer hover:underline"
-            >
-              Edit
-            </span>
-            <span
-              onClick={() => onWarningModalOpen(category)}
-              className="font-medium table-action-danger cursor-pointer hover:underline"
-            >
-              Remove
-            </span>
-          </div>
+          hasWritePermission ? (
+            <div className="flex justify-end items-center gap-4">
+              <span
+                onClick={() => openEditModal(category)}
+                className="font-medium table-action-link cursor-pointer hover:underline"
+              >
+                Edit
+              </span>
+              <span
+                onClick={() => onWarningModalOpen(category)}
+                className="font-medium table-action-danger cursor-pointer hover:underline"
+              >
+                Remove
+              </span>
+            </div>
+          ) : null
         }
       />
     )

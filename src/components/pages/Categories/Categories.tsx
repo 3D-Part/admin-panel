@@ -2,13 +2,15 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 import { CategoriesTable } from './components/CategoriesTable/CategoriesTable'
-import { useCategoryStore } from '@/store/store'
+import { useCategoryStore, useCurrentUserStore } from '@/store/store'
 import CategoryEditModal from './components/CategoryEditModal/CategoryEditModal'
 import { WarningModal } from '@/components/common'
 import { PaginationData, CategoryData, CategoryFormBody } from '@/shared/types'
 import { toast } from 'react-toastify'
 import { CategoriesAPI } from '@/services'
 import { CategoriesHeader } from './components/CategoriesHeader/CategoriesHeader'
+import { hasPermission } from '@/shared/helpers/permissions'
+import { PermissionEnum } from '@/shared/types'
 
 export const Categories = () => {
   // TODO some functionalities will be moved to store
@@ -27,6 +29,14 @@ export const Categories = () => {
     changeCurrentPage,
   } = useCategoryStore()
 
+  const { currentUser } = useCurrentUserStore()
+
+  const hasWritePermission = hasPermission(
+    currentUser?.permissions,
+    PermissionEnum.CATEGORY_WRITE,
+    currentUser?.role
+  )
+
   // ********* AddNew or Edit Modal *********
 
   const onCloseModal = () => {
@@ -35,6 +45,9 @@ export const Categories = () => {
 
   // EDIT
   const openEditModal = (category: CategoryData) => {
+    if (!hasWritePermission) {
+      return
+    }
     activeCategoryRef.current = category
     setIsModalOpen(true)
   }
