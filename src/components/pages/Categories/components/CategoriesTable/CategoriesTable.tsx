@@ -63,7 +63,6 @@ export const CategoriesTable: React.FC<CategoriesTableType> = ({
       <MobileCardBuilder
         key={category.id}
         title={name}
-        subtitle={slug}
         onClick={() => openEditModal(category)}
         items={[
           {

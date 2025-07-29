@@ -65,7 +65,7 @@
   }
 
   .mobile-card-container {
-    @apply space-y-3 p-4;
+    @apply space-y-3;
   }
 
   .mobile-card {
