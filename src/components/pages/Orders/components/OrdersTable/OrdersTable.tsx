@@ -3,7 +3,7 @@
 import { Pagination, Table } from 'flowbite-react'
 import React, { useCallback, useEffect, useState } from 'react'
 import { TableItem } from './TableItem/TableItem'
-import { useOrdersStore } from '@/store/store'
+import { useOrdersStore, useCurrentUserStore } from '@/store/store'
 import {
   Loader,
   ResponsiveTableWrapper,
@@ -15,6 +15,8 @@ import { BiMessageDetail } from 'react-icons/bi'
 import OrderDetails from '../OrderDetails'
 import OrderContactForm from '../OrderContactForm'
 import OrderEditModal from '../OrderEditModal/OrderEditModal'
+import { hasPermission } from '@/shared/helpers/permissions'
+import { PermissionEnum } from '@/shared/types'
 
 export const OrdersTable = () => {
   const [loader, setLoader] = useState(true)
@@ -32,6 +34,20 @@ export const OrdersTable = () => {
     totalPages,
     count,
   } = useOrdersStore()
+
+  const { currentUser } = useCurrentUserStore()
+
+  const hasReadPermission = hasPermission(
+    currentUser?.permissions,
+    PermissionEnum.ORDERS_READ,
+    currentUser?.role
+  )
+
+  const hasWritePermission = hasPermission(
+    currentUser?.permissions,
+    PermissionEnum.ORDERS_WRITE,
+    currentUser?.role
+  )
 
   const fetchOrdersData = useCallback(async () => {
     setLoader(true)
@@ -63,16 +79,25 @@ export const OrdersTable = () => {
   }, [changeCurrentPage, currentPage, totalPages])
 
   const handleOrderClick = (order: Order) => {
+    if (!hasReadPermission) {
+      return
+    }
     setSelectedOrder(order)
     setIsOrderDetailsOpen(true)
   }
 
   const handleMessageClick = (order: Order) => {
+    if (!hasWritePermission) {
+      return
+    }
     setSelectedOrder(order)
     setIsFormModalOpen(true)
   }
 
   const handleStatusClick = (order: Order) => {
+    if (!hasWritePermission) {
+      return
+    }
     setSelectedOrder(order)
     setIsOrderStatusModalOpen(true)
   }
@@ -93,7 +118,7 @@ export const OrdersTable = () => {
         key={order.id}
         title={fullName}
         subtitle={email}
-        onClick={() => handleOrderClick(order)}
+        onClick={hasReadPermission ? () => handleOrderClick(order) : undefined}
         items={[
           {
             label: 'City',
@@ -119,9 +144,11 @@ export const OrdersTable = () => {
               <div
                 onClick={(e) => {
                   e.stopPropagation()
-                  handleStatusClick(order)
+                  if (hasWritePermission) {
+                    handleStatusClick(order)
+                  }
                 }}
-                className="cursor-pointer"
+                className={hasWritePermission ? 'cursor-pointer' : ''}
               >
                 <OrderStatus status={status} />
               </div>
@@ -129,17 +156,19 @@ export const OrdersTable = () => {
           },
         ]}
         actions={
-          <div
-            className="flex justify-end items-center gap-2"
-            onClick={(e) => e.stopPropagation()}
-          >
+          hasWritePermission ? (
             <div
-              className="text-xl cursor-pointer text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
-              onClick={() => handleMessageClick(order)}
+              className="flex justify-end items-center gap-2"
+              onClick={(e) => e.stopPropagation()}
             >
-              <BiMessageDetail />
+              <div
+                className="text-xl cursor-pointer text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                onClick={() => handleMessageClick(order)}
+              >
+                <BiMessageDetail />
+              </div>
             </div>
-          </div>
+          ) : null
         }
       />
     )

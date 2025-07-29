@@ -6,6 +6,9 @@ import { BiMessageDetail } from 'react-icons/bi'
 import OrderContactForm from '../../OrderContactForm'
 import OrderEditModal from '../../OrderEditModal/OrderEditModal'
 import OrderDetails from '../../OrderDetails'
+import { useCurrentUserStore } from '@/store/store'
+import { hasPermission } from '@/shared/helpers/permissions'
+import { PermissionEnum } from '@/shared/types'
 
 type TableItemType = {
   order: Order
@@ -18,6 +21,20 @@ export const TableItem: React.FC<TableItemType> = ({ order }) => {
   const [isOrderStatusModalOpen, setIsOrderStatusModalOpen] = useState(false)
   const [isOrderDetailsOpen, setIsOrderDetailsOpen] = useState(false)
 
+  const { currentUser } = useCurrentUserStore()
+
+  const hasReadPermission = hasPermission(
+    currentUser?.permissions,
+    PermissionEnum.ORDERS_READ,
+    currentUser?.role
+  )
+
+  const hasWritePermission = hasPermission(
+    currentUser?.permissions,
+    PermissionEnum.ORDERS_WRITE,
+    currentUser?.role
+  )
+
   const isoDate = createdAt
   const date = new Date(isoDate)
   const year = date.toLocaleString('en-US', { year: 'numeric' })
@@ -29,8 +46,10 @@ export const TableItem: React.FC<TableItemType> = ({ order }) => {
     <>
       <Table.Row className="table-row">
         <Table.Cell
-          className="cursor-pointer"
-          onClick={() => setIsOrderDetailsOpen(true)}
+          className={hasReadPermission ? 'cursor-pointer' : ''}
+          onClick={
+            hasReadPermission ? () => setIsOrderDetailsOpen(true) : undefined
+          }
         >
           {fullName}
         </Table.Cell>
@@ -38,13 +57,23 @@ export const TableItem: React.FC<TableItemType> = ({ order }) => {
         <Table.Cell>{formattedDate}</Table.Cell>
         <Table.Cell>{price}KM</Table.Cell>
         <Table.Cell
-          onClick={() => setIsOrderStatusModalOpen(true)}
-          className="cursor-pointer"
+          onClick={
+            hasWritePermission
+              ? () => setIsOrderStatusModalOpen(true)
+              : undefined
+          }
+          className={hasWritePermission ? 'cursor-pointer' : ''}
         >
           <OrderStatus status={status} />
         </Table.Cell>
-        <Table.Cell onClick={() => setIsFormModalOpen(true)}>
-          <div className="text-xl cursor-pointer">
+        <Table.Cell
+          onClick={
+            hasWritePermission ? () => setIsFormModalOpen(true) : undefined
+          }
+        >
+          <div
+            className={`text-xl ${hasWritePermission ? 'cursor-pointer' : ''}`}
+          >
             <BiMessageDetail />
           </div>
         </Table.Cell>
