@@ -1,7 +1,8 @@
 import React, { useState, useCallback, useRef } from 'react'
-import { Modal, Button, Label } from 'flowbite-react'
+import { Modal, Button, Label, Spinner } from 'flowbite-react'
 import { PermissionEnum, CreateEmployeeData } from '@/shared/types'
 import UsersAPI from '@/services/users'
+import { toast } from 'react-toastify'
 
 interface CreateEmployeeModalProps {
   isOpen: boolean
@@ -119,14 +120,29 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
       const success = await UsersAPI.createEmployee(employeeData)
 
       if (success) {
+        toast('Employee created successfully!', {
+          type: 'success',
+          position: 'top-right',
+          autoClose: 3000,
+        })
         onSuccess()
         handleClose()
       } else {
+        toast('Failed to create employee. Please try again.', {
+          type: 'error',
+          position: 'top-right',
+          autoClose: 5000,
+        })
         setErrors({
           permissions: 'Failed to create employee. Please try again.',
         })
       }
     } catch (error) {
+      toast('An error occurred. Please try again.', {
+        type: 'error',
+        position: 'top-right',
+        autoClose: 5000,
+      })
       setErrors({ permissions: 'An error occurred. Please try again.' })
     } finally {
       setIsLoading(false)
@@ -322,7 +338,14 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
               disabled={isLoading}
               className="dark:bg-blue-600 dark:hover:bg-blue-700"
             >
-              {isLoading ? 'Creating...' : 'Create Employee'}
+              {isLoading ? (
+                <>
+                  <Spinner size="sm" className="mr-2" />
+                  Creating...
+                </>
+              ) : (
+                'Create Employee'
+              )}
             </Button>
           </div>
         </form>

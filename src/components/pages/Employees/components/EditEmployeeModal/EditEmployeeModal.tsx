@@ -1,7 +1,8 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react'
-import { Modal, Button, Label } from 'flowbite-react'
+import { Modal, Button, Label, Spinner } from 'flowbite-react'
 import { PermissionEnum, EditEmployeeData, User } from '@/shared/types'
 import UsersAPI from '@/services/users'
+import { toast } from 'react-toastify'
 
 interface EditEmployeeModalProps {
   isOpen: boolean
@@ -145,14 +146,29 @@ const EditEmployeeModal: React.FC<EditEmployeeModalProps> = ({
       const success = await UsersAPI.editEmployee(employee.id, employeeData)
 
       if (success) {
+        toast('Employee updated successfully!', {
+          type: 'success',
+          position: 'top-right',
+          autoClose: 3000,
+        })
         onSuccess()
         handleClose()
       } else {
+        toast('Failed to update employee. Please try again.', {
+          type: 'error',
+          position: 'top-right',
+          autoClose: 5000,
+        })
         setErrors({
           permissions: 'Failed to update employee. Please try again.',
         })
       }
     } catch (error) {
+      toast('An error occurred. Please try again.', {
+        type: 'error',
+        position: 'top-right',
+        autoClose: 5000,
+      })
       setErrors({ permissions: 'An error occurred. Please try again.' })
     } finally {
       setIsLoading(false)
@@ -345,7 +361,14 @@ const EditEmployeeModal: React.FC<EditEmployeeModalProps> = ({
               disabled={isLoading}
               className="dark:bg-blue-600 dark:hover:bg-blue-700"
             >
-              {isLoading ? 'Updating...' : 'Update Employee'}
+              {isLoading ? (
+                <>
+                  <Spinner size="sm" className="mr-2" />
+                  Updating...
+                </>
+              ) : (
+                'Update Employee'
+              )}
             </Button>
           </div>
         </form>
