@@ -100,7 +100,7 @@ export const ManufacturesTable: React.FC<ManufacturesTableType> = ({
       count={count}
     >
       <div className="table-container">
-        <Table className="w-full">
+        <Table className="w-full table-fixed">
           <Table.Head className="table-header">
             <Table.HeadCell className="table-cell">Name</Table.HeadCell>
             <Table.HeadCell className="table-cell">Description</Table.HeadCell>
@@ -114,7 +114,7 @@ export const ManufacturesTable: React.FC<ManufacturesTableType> = ({
         </Table>
 
         <div className="table-body-container relative">
-          <Table className="w-full">
+          <Table className="w-full table-fixed">
             <Table.Body className="divide-y divide-gray-100 dark:divide-gray-800">
               {currentPageManufactures.map((manufacture) => {
                 return (

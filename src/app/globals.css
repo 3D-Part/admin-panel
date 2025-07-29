@@ -15,8 +15,20 @@
     @apply bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden flex flex-col h-full;
   }
 
+  .table-container table {
+    @apply w-full table-fixed;
+  }
+
+  .table-container thead {
+    @apply sticky top-0 z-10;
+  }
+
+  .table-container tbody {
+    @apply overflow-y-auto;
+  }
+
   .table-header {
-    @apply bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 text-gray-700 dark:text-gray-300 font-semibold sticky top-0 z-10;
+    @apply bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 text-gray-700 dark:text-gray-300 font-semibold;
   }
 
   .table-body-container {

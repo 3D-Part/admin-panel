@@ -106,7 +106,7 @@ export const CategoriesTable: React.FC<CategoriesTableType> = ({
       count={count}
     >
       <div className="table-container">
-        <Table className="w-full">
+        <Table className="w-full table-fixed">
           <Table.Head className="table-header">
             <Table.HeadCell className="table-cell">Name</Table.HeadCell>
             <Table.HeadCell className="table-cell">Description</Table.HeadCell>
@@ -120,7 +120,7 @@ export const CategoriesTable: React.FC<CategoriesTableType> = ({
         </Table>
 
         <div className="table-body-container relative">
-          <Table className="w-full">
+          <Table className="w-full table-fixed">
             <Table.Body className="divide-y divide-gray-100 dark:divide-gray-800">
               {currentPageCategories.map((category) => {
                 return (

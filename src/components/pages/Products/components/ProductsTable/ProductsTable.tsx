@@ -250,9 +250,8 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
       count={count}
     >
       <div className="table-container">
-        <Table className="w-full">
+        <Table className="w-full table-fixed">
           <Table.Head className="table-header">
-            {/* <Table.HeadCell /> */}
             <Table.HeadCell className="table-cell">Name</Table.HeadCell>
             <Table.HeadCell className="table-cell">Category</Table.HeadCell>
             <Table.HeadCell className="table-cell">Manufacturer</Table.HeadCell>
@@ -266,7 +265,7 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
         </Table>
 
         <div className="table-body-container relative">
-          <Table className="w-full">
+          <Table className="w-full table-fixed">
             <Table.Body className="divide-y divide-gray-100 dark:divide-gray-800">
               {currentPageProducts.map((product) => {
                 return (
@@ -288,15 +287,6 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
           )}
         </div>
       </div>
-
-      {/* <Pagination
-        className="mt-8"
-        currentPage={currentPage}
-        onPageChange={(page) => {
-          changeCurrentPage(page)
-        }}
-        totalPages={totalPages}
-      /> */}
 
       <div className="flex justify-between gap-4 items-center w-full mt-8 p-4 bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800">
         <Pagination
