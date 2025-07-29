@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 import { AttributesHeader } from './components/AttributesHeader/AttributesHeader'
-import { useAttributesStore } from '@/store/store'
+import { useAttributesStore, useCurrentUserStore } from '@/store/store'
 import AttributeFormModal from './components/AttributeFormModal/AttributeFormModal'
 import { WarningModal } from '@/components/common'
 import {
@@ -13,6 +13,8 @@ import {
 import { AttributeAPI } from '@/services'
 import { toast } from 'react-toastify'
 import { AttributesTable } from './components/AttributesTable/AttributesTable'
+import { hasPermission } from '@/shared/helpers/permissions'
+import { PermissionEnum } from '@/shared/types'
 
 export const Attributes = () => {
   // TODO some functionalities will be moved to store
@@ -31,6 +33,14 @@ export const Attributes = () => {
     changeCurrentPage,
   } = useAttributesStore()
 
+  const { currentUser } = useCurrentUserStore()
+
+  const hasWritePermission = hasPermission(
+    currentUser?.permissions,
+    PermissionEnum.ATTRIBUTES_WRITE,
+    currentUser?.role
+  )
+
   // ********* AddNew or Edit Modal *********
 
   const onCloseModal = () => {
@@ -39,6 +49,9 @@ export const Attributes = () => {
 
   // EDIT
   const openEditModal = (attribute: AttributeData) => {
+    if (!hasWritePermission) {
+      return
+    }
     activeAttributeRef.current = attribute
     setIsModalOpen(true)
   }

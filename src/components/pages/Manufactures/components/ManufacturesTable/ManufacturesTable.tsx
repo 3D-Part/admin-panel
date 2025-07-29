@@ -3,13 +3,15 @@
 import { Pagination, Table } from 'flowbite-react'
 import React, { useCallback, useEffect, useState } from 'react'
 import { TableItem } from './TableItem/TableItem'
-import { useManufactureStore } from '@/store/store'
+import { useManufactureStore, useCurrentUserStore } from '@/store/store'
 import {
   Loader,
   ResponsiveTableWrapper,
   MobileCardBuilder,
 } from '@/components/common'
 import { PaginationData, ManufacturerData } from '@/shared/types'
+import { hasPermission } from '@/shared/helpers/permissions'
+import { PermissionEnum } from '@/shared/types'
 
 type ManufacturesTableType = {
   onWarningModalOpen: (manufacture: ManufacturerData) => void
@@ -31,6 +33,14 @@ export const ManufacturesTable: React.FC<ManufacturesTableType> = ({
     totalPages,
     count,
   } = useManufactureStore()
+
+  const { currentUser } = useCurrentUserStore()
+
+  const hasWritePermission = hasPermission(
+    currentUser?.permissions,
+    PermissionEnum.MANUFACTURER_WRITE,
+    currentUser?.role
+  )
 
   const fetchManufacturesData = useCallback(async () => {
     setLoader(true)
@@ -68,23 +78,27 @@ export const ManufacturesTable: React.FC<ManufacturesTableType> = ({
         <MobileCardBuilder
           key={manufacture.id}
           title={name}
-          onClick={() => openEditModal(manufacture)}
+          onClick={
+            hasWritePermission ? () => openEditModal(manufacture) : undefined
+          }
           items={[]}
           actions={
-            <div className="flex justify-end items-center gap-4">
-              <span
-                onClick={() => openEditModal(manufacture)}
-                className="font-medium table-action-link cursor-pointer hover:underline"
-              >
-                Edit
-              </span>
-              <span
-                onClick={() => onWarningModalOpen(manufacture)}
-                className="font-medium table-action-danger cursor-pointer hover:underline"
-              >
-                Remove
-              </span>
-            </div>
+            hasWritePermission ? (
+              <div className="flex justify-end items-center gap-4">
+                <span
+                  onClick={() => openEditModal(manufacture)}
+                  className="font-medium table-action-link cursor-pointer hover:underline"
+                >
+                  Edit
+                </span>
+                <span
+                  onClick={() => onWarningModalOpen(manufacture)}
+                  className="font-medium table-action-danger cursor-pointer hover:underline"
+                >
+                  Remove
+                </span>
+              </div>
+            ) : null
           }
         />
       )

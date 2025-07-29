@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 import { ManufacturesHeader } from './components/ManufacturesHeader/ManufacturesHeader'
-import { useManufactureStore } from '@/store/store'
+import { useManufactureStore, useCurrentUserStore } from '@/store/store'
 import ManufacturesFormModal from './components/ManufactureFormModal/ManufactureFormModal'
 import { WarningModal } from '@/components/common'
 import {
@@ -13,6 +13,8 @@ import {
 import manufacturesAPI from '@/services/manufactures'
 import { toast } from 'react-toastify'
 import { ManufacturesTable } from './components/ManufacturesTable/ManufacturesTable'
+import { hasPermission } from '@/shared/helpers/permissions'
+import { PermissionEnum } from '@/shared/types'
 
 export const Manufactures = () => {
   // TODO some functionalities will be moved to store
@@ -31,6 +33,14 @@ export const Manufactures = () => {
     changeCurrentPage,
   } = useManufactureStore()
 
+  const { currentUser } = useCurrentUserStore()
+
+  const hasWritePermission = hasPermission(
+    currentUser?.permissions,
+    PermissionEnum.MANUFACTURER_WRITE,
+    currentUser?.role
+  )
+
   // ********* AddNew or Edit Modal *********
 
   const onCloseModal = () => {
@@ -39,6 +49,9 @@ export const Manufactures = () => {
 
   // EDIT
   const openEditModal = (manufacturer: ManufacturerData) => {
+    if (!hasWritePermission) {
+      return
+    }
     activeManufacturerRef.current = manufacturer
     setIsModalOpen(true)
   }

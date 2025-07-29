@@ -3,13 +3,15 @@
 import { Pagination, Table } from 'flowbite-react'
 import React, { useCallback, useEffect, useState } from 'react'
 import { TableItem } from './TableItem/TableItem'
-import { useAttributesStore } from '@/store/store'
+import { useAttributesStore, useCurrentUserStore } from '@/store/store'
 import {
   Loader,
   ResponsiveTableWrapper,
   MobileCardBuilder,
 } from '@/components/common'
 import { PaginationData, AttributeData } from '@/shared/types'
+import { hasPermission } from '@/shared/helpers/permissions'
+import { PermissionEnum } from '@/shared/types'
 
 type AttributesTableType = {
   onWarningModalOpen: (attribute: AttributeData) => void
@@ -31,6 +33,14 @@ export const AttributesTable: React.FC<AttributesTableType> = ({
     totalPages,
     count,
   } = useAttributesStore()
+
+  const { currentUser } = useCurrentUserStore()
+
+  const hasWritePermission = hasPermission(
+    currentUser?.permissions,
+    PermissionEnum.ATTRIBUTES_WRITE,
+    currentUser?.role
+  )
 
   const fetchAttributesData = useCallback(async () => {
     setLoader(true)
@@ -63,23 +73,27 @@ export const AttributesTable: React.FC<AttributesTableType> = ({
       <MobileCardBuilder
         key={attribute.id}
         title={name}
-        onClick={() => openEditModal(attribute)}
+        onClick={
+          hasWritePermission ? () => openEditModal(attribute) : undefined
+        }
         items={[]}
         actions={
-          <div className="flex justify-end items-center gap-4">
-            <span
-              onClick={() => openEditModal(attribute)}
-              className="font-medium table-action-link cursor-pointer hover:underline"
-            >
-              Edit
-            </span>
-            <span
-              onClick={() => onWarningModalOpen(attribute)}
-              className="font-medium table-action-danger cursor-pointer hover:underline"
-            >
-              Remove
-            </span>
-          </div>
+          hasWritePermission ? (
+            <div className="flex justify-end items-center gap-4">
+              <span
+                onClick={() => openEditModal(attribute)}
+                className="font-medium table-action-link cursor-pointer hover:underline"
+              >
+                Edit
+              </span>
+              <span
+                onClick={() => onWarningModalOpen(attribute)}
+                className="font-medium table-action-danger cursor-pointer hover:underline"
+              >
+                Remove
+              </span>
+            </div>
+          ) : null
         }
       />
     )
