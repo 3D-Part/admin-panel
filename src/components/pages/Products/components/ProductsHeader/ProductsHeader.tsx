@@ -18,11 +18,18 @@ export const ProductsOverviewHeader = () => {
     currentUser?.role
   )
   return (
-    <div className="w-full flex justify-between items-center flex-wrap gap-4">
-      <ProductsSearch />
+    <div className="w-full flex justify-between items-center gap-2 md:gap-4">
+      <div className="flex-1  min-w-0">
+        <ProductsSearch />
+      </div>
       {hasWritePermission && (
-        <Button href={URLPartsEnum.AddNewProduct}>
-          Add new <HiPlus className="ml-2" />
+        <Button
+          href={URLPartsEnum.AddNewProduct}
+          size="sm"
+          className="shrink-0 py-1"
+        >
+          <HiPlus className="mr-1 md:mr-2" />
+          <span className="hidden sm:inline">Add new</span>
         </Button>
       )}
     </div>

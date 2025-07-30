@@ -48,8 +48,8 @@ const ProductsSearch = () => {
   )
 
   return (
-    <div className="flex gap-2 items-center">
-      <Dropdown dismissOnClick label={searchBy.toUpperCase()}>
+    <div className="flex gap-2 items-center w-full md:w-auto">
+      <Dropdown dismissOnClick label={searchBy.toUpperCase()} size="sm">
         <Dropdown.Item onClick={() => setSearchBy('name')}>
           <span className="font-medium text-cyan-600 cursor-pointer hover:underline dark:text-cyan-500">
             <p>NAME</p>
@@ -61,8 +61,10 @@ const ProductsSearch = () => {
           </span>
         </Dropdown.Item>
       </Dropdown>
-      <Search getData={fetchProductsData} />
-      {loader && <Spinner aria-label="Loading..." size="lg" />}
+      <div className="flex-1 md:flex-none min-w-0">
+        <Search getData={fetchProductsData} />
+      </div>
+      {loader && <Spinner aria-label="Loading..." size="sm" />}
     </div>
   )
 }
