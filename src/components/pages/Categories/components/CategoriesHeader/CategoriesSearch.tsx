@@ -46,7 +46,7 @@ const CategoriesSearch = () => {
   )
 
   return (
-    <div className="flex gap-8 items-center">
+    <div className="flex gap-8 items-center flex-1">
       <Search getData={fetchCategoriesData} />
       {loader && <Spinner aria-label="Loading..." size="lg" />}
     </div>
