@@ -126,97 +126,163 @@ const CategoryEditModal: React.FC<ModalType> = ({
 
   return (
     <>
-      <Modal dismissible show={isOpen} onClose={onClose}>
-        <Modal.Header>Edit Category t</Modal.Header>
-        <Modal.Body>
+      <Modal dismissible show={isOpen} onClose={onClose} size="2xl">
+        <Modal.Header className="border-b border-gray-200 dark:border-gray-700">
+          <div className="flex items-center gap-3">
+            <span className="font-semibold text-gray-900 dark:text-white">
+              {initialValue ? 'Edit Category' : 'Add New Category'}
+            </span>
+            {initialValue && (
+              <span className="text-sm text-gray-500 dark:text-gray-400">
+                {initialValue.name}
+              </span>
+            )}
+          </div>
+        </Modal.Header>
+
+        <Modal.Body className="space-y-6">
           {allCategories.length > 0 ? (
-            <form
-              // onSubmit={saveFunction}
-              className="flex max-w-md flex-col gap-4"
-            >
+            <form className="space-y-6">
+              {/* Basic Information */}
               <div>
-                <div className="mb-2 block">
-                  <Label htmlFor="categoryName" value="Category Name" />
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                  Basic Information
+                </h3>
+                <div className="space-y-4">
+                  <div>
+                    <Label
+                      htmlFor="categoryName"
+                      value="Category Name"
+                      className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                    />
+                    <TextInput
+                      name="name"
+                      onChange={handleInputChange}
+                      id="categoryName"
+                      required
+                      type="text"
+                      defaultValue={initialValue?.name ? initialValue.name : ''}
+                      className="mt-1"
+                      placeholder="Enter category name..."
+                    />
+                  </div>
+
+                  <div>
+                    <Label
+                      htmlFor="urlSlug"
+                      value="URL Slug"
+                      className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                    />
+                    <TextInput
+                      name="slug"
+                      onChange={handleInputChange}
+                      id="urlSlug"
+                      required
+                      type="text"
+                      defaultValue={initialValue?.slug ? initialValue.slug : ''}
+                      className="mt-1"
+                      placeholder="category-slug"
+                    />
+                  </div>
                 </div>
-                <TextInput
-                  name="name"
-                  onChange={handleInputChange}
-                  id="categoryName"
-                  required
-                  type="text"
-                  defaultValue={initialValue?.name ? initialValue.name : ''}
-                />
               </div>
 
+              {/* Description */}
               <div>
-                <div className="mb-2 block">
-                  <Label htmlFor="urlSlug" value="URL Slug" />
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                  Description
+                </h3>
+                <div>
+                  <Label
+                    htmlFor="description"
+                    value="Category Description"
+                    className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                  />
+                  <Textarea
+                    onChange={handleInputChange}
+                    defaultValue={
+                      initialValue?.description ? initialValue?.description : ''
+                    }
+                    id="description"
+                    name="description"
+                    placeholder="Enter category description..."
+                    rows={3}
+                    className="mt-1"
+                  />
                 </div>
-                <TextInput
-                  name="slug"
-                  onChange={handleInputChange}
-                  id="urlSlug"
-                  required
-                  type="text"
-                  defaultValue={initialValue?.slug ? initialValue.slug : ''}
-                />
               </div>
 
-              <div className="w-full">
-                <div className="mb-2 block">
-                  <Label htmlFor="description" value="Description" />
-                </div>
-                <Textarea
-                  onChange={handleInputChange}
-                  defaultValue={
-                    initialValue?.description ? initialValue?.description : ''
-                  }
-                  id="description"
-                  name="description"
-                  placeholder="Category description..."
-                  rows={4}
-                />
-              </div>
-
+              {/* Parent Category */}
               <div>
-                <div className="mb-2 block">
-                  <Label htmlFor="category" value="Parent Category" />
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                  Parent Category
+                </h3>
+                <div>
+                  <Label
+                    htmlFor="category"
+                    value="Select Parent Category"
+                    className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                  />
+                  <Select
+                    onChange={handleInputChange}
+                    name="parentCategoryId"
+                    id="category"
+                    defaultValue={
+                      initialValue?.parentCategoryId
+                        ? initialValue?.parentCategoryId
+                        : ''
+                    }
+                    className="mt-1"
+                  >
+                    <option value={''}>No parent category</option>
+                    {allCategories.map((category) => {
+                      return (
+                        <option key={category.id} value={category.id}>
+                          {category.name}
+                        </option>
+                      )
+                    })}
+                  </Select>
                 </div>
-                <Select
-                  onChange={handleInputChange}
-                  name="parentCategoryId"
-                  id="category"
-                  defaultValue={
-                    initialValue?.parentCategoryId
-                      ? initialValue?.parentCategoryId
-                      : ''
-                  }
-                >
-                  <option value={''}>None</option>
-                  {allCategories.map((category) => {
-                    return (
-                      <option key={category.id} value={category.id}>
-                        {category.name}
-                      </option>
-                    )
-                  })}
-                </Select>
               </div>
 
-              <CategoryAttribute
-                onAttributesChange={changeCategoryAttributeIds}
-                initialAttributes={initialValue?.categoryAttributes}
-              />
+              {/* Attributes */}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                  Category Attributes
+                </h3>
+                <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                  <CategoryAttribute
+                    onAttributesChange={changeCategoryAttributeIds}
+                    initialAttributes={initialValue?.categoryAttributes}
+                  />
+                </div>
+              </div>
             </form>
           ) : (
-            <Loader />
+            <div className="flex justify-center items-center py-8">
+              <Loader />
+            </div>
           )}
         </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={saveFunction}>Save</Button>
-          <Button color="gray" onClick={onClose}>
-            Cancel
-          </Button>
+
+        <Modal.Footer className="border-t border-gray-200 dark:border-gray-700">
+          <div className="flex flex-col sm:flex-row gap-2 w-full">
+            <Button
+              onClick={saveFunction}
+              className="w-full sm:w-auto order-2 sm:order-1"
+              disabled={!categoryDataRef.current.name}
+            >
+              {initialValue ? 'Update Category' : 'Create Category'}
+            </Button>
+            <Button
+              color="gray"
+              onClick={onClose}
+              className="w-full sm:w-auto order-1 sm:order-2"
+            >
+              Cancel
+            </Button>
+          </div>
         </Modal.Footer>
       </Modal>
     </>
