@@ -130,7 +130,7 @@ const OrderEditModal: React.FC<ModalType> = ({
                   />
                   <Dropdown
                     label={activeStatus ? activeStatus : 'Select status'}
-                    className="mt-1"
+                    className="mt-1 !bg-gray-700"
                   >
                     {orderStatus.map((status) => {
                       const statusStyle = getOrderStatusStyle(status)
@@ -139,6 +139,7 @@ const OrderEditModal: React.FC<ModalType> = ({
                         <Item
                           key={status}
                           onClick={() => setActiveStatus(status)}
+                          className="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-600 p-2"
                         >
                           <Badge
                             className={`justify-center w-full ${statusStyle}`}
