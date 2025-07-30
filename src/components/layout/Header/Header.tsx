@@ -42,6 +42,7 @@ const SideBar = () => {
               width="138"
               height="44"
               priority
+              className="w-28 h-auto md:w-32"
             />
           </span>
         </Navbar.Brand>

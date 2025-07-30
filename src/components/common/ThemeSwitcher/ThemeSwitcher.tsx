@@ -42,13 +42,13 @@ const ThemeSwitcher = () => {
   const getThemeIcon = () => {
     switch (theme) {
       case 'light':
-        return <HiSun className="h-5 w-5" />
+        return <HiSun className="h-4 w-4 md:h-5 md:w-5" />
       case 'dark':
-        return <HiMoon className="h-5 w-5" />
+        return <HiMoon className="h-4 w-4 md:h-5 md:w-5" />
       case 'system':
-        return <HiComputerDesktop className="h-5 w-5" />
+        return <HiComputerDesktop className="h-4 w-4 md:h-5 md:w-5" />
       default:
-        return <HiMoon className="h-5 w-5" />
+        return <HiMoon className="h-4 w-4 md:h-5 md:w-5" />
     }
   }
 
@@ -62,7 +62,7 @@ const ThemeSwitcher = () => {
       <Button
         color="gray"
         className="bg-gray-700 hover:bg-gray-600 border-gray-600 text-white"
-        size="sm"
+        size="xs"
         onClick={() => setIsOpen(!isOpen)}
       >
         {getThemeIcon()}
