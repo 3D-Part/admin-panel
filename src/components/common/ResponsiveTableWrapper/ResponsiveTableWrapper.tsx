@@ -90,15 +90,17 @@ export const MobileCardBuilder: React.FC<MobileCardBuilderProps> = ({
   return (
     <MobileTableCard onClick={handleCardClick} className={className}>
       <div className="mobile-card-header">
-        <div>
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-            {title}
-          </h3>
-          {subtitle && (
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              {subtitle}
-            </p>
-          )}
+        <div className="flex justify-between items-center w-full">
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+              {title}
+            </h3>
+            {subtitle && (
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                {subtitle}
+              </p>
+            )}
+          </div>
         </div>
       </div>
 

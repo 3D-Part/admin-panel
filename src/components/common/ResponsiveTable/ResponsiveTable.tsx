@@ -33,8 +33,10 @@ export const MobileTableCard: React.FC<MobileTableCardProps> = ({
 }) => {
   return (
     <div
-      className={`bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-3 shadow-sm hover:shadow-md transition-shadow duration-200 ${
-        onClick ? 'cursor-pointer' : ''
+      className={`bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-3 shadow-sm hover:shadow-md transition-all duration-200 ${
+        onClick
+          ? 'cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 active:scale-[0.98]'
+          : ''
       } ${className}`}
       onClick={onClick}
     >

@@ -102,6 +102,21 @@ export const OrdersTable = () => {
     setIsOrderStatusModalOpen(true)
   }
 
+  const handleCloseOrderDetails = () => {
+    setIsOrderDetailsOpen(false)
+    setSelectedOrder(null)
+  }
+
+  const handleCloseFormModal = () => {
+    setIsFormModalOpen(false)
+    setSelectedOrder(null)
+  }
+
+  const handleCloseStatusModal = () => {
+    setIsOrderStatusModalOpen(false)
+    setSelectedOrder(null)
+  }
+
   // Generate mobile cards
   const mobileCards = currentPageOrders.map((order) => {
     const { fullName, email, city, price, status, createdAt } = order
@@ -148,7 +163,11 @@ export const OrdersTable = () => {
                     handleStatusClick(order)
                   }
                 }}
-                className={hasWritePermission ? 'cursor-pointer' : ''}
+                className={
+                  hasWritePermission
+                    ? 'cursor-pointer hover:opacity-80 transition-opacity'
+                    : ''
+                }
               >
                 <OrderStatus status={status} />
               </div>
@@ -158,15 +177,16 @@ export const OrdersTable = () => {
         actions={
           hasWritePermission ? (
             <div
-              className="flex justify-end items-center gap-2"
+              className="flex justify-end items-center gap-3 "
               onClick={(e) => e.stopPropagation()}
             >
-              <div
-                className="text-xl cursor-pointer text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+              <button
+                className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
                 onClick={() => handleMessageClick(order)}
               >
-                <BiMessageDetail />
-              </div>
+                <BiMessageDetail className="text-lg" />
+                <span>Send Message</span>
+              </button>
             </div>
           ) : null
         }
@@ -175,57 +195,84 @@ export const OrdersTable = () => {
   })
 
   return (
-    <ResponsiveTableWrapper
-      mobileCards={mobileCards}
-      currentPage={currentPage}
-      totalPages={totalPages}
-      onPageChange={(page) => changeCurrentPage(page)}
-      count={count}
-      className="mt-0"
-    >
-      <div className="table-container">
-        <Table className="w-full table-fixed">
-          <Table.Head className="table-header">
-            <Table.HeadCell className="table-cell">Customer</Table.HeadCell>
-            <Table.HeadCell className="table-cell">City</Table.HeadCell>
-            <Table.HeadCell className="table-cell">Date</Table.HeadCell>
-            <Table.HeadCell className="table-cell">Total</Table.HeadCell>
-            <Table.HeadCell className="table-cell">Status</Table.HeadCell>
-            <Table.HeadCell className="table-cell">
-              <span className="sr-only">Actions</span>
-            </Table.HeadCell>
-          </Table.Head>
-        </Table>
-
-        <div className="table-body-container relative">
+    <>
+      <ResponsiveTableWrapper
+        mobileCards={mobileCards}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={(page) => changeCurrentPage(page)}
+        count={count}
+        className="mt-0"
+      >
+        <div className="table-container">
           <Table className="w-full table-fixed">
-            <Table.Body className="divide-y divide-gray-100 dark:divide-gray-800">
-              {currentPageOrders.map((order) => {
-                return <TableItem key={order.id} order={order} />
-              })}
-            </Table.Body>
+            <Table.Head className="table-header">
+              <Table.HeadCell className="table-cell">Customer</Table.HeadCell>
+              <Table.HeadCell className="table-cell">City</Table.HeadCell>
+              <Table.HeadCell className="table-cell">Date</Table.HeadCell>
+              <Table.HeadCell className="table-cell">Total</Table.HeadCell>
+              <Table.HeadCell className="table-cell">Status</Table.HeadCell>
+              <Table.HeadCell className="table-cell">
+                <span className="sr-only">Actions</span>
+              </Table.HeadCell>
+            </Table.Head>
           </Table>
-        </div>
-        {loader && (
-          <div
-            className={`absolute inset-0 flex items-center justify-center ${loaderBg} rounded-xl`}
-          >
-            <Loader />
+
+          <div className="table-body-container relative">
+            <Table className="w-full table-fixed">
+              <Table.Body className="divide-y divide-gray-100 dark:divide-gray-800">
+                {currentPageOrders.map((order) => {
+                  return <TableItem key={order.id} order={order} />
+                })}
+              </Table.Body>
+            </Table>
           </div>
-        )}
-      </div>
+          {loader && (
+            <div
+              className={`absolute inset-0 flex items-center justify-center ${loaderBg} rounded-xl`}
+            >
+              <Loader />
+            </div>
+          )}
+        </div>
 
-      <div className="flex justify-between gap-4 items-center w-full mt-8 p-4 bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800">
-        <Pagination
-          currentPage={currentPage}
-          onPageChange={(page) => {
-            changeCurrentPage(page)
-          }}
-          totalPages={totalPages}
+        <div className="flex justify-between gap-4 items-center w-full mt-8 p-4 bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800">
+          <Pagination
+            currentPage={currentPage}
+            onPageChange={(page) => {
+              changeCurrentPage(page)
+            }}
+            totalPages={totalPages}
+          />
+
+          <p className="table-total-text text-sm">Total: {count}</p>
+        </div>
+      </ResponsiveTableWrapper>
+
+      {/* Modals for mobile cards */}
+      <OrderContactForm
+        isOpen={isFormModalOpen && !!selectedOrder}
+        onClose={handleCloseFormModal}
+        initialValue={selectedOrder || undefined}
+        setIsModalOpen={setIsFormModalOpen}
+      />
+
+      {isOrderDetailsOpen && selectedOrder && (
+        <OrderDetails
+          isOpen={isOrderDetailsOpen}
+          onClose={handleCloseOrderDetails}
+          order={selectedOrder}
         />
+      )}
 
-        <p className="table-total-text text-sm">Total: {count}</p>
-      </div>
-    </ResponsiveTableWrapper>
+      {isOrderStatusModalOpen && selectedOrder && (
+        <OrderEditModal
+          isOpen={isOrderStatusModalOpen}
+          onClose={handleCloseStatusModal}
+          initialValue={selectedOrder}
+          setIsModalOpen={setIsOrderStatusModalOpen}
+        />
+      )}
+    </>
   )
 }
