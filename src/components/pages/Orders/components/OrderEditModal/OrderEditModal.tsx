@@ -100,59 +100,104 @@ const OrderEditModal: React.FC<ModalType> = ({
 
   return (
     <>
-      <Modal dismissible show={isOpen} onClose={onClose}>
-        <Modal.Header>Order Status</Modal.Header>
-        <Modal.Body>
-          <form
-            onSubmit={(e) => e.preventDefault()}
-            className="flex max-w-md flex-col gap-4"
-          >
-            <div>
-              <div className="mb-2 block">
-                <Label htmlFor="attributeName" value="Change order status" />
-              </div>
-              <Dropdown label={activeStatus ? activeStatus : 'Change status'}>
-                {orderStatus.map((status) => {
-                  const statusStyle = getOrderStatusStyle(status)
+      <Modal dismissible show={isOpen} onClose={onClose} size="lg">
+        <Modal.Header className="border-b border-gray-200 dark:border-gray-700">
+          <div className="flex items-center gap-3">
+            <span className="font-semibold text-gray-900 dark:text-white">
+              Update Order Status
+            </span>
+            {initialValue && (
+              <span className="text-sm text-gray-500 dark:text-gray-400">
+                Order #{initialValue.orderNumber}
+              </span>
+            )}
+          </div>
+        </Modal.Header>
 
-                  return (
-                    <Item key={status} onClick={() => setActiveStatus(status)}>
-                      <Badge className={`justify-center w-full ${statusStyle}`}>
-                        {status}
-                      </Badge>
-                    </Item>
-                  )
-                })}
-              </Dropdown>
+        <Modal.Body className="space-y-6">
+          <form className="space-y-6">
+            {/* Status Selection */}
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                Order Status
+              </h3>
+              <div className="space-y-4">
+                <div>
+                  <Label
+                    htmlFor="orderStatus"
+                    value="Select new status"
+                    className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                  />
+                  <Dropdown
+                    label={activeStatus ? activeStatus : 'Select status'}
+                    className="mt-1"
+                  >
+                    {orderStatus.map((status) => {
+                      const statusStyle = getOrderStatusStyle(status)
+
+                      return (
+                        <Item
+                          key={status}
+                          onClick={() => setActiveStatus(status)}
+                        >
+                          <Badge
+                            className={`justify-center w-full ${statusStyle}`}
+                          >
+                            {status}
+                          </Badge>
+                        </Item>
+                      )
+                    })}
+                  </Dropdown>
+                </div>
+              </div>
             </div>
 
+            {/* Decline Message */}
             {activeStatus === OrderStatusEnum.Declined && (
               <div>
-                <div className="mb-2 block">
-                  <Label htmlFor="declineMessage" value="Decline message" />
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                  Decline Message
+                </h3>
+                <div>
+                  <Label
+                    htmlFor="declineMessage"
+                    value="Reason for declining"
+                    className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                  />
+                  <Textarea
+                    onChange={handleInputChange}
+                    id="declineMessage"
+                    name="description"
+                    placeholder="Please provide a reason for declining this order..."
+                    rows={3}
+                    className="mt-1"
+                  />
                 </div>
-                <Textarea
-                  onChange={handleInputChange}
-                  id="declineMessage"
-                  name="description"
-                  placeholder="Order decline message..."
-                  rows={4}
-                />
               </div>
             )}
           </form>
         </Modal.Body>
-        <Modal.Footer>
-          <Button
-            isProcessing={loading}
-            disabled={loading}
-            onClick={saveFunction}
-          >
-            Save
-          </Button>
-          <Button disabled={loading} color="gray" onClick={onClose}>
-            Cancel
-          </Button>
+
+        <Modal.Footer className="border-t border-gray-200 dark:border-gray-700">
+          <div className="flex flex-col sm:flex-row gap-2 w-full">
+            <Button
+              isProcessing={loading}
+              disabled={loading || !activeStatus}
+              onClick={saveFunction}
+              className="w-full sm:w-auto order-2 sm:order-1"
+            >
+              Update Status
+            </Button>
+            <Button
+              disabled={loading}
+              color="gray"
+              onClick={onClose}
+              className="w-full sm:w-auto order-1 sm:order-2"
+            >
+              Cancel
+            </Button>
+          </div>
         </Modal.Footer>
       </Modal>
     </>

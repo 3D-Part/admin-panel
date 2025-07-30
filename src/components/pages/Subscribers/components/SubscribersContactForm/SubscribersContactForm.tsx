@@ -71,70 +71,106 @@ const SubscribersContactForm: React.FC<ModalType> = ({
 
   return (
     <>
-      <Modal dismissible show={isOpen} onClose={onClose}>
-        <Modal.Header>Send email to all subscribers</Modal.Header>
-        <Modal.Body>
-          <form
-            ref={formRef}
-            onSubmit={(e) => e.preventDefault()}
-            className="flex max-w-md flex-col gap-4"
-          >
-            {/* Subject */}
+      <Modal dismissible show={isOpen} onClose={onClose} size="lg">
+        <Modal.Header className="border-b border-gray-200 dark:border-gray-700">
+          <div className="flex items-center gap-3">
+            <span className="font-semibold text-gray-900 dark:text-white">
+              Send Email to Subscribers
+            </span>
+          </div>
+        </Modal.Header>
+
+        <Modal.Body className="space-y-6">
+          <form ref={formRef} className="space-y-6">
+            {/* Email Information */}
             <div>
-              <div className="mb-2 block">
-                <Label htmlFor="subject" value="Subject" />
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                Email Information
+              </h3>
+              <div className="space-y-4">
+                {/* Subject */}
+                <div>
+                  <Label
+                    htmlFor="subject"
+                    value="Email Subject"
+                    className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                  />
+                  <TextInput
+                    name="subject"
+                    onChange={handleInputChange}
+                    id="subject"
+                    required
+                    type="text"
+                    defaultValue=""
+                    className="mt-1"
+                    placeholder="Enter email subject..."
+                  />
+                </div>
+
+                {/* Headline */}
+                <div>
+                  <Label
+                    htmlFor="headline"
+                    value="Email Headline"
+                    className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                  />
+                  <TextInput
+                    name="headline"
+                    onChange={handleInputChange}
+                    id="headline"
+                    required
+                    type="text"
+                    defaultValue=""
+                    className="mt-1"
+                    placeholder="Enter email headline..."
+                  />
+                </div>
               </div>
-              <TextInput
-                name="subject"
-                onChange={handleInputChange}
-                id="subject"
-                required
-                type="text"
-                defaultValue=""
-              />
             </div>
 
-            {/* Headline */}
+            {/* Message Content */}
             <div>
-              <div className="mb-2 block">
-                <Label htmlFor="headline" value="Headline" />
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                Message Content
+              </h3>
+              <div>
+                <Label
+                  htmlFor="content"
+                  value="Email message"
+                  className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                />
+                <Textarea
+                  onChange={handleInputChange}
+                  id="content"
+                  name="content"
+                  placeholder="Write your email message here..."
+                  rows={4}
+                  className="mt-1"
+                />
               </div>
-              <TextInput
-                name="headline"
-                onChange={handleInputChange}
-                id="headline"
-                required
-                type="text"
-                defaultValue=""
-              />
-            </div>
-
-            {/* Content */}
-            <div>
-              <div className="mb-2 block">
-                <Label htmlFor="content" value="Message" />
-              </div>
-              <Textarea
-                onChange={handleInputChange}
-                id="content"
-                name="content"
-                placeholder="write a message ..."
-                rows={4}
-              />
             </div>
           </form>
         </Modal.Body>
-        <Modal.Footer>
-          <Button
-            isProcessing={loading}
-            disabled={loading}
-            onClick={saveFunction}
-          >
-            Send
-          </Button>
-          <Button disabled={loading} color="gray" onClick={onClose}>
-            Cancel
-          </Button>
+
+        <Modal.Footer className="border-t border-gray-200 dark:border-gray-700">
+          <div className="flex flex-col sm:flex-row gap-2 w-full">
+            <Button
+              isProcessing={loading}
+              disabled={loading}
+              onClick={saveFunction}
+              className="w-full sm:w-auto order-2 sm:order-1"
+            >
+              Send Email
+            </Button>
+            <Button
+              disabled={loading}
+              color="gray"
+              onClick={onClose}
+              className="w-full sm:w-auto order-1 sm:order-2"
+            >
+              Cancel
+            </Button>
+          </div>
         </Modal.Footer>
       </Modal>
 

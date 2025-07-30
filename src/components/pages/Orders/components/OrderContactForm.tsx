@@ -72,38 +72,65 @@ const OrderContactForm: React.FC<ModalType> = ({
 
   return (
     <>
-      <Modal dismissible show={isOpen} onClose={onClose}>
-        <Modal.Header>{`Send message to ${initialValue?.email}`}</Modal.Header>
-        <Modal.Body>
-          <form
-            onSubmit={(e) => e.preventDefault()}
-            className="flex max-w-md flex-col gap-4"
-          >
+      <Modal dismissible show={isOpen} onClose={onClose} size="lg">
+        <Modal.Header className="border-b border-gray-200 dark:border-gray-700">
+          <div className="flex items-center gap-3">
+            <span className="font-semibold text-gray-900 dark:text-white">
+              Send Message
+            </span>
+            {initialValue && (
+              <span className="text-sm text-gray-500 dark:text-gray-400">
+                to {initialValue.email}
+              </span>
+            )}
+          </div>
+        </Modal.Header>
+
+        <Modal.Body className="space-y-6">
+          <form className="space-y-6">
+            {/* Message Content */}
             <div>
-              <div className="mb-2 block">
-                <Label htmlFor="declineMessage" value="Message" />
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                Message Content
+              </h3>
+              <div>
+                <Label
+                  htmlFor="declineMessage"
+                  value="Your message"
+                  className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                />
+                <Textarea
+                  onChange={handleInputChange}
+                  id="declineMessage"
+                  name="description"
+                  placeholder="Write your message here..."
+                  rows={4}
+                  className="mt-1"
+                />
               </div>
-              <Textarea
-                onChange={handleInputChange}
-                id="declineMessage"
-                name="description"
-                placeholder="write a message ..."
-                rows={4}
-              />
             </div>
           </form>
         </Modal.Body>
-        <Modal.Footer>
-          <Button
-            isProcessing={loading}
-            disabled={loading}
-            onClick={saveFunction}
-          >
-            Send
-          </Button>
-          <Button disabled={loading} color="gray" onClick={onClose}>
-            Cancel
-          </Button>
+
+        <Modal.Footer className="border-t border-gray-200 dark:border-gray-700">
+          <div className="flex flex-col sm:flex-row gap-2 w-full">
+            <Button
+              isProcessing={loading}
+              disabled={loading}
+              onClick={saveFunction}
+              className="w-full sm:w-auto order-2 sm:order-1"
+            >
+              Send Message
+            </Button>
+            <Button
+              disabled={loading}
+              color="gray"
+              onClick={onClose}
+              className="w-full sm:w-auto order-1 sm:order-2"
+            >
+              Cancel
+            </Button>
+          </div>
         </Modal.Footer>
       </Modal>
 

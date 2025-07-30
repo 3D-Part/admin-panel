@@ -153,84 +153,123 @@ const AddProductsOnSaleModal = () => {
   }, [isAddProductsOnSaleModalOpen])
 
   return (
-    <Modal dismissible show={isAddProductsOnSaleModalOpen} onClose={closeModal}>
-      <Modal.Header>
-        <div className="flex items-center justify-center gap-2">
-          Add <i>&quot;{activeProduct.name}&quot;</i> on sale
+    <Modal
+      dismissible
+      show={isAddProductsOnSaleModalOpen}
+      onClose={closeModal}
+      size="lg"
+    >
+      <Modal.Header className="border-b border-gray-200 dark:border-gray-700">
+        <div className="flex items-center gap-3">
+          <span className="font-semibold text-gray-900 dark:text-white">
+            Add Product to Sale
+          </span>
+          <span className="text-sm text-gray-500 dark:text-gray-400">
+            "{activeProduct.name}"
+          </span>
         </div>
       </Modal.Header>
-      <Modal.Body>
-        <form
-          ref={formRef}
-          onSubmit={(e) => e.preventDefault()}
-          className="flex max-w-md flex-col gap-4"
-        >
-          {/* SALES */}
-          <div className="w-full" id="select">
-            <div className="mb-2 block">
-              <Label
-                htmlFor="saleId"
-                value={`Sale ${
-                  productOnSelectedSale
-                    ? '(product is already in this sale)'
-                    : ''
-                }`}
-              />
+
+      <Modal.Body className="space-y-6">
+        <form ref={formRef} className="space-y-6">
+          {/* Sale Selection */}
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              Sale Selection
+            </h3>
+            <div className="space-y-4">
+              <div>
+                <Label
+                  htmlFor="saleId"
+                  value={`Select Sale ${
+                    productOnSelectedSale
+                      ? '(product is already in this sale)'
+                      : ''
+                  }`}
+                  className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                />
+                <Select
+                  onChange={handleInputChange}
+                  name="saleId"
+                  id="saleId"
+                  required
+                  className="mt-1"
+                >
+                  <option value={''}>Select a sale...</option>
+                  {allSales.map((sale) => {
+                    return (
+                      <option value={sale.id} key={sale.id}>
+                        {sale.name}
+                      </option>
+                    )
+                  })}
+                </Select>
+              </div>
             </div>
-            <Select
-              onChange={handleInputChange}
-              name="saleId"
-              id="saleId"
-              required
-            >
-              <option value={''}>None</option>
-              {allSales.map((sale) => {
-                return (
-                  <option value={sale.id} key={sale.id}>
-                    {sale.name}
-                  </option>
-                )
-              })}
-            </Select>
           </div>
-          {/* Discount */}
-          <div className="w-full">
-            <div className="mb-2 block">
-              <Label htmlFor="discountedPrice" value="Discount price" />
+
+          {/* Pricing */}
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              Pricing
+            </h3>
+            <div className="space-y-4">
+              <div>
+                <Label
+                  htmlFor="discountedPrice"
+                  value="Discounted Price"
+                  className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                />
+                <TextInput
+                  name="discountedPrice"
+                  onChange={handleInputChange}
+                  id="discountedPrice"
+                  required
+                  type="number"
+                  defaultValue={
+                    productOnSelectedSale
+                      ? productOnSelectedSale.discountedPrice
+                      : ''
+                  }
+                  className="mt-1"
+                  placeholder="Enter discounted price..."
+                />
+              </div>
             </div>
-            <TextInput
-              name="discountedPrice"
-              onChange={handleInputChange}
-              id="discountedPrice"
-              required
-              type="text"
-              defaultValue={
-                productOnSelectedSale
-                  ? productOnSelectedSale.discountedPrice
-                  : ''
-              }
-            />
           </div>
         </form>
       </Modal.Body>
-      <Modal.Footer>
-        <Button isProcessing={loading} disabled={loading} onClick={onSave}>
-          Save
-        </Button>
-        {productOnSelectedSale && (
+
+      <Modal.Footer className="border-t border-gray-200 dark:border-gray-700">
+        <div className="flex flex-col sm:flex-row gap-2 w-full">
           <Button
-            color="red"
             isProcessing={loading}
             disabled={loading}
-            onClick={onDelete}
+            onClick={onSave}
+            className="w-full sm:w-auto order-3 sm:order-1"
           >
-            Remove
+            {productOnSelectedSale ? 'Update Price' : 'Add to Sale'}
           </Button>
-        )}
-
-        <Button disabled={loading} color="gray" onClick={closeModal}>
-          Cancel
-        </Button>
+          {productOnSelectedSale && (
+            <Button
+              color="red"
+              isProcessing={loading}
+              disabled={loading}
+              onClick={onDelete}
+              className="w-full sm:w-auto order-2"
+            >
+              Remove from Sale
+            </Button>
+          )}
+          <Button
+            disabled={loading}
+            color="gray"
+            onClick={closeModal}
+            className="w-full sm:w-auto order-1 sm:order-3"
+          >
+            Cancel
+          </Button>
+        </div>
       </Modal.Footer>
     </Modal>
   )

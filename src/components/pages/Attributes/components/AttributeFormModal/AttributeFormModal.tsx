@@ -3,8 +3,8 @@
 import { Loader } from '@/components/common'
 import { AttributeFormBody, AttributeData } from '@/shared/types'
 import { useAttributesStore } from '@/store/store'
-import { Button, Label, Modal, Select, TextInput } from 'flowbite-react'
-import { SyntheticEvent, useEffect, useRef } from 'react'
+import { Button, Label, Modal, TextInput } from 'flowbite-react'
+import { useEffect, useRef } from 'react'
 
 type ModalType = {
   isOpen: boolean
@@ -54,41 +54,78 @@ const AttributeFormModal: React.FC<ModalType> = ({
 
     attributeDataRef.current = initialValue
   }, [initialValue])
+
   if (!isOpen) return null
 
   return (
     <>
-      <Modal dismissible show={isOpen} onClose={onClose}>
-        <Modal.Header>Edit Attribute</Modal.Header>
-        <Modal.Body>
+      <Modal dismissible show={isOpen} onClose={onClose} size="lg">
+        <Modal.Header className="border-b border-gray-200 dark:border-gray-700">
+          <div className="flex items-center gap-3">
+            <span className="font-semibold text-gray-900 dark:text-white">
+              {initialValue ? 'Edit Attribute' : 'Add New Attribute'}
+            </span>
+            {initialValue && (
+              <span className="text-sm text-gray-500 dark:text-gray-400">
+                {initialValue.name}
+              </span>
+            )}
+          </div>
+        </Modal.Header>
+
+        <Modal.Body className="space-y-6">
           {allAttributes.length > 0 ? (
-            <form
-              onSubmit={(e) => e.preventDefault()}
-              className="flex max-w-md flex-col gap-4"
-            >
+            <form className="space-y-6">
+              {/* Attribute Information */}
               <div>
-                <div className="mb-2 block">
-                  <Label htmlFor="attributeName" value="attributeName" />
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                  Attribute Information
+                </h3>
+                <div className="space-y-4">
+                  <div>
+                    <Label
+                      htmlFor="attributeName"
+                      value="Attribute Name"
+                      className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                    />
+                    <TextInput
+                      name="name"
+                      onChange={handleInputChange}
+                      id="attributeName"
+                      required
+                      type="text"
+                      defaultValue={initialValue?.name ? initialValue.name : ''}
+                      className="mt-1"
+                      placeholder="Enter attribute name..."
+                    />
+                  </div>
                 </div>
-                <TextInput
-                  name="name"
-                  onChange={handleInputChange}
-                  id="attributeName"
-                  required
-                  type="text"
-                  defaultValue={initialValue?.name ? initialValue.name : ''}
-                />
               </div>
             </form>
           ) : (
-            <Loader />
+            <div className="flex justify-center items-center py-8">
+              <Loader />
+            </div>
           )}
         </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={saveFunction}>Save</Button>
-          <Button color="gray" onClick={onClose}>
-            Cancel
-          </Button>
+
+        <Modal.Footer className="border-t border-gray-200 dark:border-gray-700">
+          <div className="flex flex-col sm:flex-row gap-2 w-full">
+            <Button
+              onClick={saveFunction}
+              className="w-full sm:w-auto order-2 sm:order-1"
+              disabled={!attributeDataRef.current.name}
+            >
+              {initialValue ? 'Update Attribute' : 'Create Attribute'}
+            </Button>
+            <Button
+              color="gray"
+              onClick={onClose}
+              className="w-full sm:w-auto order-1 sm:order-2"
+            >
+              Cancel
+            </Button>
+          </div>
         </Modal.Footer>
       </Modal>
     </>
