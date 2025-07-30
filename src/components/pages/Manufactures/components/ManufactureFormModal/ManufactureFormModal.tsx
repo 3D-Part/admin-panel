@@ -5,6 +5,7 @@ import { ManufacturerFormBody, ManufacturerData } from '@/shared/types'
 import { useManufactureStore } from '@/store/store'
 import { Button, Label, Modal, TextInput } from 'flowbite-react'
 import { useEffect, useRef } from 'react'
+import { useModalScroll } from '@/shared/hooks/useModalScroll'
 
 type ModalType = {
   isOpen: boolean
@@ -54,6 +55,9 @@ const ManufactureFormModal: React.FC<ModalType> = ({
 
     manufacturerDataRef.current = initialValue
   }, [initialValue])
+
+  // Disable body scroll when modal is open
+  useModalScroll(isOpen)
 
   if (!isOpen) return null
 

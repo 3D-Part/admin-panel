@@ -6,6 +6,7 @@ import { Order } from '@/shared/types'
 import { Button, Label, Modal, Textarea } from 'flowbite-react'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
+import { useModalScroll } from '@/shared/hooks/useModalScroll'
 
 type ModalType = {
   isOpen: boolean
@@ -29,6 +30,9 @@ const OrderContactForm: React.FC<ModalType> = ({
   useEffect(() => {
     declineMessageRef.current = ''
   }, [])
+
+  // Disable body scroll when modal is open
+  useModalScroll(isOpen)
 
   const { orderContactMessage } = OrdersAPI
 

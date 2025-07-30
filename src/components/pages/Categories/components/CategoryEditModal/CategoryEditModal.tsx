@@ -18,6 +18,7 @@ import {
 import { useEffect, useRef } from 'react'
 import CategoryAttribute from '../../CategoryAttribute/CategoryAttribute'
 import { CategoryAttributeAPI } from '@/services'
+import { useModalScroll } from '@/shared/hooks/useModalScroll'
 
 type ModalType = {
   isOpen: boolean
@@ -121,6 +122,9 @@ const CategoryEditModal: React.FC<ModalType> = ({
     if (allCategories.length > 0) return
     fetchAllCategories()
   }, [fetchAllCategories, allCategories])
+
+  // Disable body scroll when modal is open
+  useModalScroll(isOpen)
 
   if (!isOpen) return null
 

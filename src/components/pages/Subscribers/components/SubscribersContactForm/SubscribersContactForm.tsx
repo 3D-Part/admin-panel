@@ -6,6 +6,7 @@ import { Order, SubscribersEmailBody } from '@/shared/types'
 import { Button, Label, Modal, TextInput, Textarea } from 'flowbite-react'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
+import { useModalScroll } from '@/shared/hooks/useModalScroll'
 
 type ModalType = {
   isOpen: boolean
@@ -30,6 +31,9 @@ const SubscribersContactForm: React.FC<ModalType> = ({
     emailDataRef.current = {} as SubscribersEmailBody
     formRef.current && formRef.current.reset()
   }, [])
+
+  // Disable body scroll when modal is open
+  useModalScroll(isOpen)
 
   const { sendMailToAllSubscribers } = SubscribersAPI
 

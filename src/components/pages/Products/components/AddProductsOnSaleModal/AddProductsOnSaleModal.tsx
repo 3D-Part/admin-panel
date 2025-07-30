@@ -17,6 +17,7 @@ import { SalesAPI } from '@/services'
 import { Button, Label, Modal, Select, TextInput } from 'flowbite-react'
 import React, { useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
+import { useModalScroll } from '@/shared/hooks/useModalScroll'
 
 const AddProductsOnSaleModal = () => {
   const [loading, setLoading] = useState(false)
@@ -151,6 +152,9 @@ const AddProductsOnSaleModal = () => {
   useEffect(() => {
     resetData()
   }, [isAddProductsOnSaleModalOpen])
+
+  // Disable body scroll when modal is open
+  useModalScroll(isAddProductsOnSaleModalOpen)
 
   return (
     <Modal
