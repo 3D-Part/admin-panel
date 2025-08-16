@@ -169,7 +169,7 @@ const AddProductsOnSaleModal = () => {
             Add Product to Sale
           </span>
           <span className="text-sm text-gray-500 dark:text-gray-400">
-            "{activeProduct.name}"
+            {activeProduct.name}
           </span>
         </div>
       </Modal.Header>
