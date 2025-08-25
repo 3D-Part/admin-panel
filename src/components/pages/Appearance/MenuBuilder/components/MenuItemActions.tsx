@@ -132,19 +132,6 @@ const MenuItemActions: React.FC<MenuItemActionsProps> = ({
             size="xs"
             color="gray"
             onClick={() => {
-              onIndentRight(item.id)
-            }}
-            disabled={!canIndentRight}
-            className="!p-1.5 !h-8 !w-8"
-            title="Indent Right (Make Child)"
-          >
-            <HiChevronRight className="h-3.5 w-3.5" />
-          </Button>
-
-          <Button
-            size="xs"
-            color="gray"
-            onClick={() => {
               onIndentLeft(item.id)
             }}
             disabled={!canIndentLeft}
@@ -152,6 +139,19 @@ const MenuItemActions: React.FC<MenuItemActionsProps> = ({
             title="Indent Left (Move Up Level)"
           >
             <HiChevronLeft className="h-3.5 w-3.5" />
+          </Button>
+
+          <Button
+            size="xs"
+            color="gray"
+            onClick={() => {
+              onIndentRight(item.id)
+            }}
+            disabled={!canIndentRight}
+            className="!p-1.5 !h-8 !w-8"
+            title="Indent Right (Make Child)"
+          >
+            <HiChevronRight className="h-3.5 w-3.5" />
           </Button>
         </div>
         {/* Edit & Delete */}
