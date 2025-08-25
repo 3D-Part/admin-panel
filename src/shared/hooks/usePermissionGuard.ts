@@ -35,6 +35,7 @@ const ROUTE_PERMISSIONS: Record<string, PermissionEnum[]> = {
   [URLPartsEnum.Users]: [PermissionEnum.USER_READ],
   [URLPartsEnum.Employees]: [PermissionEnum.EMPLOYEE_READ],
   [URLPartsEnum.Subscribers]: [], // No specific permission required
+  [URLPartsEnum.SettingsMenu]: [PermissionEnum.ADMIN_ONLY], // Admin only access
 }
 
 // Routes that don't require permission checking

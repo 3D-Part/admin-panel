@@ -75,4 +75,5 @@ export const PERMISSION_GROUPS = {
   USERS: [PermissionEnum.USER_READ],
   EMPLOYEES: [PermissionEnum.EMPLOYEE_READ, PermissionEnum.EMPLOYEE_WRITE],
   SUBSCRIBERS: [], // No specific permission required for subscribers
+  ADMIN: [PermissionEnum.ADMIN_ONLY], // Admin only permissions
 }

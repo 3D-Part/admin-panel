@@ -9,7 +9,7 @@ import {
   HiDocumentText,
 } from 'react-icons/hi'
 import { MdUnsubscribe } from 'react-icons/md'
-import { IoMdPricetags } from 'react-icons/io'
+import { IoMdPricetags, IoMdSettings } from 'react-icons/io'
 import { FaUsers, FaShopify } from 'react-icons/fa'
 import { FaUsersCog } from 'react-icons/fa'
 
@@ -178,6 +178,20 @@ const SideBar = () => {
         icon: MdUnsubscribe,
         open: false,
         requiredPermissions: PERMISSION_GROUPS.SUBSCRIBERS,
+      },
+      {
+        name: 'Settings',
+        href: URLPartsEnum.Settings,
+        icon: IoMdSettings,
+        open: true,
+        requiredPermissions: PERMISSION_GROUPS.ADMIN,
+        children: [
+          {
+            name: 'Menu',
+            href: URLPartsEnum.SettingsMenu,
+            requiredPermissions: [PermissionEnum.ADMIN_ONLY],
+          },
+        ],
       },
     ]
 

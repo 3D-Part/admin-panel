@@ -448,6 +448,7 @@ export enum PermissionEnum {
   USER_READ = 'USER_READ',
   EMPLOYEE_READ = 'EMPLOYEE_READ',
   EMPLOYEE_WRITE = 'EMPLOYEE_WRITE',
+  ADMIN_ONLY = 'ADMIN_ONLY',
 }
 
 export interface CreateEmployeeData {
