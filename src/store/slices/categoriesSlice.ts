@@ -82,11 +82,37 @@ export const categorySlice: StateCreator<CategorySliceInterface> = (
       order: get().sortOrder,
     }
 
+    const chunkSize = 50 // Fetch 50 categories at a time
+    let allCategories: CategoryData[] = []
+    let offset = 0
+    let hasMore = true
+
     try {
-      const data = await CategoriesAPI.getCategories(sort)
-      if (data) {
-        set({ allCategories: data.rows })
+      while (hasMore) {
+        const paginationData = {
+          offset,
+          limit: chunkSize,
+        }
+
+        const data = await CategoriesAPI.getCategories(sort, paginationData)
+
+        if (data && data.rows.length > 0) {
+          allCategories = [...allCategories, ...data.rows]
+          offset += chunkSize
+
+          // Check if we've fetched all categories
+          if (
+            data.rows.length < chunkSize ||
+            allCategories.length >= data.count
+          ) {
+            hasMore = false
+          }
+        } else {
+          hasMore = false
+        }
       }
+
+      set({ allCategories })
       return true
     } catch (error) {
       console.error('Error with getting data:', error)
