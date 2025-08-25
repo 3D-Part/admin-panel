@@ -35,6 +35,9 @@ export enum URLPartsEnum {
   EditSale = '/sales/edit',
 
   Employees = '/employees',
+
+  Settings = '/settings',
+  SettingsMenu = '/settings/menu',
 }
 
 export enum ErrorsEnum {
