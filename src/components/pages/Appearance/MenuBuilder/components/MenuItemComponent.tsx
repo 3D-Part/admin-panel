@@ -115,7 +115,8 @@ const MenuItemComponent: React.FC<MenuItemComponentProps> = ({
                 canMoveUp={index > 0}
                 canMoveDown={index < item.children.length - 1}
                 canIndentRight={true}
-                canIndentLeft={level > 0}
+                // canIndentLeft={level > 0}
+                canIndentLeft={true}
               />
             ))}
           </div>
