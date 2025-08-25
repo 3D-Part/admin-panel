@@ -107,7 +107,6 @@ const MenuItemActions: React.FC<MenuItemActionsProps> = ({
             color="gray"
             onClick={() => {
               onMoveUp(item.id)
-              if (isTablet) setShowMobileActions(false)
             }}
             disabled={!canMoveUp}
             className="!p-1.5 !h-8 !w-8"
@@ -121,7 +120,6 @@ const MenuItemActions: React.FC<MenuItemActionsProps> = ({
             color="gray"
             onClick={() => {
               onMoveDown(item.id)
-              if (isTablet) setShowMobileActions(false)
             }}
             disabled={!canMoveDown}
             className="!p-1.5 !h-8 !w-8"
@@ -135,7 +133,6 @@ const MenuItemActions: React.FC<MenuItemActionsProps> = ({
             color="gray"
             onClick={() => {
               onIndentRight(item.id)
-              if (isTablet) setShowMobileActions(false)
             }}
             disabled={!canIndentRight}
             className="!p-1.5 !h-8 !w-8"
@@ -149,7 +146,6 @@ const MenuItemActions: React.FC<MenuItemActionsProps> = ({
             color="gray"
             onClick={() => {
               onIndentLeft(item.id)
-              if (isTablet) setShowMobileActions(false)
             }}
             disabled={!canIndentLeft}
             className="!p-1.5 !h-8 !w-8"
