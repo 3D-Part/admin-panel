@@ -10,7 +10,9 @@ import MenuItemComponent from './components/MenuItemComponent'
 
 const MenuBuilder: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [editingItem, setEditingItem] = useState<MenuItemNode | undefined>()
+  const [editingItem, setEditingItem] = useState<
+    (MenuItemNode & { parentId?: string }) | undefined
+  >()
 
   const {
     menuItems,
@@ -79,7 +81,13 @@ const MenuBuilder: React.FC = () => {
   }
 
   const handleEdit = (item: MenuItemNode) => {
-    setEditingItem(item)
+    // Find the parent ID for this item
+    const parent = findParentById(item.id, menuItems)
+    const itemWithParentId = {
+      ...item,
+      parentId: parent?.id,
+    }
+    setEditingItem(itemWithParentId)
     setIsModalOpen(true)
   }
 
