@@ -1,5 +1,7 @@
 import React from 'react'
 import { HiLink, HiDocumentText } from 'react-icons/hi'
+import { MdCategory } from 'react-icons/md'
+
 import type { MenuItemNode } from '@/store/slices/menuBuilderSlice'
 
 interface MenuItemContentProps {
@@ -13,6 +15,8 @@ const MenuItemContent: React.FC<MenuItemContentProps> = ({ item }) => {
         {/* Type icon */}
         {item.type === 'link' ? (
           <HiLink className="h-4 w-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+        ) : item.type === 'category-manufacturer' ? (
+          <MdCategory className="h-4 w-4 text-green-600 dark:text-green-400 flex-shrink-0" />
         ) : (
           <HiDocumentText className="h-4 w-4 text-purple-600 dark:text-purple-400 flex-shrink-0" />
         )}

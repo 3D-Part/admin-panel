@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Button, Modal, Select, TextInput } from 'flowbite-react'
+import { useCategoryStore, useManufactureStore } from '@/store/store'
 import type {
   MenuItemNode,
   MenuItemType,
@@ -22,6 +23,9 @@ const EditModal: React.FC<EditModalProps> = ({
   item,
   allItems,
 }) => {
+  const { allCategories } = useCategoryStore()
+  const { allManufactures } = useManufactureStore()
+
   // Keep type in state since it controls conditional rendering
   const [type, setType] = useState<MenuItemType>(item?.type || 'link')
 
@@ -29,6 +33,8 @@ const EditModal: React.FC<EditModalProps> = ({
   const labelRef = useRef<HTMLInputElement>(null)
   const urlRef = useRef<HTMLInputElement>(null)
   const parentIdRef = useRef<HTMLSelectElement>(null)
+  const categoryRef = useRef<HTMLSelectElement>(null)
+  const manufacturerRef = useRef<HTMLSelectElement>(null)
 
   // Update form values when item changes
   useEffect(() => {
@@ -37,21 +43,56 @@ const EditModal: React.FC<EditModalProps> = ({
       if (labelRef.current) labelRef.current.value = item.label
       if (urlRef.current) urlRef.current.value = item.url || ''
       if (parentIdRef.current) parentIdRef.current.value = item.parentId || ''
+      if (categoryRef.current)
+        categoryRef.current.value = item.categorySlug || ''
+      if (manufacturerRef.current)
+        manufacturerRef.current.value = item.manufacturerId || ''
     } else {
       setType('link')
       if (labelRef.current) labelRef.current.value = ''
       if (urlRef.current) urlRef.current.value = ''
       if (parentIdRef.current) parentIdRef.current.value = ''
+      if (categoryRef.current) categoryRef.current.value = ''
+      if (manufacturerRef.current) manufacturerRef.current.value = ''
     }
   }, [item])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
+    let url = ''
+    let manufacturerId = ''
+
+    if (type === 'category-manufacturer') {
+      const categorySlug = categoryRef.current?.value
+      const manufacturerIdValue = manufacturerRef.current?.value
+
+      if (!categorySlug) {
+        alert('Please select a category')
+        return
+      }
+
+      // Manufacturer is optional - can be just category or category + manufacturer
+      if (manufacturerIdValue) {
+        url = `/shop/category/${categorySlug}?manufacturerId=${manufacturerIdValue}`
+        manufacturerId = manufacturerIdValue
+      } else {
+        url = `/shop/category/${categorySlug}`
+      }
+    } else {
+      url = urlRef.current?.value || ''
+    }
+
     const formData = {
       type,
       label: labelRef.current?.value || '',
-      url: urlRef.current?.value || '',
+      url,
+      categorySlug:
+        type === 'category-manufacturer'
+          ? categoryRef.current?.value
+          : undefined,
+      manufacturerId:
+        type === 'category-manufacturer' ? manufacturerId : undefined,
       parentId: parentIdRef.current?.value || '',
     }
 
@@ -76,6 +117,9 @@ const EditModal: React.FC<EditModalProps> = ({
             >
               <option value="link">Custom Link</option>
               <option value="text">Text Only</option>
+              <option value="category-manufacturer">
+                Category & Manufacturer
+              </option>
             </Select>
           </div>
 
@@ -105,6 +149,43 @@ const EditModal: React.FC<EditModalProps> = ({
                 required
               />
             </div>
+          )}
+
+          {type === 'category-manufacturer' && (
+            <>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Category
+                </label>
+                <Select
+                  ref={categoryRef}
+                  defaultValue={item?.categorySlug || ''}
+                >
+                  <option value="">Select Category</option>
+                  {allCategories.map((category) => (
+                    <option key={category.slug} value={category.slug}>
+                      {category.name}
+                    </option>
+                  ))}
+                </Select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Manufacturer (Optional)
+                </label>
+                <Select
+                  ref={manufacturerRef}
+                  defaultValue={item?.manufacturerId || ''}
+                >
+                  <option value="">No Manufacturer (Category Only)</option>
+                  {allManufactures.map((manufacture) => (
+                    <option key={manufacture.id} value={manufacture.id}>
+                      {manufacture.name}
+                    </option>
+                  ))}
+                </Select>
+              </div>
+            </>
           )}
 
           <div>

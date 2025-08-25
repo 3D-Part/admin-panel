@@ -80,11 +80,15 @@ const MenuBuilder: React.FC = () => {
       type: string
       label: string
       url?: string
+      categorySlug?: string
+      manufacturerId?: string
       children: any[]
     } => ({
       type: item.type,
       label: item.label,
       ...(item.url && { url: item.url }),
+      ...(item.categorySlug && { categorySlug: item.categorySlug }),
+      ...(item.manufacturerId && { manufacturerId: item.manufacturerId }),
       children: item.children.map(processMenuItem), // Recursively process children
     })
 

@@ -1,12 +1,14 @@
 import { StateCreator } from 'zustand'
 
-export type MenuItemType = 'link' | 'text'
+export type MenuItemType = 'link' | 'text' | 'category-manufacturer'
 
 export interface MenuItemNode {
   id: string
   type: MenuItemType
   label: string
   url?: string
+  categorySlug?: string
+  manufacturerId?: string
   children: MenuItemNode[]
 }
 
