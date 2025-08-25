@@ -34,7 +34,7 @@ const MenuItemComponent: React.FC<MenuItemComponentProps> = ({
   canIndentRight,
   canIndentLeft,
 }) => {
-  const [isCollapsed, setIsCollapsed] = useState(false)
+  const [isCollapsed, setIsCollapsed] = useState(true)
   const hasChildren = item.children.length > 0
 
   const toggleCollapse = () => {
