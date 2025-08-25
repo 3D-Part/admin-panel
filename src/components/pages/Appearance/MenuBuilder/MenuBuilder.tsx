@@ -122,7 +122,7 @@ const MenuBuilder: React.FC = () => {
   return (
     <div className="w-full flex flex-col h-full overflow-hidden">
       <div className="w-full flex justify-between items-center flex-wrap gap-4 mb-6">
-        <div className="flex-1 min-w-0">
+        <div className="hidden md:flex flex-col flex-1 min-w-0">
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
             Menu Builder
           </h1>
@@ -130,7 +130,7 @@ const MenuBuilder: React.FC = () => {
             Create and manage your website navigation menu structure
           </p>
         </div>
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex items-center w-full md:w-auto justify-between gap-3 shrink-0">
           <Button color="gray" onClick={exportMenu} size="sm">
             Export Menu
           </Button>
