@@ -10,7 +10,7 @@ import {
   HiDotsVertical,
   HiX,
 } from 'react-icons/hi'
-import { useIsPhone } from '@/shared/hooks/useMediaQuerry'
+import { useIsTablet } from '@/shared/hooks/useMediaQuerry'
 import type { MenuItemNode } from '@/store/slices/menuBuilderSlice'
 
 interface MenuItemActionsProps {
@@ -40,7 +40,7 @@ const MenuItemActions: React.FC<MenuItemActionsProps> = ({
   canIndentRight,
   canIndentLeft,
 }) => {
-  const isPhone = useIsPhone()
+  const isTablet = useIsTablet()
   const [showMobileActions, setShowMobileActions] = useState(false)
 
   const toggleMobileActions = () => {
@@ -50,7 +50,7 @@ const MenuItemActions: React.FC<MenuItemActionsProps> = ({
   return (
     <>
       {/* Mobile Actions Button - only visible on mobile */}
-      {isPhone && (
+      {isTablet && (
         <Button
           size="sm"
           color="gray"
@@ -65,20 +65,20 @@ const MenuItemActions: React.FC<MenuItemActionsProps> = ({
       {/* Actions Container - same structure for both mobile and desktop */}
       <div
         className={`flex items-center space-x-1 flex-shrink-0 justify-between ${
-          isPhone
+          isTablet
             ? `absolute inset-0 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 shadow-lg z-10 p-4 transition-transform duration-300 ease-in-out ${
                 showMobileActions ? 'translate-x-0' : 'translate-x-full'
               } md:relative md:bg-transparent md:border-0 md:shadow-none md:z-auto md:p-0 md:translate-x-0`
             : ''
         }`}
       >
-        <div className="flex items-center space-x-1 flex-wrap gap-2">
+        <div className="flex items-center space-x-1  gap-2 overflow-x-auto no-scrollbar">
           <Button
             size="xs"
             color="gray"
             onClick={() => {
               onEdit(item)
-              if (isPhone) setShowMobileActions(false)
+              if (isTablet) setShowMobileActions(false)
             }}
             className="!p-1.5 !h-8 !w-8"
             title="Edit"
@@ -91,7 +91,7 @@ const MenuItemActions: React.FC<MenuItemActionsProps> = ({
             color="failure"
             onClick={() => {
               onDelete(item.id)
-              if (isPhone) setShowMobileActions(false)
+              if (isTablet) setShowMobileActions(false)
             }}
             className="!p-1.5 !h-8 !w-8"
             title="Delete"
@@ -107,7 +107,7 @@ const MenuItemActions: React.FC<MenuItemActionsProps> = ({
             color="gray"
             onClick={() => {
               onMoveUp(item.id)
-              if (isPhone) setShowMobileActions(false)
+              if (isTablet) setShowMobileActions(false)
             }}
             disabled={!canMoveUp}
             className="!p-1.5 !h-8 !w-8"
@@ -121,7 +121,7 @@ const MenuItemActions: React.FC<MenuItemActionsProps> = ({
             color="gray"
             onClick={() => {
               onMoveDown(item.id)
-              if (isPhone) setShowMobileActions(false)
+              if (isTablet) setShowMobileActions(false)
             }}
             disabled={!canMoveDown}
             className="!p-1.5 !h-8 !w-8"
@@ -135,7 +135,7 @@ const MenuItemActions: React.FC<MenuItemActionsProps> = ({
             color="gray"
             onClick={() => {
               onIndentRight(item.id)
-              if (isPhone) setShowMobileActions(false)
+              if (isTablet) setShowMobileActions(false)
             }}
             disabled={!canIndentRight}
             className="!p-1.5 !h-8 !w-8"
@@ -149,7 +149,7 @@ const MenuItemActions: React.FC<MenuItemActionsProps> = ({
             color="gray"
             onClick={() => {
               onIndentLeft(item.id)
-              if (isPhone) setShowMobileActions(false)
+              if (isTablet) setShowMobileActions(false)
             }}
             disabled={!canIndentLeft}
             className="!p-1.5 !h-8 !w-8"
@@ -161,7 +161,7 @@ const MenuItemActions: React.FC<MenuItemActionsProps> = ({
         {/* Edit & Delete */}
 
         {/* Mobile Close Button - only visible on mobile */}
-        {isPhone && (
+        {isTablet && (
           <Button
             size="xs"
             color="gray"
