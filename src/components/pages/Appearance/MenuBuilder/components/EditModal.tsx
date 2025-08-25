@@ -50,7 +50,7 @@ const EditModal: React.FC<EditModalProps> = ({
       if (manufacturerRef.current)
         manufacturerRef.current.value = item.manufacturerId || ''
     } else {
-      setType('link')
+      // Keep the default type for new items, don't reset to 'link'
       if (labelRef.current) labelRef.current.value = ''
       if (urlRef.current) urlRef.current.value = ''
       if (parentIdRef.current) parentIdRef.current.value = ''
@@ -117,11 +117,11 @@ const EditModal: React.FC<EditModalProps> = ({
               value={type}
               onChange={(e) => setType(e.target.value as MenuItemType)}
             >
-              <option value="link">Custom Link</option>
-              <option value="text">Text Only</option>
               <option value="category-manufacturer">
                 Category & Manufacturer
               </option>
+              <option value="link">Custom Link</option>
+              <option value="text">Text Only</option>
             </Select>
           </div>
 

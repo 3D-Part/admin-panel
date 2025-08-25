@@ -179,8 +179,10 @@ const MenuBuilder: React.FC = () => {
         type: formData.type,
         label: formData.label,
         url: formData.url,
+        categorySlug: formData.categorySlug,
+        manufacturerId: formData.manufacturerId,
         parentId: formData.parentId || undefined,
-      } as const
+      }
       addItem(newItem)
     }
   }
