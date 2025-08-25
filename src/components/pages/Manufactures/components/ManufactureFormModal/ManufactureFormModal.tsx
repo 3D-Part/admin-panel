@@ -22,7 +22,7 @@ const ManufactureFormModal: React.FC<ModalType> = ({
 }) => {
   const manufacturerDataRef = useRef<ManufacturerData>({} as ManufacturerData)
 
-  const { allManufactures } = useManufactureStore()
+  const { currentPageManufactures } = useManufactureStore()
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -78,7 +78,7 @@ const ManufactureFormModal: React.FC<ModalType> = ({
         </Modal.Header>
 
         <Modal.Body className="space-y-6">
-          {allManufactures.length > 0 ? (
+          {currentPageManufactures.length > 0 ? (
             <form className="space-y-6">
               {/* Manufacturer Information */}
               <div>

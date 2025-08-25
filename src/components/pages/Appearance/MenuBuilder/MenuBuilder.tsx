@@ -97,17 +97,22 @@ const MenuBuilder: React.FC = () => {
   }
 
   const exportMenu = () => {
-    const menuData = menuItems.map((item) => ({
+    // Recursive function to process menu items and their children
+    const processMenuItem = (
+      item: MenuItemNode
+    ): {
+      type: string
+      label: string
+      url?: string
+      children: any[]
+    } => ({
       type: item.type,
       label: item.label,
       ...(item.url && { url: item.url }),
-      children: item.children.map((child) => ({
-        type: child.type,
-        label: child.label,
-        ...(child.url && { url: child.url }),
-        children: [],
-      })),
-    }))
+      children: item.children.map(processMenuItem), // Recursively process children
+    })
+
+    const menuData = menuItems.map(processMenuItem)
 
     const dataStr = JSON.stringify(menuData, null, 2)
     const dataBlob = new Blob([dataStr], { type: 'application/json' })
