@@ -38,12 +38,12 @@ const MenuItemComponent: React.FC<MenuItemComponentProps> = ({
       {/* Left border indicator for hierarchy with rotating colors */}
 
       <div
-        className={`relative 
+        className={`relative overflow-hidden
           border border-gray-200 dark:border-gray-700 rounded-lg mb-1
           bg-white dark:bg-gray-900 
           hover:bg-gray-50 dark:hover:bg-gray-800/50 
           transition-all duration-200 ease-in-out
-          ${level > 0 ? 'ml-6' : ''}
+          ${level > 0 ? 'ml-5' : ''}
         `}
       >
         <MenuItemIndicator level={level} />

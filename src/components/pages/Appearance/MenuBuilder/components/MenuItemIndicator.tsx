@@ -32,8 +32,8 @@ interface MenuItemIndicatorProps {
 
 const MenuItemIndicator: React.FC<MenuItemIndicatorProps> = ({ level }) => {
   const getLevelColor = (level: number) => {
-    if (level === 0) return null
-    const colorIndex = (level - 1) % levelColors.length
+    // if (level === 0) return null
+    const colorIndex = level % levelColors.length
     return levelColors[colorIndex]
   }
 
@@ -43,7 +43,7 @@ const MenuItemIndicator: React.FC<MenuItemIndicatorProps> = ({ level }) => {
 
   return (
     <div
-      className={`absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b ${levelColor.light} dark:${levelColor.dark}`}
+      className={`absolute left-0 top-0 bottom-0 w-0.5 bg-gradient-to-b ${levelColor.light} dark:${levelColor.dark}`}
     />
   )
 }
