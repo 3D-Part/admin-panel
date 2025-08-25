@@ -44,6 +44,10 @@ import {
   currentUserSlice,
 } from './slices/currentUserSlice'
 import { ThemeSliceInterface, themeSlice } from './slices/themeSlice'
+import {
+  menuBuilderSlice,
+  MenuBuilderSliceInterface,
+} from './slices/menuBuilderSlice'
 
 export const useCategoryStore = create<CategorySliceInterface>()((...a) => ({
   ...categorySlice(...a),
@@ -119,3 +123,9 @@ export const useCurrentUserStore = create<CurrentUserSliceInterface>()(
 export const useThemeStore = create<ThemeSliceInterface>()((...a) => ({
   ...themeSlice(...a),
 }))
+
+export const useMenuBuilderStore = create<MenuBuilderSliceInterface>()(
+  (...a) => ({
+    ...menuBuilderSlice(...a),
+  })
+)

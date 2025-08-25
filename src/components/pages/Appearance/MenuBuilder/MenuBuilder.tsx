@@ -11,22 +11,20 @@ import {
   HiChevronRight,
   HiChevronLeft,
 } from 'react-icons/hi'
-
-interface MenuItem {
-  id: string
-  type: 'link' | 'text'
-  label: string
-  url?: string
-  children: MenuItem[]
-  parentId?: string
-}
+import { useMenuBuilderStore } from '@/store/store'
+import type {
+  MenuItemNode,
+  MenuItemType,
+} from '@/store/slices/menuBuilderSlice'
 
 interface EditModalProps {
   isOpen: boolean
   onClose: () => void
-  onSave: (item: Omit<MenuItem, 'id' | 'children'>) => void
-  item?: MenuItem
-  allItems: MenuItem[]
+  onSave: (
+    item: Omit<MenuItemNode, 'id' | 'children'> & { parentId?: string }
+  ) => void
+  item?: MenuItemNode & { parentId?: string }
+  allItems: (MenuItemNode & { parentId?: string })[]
 }
 
 const EditModal: React.FC<EditModalProps> = ({
@@ -65,7 +63,7 @@ const EditModal: React.FC<EditModalProps> = ({
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  type: e.target.value as 'link' | 'text',
+                  type: e.target.value as MenuItemType,
                 })
               }
             >
@@ -137,9 +135,9 @@ const EditModal: React.FC<EditModalProps> = ({
 }
 
 const MenuItemComponent: React.FC<{
-  item: MenuItem
+  item: MenuItemNode
   level: number
-  onEdit: (item: MenuItem) => void
+  onEdit: (item: MenuItemNode) => void
   onDelete: (id: string) => void
   onMoveUp: (id: string) => void
   onMoveDown: (id: string) => void
@@ -286,42 +284,42 @@ const MenuItemComponent: React.FC<{
 }
 
 const MenuBuilder: React.FC = () => {
-  const [menuItems, setMenuItems] = useState<MenuItem[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [editingItem, setEditingItem] = useState<MenuItem | undefined>()
+  const [editingItem, setEditingItem] = useState<MenuItemNode | undefined>()
+
+  const {
+    menuItems,
+    addItem,
+    updateItem,
+    deleteItem,
+    moveUp,
+    moveDown,
+    indentRight,
+    indentLeft,
+    moveToParent,
+  } = useMenuBuilderStore()
 
   const generateId = () => Math.random().toString(36).substr(2, 9)
 
-  const flattenItems = useCallback((items: MenuItem[]): MenuItem[] => {
-    const result: MenuItem[] = []
-    const flatten = (items: MenuItem[], parentId?: string) => {
-      items.forEach((item) => {
-        result.push({ ...item, parentId })
-        if (item.children.length > 0) {
-          flatten(item.children, item.id)
-        }
-      })
-    }
-    flatten(items)
-    return result
-  }, [])
-
-  const findItemById = useCallback(
-    (id: string, items: MenuItem[]): MenuItem | null => {
-      for (const item of items) {
-        if (item.id === id) return item
-        if (item.children.length > 0) {
-          const found = findItemById(id, item.children)
-          if (found) return found
-        }
+  const flattenItems = useCallback(
+    (items: MenuItemNode[]): (MenuItemNode & { parentId?: string })[] => {
+      const result: (MenuItemNode & { parentId?: string })[] = []
+      const flatten = (items: MenuItemNode[], parentId?: string) => {
+        items.forEach((item) => {
+          result.push({ ...item, parentId })
+          if (item.children.length > 0) {
+            flatten(item.children, item.id)
+          }
+        })
       }
-      return null
+      flatten(items)
+      return result
     },
     []
   )
 
   const findParentById = useCallback(
-    (id: string, items: MenuItem[]): MenuItem | null => {
+    (id: string, items: MenuItemNode[]): MenuItemNode | null => {
       for (const item of items) {
         if (item.children.some((child) => child.id === id)) return item
         if (item.children.length > 0) {
@@ -334,214 +332,32 @@ const MenuBuilder: React.FC = () => {
     []
   )
 
-  const updateItemInTree = useCallback(
-    (id: string, updates: Partial<MenuItem>, items: MenuItem[]): MenuItem[] => {
-      return items.map((item) => {
-        if (item.id === id) {
-          return { ...item, ...updates }
-        }
-        if (item.children.length > 0) {
-          return {
-            ...item,
-            children: updateItemInTree(id, updates, item.children),
-          }
-        }
-        return item
-      })
-    },
-    []
-  )
-
-  const removeItemFromTree = useCallback(
-    (id: string, items: MenuItem[]): MenuItem[] => {
-      return items.filter((item) => {
-        if (item.id === id) return false
-        if (item.children.length > 0) {
-          item.children = removeItemFromTree(id, item.children)
-        }
-        return true
-      })
-    },
-    []
-  )
-
-  const handleSave = (formData: Omit<MenuItem, 'id' | 'children'>) => {
+  const handleSave = (
+    formData: Omit<MenuItemNode, 'id' | 'children'> & { parentId?: string }
+  ) => {
     if (editingItem) {
       // Update existing item
-      setMenuItems((prev) => updateItemInTree(editingItem.id, formData, prev))
+      updateItem(editingItem.id, formData)
+
+      // If parent changed, move to new parent
+      const currentParentId = findParentById(editingItem.id, menuItems)?.id
+      if (formData.parentId !== currentParentId) {
+        moveToParent(editingItem.id, formData.parentId)
+      }
     } else {
       // Create new item
-      const newItem: MenuItem = {
+      const newItem = {
         id: generateId(),
-        ...formData,
-        children: [],
-      }
-
-      if (formData.parentId) {
-        // Add as child to parent
-        setMenuItems((prev) =>
-          updateItemInTree(
-            formData.parentId!,
-            {
-              children: [
-                ...(findItemById(formData.parentId!, prev)?.children || []),
-                newItem,
-              ],
-            },
-            prev
-          )
-        )
-      } else {
-        // Add to top level
-        setMenuItems((prev) => [...prev, newItem])
-      }
+        type: formData.type,
+        label: formData.label,
+        url: formData.url,
+        parentId: formData.parentId || undefined,
+      } as const
+      addItem(newItem)
     }
   }
 
-  const handleDelete = (id: string) => {
-    setMenuItems((prev) => removeItemFromTree(id, prev))
-  }
-
-  const handleMoveUp = (id: string) => {
-    setMenuItems((prev) => {
-      const flatItems = flattenItems(prev)
-      const currentIndex = flatItems.findIndex((item) => item.id === id)
-      if (currentIndex <= 0) return prev
-
-      const currentItem = flatItems[currentIndex]
-      const parent = findParentById(id, prev)
-
-      if (parent) {
-        // Moving within same parent
-        const parentIndex = flatItems.findIndex((item) => item.id === parent.id)
-        const siblings = parent.children
-        const siblingIndex = siblings.findIndex((sibling) => sibling.id === id)
-
-        if (siblingIndex > 0) {
-          const newSiblings: MenuItem[] = [...siblings]
-          const temp = newSiblings[siblingIndex]
-          newSiblings[siblingIndex] = newSiblings[siblingIndex - 1]
-          newSiblings[siblingIndex - 1] = temp
-
-          return updateItemInTree(parent.id, { children: newSiblings }, prev)
-        }
-      } else {
-        // Moving at top level
-        const newItems: MenuItem[] = [...prev]
-        const temp = newItems[currentIndex]
-        newItems[currentIndex] = newItems[currentIndex - 1]
-        newItems[currentIndex - 1] = temp
-        return newItems
-      }
-
-      return prev
-    })
-  }
-
-  const handleMoveDown = (id: string) => {
-    setMenuItems((prev) => {
-      const flatItems = flattenItems(prev)
-      const currentIndex = flatItems.findIndex((item) => item.id === id)
-      if (currentIndex >= flatItems.length - 1) return prev
-
-      const currentItem = flatItems[currentIndex]
-      const parent = findParentById(id, prev)
-
-      if (parent) {
-        // Moving within same parent
-        const siblings = parent.children
-        const siblingIndex = siblings.findIndex((sibling) => sibling.id === id)
-
-        if (siblingIndex < siblings.length - 1) {
-          const newSiblings: MenuItem[] = [...siblings]
-          const temp = newSiblings[siblingIndex]
-          newSiblings[siblingIndex] = newSiblings[siblingIndex + 1]
-          newSiblings[siblingIndex + 1] = temp
-
-          return updateItemInTree(parent.id, { children: newSiblings }, prev)
-        }
-      } else {
-        // Moving at top level
-        const newItems: MenuItem[] = [...prev]
-        const temp = newItems[currentIndex]
-        newItems[currentIndex] = newItems[currentIndex + 1]
-        newItems[currentIndex + 1] = temp
-        return newItems
-      }
-
-      return prev
-    })
-  }
-
-  const handleIndentRight = (id: string) => {
-    setMenuItems((prev) => {
-      const flatItems = flattenItems(prev)
-      const currentIndex = flatItems.findIndex((item) => item.id === id)
-      if (currentIndex <= 0) return prev
-
-      const currentItem = flatItems[currentIndex]
-      const previousItem = flatItems[currentIndex - 1]
-
-      if (!currentItem || !previousItem) return prev
-
-      // Remove from current position
-      const newItems = removeItemFromTree(id, prev)
-
-      // Add as child to previous item
-      return updateItemInTree(
-        previousItem.id,
-        {
-          children: [
-            ...(findItemById(previousItem.id, newItems)?.children || []),
-            currentItem,
-          ],
-        },
-        newItems
-      )
-    })
-  }
-
-  const handleIndentLeft = (id: string) => {
-    setMenuItems((prev) => {
-      const parent = findParentById(id, prev)
-      if (!parent) return prev
-
-      const grandParent = findParentById(parent.id, prev)
-      const currentItem = findItemById(id, prev)
-
-      if (!currentItem) return prev
-
-      // Remove from current parent
-      let newItems = updateItemInTree(
-        parent.id,
-        {
-          children: parent.children.filter((child) => child.id !== id),
-        },
-        prev
-      )
-
-      if (grandParent) {
-        // Add as sibling to parent
-        newItems = updateItemInTree(
-          grandParent.id,
-          {
-            children: [
-              ...(findItemById(grandParent.id, newItems)?.children || []),
-              currentItem,
-            ],
-          },
-          newItems
-        )
-      } else {
-        // Add to top level
-        newItems = [...newItems, currentItem]
-      }
-
-      return newItems
-    })
-  }
-
-  const handleEdit = (item: MenuItem) => {
+  const handleEdit = (item: MenuItemNode) => {
     setEditingItem(item)
     setIsModalOpen(true)
   }
@@ -623,7 +439,7 @@ const MenuBuilder: React.FC = () => {
       {/* Menu Items */}
       <div className="flex-1 overflow-y-auto">
         {menuItems.length === 0 ? (
-          <div className="text-center py-12">
+          <div className="text-center py-12 flex flex-col items-center justify-center">
             <div className="text-gray-400 dark:text-gray-500 text-6xl mb-4">
               📋
             </div>
@@ -655,11 +471,11 @@ const MenuBuilder: React.FC = () => {
                 item={item}
                 level={0}
                 onEdit={handleEdit}
-                onDelete={handleDelete}
-                onMoveUp={handleMoveUp}
-                onMoveDown={handleMoveDown}
-                onIndentRight={handleIndentRight}
-                onIndentLeft={handleIndentLeft}
+                onDelete={deleteItem}
+                onMoveUp={moveUp}
+                onMoveDown={moveDown}
+                onIndentRight={indentRight}
+                onIndentLeft={indentLeft}
                 canMoveUp={index > 0}
                 canMoveDown={index < menuItems.length - 1}
                 canIndentRight={index > 0}
