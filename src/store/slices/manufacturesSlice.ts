@@ -20,7 +20,7 @@ export interface ManufactureSliceInterface {
   changeItemsPerPage: (data: number) => void
   changeManufactureFilter: (data: {}) => void
   fetchManufactures: (paginationData?: PaginationData) => Promise<boolean>
-  fetchAllManufactures: (paginationData?: PaginationData) => Promise<boolean>
+  fetchAllManufactures: (forceRefresh?: boolean) => Promise<boolean>
   addNewManufacture: (manufacture: ManufacturerFormBody) => Promise<boolean>
   editManufacture: (
     manufactureId: string,
@@ -79,17 +79,50 @@ export const manufactureSlice: StateCreator<ManufactureSliceInterface> = (
     return false
   },
 
-  fetchAllManufactures: async () => {
+  fetchAllManufactures: async (forceRefresh = false) => {
+    // Don't fetch if we already have data and don't need to force refresh
+    if (get().allManufactures.length > 0 && !forceRefresh) {
+      console.log('Manufactures already loaded, skipping API call')
+      return true
+    }
+
     const sort = {
       field: get().sortFiled,
       order: get().sortOrder,
     }
 
+    const chunkSize = 50 // Fetch 50 manufactures at a time
+    let allManufactures: ManufacturerData[] = []
+    let offset = 0
+    let hasMore = true
+
     try {
-      const data = await ManufacturesAPI.getManufactures(sort)
-      if (data) {
-        set({ allManufactures: data.rows })
+      while (hasMore) {
+        const paginationData = {
+          offset,
+          limit: chunkSize,
+        }
+
+        const data = await ManufacturesAPI.getManufactures(sort, paginationData)
+
+        if (data && data.rows.length > 0) {
+          allManufactures = [...allManufactures, ...data.rows]
+          offset += chunkSize
+
+          // Check if we've fetched all manufactures
+          if (
+            data.rows.length < chunkSize ||
+            allManufactures.length >= data.count
+          ) {
+            hasMore = false
+          }
+        } else {
+          hasMore = false
+        }
       }
+
+      set({ allManufactures })
+      console.log(`Loaded ${allManufactures.length} manufactures in chunks`)
       return true
     } catch (error) {
       console.error('Error with getting data:', error)

@@ -21,7 +21,6 @@ export const Categories = () => {
 
   const {
     fetchCategories,
-    fetchAllCategories,
     currentPage,
     editCategory,
     itemsPerPage,

@@ -1,9 +1,13 @@
 'use client'
 
-import React, { useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { Button } from 'flowbite-react'
 import { HiPlus } from 'react-icons/hi'
-import { useMenuBuilderStore } from '@/store/store'
+import {
+  useMenuBuilderStore,
+  useCategoryStore,
+  useManufactureStore,
+} from '@/store/store'
 import type { MenuItemNode } from '@/store/slices/menuBuilderSlice'
 import EditModal from './components/EditModal'
 import MenuItemComponent from './components/MenuItemComponent'
@@ -25,6 +29,15 @@ const MenuBuilder: React.FC = () => {
     indentLeft,
     moveToParent,
   } = useMenuBuilderStore()
+
+  const { fetchAllCategories } = useCategoryStore()
+  const { fetchAllManufactures } = useManufactureStore()
+
+  // Fetch categories and manufactures when component mounts
+  useEffect(() => {
+    fetchAllCategories()
+    fetchAllManufactures()
+  }, [fetchAllCategories, fetchAllManufactures])
 
   const generateId = () => Math.random().toString(36).substr(2, 9)
 
@@ -58,6 +71,34 @@ const MenuBuilder: React.FC = () => {
     },
     []
   )
+
+  const exportMenu = useCallback(() => {
+    // Recursive function to process menu items and their children
+    const processMenuItem = (
+      item: MenuItemNode
+    ): {
+      type: string
+      label: string
+      url?: string
+      children: any[]
+    } => ({
+      type: item.type,
+      label: item.label,
+      ...(item.url && { url: item.url }),
+      children: item.children.map(processMenuItem), // Recursively process children
+    })
+
+    const menuData = menuItems.map(processMenuItem)
+
+    const dataStr = JSON.stringify(menuData, null, 2)
+    const dataBlob = new Blob([dataStr], { type: 'application/json' })
+    const url = URL.createObjectURL(dataBlob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = 'menu-structure.json'
+    link.click()
+    URL.revokeObjectURL(url)
+  }, [menuItems])
 
   const handleSave = (
     formData: Omit<MenuItemNode, 'id' | 'children'> & { parentId?: string }
@@ -94,34 +135,6 @@ const MenuBuilder: React.FC = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false)
     setEditingItem(undefined)
-  }
-
-  const exportMenu = () => {
-    // Recursive function to process menu items and their children
-    const processMenuItem = (
-      item: MenuItemNode
-    ): {
-      type: string
-      label: string
-      url?: string
-      children: any[]
-    } => ({
-      type: item.type,
-      label: item.label,
-      ...(item.url && { url: item.url }),
-      children: item.children.map(processMenuItem), // Recursively process children
-    })
-
-    const menuData = menuItems.map(processMenuItem)
-
-    const dataStr = JSON.stringify(menuData, null, 2)
-    const dataBlob = new Blob([dataStr], { type: 'application/json' })
-    const url = URL.createObjectURL(dataBlob)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = 'menu-structure.json'
-    link.click()
-    URL.revokeObjectURL(url)
   }
 
   return (

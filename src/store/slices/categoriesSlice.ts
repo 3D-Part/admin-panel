@@ -16,7 +16,7 @@ export interface CategorySliceInterface {
   changeItemsPerPage: (data: number) => void
   changeCategoryFilter: (data: {}) => void
   fetchCategories: (paginationData?: PaginationData) => Promise<boolean>
-  fetchAllCategories: () => Promise<boolean>
+  fetchAllCategories: (forceRefresh?: boolean) => Promise<boolean>
   addNewCategory: (
     category: CategoryFormBody
   ) => Promise<CategoryData | boolean>
@@ -76,7 +76,13 @@ export const categorySlice: StateCreator<CategorySliceInterface> = (
     return false
   },
 
-  fetchAllCategories: async () => {
+  fetchAllCategories: async (forceRefresh = false) => {
+    // Don't fetch if we already have data and don't need to force refresh
+    if (get().allCategories.length > 0 && !forceRefresh) {
+      console.log('Categories already loaded, skipping API call')
+      return true
+    }
+
     const sort = {
       field: get().sortFiled,
       order: get().sortOrder,
@@ -113,6 +119,7 @@ export const categorySlice: StateCreator<CategorySliceInterface> = (
       }
 
       set({ allCategories })
+      console.log(`Loaded ${allCategories.length} categories in chunks`)
       return true
     } catch (error) {
       console.error('Error with getting data:', error)
