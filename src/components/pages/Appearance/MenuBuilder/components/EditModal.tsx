@@ -27,7 +27,9 @@ const EditModal: React.FC<EditModalProps> = ({
   const { allManufactures } = useManufactureStore()
 
   // Keep type in state since it controls conditional rendering
-  const [type, setType] = useState<MenuItemType>(item?.type || 'link')
+  const [type, setType] = useState<MenuItemType>(
+    item?.type || 'category-manufacturer'
+  )
 
   // Use refs for inputs that don't need re-renders
   const labelRef = useRef<HTMLInputElement>(null)

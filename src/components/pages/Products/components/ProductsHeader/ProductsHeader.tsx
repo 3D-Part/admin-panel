@@ -18,8 +18,8 @@ export const ProductsOverviewHeader = () => {
     currentUser?.role
   )
   return (
-    <div className="w-full flex justify-between items-center gap-2 md:gap-4">
-      <div className="flex-1  min-w-0">
+    <div className="w-full flex justify-between items-center gap-2 md:gap-4 z-20">
+      <div className="flex-1 min-w-0 ">
         <ProductsSearch />
       </div>
       {hasWritePermission && (

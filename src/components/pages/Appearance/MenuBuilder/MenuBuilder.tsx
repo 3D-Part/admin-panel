@@ -1,8 +1,8 @@
 'use client'
 
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, useRef } from 'react'
 import { Button } from 'flowbite-react'
-import { HiPlus } from 'react-icons/hi'
+import { HiPlus, HiUpload, HiDownload } from 'react-icons/hi'
 import {
   useMenuBuilderStore,
   useCategoryStore,
@@ -28,10 +28,14 @@ const MenuBuilder: React.FC = () => {
     indentRight,
     indentLeft,
     moveToParent,
+    setMenuItems,
   } = useMenuBuilderStore()
 
   const { fetchAllCategories } = useCategoryStore()
   const { fetchAllManufactures } = useManufactureStore()
+
+  // File input ref for import functionality
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   // Fetch categories and manufactures when component mounts
   useEffect(() => {
@@ -104,6 +108,62 @@ const MenuBuilder: React.FC = () => {
     URL.revokeObjectURL(url)
   }, [menuItems])
 
+  const importMenu = useCallback(() => {
+    fileInputRef.current?.click()
+  }, [])
+
+  const handleFileImport = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0]
+      if (!file) return
+
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        try {
+          const content = e.target?.result as string
+          const importedData = JSON.parse(content)
+
+          // Validate the imported data structure
+          if (!Array.isArray(importedData)) {
+            alert('Invalid file format: Expected an array of menu items')
+            return
+          }
+
+          // Process imported data and generate new IDs
+          const processImportedItem = (item: any): MenuItemNode => ({
+            id: generateId(), // Generate new ID for each item
+            type: item.type || 'link',
+            label: item.label || 'Imported Item',
+            url: item.url || '',
+            categorySlug: item.categorySlug || '',
+            manufacturerId: item.manufacturerId || '',
+            children: (item.children || []).map(processImportedItem),
+          })
+
+          const processedMenuItems = importedData.map(processImportedItem)
+
+          // Set the imported menu items
+          setMenuItems(processedMenuItems)
+
+          // Clear the file input
+          if (fileInputRef.current) {
+            fileInputRef.current.value = ''
+          }
+
+          alert(
+            `Successfully imported ${processedMenuItems.length} menu items!`
+          )
+        } catch (error) {
+          console.error('Error importing menu:', error)
+          alert('Error importing menu: Invalid JSON format')
+        }
+      }
+
+      reader.readAsText(file)
+    },
+    [setMenuItems]
+  )
+
   const handleSave = (
     formData: Omit<MenuItemNode, 'id' | 'children'> & { parentId?: string }
   ) => {
@@ -154,8 +214,15 @@ const MenuBuilder: React.FC = () => {
         </div>
         <div className="flex items-center w-full md:w-auto justify-between gap-3 shrink-0">
           <Button color="gray" onClick={exportMenu} size="sm">
-            Export Menu
+            <HiDownload className="mr-2" />
+            Export
           </Button>
+
+          <Button onClick={importMenu} color="gray" size="sm">
+            <HiUpload className="mr-2" />
+            Import
+          </Button>
+
           <Button onClick={() => setIsModalOpen(true)} size="sm">
             <HiPlus className="mr-2" />
             Add Menu Item
@@ -221,6 +288,14 @@ const MenuBuilder: React.FC = () => {
           allItems={flattenItems(menuItems)}
         />
       )}
+
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileImport}
+        accept=".json"
+        className="hidden"
+      />
     </div>
   )
 }

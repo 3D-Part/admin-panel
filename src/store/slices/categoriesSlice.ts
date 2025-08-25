@@ -83,9 +83,10 @@ export const categorySlice: StateCreator<CategorySliceInterface> = (
       return true
     }
 
+    // Use alphabetical sorting specifically for fetchAllCategories
     const sort = {
-      field: get().sortFiled,
-      order: get().sortOrder,
+      field: 'name',
+      order: 'ASC' as const,
     }
 
     const chunkSize = 50 // Fetch 50 categories at a time

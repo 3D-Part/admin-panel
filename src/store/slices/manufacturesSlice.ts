@@ -86,9 +86,10 @@ export const manufactureSlice: StateCreator<ManufactureSliceInterface> = (
       return true
     }
 
+    // Use alphabetical sorting specifically for fetchAllManufactures
     const sort = {
-      field: get().sortFiled,
-      order: get().sortOrder,
+      field: 'name',
+      order: 'ASC' as const,
     }
 
     const chunkSize = 50 // Fetch 50 manufactures at a time
