@@ -22,6 +22,7 @@ import {
   PERMISSION_GROUPS,
 } from '@/shared/helpers/permissions'
 import { PermissionEnum } from '@/shared/types'
+import { useEffect } from 'react'
 
 const SideBar = () => {
   const pathname = usePathname()
@@ -33,6 +34,10 @@ const SideBar = () => {
   const closeMobileMenu = () => {
     changeIsMobileMenuOpen(false)
   }
+
+  useEffect(() => {
+    console.log('test')
+  }, [])
 
   // Filter menu items based on user permissions
   const getFilteredMenuItems = () => {
