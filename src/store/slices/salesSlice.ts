@@ -180,11 +180,43 @@ export const salesSlice: StateCreator<SalesSliceInterface> = (set, get) => ({
       const updatedProductOnSale = currentActiveSale.productOnSale.filter(
         (product) => product.id !== productId
       )
+
+      // Update activeSale
+      const updatedActiveSale = {
+        ...currentActiveSale,
+        productOnSale: updatedProductOnSale,
+      }
+
+      // Update allSales array
+      const updatedAllSales = get().allSales.map((sale) =>
+        sale.id === currentActiveSale.id
+          ? {
+              ...sale,
+              productOnSale:
+                sale.productOnSale?.filter(
+                  (product) => product.id !== productId
+                ) || [],
+            }
+          : sale
+      )
+
+      // Update currentPageSales array
+      const updatedCurrentPageSales = get().currentPageSales.map((sale) =>
+        sale.id === currentActiveSale.id
+          ? {
+              ...sale,
+              productOnSale:
+                sale.productOnSale?.filter(
+                  (product) => product.id !== productId
+                ) || [],
+            }
+          : sale
+      )
+
       set({
-        activeSale: {
-          ...currentActiveSale,
-          productOnSale: updatedProductOnSale,
-        },
+        activeSale: updatedActiveSale,
+        allSales: updatedAllSales,
+        currentPageSales: updatedCurrentPageSales,
       })
     }
   },
