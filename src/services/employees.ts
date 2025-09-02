@@ -34,8 +34,19 @@ const getEmployees = async (
   }
 }
 
+const deleteEmployee = async (id: string): Promise<boolean> => {
+  try {
+    await API.remove(`${API_BASE_URL}/users/employee/${id}`)
+    return true
+  } catch (error) {
+    console.error('Error deleting employee:', error)
+    return false
+  }
+}
+
 const EmployeesAPI = {
   getEmployees,
+  deleteEmployee,
 }
 
 export default EmployeesAPI

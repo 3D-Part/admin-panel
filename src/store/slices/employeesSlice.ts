@@ -1,5 +1,5 @@
 import { StateCreator } from 'zustand'
-import { PaginationData, User, UsersData } from '@/shared/types'
+import { PaginationData, User } from '@/shared/types'
 import EmployeesAPI from '@/services/employees'
 
 export interface EmployeesSliceInterface {
@@ -14,13 +14,14 @@ export interface EmployeesSliceInterface {
   sortFiled: string
   sortOrder: 'ASC' | 'DESC'
   employeesFilters: {}
-  changeActiveEmployee: (data: User) => void
-  changeSelectedEmployee: (data: User | null) => void
-  changeCurrentPage: (data: number) => void
-  changeItemsPerPage: (data: number) => void
-  changeEmployeesFilter: (data: {}) => void
+  changeActiveEmployee: (employee: User) => void
+  changeSelectedEmployee: (employee: User | null) => void
+  changeCurrentPage: (page: number) => void
+  changeItemsPerPage: (itemsPerPage: number) => void
+  changeEmployeesFilter: (filters: {}) => void
   fetchEmployees: (paginationData?: PaginationData) => Promise<boolean>
-  fetchAllEmployees: (paginationData?: PaginationData) => Promise<boolean>
+  fetchAllEmployees: () => Promise<boolean>
+  deleteEmployee: (id: string) => Promise<boolean>
 }
 
 export const employeesSlice: StateCreator<EmployeesSliceInterface> = (
@@ -39,24 +40,24 @@ export const employeesSlice: StateCreator<EmployeesSliceInterface> = (
   sortOrder: 'DESC',
   employeesFilters: {},
 
-  changeActiveEmployee: (data: User) => {
-    set({ activeEmployee: data })
+  changeActiveEmployee: (employee: User) => {
+    set({ activeEmployee: employee })
   },
 
-  changeSelectedEmployee: (data: User | null) => {
-    set({ selectedEmployee: data })
+  changeSelectedEmployee: (employee: User | null) => {
+    set({ selectedEmployee: employee })
   },
 
-  changeCurrentPage: (data: number) => {
-    set({ currentPage: data })
+  changeCurrentPage: (page: number) => {
+    set({ currentPage: page })
   },
 
-  changeItemsPerPage: (data: number) => {
-    set({ itemsPerPage: data })
+  changeItemsPerPage: (itemsPerPage: number) => {
+    set({ itemsPerPage })
   },
 
-  changeEmployeesFilter: (data: {}) => {
-    set({ employeesFilters: data })
+  changeEmployeesFilter: (filters: {}) => {
+    set({ employeesFilters: filters })
   },
 
   fetchEmployees: async (paginationData?: PaginationData) => {
@@ -100,5 +101,32 @@ export const employeesSlice: StateCreator<EmployeesSliceInterface> = (
       console.error('Error with getting data:', error)
     }
     return false
+  },
+
+  deleteEmployee: async (id: string) => {
+    try {
+      const success = await EmployeesAPI.deleteEmployee(id)
+      if (success) {
+        // Remove the deleted employee from both arrays
+        const updatedCurrentPageEmployees = get().currentPageEmployees.filter(
+          (employee) => employee.id !== id
+        )
+        const updatedAllEmployees = get().allEmployees.filter(
+          (employee) => employee.id !== id
+        )
+
+        set({
+          currentPageEmployees: updatedCurrentPageEmployees,
+          allEmployees: updatedAllEmployees,
+          count: get().count - 1,
+        })
+
+        return true
+      }
+      return false
+    } catch (error) {
+      console.error('Error deleting employee:', error)
+      return false
+    }
   },
 })
