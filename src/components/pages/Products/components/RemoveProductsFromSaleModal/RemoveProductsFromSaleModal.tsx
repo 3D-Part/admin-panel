@@ -163,6 +163,7 @@ const RemoveProductsFromSaleModal = () => {
 
             <div className="space-y-3 max-h-96 overflow-y-auto">
               {activeProduct?.productOnSale?.map((productOnSale) => {
+                console.log('productOnSale: ', productOnSale)
                 const isSelected = selectedIds.includes(productOnSale.id)
 
                 return (
@@ -188,8 +189,8 @@ const RemoveProductsFromSaleModal = () => {
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
                           <div>
-                            <h4 className="font-medium text-gray-900 dark:text-white">
-                              Sale ID: {productOnSale.saleId}
+                            <h4 className="font-medium text-gray-900 dark:text-white font-bold">
+                              {productOnSale.sale.name}
                             </h4>
                             <p className="text-sm text-gray-500 dark:text-gray-400">
                               Discounted Price: {productOnSale.discountedPrice}{' '}

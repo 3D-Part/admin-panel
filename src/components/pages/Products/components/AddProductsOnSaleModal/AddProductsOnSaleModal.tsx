@@ -22,7 +22,7 @@ import { useModalScroll } from '@/shared/hooks/useModalScroll'
 
 const AddProductsOnSaleModal = () => {
   const [loading, setLoading] = useState(false)
-  const [discountedPrice, setDiscountedPrice] = useState<number | string>('')
+  const discountedPriceRef = useRef<string>('')
 
   const [productOnSelectedSale, setProductOnSelectedSale] =
     useState<ProductOnSale | null>(null)
@@ -80,7 +80,10 @@ const AddProductsOnSaleModal = () => {
 
   useEffect(() => {
     if (productOnSelectedSale) {
-      setDiscountedPrice(productOnSelectedSale.discountedPrice)
+      discountedPriceRef.current =
+        productOnSelectedSale.discountedPrice.toString()
+    } else {
+      discountedPriceRef.current = ''
     }
   }, [productOnSelectedSale])
 
@@ -97,7 +100,7 @@ const AddProductsOnSaleModal = () => {
     }
 
     if (name === 'discountedPrice') {
-      setDiscountedPrice(value)
+      discountedPriceRef.current = value
     }
 
     if (name === 'saleId') {
@@ -110,7 +113,7 @@ const AddProductsOnSaleModal = () => {
     formRef.current && formRef.current.reset()
     salesDataRef.current = {} as ProductOnSaleData
     setProductOnSelectedSale(null)
-    setDiscountedPrice('')
+    discountedPriceRef.current = ''
   }
 
   const closeModal = () => {
@@ -374,43 +377,15 @@ const AddProductsOnSaleModal = () => {
                     type="number"
                     step="0.01"
                     min="0"
-                    value={
-                      discountedPrice ||
-                      (productOnSelectedSale
-                        ? productOnSelectedSale.discountedPrice
-                        : '')
+                    defaultValue={
+                      productOnSelectedSale
+                        ? productOnSelectedSale.discountedPrice.toString()
+                        : ''
                     }
                     className="w-full"
                     placeholder="Enter discounted price..."
                   />
                 </div>
-                {activeSale && discountedPrice && (
-                  <div className="mt-3 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-green-700 dark:text-green-300">
-                        You save:
-                      </span>
-                      <span className="text-sm font-semibold text-green-800 dark:text-green-200">
-                        {`${(
-                          Number(activeProduct.price) - Number(discountedPrice)
-                        ).toFixed(2)} KM`}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between mt-1">
-                      <span className="text-sm text-green-700 dark:text-green-300">
-                        Discount:
-                      </span>
-                      <span className="text-sm font-semibold text-green-800 dark:text-green-200">
-                        {`${Math.round(
-                          ((Number(activeProduct.price) -
-                            Number(discountedPrice)) /
-                            Number(activeProduct.price)) *
-                            100
-                        )}%`}
-                      </span>
-                    </div>
-                  </div>
-                )}
               </div>
             </div>
           </div>
@@ -418,7 +393,7 @@ const AddProductsOnSaleModal = () => {
       </Modal.Body>
 
       <Modal.Footer className="border-t border-gray-200 dark:border-gray-700 px-4 sm:px-6 py-4">
-        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full">
+        <div className="flex flex-row gap-2 sm:gap-3 w-full">
           <Button
             isProcessing={loading}
             disabled={loading}

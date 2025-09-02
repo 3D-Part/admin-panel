@@ -380,6 +380,9 @@ export interface ProductOnSale {
   productId: string
   saleId: string
   updatedAt: string
+  sale: {
+    name: string
+  }
 }
 export interface Sale {
   id: string
