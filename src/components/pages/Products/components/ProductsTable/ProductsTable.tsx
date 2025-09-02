@@ -49,8 +49,6 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
     addNewProducts,
   } = useProductsStore()
 
-  const { changeIsAddProductsOnSaleModalOpen } = useUISliceStore()
-
   // Check if user has write permission for products
   const hasWritePermission = hasPermission(
     currentUser?.permissions,
@@ -94,7 +92,10 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
   // Mobile card actions component
   const MobileCardActions = ({ product }: { product: ProductData }) => {
     const router = useRouter()
-    const { changeIsAddProductsOnSaleModalOpen } = useUISliceStore()
+    const {
+      changeIsAddProductsOnSaleModalOpen,
+      changeIsRemoveProductsFromSaleModalOpen,
+    } = useUISliceStore()
     const {
       changeActiveProduct,
       addNewProducts,
@@ -106,6 +107,11 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
     const addProductOnSale = () => {
       changeActiveProduct(product)
       changeIsAddProductsOnSaleModalOpen(true)
+    }
+
+    const removeProductFromSale = () => {
+      changeActiveProduct(product)
+      changeIsRemoveProductsFromSaleModalOpen(true)
     }
 
     const duplicateProduct = async () => {
@@ -171,11 +177,17 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
               </span>
             </Dropdown.Item>
             <Dropdown.Item
-              onClick={addProductOnSale}
+              onClick={
+                product.productOnSale.length > 0
+                  ? removeProductFromSale
+                  : addProductOnSale
+              }
               className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
             >
               <span className="font-medium table-action-link cursor-pointer">
-                Add on sale
+                {product.productOnSale.length > 0
+                  ? 'Remove from sale'
+                  : 'Add on sale'}
               </span>
             </Dropdown.Item>
             <Dropdown.Item

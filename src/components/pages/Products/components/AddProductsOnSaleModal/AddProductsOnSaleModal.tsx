@@ -6,6 +6,7 @@ import {
   ProductOnSale,
   ProductOnSaleData,
   Sale,
+  PaginationData,
 } from '@/shared/types'
 import {
   useProductsStore,
@@ -25,15 +26,25 @@ const AddProductsOnSaleModal = () => {
   const [productOnSelectedSale, setProductOnSelectedSale] =
     useState<ProductOnSale | null>(null)
 
-  const { activeProduct } = useProductsStore()
+  const { activeProduct, fetchProducts, currentPage, itemsPerPage } =
+    useProductsStore()
 
   const { changeIsAddProductsOnSaleModalOpen, isAddProductsOnSaleModalOpen } =
     useUISliceStore()
+
   const { allSales, activeSale, changeActiveSale, fetchAllSales } =
     useSalesSliceStore()
 
   const salesDataRef = useRef<ProductOnSaleData>({} as ProductOnSaleData)
   const formRef = useRef<HTMLFormElement>(null)
+
+  const refetchProducts = async () => {
+    const paginationData: PaginationData = {
+      offset: (currentPage - 1) * itemsPerPage,
+      limit: itemsPerPage,
+    }
+    await fetchProducts(paginationData)
+  }
 
   const changeActiveSaleData = (saleId: string) => {
     const selectedSale = allSales.find((sale) => sale.id === saleId)
@@ -124,6 +135,7 @@ const AddProductsOnSaleModal = () => {
       })
     }
     await fetchAllSales()
+    await refetchProducts()
     setLoading(false)
     changeIsAddProductsOnSaleModalOpen(false)
   }
@@ -146,6 +158,7 @@ const AddProductsOnSaleModal = () => {
     }
     changeActiveSale({} as Sale)
     await fetchAllSales()
+    await refetchProducts()
     setLoading(false)
   }
 

@@ -4,6 +4,7 @@ import { ToastContainer } from 'react-toastify'
 import ChildrenWrapper from '@/components/layout/ChildrenWrapper'
 import LayoutWrapper from '@/components/layout/LayoutWrapper'
 import AddProductsOnSaleModal from '@/components/pages/Products/components/AddProductsOnSaleModal/AddProductsOnSaleModal'
+import RemoveProductsFromSaleModal from '@/components/pages/Products/components/RemoveProductsFromSaleModal/RemoveProductsFromSaleModal'
 import AuthCheck from '@/components/common/AuthCheck'
 import ThemeProvider from '@/components/common/ThemeProvider'
 import PermissionGuard from '@/components/common/PermissionGuard'
@@ -31,6 +32,7 @@ export default function RootLayout({
 
           <ToastContainer theme="colored" />
           <AddProductsOnSaleModal />
+          <RemoveProductsFromSaleModal />
         </ThemeProvider>
       </body>
     </html>

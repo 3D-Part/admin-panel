@@ -31,7 +31,10 @@ export const TableItem: React.FC<TableItemType> = ({
   const router = useRouter()
   const { currentUser } = useCurrentUserStore()
 
-  const { changeIsAddProductsOnSaleModalOpen } = useUISliceStore()
+  const {
+    changeIsAddProductsOnSaleModalOpen,
+    changeIsRemoveProductsFromSaleModalOpen,
+  } = useUISliceStore()
 
   const {
     changeActiveProduct,
@@ -51,6 +54,11 @@ export const TableItem: React.FC<TableItemType> = ({
   const addProductOnSale = () => {
     changeActiveProduct(product)
     changeIsAddProductsOnSaleModalOpen(true)
+  }
+
+  const removeProductFromSale = () => {
+    changeActiveProduct(product)
+    changeIsRemoveProductsFromSaleModalOpen(true)
   }
 
   // Make this function global
@@ -199,11 +207,17 @@ export const TableItem: React.FC<TableItemType> = ({
                   </span>
                 </Dropdown.Item>
                 <Dropdown.Item
-                  onClick={addProductOnSale}
+                  onClick={
+                    product.productOnSale.length > 0
+                      ? removeProductFromSale
+                      : addProductOnSale
+                  }
                   className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
                 >
                   <span className="font-medium table-action-link cursor-pointer">
-                    Add on sale
+                    {product.productOnSale.length > 0
+                      ? 'Remove from sale'
+                      : 'Add on sale'}
                   </span>
                 </Dropdown.Item>
                 <Dropdown.Item
