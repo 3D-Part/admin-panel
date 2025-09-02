@@ -23,6 +23,7 @@ export interface SalesSliceInterface {
   addNewSale: (sale: SaleFormBody) => Promise<Sale | null>
   editSale: (saleId: string, sale: SaleFormBody) => Promise<Sale | null>
   removeSale: (saleId: string) => Promise<boolean>
+  removeProductFromActiveSale: (productId: string) => void
 }
 
 export const salesSlice: StateCreator<SalesSliceInterface> = (set, get) => ({
@@ -171,5 +172,20 @@ export const salesSlice: StateCreator<SalesSliceInterface> = (set, get) => ({
       throw error
     }
     return false
+  },
+
+  removeProductFromActiveSale: (productId: string) => {
+    const currentActiveSale = get().activeSale
+    if (currentActiveSale && currentActiveSale.productOnSale) {
+      const updatedProductOnSale = currentActiveSale.productOnSale.filter(
+        (product) => product.id !== productId
+      )
+      set({
+        activeSale: {
+          ...currentActiveSale,
+          productOnSale: updatedProductOnSale,
+        },
+      })
+    }
   },
 })

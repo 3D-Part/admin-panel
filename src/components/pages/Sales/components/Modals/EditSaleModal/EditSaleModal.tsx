@@ -7,6 +7,7 @@ import { Button, Label, Modal, TextInput } from 'flowbite-react'
 import React, { useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import { useModalScroll } from '@/shared/hooks/useModalScroll'
+import SalesAPI from '@/services/sales'
 
 const EditSaleModal = () => {
   const [loading, setLoading] = useState(false)
@@ -16,6 +17,7 @@ const EditSaleModal = () => {
     activeSale,
     editSale,
     removeSale,
+    removeProductFromActiveSale,
     currentPage,
     itemsPerPage,
     fetchSales,
@@ -36,7 +38,7 @@ const EditSaleModal = () => {
       offset: (currentPage - 1) * itemsPerPage,
       limit: itemsPerPage,
     }
-    const data = await fetchSales(paginationData)
+    await fetchSales(paginationData)
     setLoading(false)
   }
 
@@ -105,17 +107,26 @@ const EditSaleModal = () => {
 
     setLoading(true)
     try {
-      // You'll need to implement this method in your sales service
-      // const response = await removeProductFromSale(activeSale.id, productId)
-
-      // For now, just show a toast and refresh the data
-      toast('Product removed from sale', {
-        hideProgressBar: true,
-        autoClose: 2000,
-        type: 'success',
+      const response = await SalesAPI.deleteProductOnSale({
+        ids: [productId],
       })
 
-      await fetchSalesData()
+      if (response) {
+        // Manually remove the product from the active sale in the slice
+        removeProductFromActiveSale(productId)
+
+        toast('Product removed from sale', {
+          hideProgressBar: true,
+          autoClose: 2000,
+          type: 'success',
+        })
+      } else {
+        toast('Failed to remove product from sale', {
+          hideProgressBar: true,
+          autoClose: 2000,
+          type: 'error',
+        })
+      }
     } catch (error) {
       toast('Failed to remove product from sale', {
         hideProgressBar: true,
@@ -329,6 +340,7 @@ const EditSaleModal = () => {
                       {/* Remove Button */}
                       <div className="flex-shrink-0">
                         <button
+                          type="button"
                           onClick={() => handleRemoveProduct(product.id)}
                           className="p-2 sm:p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors duration-200 touch-manipulation"
                           title="Remove from sale"
