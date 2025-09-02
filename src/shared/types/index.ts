@@ -166,7 +166,7 @@ export interface ProductData {
   price: number
   updatedAt: string
   category: ProductCategory
-  productOnSale: [] // TODO add type
+  productOnSale: ProductOnSale[]
   manufacturer: {
     id: string
     name: string

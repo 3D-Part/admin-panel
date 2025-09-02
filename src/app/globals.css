@@ -32,7 +32,7 @@
   }
 
   .table-body-container {
-    @apply flex-1 overflow-y-auto overflow-x-hidden;
+    @apply flex-1 overflow-y-auto overflow-x-hidden min-h-[240px];
   }
 
   .table-row {
