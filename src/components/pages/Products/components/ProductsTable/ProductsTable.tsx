@@ -1,7 +1,7 @@
 'use client' // This is a client component 👈🏽
 
 import { Pagination, Table } from 'flowbite-react'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { TableItem } from './TableItem/TableItem'
 import {
   useProductsStore,
@@ -32,6 +32,7 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
   onWarningModalOpen,
 }) => {
   const [loader, setLoader] = useState(true)
+  const filtersInitializedRef = useRef(false)
 
   const router = useRouter()
   const { currentUser } = useCurrentUserStore()
@@ -47,6 +48,7 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
     changeProductFilter,
     changeActiveProduct,
     addNewProducts,
+    resetProductsState,
   } = useProductsStore()
 
   // Check if user has write permission for products
@@ -57,8 +59,15 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
   )
 
   useEffect(() => {
-    changeProductFilter({})
-  }, [])
+    if (!filtersInitializedRef.current) {
+      // Only reset state if we don't have any existing data
+      // This prevents resetting state when navigating back from edit page
+      if (currentPageProducts.length === 0) {
+        resetProductsState()
+      }
+      filtersInitializedRef.current = true
+    }
+  }, [resetProductsState, currentPageProducts.length])
 
   const fetchProductsData = useCallback(async () => {
     setLoader(true)

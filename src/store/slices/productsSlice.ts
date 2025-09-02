@@ -21,6 +21,7 @@ export interface ProductsSliceInterface {
   fetchAllProducts: (paginationData?: PaginationData) => Promise<boolean>
   addNewProducts: (attribute: ProductFormBody) => Promise<boolean>
   editProduct: (productID: string, product: ProductFormBody) => Promise<boolean>
+  resetProductsState: () => void
 }
 
 export const productsSlice: StateCreator<ProductsSliceInterface> = (
@@ -166,5 +167,15 @@ export const productsSlice: StateCreator<ProductsSliceInterface> = (
       throw error
     }
     return false
+  },
+
+  resetProductsState: () => {
+    set({
+      currentPageProducts: [],
+      currentPage: 1,
+      totalPages: 1,
+      count: 0,
+      productFilters: {},
+    })
   },
 })
