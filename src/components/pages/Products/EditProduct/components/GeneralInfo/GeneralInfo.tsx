@@ -30,7 +30,7 @@ const GeneralInfo = () => {
   const [isRecommended, setIsRecommended] = useState(false)
   const [loader, setLoader] = useState(true)
 
-  const [parentCategory, setParentCategoryId] = useState('')
+  // const [parentCategory, setParentCategoryId] = useState('')
 
   // STORE DATA
   const { editProduct, activeProduct } = useProductsStore()
@@ -176,9 +176,9 @@ const GeneralInfo = () => {
     setIsPublished(activeProduct.isPublished)
     setIsMostSold(activeProduct.isMostSold)
     setIsRecommended(activeProduct.isRecommended)
-    if (activeProduct.category) {
-      setParentCategoryId(activeProduct.category.id)
-    }
+    // if (activeProduct.category) {
+    //   setParentCategoryId(activeProduct.category.id)
+    // }
   }, [activeProduct])
 
   if (loader || !activeProduct || allCategories.length === 0) return <Loader />
