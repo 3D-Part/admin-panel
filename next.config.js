@@ -1,9 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    appDir: true,
-  },
-
   env: {
     API_KEY: process.env.BASE_URL,
     S3_URL: process.env.S3_URL,

@@ -35,10 +35,6 @@ const SideBar = () => {
     changeIsMobileMenuOpen(false)
   }
 
-  useEffect(() => {
-    console.log('test')
-  }, [])
-
   // Filter menu items based on user permissions
   const getFilteredMenuItems = () => {
     const allMenuItems = [
