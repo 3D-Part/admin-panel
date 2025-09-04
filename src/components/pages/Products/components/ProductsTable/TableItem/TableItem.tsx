@@ -207,19 +207,23 @@ export const TableItem: React.FC<TableItemType> = ({
                   </span>
                 </Dropdown.Item>
                 <Dropdown.Item
-                  onClick={
-                    product.productOnSale.length > 0
-                      ? removeProductFromSale
-                      : addProductOnSale
-                  }
+                  onClick={addProductOnSale}
                   className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
                 >
                   <span className="font-medium table-action-link cursor-pointer">
-                    {product.productOnSale.length > 0
-                      ? 'Remove from sale'
-                      : 'Add on sale'}
+                    Add on sale
                   </span>
                 </Dropdown.Item>
+                {product.productOnSale.length > 0 && (
+                  <Dropdown.Item
+                    onClick={removeProductFromSale}
+                    className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
+                  >
+                    <span className="font-medium table-action-link cursor-pointer">
+                      Remove from sale
+                    </span>
+                  </Dropdown.Item>
+                )}
                 <Dropdown.Item
                   onClick={() => onWarningModalOpen(product)}
                   className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
