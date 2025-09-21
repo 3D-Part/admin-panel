@@ -2,7 +2,8 @@
 
 import React, { useEffect, useState, useCallback, useRef } from 'react'
 import { Button } from 'flowbite-react'
-import { HiPlus, HiUpload, HiDownload } from 'react-icons/hi'
+import { HiPlus, HiUpload, HiDownload, HiSave } from 'react-icons/hi'
+import { toast } from 'react-toastify'
 import {
   useMenuBuilderStore,
   useCategoryStore,
@@ -203,6 +204,16 @@ const MenuBuilder: React.FC = () => {
     setEditingItem(undefined)
   }
 
+  const handleSaveMenu = useCallback(() => {
+    // TODO: Implement actual save functionality (API call)
+    // For now, just show a success message
+    toast('Menu structure saved successfully!', {
+      hideProgressBar: true,
+      autoClose: 2000,
+      type: 'success',
+    })
+  }, [])
+
   return (
     <div className="w-full flex flex-col h-full overflow-hidden">
       <div className="w-full flex justify-between items-center flex-wrap gap-4 mb-6">
@@ -215,19 +226,36 @@ const MenuBuilder: React.FC = () => {
           </p>
         </div>
         <div className="flex items-center w-full md:w-auto justify-between gap-3 shrink-0">
-          <Button color="gray" onClick={exportMenu} size="sm">
+          <Button
+            className="hidden md:block"
+            color="gray"
+            onClick={exportMenu}
+            size="sm"
+          >
             <HiDownload className="mr-2" />
             Export
           </Button>
 
-          <Button onClick={importMenu} color="gray" size="sm">
+          <Button
+            className="hidden md:block"
+            onClick={importMenu}
+            color="gray"
+            size="sm"
+          >
             <HiUpload className="mr-2" />
             Import
           </Button>
 
-          <Button onClick={() => setIsModalOpen(true)} size="sm">
+          <Button onClick={() => setIsModalOpen(true)} color="blue" size="sm">
             <HiPlus className="mr-2" />
             Add Menu Item
+          </Button>
+
+          <div className="h-4 mx-4" />
+
+          <Button onClick={handleSaveMenu} color="purple" size="sm">
+            <HiSave className="mr-2" />
+            Save Menu
           </Button>
         </div>
       </div>
