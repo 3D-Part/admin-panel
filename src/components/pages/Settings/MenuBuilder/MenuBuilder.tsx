@@ -9,6 +9,7 @@ import {
   useCategoryStore,
   useManufactureStore,
 } from '@/store/store'
+import { MenuAPI } from '@/services'
 import type { MenuItemNode } from '@/store/slices/menuBuilderSlice'
 import EditModal from './components/EditModal'
 import MenuItemComponent from './components/MenuItemComponent'
@@ -43,6 +44,22 @@ const MenuBuilder: React.FC = () => {
     fetchAllCategories()
     fetchAllManufactures()
   }, [fetchAllCategories, fetchAllManufactures])
+
+  // Load menu data when component mounts
+  useEffect(() => {
+    const loadMenu = async () => {
+      try {
+        const menuData = await MenuAPI.getMenu()
+        if (menuData) {
+          setMenuItems(menuData)
+        }
+      } catch (error) {
+        console.error('Error loading menu:', error)
+      }
+    }
+
+    loadMenu()
+  }, [setMenuItems])
 
   const generateId = () => Math.random().toString(36).substr(2, 9)
 
@@ -204,15 +221,38 @@ const MenuBuilder: React.FC = () => {
     setEditingItem(undefined)
   }
 
-  const handleSaveMenu = useCallback(() => {
-    // TODO: Implement actual save functionality (API call)
-    // For now, just show a success message
-    toast('Menu structure saved successfully!', {
-      hideProgressBar: true,
-      autoClose: 2000,
-      type: 'success',
-    })
-  }, [])
+  const handleSaveMenu = useCallback(async () => {
+    try {
+      const menuData = {
+        menu: {
+          items: menuItems,
+        },
+      }
+
+      const success = await MenuAPI.saveMenu(menuData)
+
+      if (success) {
+        toast('Menu structure saved successfully!', {
+          hideProgressBar: true,
+          autoClose: 2000,
+          type: 'success',
+        })
+      } else {
+        toast('Failed to save menu structure', {
+          hideProgressBar: true,
+          autoClose: 2000,
+          type: 'error',
+        })
+      }
+    } catch (error) {
+      console.error('Error saving menu:', error)
+      toast('Error saving menu structure', {
+        hideProgressBar: true,
+        autoClose: 2000,
+        type: 'error',
+      })
+    }
+  }, [menuItems])
 
   return (
     <div className="w-full flex flex-col h-full overflow-hidden">
