@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useCallback, useRef } from 'react'
 import { Button } from 'flowbite-react'
-import { HiPlus, HiUpload, HiDownload, HiSave } from 'react-icons/hi'
+import { HiPlus, HiUpload, HiDownload, HiSave, HiRefresh } from 'react-icons/hi'
 import { toast } from 'react-toastify'
 import {
   useMenuBuilderStore,
@@ -19,6 +19,7 @@ const MenuBuilder: React.FC = () => {
   const [editingItem, setEditingItem] = useState<
     (MenuItemNode & { parentId?: string }) | undefined
   >()
+  const [isSaving, setIsSaving] = useState(false)
 
   const {
     menuItems,
@@ -222,6 +223,7 @@ const MenuBuilder: React.FC = () => {
   }
 
   const handleSaveMenu = useCallback(async () => {
+    setIsSaving(true)
     try {
       const menuData = {
         menu: {
@@ -251,6 +253,8 @@ const MenuBuilder: React.FC = () => {
         autoClose: 2000,
         type: 'error',
       })
+    } finally {
+      setIsSaving(false)
     }
   }, [menuItems])
 
@@ -293,9 +297,18 @@ const MenuBuilder: React.FC = () => {
 
           <div className="h-4 mx-4" />
 
-          <Button onClick={handleSaveMenu} color="purple" size="sm">
-            <HiSave className="mr-2" />
-            Save Menu
+          <Button
+            onClick={handleSaveMenu}
+            color="purple"
+            size="sm"
+            disabled={isSaving}
+          >
+            {isSaving ? (
+              <HiRefresh className="mr-2 animate-spin" />
+            ) : (
+              <HiSave className="mr-2" />
+            )}
+            {isSaving ? 'Saving...' : 'Save Menu'}
           </Button>
         </div>
       </div>
