@@ -6,7 +6,7 @@ import { useShopSettingsStore } from '@/store/store'
 import { toast } from 'react-toastify'
 
 interface SettingsFormData {
-  bannedText: string
+  bannerText: string
   deliveryCost: string
   freeDeliveryLimit: string
 }
@@ -15,7 +15,7 @@ const GeneralSettings = () => {
   const [loading, setLoading] = useState(false)
   const [initialLoading, setInitialLoading] = useState(true)
   const [formData, setFormData] = useState<SettingsFormData>({
-    bannedText: '',
+    bannerText: '',
     deliveryCost: '',
     freeDeliveryLimit: '',
   })
@@ -34,7 +34,7 @@ const GeneralSettings = () => {
 
         // Populate form with existing settings
         setFormData({
-          bannedText: settings.bannedText || '',
+          bannerText: settings.bannerText || '',
           deliveryCost: settings.deliveryCost?.toString() || '',
           freeDeliveryLimit: settings.freeDeliveryLimit?.toString() || '',
         })
@@ -60,7 +60,7 @@ const GeneralSettings = () => {
 
     const success = await updateShopSettings({
       settings: {
-        bannedText: formData.bannedText,
+        bannerText: formData.bannerText,
         deliveryCost: parseFloat(formData.deliveryCost) || 0,
         freeDeliveryLimit: parseFloat(formData.freeDeliveryLimit) || 0,
       },
@@ -118,7 +118,7 @@ const GeneralSettings = () => {
                 <div className="mb-2 block">
                   <Label
                     className="text-base"
-                    htmlFor="bannedText"
+                    htmlFor="bannerText"
                     value="Banner Text"
                   />
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
@@ -126,11 +126,11 @@ const GeneralSettings = () => {
                   </p>
                 </div>
                 <TextInput
-                  name="bannedText"
+                  name="bannerText"
                   onChange={handleInputChange}
-                  id="bannedText"
+                  id="bannerText"
                   type="text"
-                  value={formData.bannedText}
+                  value={formData.bannerText}
                   placeholder="BLACK FRIDAY: 20% popusta na sve proizvode!"
                 />
               </div>
