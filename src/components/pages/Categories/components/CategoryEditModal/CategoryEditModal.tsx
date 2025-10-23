@@ -130,7 +130,13 @@ const CategoryEditModal: React.FC<ModalType> = ({
 
   return (
     <>
-      <Modal dismissible show={isOpen} onClose={onClose} size="2xl">
+      <Modal
+        dismissible
+        show={isOpen}
+        onClose={onClose}
+        size="2xl"
+        className="!h-full"
+      >
         <Modal.Header className="border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center gap-3">
             <span className="font-semibold text-gray-900 dark:text-white">

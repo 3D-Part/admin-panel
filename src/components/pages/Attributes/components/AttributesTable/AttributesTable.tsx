@@ -108,17 +108,15 @@ export const AttributesTable: React.FC<AttributesTableType> = ({
       count={count}
     >
       <div className="table-container">
-        <Table className="w-full table-fixed">
-          <Table.Head className="table-header">
-            <Table.HeadCell className="table-cell">Name</Table.HeadCell>
-            <Table.HeadCell className="table-cell">
-              <span className="sr-only">Actions</span>
-            </Table.HeadCell>
-          </Table.Head>
-        </Table>
-
         <div className="table-body-container relative">
-          <Table className="w-full table-fixed">
+          <Table className="w-full">
+            <Table.Head className="table-header">
+              <Table.HeadCell className="table-cell">Name</Table.HeadCell>
+              <Table.HeadCell className="table-cell">
+                <span className="sr-only">Actions</span>
+              </Table.HeadCell>
+            </Table.Head>
+
             <Table.Body className="divide-y divide-gray-100 dark:divide-gray-800">
               {currentPageAttributes.map((attribute) => {
                 return (
@@ -132,17 +130,18 @@ export const AttributesTable: React.FC<AttributesTableType> = ({
               })}
             </Table.Body>
           </Table>
+
+          {loader && (
+            <div
+              className={`absolute inset-0 flex items-center justify-center ${loaderBg} rounded-xl`}
+            >
+              <Loader />
+            </div>
+          )}
         </div>
-        {loader && (
-          <div
-            className={`absolute inset-0 flex items-center justify-center ${loaderBg} rounded-xl`}
-          >
-            <Loader />
-          </div>
-        )}
       </div>
 
-      <div className="flex justify-between gap-4 items-center w-full mt-8 p-4 bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800">
+      <div className="hidden md:flex justify-between gap-4 items-center w-full mt-8 p-4 bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800">
         <Pagination
           currentPage={currentPage}
           onPageChange={(page) => {

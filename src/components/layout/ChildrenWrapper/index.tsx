@@ -12,7 +12,7 @@ const ChildrenWrapper = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div
-      className={`ml-0 flex items-center justify-center p-4 mt-16 md:p-12 overflow-hidden ${
+      className={`ml-0 flex items-center justify-center p-2 mt-16 md:p-6 overflow-hidden ${
         !isFullWidthPage ? 'md:ml-64' : ''
       } `}
     >

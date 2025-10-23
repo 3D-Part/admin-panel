@@ -28,12 +28,12 @@ export const ResponsiveTableWrapper: React.FC<ResponsiveTableWrapperProps> = ({
     >
       {/* Desktop Table */}
       <div className="table-desktop flex-1">{children}</div>
+      {/* NOTE If he want cards on mobile design, go to global css and uncomment the table-desktop css */}
 
       {/* Mobile Cards */}
       <div className="table-mobile">
-        <div className="mobile-card-container">{mobileCards}</div>
+        {/* <div className="mobile-card-container">{mobileCards}</div> */}
 
-        {/* Mobile Pagination */}
         {currentPage && totalPages && onPageChange && (
           <MobilePagination
             currentPage={currentPage}

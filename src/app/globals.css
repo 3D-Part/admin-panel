@@ -12,11 +12,11 @@
 /* Modern table styles for better light/dark theme support */
 @layer components {
   .table-container {
-    @apply relative bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden flex flex-col h-full;
+    @apply relative bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col h-full overflow-x-auto overflow-y-hidden;
   }
 
   .table-container table {
-    @apply w-full table-fixed;
+    @apply w-full table-auto lg:table-fixed;
   }
 
   .table-container thead {
@@ -32,7 +32,8 @@
   }
 
   .table-body-container {
-    @apply flex-1 overflow-y-auto overflow-x-hidden min-h-[240px];
+    /* @apply flex-1 overflow-y-auto min-h-[240px]; */
+    @apply flex-1 overflow-y-auto overflow-x-auto lg:overflow-x-hidden min-h-[240px];
   }
 
   .table-row {
@@ -57,7 +58,8 @@
 
   /* Responsive table styles */
   .table-desktop {
-    @apply hidden md:flex w-full flex-col overflow-hidden flex-1;
+    /* @apply hidden md:flex w-full flex-col overflow-hidden flex-1; */
+    @apply flex w-full flex-col overflow-hidden flex-1;
   }
 
   .table-mobile {
