@@ -188,6 +188,11 @@ const SideBar = () => {
         requiredPermissions: PERMISSION_GROUPS.ADMIN,
         children: [
           {
+            name: 'General',
+            href: URLPartsEnum.SettingsGeneral,
+            requiredPermissions: [PermissionEnum.ADMIN_ONLY],
+          },
+          {
             name: 'Menu',
             href: URLPartsEnum.SettingsMenu,
             requiredPermissions: [PermissionEnum.ADMIN_ONLY],

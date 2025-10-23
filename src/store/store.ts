@@ -48,6 +48,10 @@ import {
   menuBuilderSlice,
   MenuBuilderSliceInterface,
 } from './slices/menuBuilderSlice'
+import {
+  shopSettingsSlice,
+  ShopSettingsSliceInterface,
+} from './slices/shopSettingsSlice'
 
 export const useCategoryStore = create<CategorySliceInterface>()((...a) => ({
   ...categorySlice(...a),
@@ -127,5 +131,11 @@ export const useThemeStore = create<ThemeSliceInterface>()((...a) => ({
 export const useMenuBuilderStore = create<MenuBuilderSliceInterface>()(
   (...a) => ({
     ...menuBuilderSlice(...a),
+  })
+)
+
+export const useShopSettingsStore = create<ShopSettingsSliceInterface>()(
+  (...a) => ({
+    ...shopSettingsSlice(...a),
   })
 )
