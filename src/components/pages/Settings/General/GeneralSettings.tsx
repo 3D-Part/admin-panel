@@ -201,7 +201,7 @@ const GeneralSettings = () => {
               type="submit"
               isProcessing={loading}
               disabled={loading}
-              size="lg"
+              size="md"
             >
               Save Settings
             </Button>
