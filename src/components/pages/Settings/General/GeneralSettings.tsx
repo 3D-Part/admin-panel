@@ -5,19 +5,45 @@ import { Button, Label, TextInput } from 'flowbite-react'
 import { useShopSettingsStore } from '@/store/store'
 import { toast } from 'react-toastify'
 
-interface SettingsFormData {
-  bannerText: string
-  deliveryCost: string
+interface BannerSettings {
+  text: string
+}
+
+interface DeliverySettings {
+  cost: string
   freeDeliveryLimit: string
+}
+
+interface CompanyDetails {
+  email: string
+  phone: string
+  town: string
+  address: string
+}
+
+interface SettingsFormData {
+  banner: BannerSettings
+  delivery: DeliverySettings
+  company: CompanyDetails
 }
 
 const GeneralSettings = () => {
   const [loading, setLoading] = useState(false)
   const [initialLoading, setInitialLoading] = useState(true)
   const [formData, setFormData] = useState<SettingsFormData>({
-    bannerText: '',
-    deliveryCost: '',
-    freeDeliveryLimit: '',
+    banner: {
+      text: '',
+    },
+    delivery: {
+      cost: '',
+      freeDeliveryLimit: '',
+    },
+    company: {
+      email: '',
+      phone: '',
+      town: '',
+      address: '',
+    },
   })
   const formRef = useRef<HTMLFormElement>(null)
 
@@ -34,9 +60,20 @@ const GeneralSettings = () => {
 
         // Populate form with existing settings
         setFormData({
-          bannerText: settings.bannerText || '',
-          deliveryCost: settings.deliveryCost?.toString() || '',
-          freeDeliveryLimit: settings.freeDeliveryLimit?.toString() || '',
+          banner: {
+            text: settings.banner?.text || '',
+          },
+          delivery: {
+            cost: settings.delivery?.cost?.toString() || '',
+            freeDeliveryLimit:
+              settings.delivery?.freeDeliveryLimit?.toString() || '',
+          },
+          company: {
+            email: settings.company?.email || '',
+            phone: settings.company?.phone || '',
+            town: settings.company?.town || '',
+            address: settings.company?.address || '',
+          },
         })
       }
 
@@ -48,9 +85,14 @@ const GeneralSettings = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
+    const [section, field] = name.split('.')
+
     setFormData({
       ...formData,
-      [name]: value,
+      [section]: {
+        ...(formData as any)[section],
+        [field]: value,
+      },
     })
   }
 
@@ -60,9 +102,20 @@ const GeneralSettings = () => {
 
     const success = await updateShopSettings({
       settings: {
-        bannerText: formData.bannerText,
-        deliveryCost: parseFloat(formData.deliveryCost) || 0,
-        freeDeliveryLimit: parseFloat(formData.freeDeliveryLimit) || 0,
+        banner: {
+          text: formData.banner.text,
+        },
+        delivery: {
+          cost: parseFloat(formData.delivery.cost) || 0,
+          freeDeliveryLimit:
+            parseFloat(formData.delivery.freeDeliveryLimit) || 0,
+        },
+        company: {
+          email: formData.company.email,
+          phone: formData.company.phone,
+          town: formData.company.town,
+          address: formData.company.address,
+        },
       },
     })
 
@@ -105,9 +158,13 @@ const GeneralSettings = () => {
         </p>
       </div>
 
-      {/* Scrollable Content */}
-      <div className="flex-1 overflow-y-auto">
-        <form ref={formRef} onSubmit={onSubmit} className="space-y-6 pb-8">
+      <form
+        ref={formRef}
+        onSubmit={onSubmit}
+        className="flex-1 flex flex-col overflow-hidden"
+      >
+        {/* Scrollable Content */}
+        <div className="flex-1 overflow-y-auto space-y-6 pb-4">
           {/* Banner Settings Section */}
           <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
@@ -126,11 +183,11 @@ const GeneralSettings = () => {
                   </p>
                 </div>
                 <TextInput
-                  name="bannerText"
+                  name="banner.text"
                   onChange={handleInputChange}
                   id="bannerText"
                   type="text"
-                  value={formData.bannerText}
+                  value={formData.banner.text}
                   placeholder="BLACK FRIDAY: 20% popusta na sve proizvode!"
                 />
               </div>
@@ -156,15 +213,14 @@ const GeneralSettings = () => {
                   </p>
                 </div>
                 <TextInput
-                  name="deliveryCost"
+                  name="delivery.cost"
                   onChange={handleInputChange}
                   id="deliveryCost"
                   type="number"
                   step="0.01"
                   min="0"
-                  value={formData.deliveryCost}
+                  value={formData.delivery.cost}
                   placeholder="0.00"
-                  required
                 />
               </div>
 
@@ -181,21 +237,118 @@ const GeneralSettings = () => {
                   </p>
                 </div>
                 <TextInput
-                  name="freeDeliveryLimit"
+                  name="delivery.freeDeliveryLimit"
                   onChange={handleInputChange}
                   id="freeDeliveryLimit"
                   type="number"
                   step="0.01"
                   min="0"
-                  value={formData.freeDeliveryLimit}
+                  value={formData.delivery.freeDeliveryLimit}
                   placeholder="0.00"
-                  required
                 />
               </div>
             </div>
           </div>
 
-          {/* Save Button */}
+          {/* Company Details Section */}
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              Company Details
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Company Email */}
+              <div className="w-full">
+                <div className="mb-2 block">
+                  <Label
+                    className="text-base"
+                    htmlFor="companyEmail"
+                    value="Email"
+                  />
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    Company contact email
+                  </p>
+                </div>
+                <TextInput
+                  name="company.email"
+                  onChange={handleInputChange}
+                  id="companyEmail"
+                  type="email"
+                  value={formData.company.email}
+                  placeholder="contact@company.com"
+                />
+              </div>
+
+              {/* Company Phone */}
+              <div className="w-full">
+                <div className="mb-2 block">
+                  <Label
+                    className="text-base"
+                    htmlFor="companyPhone"
+                    value="Phone Number"
+                  />
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    Company contact phone
+                  </p>
+                </div>
+                <TextInput
+                  name="company.phone"
+                  onChange={handleInputChange}
+                  id="companyPhone"
+                  type="tel"
+                  value={formData.company.phone}
+                  placeholder="+387 XX XXX XXX"
+                />
+              </div>
+
+              {/* Company Town */}
+              <div className="w-full">
+                <div className="mb-2 block">
+                  <Label
+                    className="text-base"
+                    htmlFor="companyTown"
+                    value="Town/City"
+                  />
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    Company location
+                  </p>
+                </div>
+                <TextInput
+                  name="company.town"
+                  onChange={handleInputChange}
+                  id="companyTown"
+                  type="text"
+                  value={formData.company.town}
+                  placeholder="Banja Luka"
+                />
+              </div>
+
+              {/* Company Address */}
+              <div className="w-full">
+                <div className="mb-2 block">
+                  <Label
+                    className="text-base"
+                    htmlFor="companyAddress"
+                    value="Address"
+                  />
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    Company street address
+                  </p>
+                </div>
+                <TextInput
+                  name="company.address"
+                  onChange={handleInputChange}
+                  id="companyAddress"
+                  type="text"
+                  value={formData.company.address}
+                  placeholder="Street Name 123"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Fixed Save Button */}
+        <div className="flex-shrink-0 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 p-4">
           <div className="flex justify-end">
             <Button
               type="submit"
@@ -206,8 +359,8 @@ const GeneralSettings = () => {
               Save Settings
             </Button>
           </div>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
   )
 }
