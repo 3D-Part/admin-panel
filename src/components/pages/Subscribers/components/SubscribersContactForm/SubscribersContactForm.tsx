@@ -163,6 +163,7 @@ const SubscribersContactForm: React.FC<ModalType> = ({
               disabled={loading}
               onClick={saveFunction}
               className="w-full sm:w-auto order-2 sm:order-1"
+              color="purple"
             >
               Send Email
             </Button>
