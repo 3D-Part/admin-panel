@@ -11,8 +11,10 @@ export interface OrdersSliceInterface {
   count: number
   sortFiled: string
   sortOrder: 'ASC' | 'DESC'
+  orderFilter: object
   changeCurrentPage: (data: number) => void
   changeItemsPerPage: (data: number) => void
+  changeOrderFilter: (data: object) => void
   fetchOrders: (paginationData?: PaginationData) => Promise<boolean>
   // fetchAllOrders: (paginationData?: PaginationData) => Promise<boolean>;
 }
@@ -26,6 +28,7 @@ export const ordersSlice: StateCreator<OrdersSliceInterface> = (set, get) => ({
   count: 0,
   sortFiled: 'createdAt',
   sortOrder: 'DESC',
+  orderFilter: {},
 
   changeCurrentPage: (data: number) => {
     set({ currentPage: data })
@@ -35,6 +38,10 @@ export const ordersSlice: StateCreator<OrdersSliceInterface> = (set, get) => ({
     set({ itemsPerPage: data })
   },
 
+  changeOrderFilter: (data: object) => {
+    set({ orderFilter: data })
+  },
+
   fetchOrders: async (paginationData?: PaginationData) => {
     const sort = {
       field: get().sortFiled,
@@ -42,7 +49,11 @@ export const ordersSlice: StateCreator<OrdersSliceInterface> = (set, get) => ({
     }
 
     try {
-      const data = await OrdersAPI.getOrders(sort, paginationData)
+      const data = await OrdersAPI.getOrders(
+        sort,
+        paginationData,
+        get().orderFilter
+      )
       if (data) {
         set({ currentPageOrders: data.rows })
         set({ totalPages: Math.ceil(data.count / get().itemsPerPage) })

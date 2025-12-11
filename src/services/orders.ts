@@ -10,7 +10,8 @@ const API_BASE_URL = process.env.API_KEY
 
 const getOrders = async (
   sortData: SortParamsData,
-  paginationData?: PaginationData
+  paginationData?: PaginationData,
+  params = {}
 ) => {
   const { offset, limit } = paginationData || {}
   const queryParams = new URLSearchParams()
@@ -23,7 +24,8 @@ const getOrders = async (
 
   try {
     const data = await API.get<OrdersData>(
-      `${API_BASE_URL}/order?${queryParams}`
+      `${API_BASE_URL}/order?${queryParams}`,
+      params
     )
     return data
   } catch (error) {
