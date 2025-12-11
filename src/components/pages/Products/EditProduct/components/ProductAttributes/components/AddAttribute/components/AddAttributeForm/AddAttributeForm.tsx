@@ -83,7 +83,7 @@ const AddAttributeForm: React.FC<AddAttributeFormType> = ({
             type="text"
           />
           <div className="flex justify-start items-center gap-4">
-            <Button type="submit">
+            <Button type="submit" color="purple">
               <HiCheckCircle className="h-5 w-5" />
             </Button>
             <Button onClick={resetData} color="light">

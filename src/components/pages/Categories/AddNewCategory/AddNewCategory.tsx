@@ -230,7 +230,7 @@ const AddNewCategory: React.FC<AddNewCategoryType> = ({ initialValue }) => {
 
         <CategoryAttribute onAttributesChange={changeCategoryAttributeIds} />
 
-        <Button className="mt-6" type="submit">
+        <Button className="mt-6" type="submit" color="purple">
           Save
         </Button>
       </form>

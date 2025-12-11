@@ -282,6 +282,7 @@ const CategoryEditModal: React.FC<ModalType> = ({
               onClick={saveFunction}
               className="w-full sm:w-auto order-2 sm:order-1"
               disabled={!categoryDataRef.current.name}
+              color="purple"
             >
               {initialValue ? 'Update Category' : 'Create Category'}
             </Button>

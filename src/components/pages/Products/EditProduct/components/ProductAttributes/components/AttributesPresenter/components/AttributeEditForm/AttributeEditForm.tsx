@@ -108,7 +108,7 @@ const AttributeEditForm: React.FC<AttributeEditFormType> = ({
               defaultValue={value}
             />
             {isValueChanged && (
-              <Button type="submit">
+              <Button type="submit" color="purple">
                 <HiCheckCircle className="h-5 w-5" />
               </Button>
             )}

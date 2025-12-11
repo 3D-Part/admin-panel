@@ -336,7 +336,8 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
             <Button
               type="submit"
               disabled={isLoading}
-              className="dark:bg-blue-600 dark:hover:bg-blue-700"
+              color="purple"
+              className="dark:bg-purple-600 dark:hover:bg-purple-700"
             >
               {isLoading ? (
                 <>

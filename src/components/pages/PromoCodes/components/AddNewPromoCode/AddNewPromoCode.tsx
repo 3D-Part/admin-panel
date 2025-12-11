@@ -152,7 +152,7 @@ const AddNewPromoCode: React.FC<AddNewPromoCodeType> = ({ initialValue }) => {
           />
         </div>
 
-        <Button className="mt-6" type="submit">
+        <Button className="mt-6" type="submit" color="purple">
           Save
         </Button>
       </form>
