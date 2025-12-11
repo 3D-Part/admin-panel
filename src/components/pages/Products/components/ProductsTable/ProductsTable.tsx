@@ -49,6 +49,8 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
     changeActiveProduct,
     addNewProducts,
     resetProductsState,
+    sortFiled,
+    sortOrder,
   } = useProductsStore()
 
   // Check if user has write permission for products
@@ -90,7 +92,7 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
 
   useEffect(() => {
     fetchProductsData()
-  }, [currentPage, fetchProductsData])
+  }, [currentPage, fetchProductsData, sortFiled, sortOrder])
 
   useEffect(() => {
     if (currentPage > totalPages && currentPage > 1) {

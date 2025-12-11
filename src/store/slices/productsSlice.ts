@@ -17,6 +17,8 @@ export interface ProductsSliceInterface {
   changeItemsPerPage: (data: number) => void
   changeProductFilter: (data: {}) => void
   changeActiveProduct: (product: ProductData) => void
+  changeSortField: (field: string) => void
+  setSortField: (field: string, order: 'ASC' | 'DESC') => void
   fetchProducts: (paginationData?: PaginationData) => Promise<boolean>
   fetchAllProducts: (paginationData?: PaginationData) => Promise<boolean>
   addNewProducts: (attribute: ProductFormBody) => Promise<boolean>
@@ -53,6 +55,23 @@ export const productsSlice: StateCreator<ProductsSliceInterface> = (
 
   changeActiveProduct: (product: ProductData) => {
     set({ activeProduct: product })
+  },
+
+  changeSortField: (field: string) => {
+    const currentField = get().sortFiled
+    const currentOrder = get().sortOrder
+
+    if (currentField === field) {
+      // Toggle order if same field
+      set({ sortOrder: currentOrder === 'ASC' ? 'DESC' : 'ASC' })
+    } else {
+      // New field, default to DESC
+      set({ sortFiled: field, sortOrder: 'DESC' })
+    }
+  },
+
+  setSortField: (field: string, order: 'ASC' | 'DESC') => {
+    set({ sortFiled: field, sortOrder: order })
   },
 
   fetchProducts: async (paginationData?: PaginationData) => {

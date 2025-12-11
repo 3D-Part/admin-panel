@@ -5,6 +5,7 @@ import { Button } from 'flowbite-react'
 import { HiPlus } from 'react-icons/hi'
 import { URLPartsEnum } from '@/shared/enums'
 import ProductsSearch from './ProductsSearch'
+import ProductsSort from './ProductsSort'
 import { useCurrentUserStore } from '@/store/store'
 import { hasPermission } from '@/shared/helpers/permissions'
 import { PermissionEnum } from '@/shared/types'
@@ -19,9 +20,10 @@ export const ProductsOverviewHeader = () => {
   )
   return (
     <div className="w-full flex justify-between items-center gap-2 md:gap-4 z-20">
-      <div className="flex-1 min-w-0 ">
+      <div className="flex-1 min-w-0">
         <ProductsSearch />
       </div>
+      <ProductsSort />
       {hasWritePermission && (
         <Button
           href={URLPartsEnum.AddNewProduct}
