@@ -2,7 +2,7 @@
 
 import { Search } from '@/components/common'
 import { PaginationData } from '@/shared/types'
-import { useCategoryStore, useManufactureStore } from '@/store/store'
+import { useSubscribersSliceStore } from '@/store/store'
 import { Spinner } from 'flowbite-react'
 import React, { useCallback, useState } from 'react'
 
@@ -11,49 +11,48 @@ const SubscribersSearch = () => {
 
   const {
     itemsPerPage,
-    fetchManufactures,
+    fetchSubscribers,
     changeCurrentPage,
-    changeManufactureFilter,
-  } = useManufactureStore()
+    changeSubscribersFilter,
+  } = useSubscribersSliceStore()
 
-  const fetchCategoriesData = useCallback(
+  const fetchSubscribersData = useCallback(
     async (value: string) => {
       changeCurrentPage(1)
 
-      const filters = {
-        filters: {
-          name: {
-            like: `%${value}%`,
-          },
-        },
-      }
+      const filters = value
+        ? {
+            filters: {
+              email: {
+                like: `%${value}%`,
+              },
+            },
+          }
+        : {}
 
-      changeManufactureFilter(filters)
+      changeSubscribersFilter(filters)
 
       setLoader(true)
       const paginationData: PaginationData = {
         offset: 0,
         limit: itemsPerPage,
       }
-      const data = await fetchManufactures(paginationData)
+      const data = await fetchSubscribers(paginationData)
       if (data) {
         setLoader(false)
       } else {
         setLoader(true)
       }
     },
-    [
-      changeCurrentPage,
-      changeManufactureFilter,
-      fetchManufactures,
-      itemsPerPage,
-    ]
+    [changeCurrentPage, changeSubscribersFilter, fetchSubscribers, itemsPerPage]
   )
 
   return (
-    <div className="flex gap-8 items-center">
-      <Search getData={fetchCategoriesData} />
-      {loader && <Spinner aria-label="Loading..." size="lg" />}
+    <div className="flex gap-2 items-center w-full md:w-auto">
+      <div className="flex-1 md:flex-none min-w-0">
+        <Search getData={fetchSubscribersData} />
+      </div>
+      {loader && <Spinner aria-label="Loading..." size="sm" />}
     </div>
   )
 }
