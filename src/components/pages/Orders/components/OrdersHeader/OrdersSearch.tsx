@@ -6,12 +6,13 @@ import { useOrdersStore } from '@/store/store'
 import { Dropdown, Spinner } from 'flowbite-react'
 import React, { useCallback, useState } from 'react'
 
-type SearchField = 'orderNumber' | 'fullName' | 'city'
+type SearchField = 'orderNumber' | 'fullName' | 'city' | 'status'
 
 const searchFieldLabels: Record<SearchField, string> = {
   orderNumber: 'ORDER #',
   fullName: 'FULL NAME',
   city: 'CITY',
+  status: 'STATUS',
 }
 
 const OrdersSearch = () => {
@@ -68,6 +69,11 @@ const OrdersSearch = () => {
         <Dropdown.Item onClick={() => setSearchBy('city')}>
           <span className="font-medium text-cyan-600 cursor-pointer hover:underline dark:text-cyan-500">
             <p>CITY</p>
+          </span>
+        </Dropdown.Item>
+        <Dropdown.Item onClick={() => setSearchBy('status')}>
+          <span className="font-medium text-cyan-600 cursor-pointer hover:underline dark:text-cyan-500">
+            <p>STATUS</p>
           </span>
         </Dropdown.Item>
       </Dropdown>
