@@ -20,12 +20,13 @@ export const PromoCodesHeader = () => {
   )
 
   return (
-    <div className="w-full flex justify-between items-center flex-wrap gap-4">
+    <div className="w-full flex justify-end items-center flex-wrap gap-4">
       {/* <ManufacturesSearch /> */}
       {hasWritePermission && (
         <Button
           className="cursor-pointer"
           onClick={() => router.push(URLPartsEnum.AddNewPromoCode)}
+          color="purple"
         >
           Add new <HiPlus className="ml-2" />
         </Button>

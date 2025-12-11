@@ -17,7 +17,11 @@ export const SubscribersHeader = () => {
     <>
       <div className="w-full flex justify-between items-center flex-wrap gap-4">
         <div className="flex-1 min-w-0">{/* <SubscribersSearch /> */}</div>
-        <Button className="cursor-pointer" onClick={toggleFormModalVisible}>
+        <Button
+          className="cursor-pointer"
+          onClick={toggleFormModalVisible}
+          color="purple"
+        >
           Send email
           <BiMessageDetail className="ml-2" />
         </Button>

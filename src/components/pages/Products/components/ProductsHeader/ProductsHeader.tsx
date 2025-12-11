@@ -29,6 +29,7 @@ export const ProductsOverviewHeader = () => {
           href={URLPartsEnum.AddNewProduct}
           size="sm"
           className="shrink-0 py-1"
+          color="purple"
         >
           <HiPlus className="mr-1 md:mr-2" />
           <span className="hidden sm:inline">Add new</span>

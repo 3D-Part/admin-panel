@@ -18,11 +18,12 @@ export const EmployeesHeader = () => {
   )
 
   return (
-    <div className="w-full flex justify-between items-center flex-wrap gap-4">
+    <div className="w-full flex justify-end items-center flex-wrap gap-4">
       {hasWritePermission && (
         <Button
           className="cursor-pointer"
           onClick={() => changeIsEmployeeAddNewModalOpen(true)}
+          color="purple"
         >
           Create New <HiPlus className="ml-2" />
         </Button>

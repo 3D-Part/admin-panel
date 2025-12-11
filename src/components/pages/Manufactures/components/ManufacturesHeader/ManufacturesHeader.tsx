@@ -27,6 +27,7 @@ export const ManufacturesHeader = () => {
         <Button
           className="cursor-pointer"
           onClick={() => router.push(URLPartsEnum.AddNewManufacturer)}
+          color="purple"
         >
           Add new <HiPlus className="ml-2" />
         </Button>
