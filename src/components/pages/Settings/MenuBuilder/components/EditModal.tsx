@@ -208,7 +208,9 @@ const EditModal: React.FC<EditModalProps> = ({
           <Button color="gray" onClick={onClose}>
             Cancel
           </Button>
-          <Button type="submit" color="purple">{item ? 'Update' : 'Create'}</Button>
+          <Button type="submit" color="purple">
+            {item ? 'Update' : 'Create'}
+          </Button>
         </Modal.Footer>
       </form>
     </Modal>
