@@ -294,8 +294,8 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
       onPageChange={(page) => changeCurrentPage(page)}
       count={count}
     >
-      <div className="table-container">
-        <div className="table-body-container relative">
+      <div className="table-container relative">
+        <div className="table-body-container ">
           <Table className="w-full">
             <Table.Head className="table-header">
               <Table.HeadCell className="table-cell w-1/3">Name</Table.HeadCell>

@@ -204,8 +204,8 @@ export const OrdersTable = () => {
         count={count}
         className="mt-0"
       >
-        <div className="table-container">
-          <div className="table-body-container relative">
+        <div className="table-container relative">
+          <div className="table-body-container ">
             <Table className="w-full">
               <Table.Head className="table-header">
                 <Table.HeadCell className="table-cell">Customer</Table.HeadCell>

@@ -74,8 +74,8 @@ export const EmployeesTable = () => {
       onPageChange={(page) => changeCurrentPage(page)}
       count={count}
     >
-      <div className="table-container">
-        <div className="table-body-container relative">
+      <div className="table-container relative">
+        <div className="table-body-container ">
           <Table className="w-full">
             <Table.Head className="table-header">
               <Table.HeadCell className="table-cell">Name</Table.HeadCell>
