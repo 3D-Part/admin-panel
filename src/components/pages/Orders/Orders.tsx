@@ -2,12 +2,12 @@
 
 import React from 'react'
 import { OrdersTable } from './components/OrdersTable/OrdersTable'
-// import { OrdersHeader } from './components/OrdersHeader'
+import { OrdersHeader } from './components/OrdersHeader'
 
 const Orders = () => {
   return (
     <div className="w-full flex flex-col h-full overflow-hidden">
-      {/* <OrdersHeader /> */}
+      <OrdersHeader />
       <OrdersTable />
     </div>
   )
