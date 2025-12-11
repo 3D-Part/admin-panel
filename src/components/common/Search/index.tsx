@@ -15,8 +15,6 @@ const Search: React.FC<SearchProps> = ({
   const [query, setQuery] = useState('')
 
   useEffect(() => {
-    if (!query) return
-
     const delayDebounceFn = setTimeout(() => {
       getData(query)
     }, 1000)
