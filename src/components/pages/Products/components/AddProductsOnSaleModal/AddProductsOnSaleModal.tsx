@@ -22,7 +22,7 @@ import { useModalScroll } from '@/shared/hooks/useModalScroll'
 
 const AddProductsOnSaleModal = () => {
   const [loading, setLoading] = useState(false)
-  const discountedPriceRef = useRef<string>('')
+  const [discountedPrice, setDiscountedPrice] = useState<string>('')
 
   const [productOnSelectedSale, setProductOnSelectedSale] =
     useState<ProductOnSale | null>(null)
@@ -80,10 +80,9 @@ const AddProductsOnSaleModal = () => {
 
   useEffect(() => {
     if (productOnSelectedSale) {
-      discountedPriceRef.current =
-        productOnSelectedSale.discountedPrice.toString()
+      setDiscountedPrice(productOnSelectedSale.discountedPrice.toString())
     } else {
-      discountedPriceRef.current = ''
+      setDiscountedPrice('')
     }
   }, [productOnSelectedSale])
 
@@ -100,7 +99,7 @@ const AddProductsOnSaleModal = () => {
     }
 
     if (name === 'discountedPrice') {
-      discountedPriceRef.current = value
+      setDiscountedPrice(value)
     }
 
     if (name === 'saleId') {
@@ -113,7 +112,7 @@ const AddProductsOnSaleModal = () => {
     formRef.current && formRef.current.reset()
     salesDataRef.current = {} as ProductOnSaleData
     setProductOnSelectedSale(null)
-    discountedPriceRef.current = ''
+    setDiscountedPrice('')
   }
 
   const closeModal = () => {
@@ -253,7 +252,7 @@ const AddProductsOnSaleModal = () => {
                 />
                 <TextInput
                   id="productName"
-                  value={activeProduct.name}
+                  value={activeProduct.name || ''}
                   disabled
                   className="w-full bg-gray-100 dark:bg-gray-700"
                 />
@@ -267,7 +266,9 @@ const AddProductsOnSaleModal = () => {
                 <div className="relative">
                   <TextInput
                     id="currentPrice"
-                    value={`${activeProduct.price} KM`}
+                    value={
+                      activeProduct.price ? `${activeProduct.price} KM` : ''
+                    }
                     disabled
                     className="w-full bg-gray-100 dark:bg-gray-700"
                   />
@@ -377,11 +378,7 @@ const AddProductsOnSaleModal = () => {
                     type="number"
                     step="0.01"
                     min="0"
-                    defaultValue={
-                      productOnSelectedSale
-                        ? productOnSelectedSale.discountedPrice.toString()
-                        : ''
-                    }
+                    value={discountedPrice}
                     className="w-full"
                     placeholder="Enter discounted price..."
                   />
@@ -400,6 +397,7 @@ const AddProductsOnSaleModal = () => {
             onClick={onSave}
             className="flex-1 sm:w-auto order-1 h-10 touch-manipulation"
             size="sm"
+            color="purple"
           >
             {productOnSelectedSale ? 'Update Price' : 'Add to Sale'}
           </Button>
