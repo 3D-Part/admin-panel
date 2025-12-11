@@ -17,6 +17,7 @@ export interface UsersSliceInterface {
   changeCurrentPage: (data: number) => void
   changeItemsPerPage: (data: number) => void
   changeUsersFilter: (data: {}) => void
+  setSortField: (field: string, order: 'ASC' | 'DESC') => void
   fetchUsers: (paginationData?: PaginationData) => Promise<boolean>
   fetchAllUsers: (paginationData?: PaginationData) => Promise<boolean>
   // addNewManufacture: (manufacture: ManufacturerFormBody) => Promise<boolean>;
@@ -52,6 +53,10 @@ export const usersSlice: StateCreator<UsersSliceInterface> = (set, get) => ({
 
   changeUsersFilter: (data: {}) => {
     set({ usersFilters: data })
+  },
+
+  setSortField: (field: string, order: 'ASC' | 'DESC') => {
+    set({ sortFiled: field, sortOrder: order })
   },
 
   fetchUsers: async (paginationData?: PaginationData) => {

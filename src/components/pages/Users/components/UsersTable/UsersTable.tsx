@@ -25,6 +25,8 @@ export const UsersTable = () => {
     itemsPerPage,
     totalPages,
     count,
+    sortFiled,
+    sortOrder,
   } = useUsersSliceStore()
 
   const fetchUsersData = useCallback(async () => {
@@ -52,7 +54,7 @@ export const UsersTable = () => {
 
   useEffect(() => {
     fetchUsersData()
-  }, [currentPage, fetchUsersData])
+  }, [currentPage, fetchUsersData, sortFiled, sortOrder])
 
   const handleUserClick = (user: User) => {
     setSelectedUser(user)
