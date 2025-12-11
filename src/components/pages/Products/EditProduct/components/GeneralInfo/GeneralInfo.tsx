@@ -28,6 +28,8 @@ const GeneralInfo = () => {
   const [isPublished, setIsPublished] = useState(true)
   const [isMostSold, setIsMostSold] = useState(false)
   const [isRecommended, setIsRecommended] = useState(false)
+  const [isShoppingCartRecommended, setIsShoppingCartRecommended] =
+    useState(false)
   const [loader, setLoader] = useState(true)
 
   // const [parentCategory, setParentCategoryId] = useState('')
@@ -67,6 +69,7 @@ const GeneralInfo = () => {
     setIsPublished(true)
     setIsMostSold(false)
     setIsRecommended(false)
+    setIsShoppingCartRecommended(false)
   }
 
   const changeIsPublished = () => {
@@ -80,6 +83,10 @@ const GeneralInfo = () => {
     setIsRecommended(!isRecommended)
   }
 
+  const changeIsShoppingCartRecommended = () => {
+    setIsShoppingCartRecommended(!isShoppingCartRecommended)
+  }
+
   const onSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!productDataRef.current.name) return
@@ -87,6 +94,7 @@ const GeneralInfo = () => {
     productDataRef.current.isPublished = isPublished
     productDataRef.current.isMostSold = isMostSold
     productDataRef.current.isRecommended = isRecommended
+    productDataRef.current.isShoppingCartRecommended = isShoppingCartRecommended
 
     const request = await editProduct(activeProduct.id, productDataRef.current)
     if (request) {
@@ -176,6 +184,7 @@ const GeneralInfo = () => {
     setIsPublished(activeProduct.isPublished)
     setIsMostSold(activeProduct.isMostSold)
     setIsRecommended(activeProduct.isRecommended)
+    setIsShoppingCartRecommended(activeProduct.isShoppingCartRecommended)
     // if (activeProduct.category) {
     //   setParentCategoryId(activeProduct.category.id)
     // }
@@ -361,11 +370,18 @@ const GeneralInfo = () => {
           onChange={changeIsMostSold}
         />
 
-        {/* IS RECOMMENDED */}
+        {/* IS RECOMMENDED / IS SUPER OFFER */}
         <ToggleSwitch
           checked={isRecommended}
-          label="Recommended"
+          label="Super offer"
           onChange={changeIsRecommended}
+        />
+
+        {/* IS SHOPPING CART RECOMMENDED */}
+        <ToggleSwitch
+          checked={isShoppingCartRecommended}
+          label="Shopping cart recommended"
+          onChange={changeIsShoppingCartRecommended}
         />
       </div>
 

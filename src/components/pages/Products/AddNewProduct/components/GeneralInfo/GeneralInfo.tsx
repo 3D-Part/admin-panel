@@ -29,6 +29,9 @@ import TextEditor from '@/components/common/TextEditor'
 const GeneralInfo = () => {
   const [isPublished, setIsPublished] = useState(true)
   const [isMostSold, setIsMostSold] = useState(false)
+  const [isRecommended, setIsRecommended] = useState(false)
+  const [isShoppingCartRecommended, setIsShoppingCartRecommended] =
+    useState(false)
   const [loader, setLoader] = useState(true)
 
   const router = useRouter()
@@ -37,7 +40,6 @@ const GeneralInfo = () => {
   const { addNewProducts } = useProductsStore()
   const { fetchAllManufactures, allManufactures } = useManufactureStore()
   const { fetchAllCategories, allCategories } = useCategoryStore()
-  const [isRecommended, setIsRecommended] = useState(false)
 
   const productDataRef = useRef<ProductFormBody>({} as ProductFormBody)
   const formRef = useRef<HTMLFormElement>(null)
@@ -69,6 +71,7 @@ const GeneralInfo = () => {
     setIsPublished(true)
     setIsMostSold(false)
     setIsRecommended(false)
+    setIsShoppingCartRecommended(false)
   }
 
   const changeIsPublished = () => {
@@ -83,6 +86,10 @@ const GeneralInfo = () => {
     setIsRecommended(!isRecommended)
   }
 
+  const changeIsShoppingCartRecommended = () => {
+    setIsShoppingCartRecommended(!isShoppingCartRecommended)
+  }
+
   const onSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!productDataRef.current.name) return
@@ -90,6 +97,7 @@ const GeneralInfo = () => {
     productDataRef.current.isPublished = isPublished
     productDataRef.current.isMostSold = isMostSold
     productDataRef.current.isRecommended = isRecommended
+    productDataRef.current.isShoppingCartRecommended = isShoppingCartRecommended
 
     const request = await addNewProducts(productDataRef.current)
     if (request) {
@@ -326,11 +334,18 @@ const GeneralInfo = () => {
           onChange={changeIsMostSold}
         />
 
-        {/* IS RECOMMENDED */}
+        {/* IS RECOMMENDED / IS SUPER OFFER */}
         <ToggleSwitch
           checked={isRecommended}
-          label="Recommended"
+          label="Super offer"
           onChange={changeIsRecommended}
+        />
+
+        {/* IS SHOPPING CART RECOMMENDED */}
+        <ToggleSwitch
+          checked={isShoppingCartRecommended}
+          label="Shopping cart recommended"
+          onChange={changeIsShoppingCartRecommended}
         />
       </div>
 

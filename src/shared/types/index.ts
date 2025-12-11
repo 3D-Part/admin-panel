@@ -178,6 +178,7 @@ export interface ProductData {
   isPublished: boolean
   isMostSold: boolean
   isRecommended: boolean
+  isShoppingCartRecommended: boolean
 }
 
 export interface ProductsData {
@@ -192,6 +193,7 @@ export interface ProductFormBody {
   isPublished: boolean
   isMostSold: boolean
   isRecommended: boolean
+  isShoppingCartRecommended?: boolean
   sku: string
   categoryId: string
   manufacturerId?: string
