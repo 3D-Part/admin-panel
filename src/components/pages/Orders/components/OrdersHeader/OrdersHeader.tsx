@@ -2,6 +2,7 @@
 
 import React from 'react'
 import OrdersSearch from './OrdersSearch'
+import OrdersSort from './OrdersSort'
 
 export const OrdersHeader = () => {
   return (
@@ -9,6 +10,7 @@ export const OrdersHeader = () => {
       <div className="flex-1 min-w-0">
         <OrdersSearch />
       </div>
+      <OrdersSort />
     </div>
   )
 }

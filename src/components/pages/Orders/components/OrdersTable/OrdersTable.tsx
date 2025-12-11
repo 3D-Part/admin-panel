@@ -33,6 +33,8 @@ export const OrdersTable = () => {
     changeCurrentPage,
     totalPages,
     count,
+    sortFiled,
+    sortOrder,
   } = useOrdersStore()
 
   const { currentUser } = useCurrentUserStore()
@@ -70,7 +72,7 @@ export const OrdersTable = () => {
 
   useEffect(() => {
     fetchOrdersData()
-  }, [currentPage, fetchOrdersData])
+  }, [currentPage, fetchOrdersData, sortFiled, sortOrder])
 
   useEffect(() => {
     if (currentPage > totalPages && currentPage > 1) {

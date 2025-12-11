@@ -15,6 +15,7 @@ export interface OrdersSliceInterface {
   changeCurrentPage: (data: number) => void
   changeItemsPerPage: (data: number) => void
   changeOrderFilter: (data: object) => void
+  setSortField: (field: string, order: 'ASC' | 'DESC') => void
   fetchOrders: (paginationData?: PaginationData) => Promise<boolean>
   // fetchAllOrders: (paginationData?: PaginationData) => Promise<boolean>;
 }
@@ -40,6 +41,10 @@ export const ordersSlice: StateCreator<OrdersSliceInterface> = (set, get) => ({
 
   changeOrderFilter: (data: object) => {
     set({ orderFilter: data })
+  },
+
+  setSortField: (field: string, order: 'ASC' | 'DESC') => {
+    set({ sortFiled: field, sortOrder: order })
   },
 
   fetchOrders: async (paginationData?: PaginationData) => {
