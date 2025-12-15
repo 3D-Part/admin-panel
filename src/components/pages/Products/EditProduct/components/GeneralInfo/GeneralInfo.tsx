@@ -98,9 +98,6 @@ const GeneralInfo = () => {
 
     const request = await editProduct(activeProduct.id, productDataRef.current)
 
-    console.log('isShoppingCartRecommended: ', isShoppingCartRecommended)
-    console.log('productDataRef.current: ', productDataRef.current)
-
     if (request) {
       toast(`${productDataRef.current.name} is changed!`, {
         hideProgressBar: true,
