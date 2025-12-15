@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState, SyntheticEvent } from 'react'
 import { Button, Label, TextInput } from 'flowbite-react'
 import { useShopSettingsStore } from '@/store/store'
 import { toast } from 'react-toastify'
+import { HiPlus, HiTrash } from 'react-icons/hi'
 
 interface BannerSettings {
   text: string
@@ -15,7 +16,7 @@ interface DeliverySettings {
 }
 
 interface CompanyDetails {
-  email: string
+  emails: string[]
   phone: string
   town: string
   address: string
@@ -39,7 +40,7 @@ const GeneralSettings = () => {
       freeDeliveryLimit: '',
     },
     company: {
-      email: '',
+      emails: [''],
       phone: '',
       town: '',
       address: '',
@@ -69,7 +70,10 @@ const GeneralSettings = () => {
               settings.delivery?.freeDeliveryLimit?.toString() || '',
           },
           company: {
-            email: settings.company?.email || '',
+            emails:
+              settings.company?.emails?.length > 0
+                ? settings.company.emails
+                : [''],
             phone: settings.company?.phone || '',
             town: settings.company?.town || '',
             address: settings.company?.address || '',
@@ -96,6 +100,40 @@ const GeneralSettings = () => {
     })
   }
 
+  const handleEmailChange = (index: number, value: string) => {
+    const newEmails = [...formData.company.emails]
+    newEmails[index] = value
+    setFormData({
+      ...formData,
+      company: {
+        ...formData.company,
+        emails: newEmails,
+      },
+    })
+  }
+
+  const addEmailField = () => {
+    setFormData({
+      ...formData,
+      company: {
+        ...formData.company,
+        emails: [...formData.company.emails, ''],
+      },
+    })
+  }
+
+  const removeEmailField = (index: number) => {
+    if (formData.company.emails.length === 1) return
+    const newEmails = formData.company.emails.filter((_, i) => i !== index)
+    setFormData({
+      ...formData,
+      company: {
+        ...formData.company,
+        emails: newEmails,
+      },
+    })
+  }
+
   const onSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
     setLoading(true)
@@ -111,7 +149,9 @@ const GeneralSettings = () => {
             parseFloat(formData.delivery.freeDeliveryLimit) || 0,
         },
         company: {
-          email: formData.company.email,
+          emails: formData.company.emails.filter(
+            (email) => email.trim() !== ''
+          ),
           phone: formData.company.phone,
           town: formData.company.town,
           address: formData.company.address,
@@ -256,26 +296,54 @@ const GeneralSettings = () => {
               Company Details
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Company Email */}
-              <div className="w-full">
-                <div className="mb-2 block">
+              {/* Company Emails */}
+              <div className="w-full sm:col-span-2">
+                <div className="mb-2 flex">
                   <Label
                     className="text-base"
                     htmlFor="companyEmail"
-                    value="Email"
+                    value="Email(s)"
                   />
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    Company contact email
+                    Company contact emails
                   </p>
                 </div>
-                <TextInput
-                  name="company.email"
-                  onChange={handleInputChange}
-                  id="companyEmail"
-                  type="email"
-                  value={formData.company.email}
-                  placeholder="contact@company.com"
-                />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {formData.company.emails.map((email, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <TextInput
+                        onChange={(e) =>
+                          handleEmailChange(index, e.target.value)
+                        }
+                        id={`companyEmail-${index}`}
+                        type="email"
+                        value={email}
+                        placeholder="contact@company.com"
+                        className="flex-1"
+                      />
+                      {formData.company.emails.length > 1 && (
+                        <Button
+                          type="button"
+                          color="red"
+                          size="sm"
+                          onClick={() => removeEmailField(index)}
+                        >
+                          <HiTrash className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <Button
+                  type="button"
+                  color="light"
+                  size="sm"
+                  onClick={addEmailField}
+                  className="mt-2"
+                >
+                  <HiPlus className="h-4 w-4 mr-1" />
+                  Add Email
+                </Button>
               </div>
 
               {/* Company Phone */}
@@ -355,6 +423,7 @@ const GeneralSettings = () => {
               isProcessing={loading}
               disabled={loading}
               size="md"
+              color="purple"
             >
               Save Settings
             </Button>
