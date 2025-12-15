@@ -5,6 +5,8 @@ import {
   UsersData,
   CreateEmployeeData,
   EditEmployeeData,
+  UpdateUserProfileData,
+  User,
 } from '@/shared/types'
 
 const API_BASE_URL = process.env.API_KEY
@@ -62,13 +64,27 @@ const editEmployee = async (
   }
 }
 
+const updateUserProfile = async (
+  userId: string,
+  profileData: UpdateUserProfileData
+): Promise<User | null> => {
+  try {
+    const data = await API.put<User>(
+      `${API_BASE_URL}/users/update-profile/${userId}`,
+      profileData
+    )
+    return data
+  } catch (error) {
+    console.error('Error updating user profile:', error)
+    return null
+  }
+}
+
 const UsersAPI = {
   getUsers,
   createEmployee,
   editEmployee,
-  // addNewManufacturer,
-  // editManufacturer,
-  // removeManufacture,
+  updateUserProfile,
 }
 
 export default UsersAPI

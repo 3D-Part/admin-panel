@@ -304,10 +304,22 @@ export interface User {
   street: string | null
   availablePoints: number
   usedPoints: number
+  discount: number
   updatedAt: string
   createdAt: string
   orders: Order[]
   permissions: UserPermissions[]
+}
+
+export interface UpdateUserProfileData {
+  fullName?: string
+  image?: string
+  phone?: string
+  state?: string
+  city?: string
+  postCode?: string
+  street?: string
+  discount?: number
 }
 export interface UsersData {
   count: number

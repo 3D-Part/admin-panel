@@ -180,6 +180,20 @@ export const UsersTable = () => {
 
         <p className="table-total-text text-sm">Total: {count}</p>
       </div>
+
+      {selectedUser && (
+        <UserDetails
+          user={selectedUser}
+          isOpen={isUserDetailsOpen}
+          onClose={() => {
+            setIsUserDetailsOpen(false)
+            setSelectedUser(null)
+          }}
+          onUserUpdated={() => {
+            fetchUsersData()
+          }}
+        />
+      )}
     </ResponsiveTableWrapper>
   )
 }

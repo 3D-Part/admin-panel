@@ -377,6 +377,7 @@ const EditSaleModal = () => {
             onClick={onSave}
             className="flex-1 sm:w-auto order-1 h-10 touch-manipulation"
             size="sm"
+            color="purple"
           >
             Update Sale
           </Button>

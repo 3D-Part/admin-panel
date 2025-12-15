@@ -2,8 +2,10 @@
 
 import OrderDetails from '@/components/pages/Orders/components/OrderDetails'
 import { User, Order } from '@/shared/types'
-import { Button, Modal, Table } from 'flowbite-react'
-import React, { useState } from 'react'
+import { Button, Modal, Table, TextInput, Label } from 'flowbite-react'
+import React, { useState, useRef } from 'react'
+import { toast } from 'react-toastify'
+import UsersAPI from '@/services/users'
 
 type UserDetailType = {
   name: string
@@ -57,11 +59,19 @@ type UserDetailsType = {
   user: User
   isOpen: boolean
   onClose: () => void
+  onUserUpdated?: (updatedUser: User) => void
 }
 
-const UserDetails: React.FC<UserDetailsType> = ({ user, isOpen, onClose }) => {
+const UserDetails: React.FC<UserDetailsType> = ({
+  user,
+  isOpen,
+  onClose,
+  onUserUpdated,
+}) => {
   const [isOrderDetailsVisible, setIsOrderDetailsVisible] = useState(false)
   const [activeOrder, setActiveOrder] = useState<Order>({} as Order)
+  const discountRef = useRef<HTMLInputElement>(null)
+  const [isUpdating, setIsUpdating] = useState(false)
 
   const {
     id,
@@ -82,6 +92,41 @@ const UserDetails: React.FC<UserDetailsType> = ({ user, isOpen, onClose }) => {
   const selectActiveOrder = (activeOrder: Order) => {
     setActiveOrder(activeOrder)
     setIsOrderDetailsVisible(true)
+  }
+
+  const handleDiscountSave = async () => {
+    const discountValue = parseFloat(discountRef.current?.value || '0') || 0
+    if (discountValue < 0 || discountValue > 100) {
+      toast('Discount must be between 0 and 100', {
+        hideProgressBar: true,
+        autoClose: 2000,
+        type: 'error',
+      })
+      return
+    }
+
+    setIsUpdating(true)
+    const result = await UsersAPI.updateUserProfile(id, {
+      discount: discountValue,
+    })
+    setIsUpdating(false)
+
+    if (result) {
+      toast('Discount updated successfully!', {
+        hideProgressBar: true,
+        autoClose: 2000,
+        type: 'success',
+      })
+      if (onUserUpdated) {
+        onUserUpdated(result)
+      }
+    } else {
+      toast('Failed to update discount', {
+        hideProgressBar: true,
+        autoClose: 2000,
+        type: 'error',
+      })
+    }
   }
 
   return (
@@ -118,6 +163,41 @@ const UserDetails: React.FC<UserDetailsType> = ({ user, isOpen, onClose }) => {
               />
 
               <UserDetail name="Used points:" value={String(usedPoints)} />
+            </div>
+
+            {/* Discount Section */}
+            <div className="w-full mt-4 p-4 rounded-lg bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800">
+              <Label
+                htmlFor="discount"
+                value="User Discount (%)"
+                className="text-sm font-semibold text-purple-700 dark:text-purple-300 mb-2 block"
+              />
+              <div className="flex gap-3 items-center">
+                <TextInput
+                  id="discount"
+                  type="number"
+                  min="0"
+                  max="100"
+                  step="1"
+                  ref={discountRef}
+                  defaultValue={user.discount || 0}
+                  placeholder="0"
+                  className="w-32"
+                />
+                <span className="text-gray-500 dark:text-gray-400">%</span>
+                <Button
+                  size="sm"
+                  color="purple"
+                  onClick={handleDiscountSave}
+                  isProcessing={isUpdating}
+                  disabled={isUpdating}
+                >
+                  Save Discount
+                </Button>
+              </div>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                This discount will be applied to all orders for this user.
+              </p>
             </div>
           </div>
 
