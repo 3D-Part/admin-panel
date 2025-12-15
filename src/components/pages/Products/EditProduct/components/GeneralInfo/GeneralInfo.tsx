@@ -97,6 +97,10 @@ const GeneralInfo = () => {
     productDataRef.current.isShoppingCartRecommended = isShoppingCartRecommended
 
     const request = await editProduct(activeProduct.id, productDataRef.current)
+
+    console.log('isShoppingCartRecommended: ', isShoppingCartRecommended)
+    console.log('productDataRef.current: ', productDataRef.current)
+
     if (request) {
       toast(`${productDataRef.current.name} is changed!`, {
         hideProgressBar: true,
@@ -149,6 +153,7 @@ const GeneralInfo = () => {
       isPublished: activeProduct.isPublished,
       isMostSold: activeProduct.isMostSold,
       isRecommended: activeProduct.isRecommended,
+      isShoppingCartRecommended: activeProduct.isShoppingCartRecommended,
       sku: activeProduct.sku,
       categoryId: activeProduct.categoryId,
       price: activeProduct.price,
