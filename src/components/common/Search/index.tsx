@@ -1,6 +1,6 @@
 'use client' // This is a client component 👈🏽
 
-import { SyntheticEvent, useEffect, useState } from 'react'
+import { SyntheticEvent, useEffect, useState, useRef } from 'react'
 import { IoCloseCircleOutline } from 'react-icons/io5'
 
 interface SearchProps {
@@ -13,8 +13,14 @@ const Search: React.FC<SearchProps> = ({
   //   setValue,
 }) => {
   const [query, setQuery] = useState('')
+  const isFirstRender = useRef(true)
 
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false
+      return
+    }
+
     const delayDebounceFn = setTimeout(() => {
       getData(query)
     }, 1000)
