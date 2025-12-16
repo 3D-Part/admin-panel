@@ -20,6 +20,8 @@ const sortOptions: SortOption[] = [
   { label: 'Price: High to Low', field: 'price', order: 'DESC' },
   { label: 'Quantity: Low to High', field: 'quantity', order: 'ASC' },
   { label: 'Quantity: High to Low', field: 'quantity', order: 'DESC' },
+  { label: 'Published first', field: 'isPublished', order: 'DESC' },
+  { label: 'Unpublished first', field: 'isPublished', order: 'ASC' },
   // { label: 'SKU A-Z', field: 'sku', order: 'ASC' },
   // { label: 'SKU Z-A', field: 'sku', order: 'DESC' },
 ]
