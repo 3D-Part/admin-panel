@@ -69,7 +69,7 @@ const updateUserProfile = async (
   profileData: UpdateUserProfileData
 ): Promise<User | null> => {
   try {
-    const data = await API.put<User>(
+    const data = await API.put<UpdateUserProfileData, User>(
       `${API_BASE_URL}/users/update-profile/${userId}`,
       profileData
     )
