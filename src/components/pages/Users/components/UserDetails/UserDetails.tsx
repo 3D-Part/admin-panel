@@ -87,6 +87,7 @@ const UserDetails: React.FC<UserDetailsType> = ({
     orders,
     availablePoints,
     usedPoints,
+    reservedPoints,
   } = user
 
   const selectActiveOrder = (activeOrder: Order) => {
@@ -156,13 +157,17 @@ const UserDetails: React.FC<UserDetailsType> = ({
             <UserDetail name="Post Code:" value={postCode} />
             <UserDetail name="Role:" value={role} />
             <UserDetail name="Provider:" value={provider} />
-            <div className="flex w-full gap-4">
+            <div className="flex w-full flex-wrap gap-4">
               <UserDetail
                 name="Available points:"
                 value={String(availablePoints)}
               />
 
               <UserDetail name="Used points:" value={String(usedPoints)} />
+              <UserDetail
+                name="Reserved points:"
+                value={String(reservedPoints)}
+              />
             </div>
 
             {/* Discount Section */}

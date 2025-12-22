@@ -305,6 +305,7 @@ export interface User {
   street: string | null
   availablePoints: number
   usedPoints: number
+  reservedPoints: number
   discount: number
   updatedAt: string
   createdAt: string
