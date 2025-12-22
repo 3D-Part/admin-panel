@@ -99,6 +99,7 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
     products,
     companyPdv,
     companyName,
+    points,
     jib,
   } = order
 
@@ -184,6 +185,11 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
               name="Discount"
               value={discount ? `${discount} KM` : '0 KM'}
             />
+            <OrderDetail
+              name="Used Points"
+              value={points ? `${points}` : '0'}
+            />
+
             <OrderDetail
               name="Total"
               value={`${total} KM`}
