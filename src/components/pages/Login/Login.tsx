@@ -54,7 +54,7 @@ const Login = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-4 w-full -mt-16">
+    <div className="min-h-svh flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-4 w-full ">
       <div className="w-full max-w-lg">
         {/* Card */}
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
