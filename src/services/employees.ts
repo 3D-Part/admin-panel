@@ -20,7 +20,9 @@ const getEmployees = async (
   queryParams.append('sort[field]', sortData.field)
 
   // Add filter for admin role
-  const filters = { filters: { role: { is: 'employee' } } }
+  const filters = {
+    filters: { role: { like: 'employee' } },
+  }
 
   try {
     const data = await API.get<UsersData>(
