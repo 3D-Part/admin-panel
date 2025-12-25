@@ -6,10 +6,12 @@ import { SyntheticEvent, useRef, useState } from 'react'
 import AuthAPI from '@/services/auth'
 import { useCurrentUserStore } from '@/store/store'
 import Image from 'next/image'
+import { IoIosEyeOff, IoMdEye } from 'react-icons/io'
 
 const Login = () => {
   const formDataRef = useRef<LoginData>({} as LoginData)
   const [isLoading, setIsLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const { setCurrentUser, setLoading } = useCurrentUserStore()
 
   const router = useRouter()
@@ -94,22 +96,31 @@ const Login = () => {
                 sizing="lg"
               />
             </div>
-            <div>
+            <div className="relative">
               <Label
                 htmlFor="password"
                 value="Password"
                 className="mb-2 block text-gray-700 dark:text-gray-300"
               />
-              <TextInput
-                required
-                id="password"
-                type="password"
-                name="password"
-                placeholder="••••••••"
-                onChange={handleInputChange}
-                autoComplete="on"
-                sizing="lg"
-              />
+              <div className="relative">
+                <TextInput
+                  required
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  name="password"
+                  placeholder="••••••••"
+                  onChange={handleInputChange}
+                  autoComplete="on"
+                  sizing="lg"
+                />
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <IoIosEyeOff /> : <IoMdEye />}
+                </button>
+              </div>
             </div>
             <Button
               type="submit"
