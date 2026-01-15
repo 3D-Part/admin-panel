@@ -22,7 +22,10 @@ const OrderDetail: React.FC<OrderDetailType> = ({
 }) => {
   return (
     <div
-      className={`flex flex-col gap-1 p-3 rounded-lg bg-gray-50 dark:bg-gray-800 ${className}`}
+      className={`flex flex-col gap-1 p-3 rounded-lg border ${
+        className ||
+        'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700'
+      }`}
     >
       <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
         {name}
@@ -101,6 +104,7 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
     companyName,
     points,
     jib,
+    user,
   } = order
 
   const formattedDate = dateTimeFormat(createdAt)
@@ -131,15 +135,88 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
 
       <Modal.Body className="space-y-6">
         {/* Customer Information */}
+        {user && (
+          <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+            <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-4 flex items-center gap-2">
+              <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+              Customer Information
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <OrderDetail
+                name="Customer ID"
+                value={user.id}
+                className="bg-blue-100 dark:bg-blue-800/50 border-blue-200 dark:border-blue-700"
+              />
+              <OrderDetail
+                name="Account Name"
+                value={user.fullName}
+                className="bg-blue-100 dark:bg-blue-800/50 border-blue-200 dark:border-blue-700"
+              />
+              <OrderDetail
+                name="Account Email"
+                value={user.email}
+                className="bg-blue-100 dark:bg-blue-800/50 border-blue-200 dark:border-blue-700"
+              />
+
+              <OrderDetail
+                name="Member Since"
+                value={dateTimeFormat(user.createdAt)}
+                className="bg-blue-100 dark:bg-blue-800/50 border-blue-200 dark:border-blue-700"
+              />
+            </div>
+
+            {/* User Address Information */}
+            {(user.state || user.city || user.street || user.postCode) && (
+              <div className="mt-4">
+                <h4 className="text-md font-medium text-blue-800 dark:text-blue-200 mb-3">
+                  Registered Address
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {user.state && (
+                    <OrderDetail
+                      name="State"
+                      value={user.state}
+                      className="bg-blue-100 dark:bg-blue-800/50 border-blue-200 dark:border-blue-700"
+                    />
+                  )}
+                  {user.city && (
+                    <OrderDetail
+                      name="City"
+                      value={user.city}
+                      className="bg-blue-100 dark:bg-blue-800/50 border-blue-200 dark:border-blue-700"
+                    />
+                  )}
+                  {user.street && (
+                    <OrderDetail
+                      name="Street"
+                      value={user.street}
+                      className="bg-blue-100 dark:bg-blue-800/50 border-blue-200 dark:border-blue-700"
+                    />
+                  )}
+                  {user.postCode && (
+                    <OrderDetail
+                      name="Post Code"
+                      value={user.postCode}
+                      className="bg-blue-100 dark:bg-blue-800/50 border-blue-200 dark:border-blue-700"
+                    />
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Contact Information */}
         <div>
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            Customer Information
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+            <span className="w-2 h-2 bg-gray-500 rounded-full"></span>
+            Contact Information
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <OrderDetail name="Full Name" value={fullName} />
             <OrderDetail name="Email" value={email} />
             <OrderDetail name="Phone" value={phone} />
-            <OrderDetail name="Date" value={formattedDate} />
+            <OrderDetail name="Order Date" value={formattedDate} />
           </div>
         </div>
 

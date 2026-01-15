@@ -263,6 +263,7 @@ export interface Order {
   updatedAt: string
   userId: string
   points: number
+  user: User
 }
 
 export interface OrdersData {
