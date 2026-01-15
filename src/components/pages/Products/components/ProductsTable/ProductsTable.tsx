@@ -1,4 +1,4 @@
-'use client' // This is a client component 👈🏽
+'use client'
 
 import { Pagination, Table } from 'flowbite-react'
 import React, { useCallback, useEffect, useRef, useState } from 'react'

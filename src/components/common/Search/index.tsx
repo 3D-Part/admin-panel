@@ -1,4 +1,4 @@
-'use client' // This is a client component 👈🏽
+'use client'
 
 import { SyntheticEvent, useEffect, useState, useRef } from 'react'
 import { IoCloseCircleOutline } from 'react-icons/io5'
