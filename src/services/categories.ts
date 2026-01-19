@@ -5,6 +5,7 @@ import {
   PaginationData,
   CategoriesData,
   SortParamsData,
+  CategoryBySlugData,
 } from '@/shared/types'
 
 const API_BASE_URL = process.env.API_KEY
@@ -79,11 +80,26 @@ const removeCategory = async (id: string): Promise<boolean> => {
   }
 }
 
+const getCategoryBySlug = async (
+  slug: string
+): Promise<CategoryBySlugData | null> => {
+  try {
+    const data: CategoryBySlugData = await API.get(
+      `/shop/categories/slug/${slug}`
+    )
+    return data
+  } catch (error) {
+    console.error('Error fetching category by slug:', error)
+    return null
+  }
+}
+
 const CategoriesAPI = {
   getCategories,
   addNewCategory,
   editCategory,
   removeCategory,
+  getCategoryBySlug,
 }
 
 export default CategoriesAPI

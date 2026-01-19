@@ -1,39 +1,55 @@
 'use client'
 
 import { Loader } from '@/components/common'
-import { useAttributesStore } from '@/store/store'
+import { useAttributesStore, useProductsStore } from '@/store/store'
 import { Button, Label, Select } from 'flowbite-react'
 import React, { useEffect, useRef, useState } from 'react'
 import { AttributeData } from '@/shared/types'
 import AddAttributeForm from './components/AddAttributeForm/AddAttributeForm'
+import CategoriesAPI from '@/services/categories'
 
 const AddAttribute = () => {
   const [loader, setLoader] = useState(false)
+  const [categoryAttributes, setCategoryAttributes] = useState<AttributeData[]>(
+    []
+  )
+
   const [selectedAttribute, setSelectedAttribute] = useState<AttributeData>(
     {} as AttributeData
   )
+
+  const { activeProduct } = useProductsStore()
+
+  const productCategorySlug = activeProduct.category?.slug || ''
 
   const resetSelectedAttribute = () => {
     setSelectedAttribute({} as AttributeData)
   }
   const attributeDataRef = useRef<string>('')
 
-  const { allAttributes, fetchAllAttributes } = useAttributesStore()
+  const getCategoryAttributes = async () => {
+    if (!productCategorySlug) return
 
-  const getAllAttributes = async () => {
     setLoader(true)
-    await fetchAllAttributes()
+    try {
+      const categoryData =
+        await CategoriesAPI.getCategoryBySlug(productCategorySlug)
+      if (categoryData && categoryData.categoryAttributes) {
+        const attributes = categoryData.categoryAttributes.map(
+          (ca) => ca.attribute
+        )
+        setCategoryAttributes(attributes)
+      }
+    } catch (error) {
+      console.error('Error fetching category attributes:', error)
+      setCategoryAttributes([])
+    }
     setLoader(false)
   }
 
-  // TODO need to be cached
-  // useEffect(() => {
-  //   if (allAttributes.length !== 0) return;
-  //   fetchAllAttributes();
-  // }, [allAttributes, fetchAllAttributes]);
   useEffect(() => {
-    getAllAttributes()
-  }, [])
+    getCategoryAttributes()
+  }, [productCategorySlug])
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -44,17 +60,24 @@ const AddAttribute = () => {
   }
 
   const addAttribute = () => {
-    const _selectedAttribute = allAttributes.find(
+    const _selectedAttribute = categoryAttributes.find(
       (attribute) => attribute.id === attributeDataRef.current
     )
     _selectedAttribute && setSelectedAttribute(_selectedAttribute)
   }
 
   if (loader) return <Loader />
-  if (!allAttributes.length)
+  if (!productCategorySlug) {
     return (
       <div className="mt-4 text-gray-900 dark:text-white text-xl">
-        There is no attributes available
+        No category selected for this product
+      </div>
+    )
+  }
+  if (!categoryAttributes.length)
+    return (
+      <div className="mt-4 text-gray-900 dark:text-white text-xl">
+        There are no attributes available for this category
       </div>
     )
 
@@ -73,7 +96,7 @@ const AddAttribute = () => {
             // defaultValue={activeProduct.attributeId}
           >
             <option value={''}>None</option>
-            {allAttributes.map((attribute) => {
+            {categoryAttributes.map((attribute) => {
               return (
                 <option value={attribute.id} key={attribute.id}>
                   {attribute.name}

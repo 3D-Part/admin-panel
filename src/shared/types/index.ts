@@ -98,6 +98,42 @@ export interface CategoryAttribute {
     updatedAt: string
   }
 }
+
+export interface CategoryAttributeDetailed {
+  id: string
+  categoryId: string
+  attributeId: string
+  createdAt: string
+  updatedAt: string
+  attribute: {
+    id: string
+    name: string
+    type: AttributeType
+    createdAt: string
+    updatedAt: string
+    productAttributes: any[]
+  }
+}
+
+export interface CategoryBySlugData {
+  id: string
+  name: string
+  slug: string
+  description: string
+  parentCategoryId: string | null
+  createdAt: string
+  updatedAt: string
+  category: {
+    id: string
+    name: string
+    slug: string
+    description: string
+    parentCategoryId: string | null
+    createdAt: string
+    updatedAt: string
+  } | null
+  categoryAttributes: CategoryAttributeDetailed[]
+}
 export interface CategoryData {
   id: string
   name: string
@@ -146,6 +182,11 @@ export interface ProductAttribute {
 export interface ProductCategory {
   id: string
   name: string
+  createdAt: string
+  description: string
+  parentCategoryId: string | null
+  slug: string
+  updatedAt: string
 }
 
 export interface ProductImages {
