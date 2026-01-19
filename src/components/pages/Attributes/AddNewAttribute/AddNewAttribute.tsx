@@ -1,9 +1,9 @@
 'use client'
 
-import { AttributeFormBody } from '@/shared/types'
+import { AttributeFormBody, AttributeType } from '@/shared/types'
 import { useAttributesStore } from '@/store/store'
 import { Loader } from '@/components/common'
-import { Button, Label, TextInput } from 'flowbite-react'
+import { Button, Label, Select, TextInput } from 'flowbite-react'
 import React, { SyntheticEvent, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import AttributeHeader from './components/AttributeHeader/AttributeHeader'
@@ -26,7 +26,7 @@ const AddNewAttribute: React.FC<AddNewAttributeType> = ({ initialValue }) => {
 
     attributeDataRef.current = {
       ...attributeDataRef.current,
-      [name]: value,
+      [name]: name === 'type' ? (value as AttributeType) : value,
     }
   }
 
@@ -37,10 +37,12 @@ const AddNewAttribute: React.FC<AddNewAttributeType> = ({ initialValue }) => {
 
   const saveFunction = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!attributeDataRef.current.name) return
+
+    if (!attributeDataRef.current.name || !attributeDataRef.current.type) return
 
     const _attribute: AttributeFormBody = {
       name: attributeDataRef.current.name,
+      type: attributeDataRef.current.type,
     }
 
     const request = await addNewAttribute(_attribute)
@@ -102,6 +104,27 @@ const AddNewAttribute: React.FC<AddNewAttributeType> = ({ initialValue }) => {
             type="text"
             defaultValue={initialValue?.name ? initialValue.name : ''}
           />
+        </div>
+
+        <div className="w-full">
+          <div className="mb-2 block">
+            <Label htmlFor="attributeType" value="Attribute Type" />
+          </div>
+          <Select
+            name="type"
+            onChange={handleInputChange}
+            id="attributeType"
+            required
+            defaultValue={initialValue?.type ? initialValue.type : ''}
+          >
+            <option value="" disabled>
+              Select a type
+            </option>
+            <option value="input">Input</option>
+            <option value="select">Select</option>
+            <option value="range">Range</option>
+            <option value="bool">Boolean</option>
+          </Select>
         </div>
 
         <Button className="mt-6" type="submit" color="purple">

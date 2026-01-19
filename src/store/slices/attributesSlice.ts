@@ -102,6 +102,7 @@ export const attributeSlice: StateCreator<AttributesSliceInterface> = (
 
     const _attributesData: AttributeFormBody = {
       name: attribute.name,
+      type: attribute.type,
     }
 
     try {
@@ -123,6 +124,7 @@ export const attributeSlice: StateCreator<AttributesSliceInterface> = (
 
     const _AttributeData: AttributeFormBody = {
       name: attribute.name,
+      type: attribute.type,
     }
 
     try {

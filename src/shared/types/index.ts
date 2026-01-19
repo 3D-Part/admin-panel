@@ -43,9 +43,12 @@ export interface ManufacturerFormBody {
 }
 
 // ATTRIBUTES
+export type AttributeType = 'input' | 'select' | 'range' | 'bool'
+
 export interface AttributeData {
   id: string
   name: string
+  type: AttributeType
   createdAt: string
   updatedAt: string
 }
@@ -57,6 +60,7 @@ export interface AttributesData {
 
 export interface AttributeFormBody {
   name: string
+  type: AttributeType
 }
 
 // PRODUCT ATTRIBUTES

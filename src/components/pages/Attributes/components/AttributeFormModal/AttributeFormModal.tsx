@@ -1,10 +1,10 @@
 'use client'
 
 import { Loader } from '@/components/common'
-import { AttributeFormBody, AttributeData } from '@/shared/types'
+import { AttributeFormBody, AttributeData, AttributeType } from '@/shared/types'
 import { useAttributesStore } from '@/store/store'
-import { Button, Label, Modal, TextInput } from 'flowbite-react'
-import { useEffect, useRef } from 'react'
+import { Button, Label, Modal, TextInput, Select } from 'flowbite-react'
+import { useEffect, useState } from 'react'
 import { useModalScroll } from '@/shared/hooks/useModalScroll'
 
 type ModalType = {
@@ -20,7 +20,9 @@ const AttributeFormModal: React.FC<ModalType> = ({
   onSave,
   onClose,
 }) => {
-  const attributeDataRef = useRef<AttributeData>({} as AttributeData)
+  const [attributeData, setAttributeData] = useState<AttributeData>(
+    {} as AttributeData
+  )
 
   const { allAttributes } = useAttributesStore()
 
@@ -29,21 +31,22 @@ const AttributeFormModal: React.FC<ModalType> = ({
   ) => {
     const { name, value } = e.target
 
-    attributeDataRef.current = {
-      ...attributeDataRef.current,
+    setAttributeData((prev) => ({
+      ...prev,
       [name]: value,
-    }
+    }))
   }
 
   const resetData = () => {
-    attributeDataRef.current = {} as AttributeData
+    setAttributeData({} as AttributeData)
   }
 
   const saveFunction = () => {
-    if (!attributeDataRef.current.name) return
+    if (!attributeData.name) return
 
     const _attribute: AttributeFormBody = {
-      name: attributeDataRef.current.name,
+      name: attributeData.name,
+      type: attributeData.type || 'input',
     }
 
     onSave(_attribute)
@@ -51,9 +54,12 @@ const AttributeFormModal: React.FC<ModalType> = ({
   }
 
   useEffect(() => {
-    if (!initialValue) return
+    if (!initialValue) {
+      setAttributeData({} as AttributeData)
+      return
+    }
 
-    attributeDataRef.current = initialValue
+    setAttributeData(initialValue)
   }, [initialValue])
 
   // Disable body scroll when modal is open
@@ -98,10 +104,31 @@ const AttributeFormModal: React.FC<ModalType> = ({
                       id="attributeName"
                       required
                       type="text"
-                      defaultValue={initialValue?.name ? initialValue.name : ''}
+                      value={attributeData.name || ''}
                       className="mt-1"
                       placeholder="Enter attribute name..."
                     />
+                  </div>
+
+                  <div>
+                    <Label
+                      htmlFor="attributeType"
+                      value="Attribute Type"
+                      className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                    />
+                    <Select
+                      name="type"
+                      onChange={handleInputChange}
+                      id="attributeType"
+                      required
+                      value={attributeData.type || 'input'}
+                      className="mt-1"
+                    >
+                      <option value="input">Input</option>
+                      <option value="select">Select</option>
+                      <option value="range">Range</option>
+                      <option value="bool">Boolean</option>
+                    </Select>
                   </div>
                 </div>
               </div>
@@ -118,7 +145,7 @@ const AttributeFormModal: React.FC<ModalType> = ({
             <Button
               onClick={saveFunction}
               className="w-full sm:w-auto order-2 sm:order-1"
-              disabled={!attributeDataRef.current.name}
+              disabled={!attributeData.name}
             >
               {initialValue ? 'Update Attribute' : 'Create Attribute'}
             </Button>
