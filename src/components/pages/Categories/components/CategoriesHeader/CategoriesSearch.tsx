@@ -2,7 +2,7 @@
 
 import { Search } from '@/components/common'
 import { PaginationData } from '@/shared/types'
-import { useCategoryStore, useProductsStore } from '@/store/store'
+import { useCategoryStore } from '@/store/store'
 import { Spinner } from 'flowbite-react'
 import React, { useCallback, useState } from 'react'
 

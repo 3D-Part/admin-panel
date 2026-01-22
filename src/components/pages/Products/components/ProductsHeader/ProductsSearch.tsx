@@ -22,12 +22,18 @@ const ProductsSearch = () => {
     async (value: string) => {
       changeCurrentPage(1)
 
+      // const filters = {
+      //   filters: {
+      //     [searchBy]: {
+      //       like: `%${value}%`,
+      //     },
+      //   },
+      // }
+
+      console.log('value: ', value)
+
       const filters = {
-        filters: {
-          [searchBy]: {
-            like: `%${value}%`,
-          },
-        },
+        key: `${value}`,
       }
 
       changeProductFilter(filters)
