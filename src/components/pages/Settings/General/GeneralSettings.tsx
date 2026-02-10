@@ -22,10 +22,17 @@ interface CompanyDetails {
   address: string
 }
 
+interface SocialMediaSettings {
+  facebook: string
+  instagram: string
+  olx: string
+}
+
 interface SettingsFormData {
   banner: BannerSettings
   delivery: DeliverySettings
   company: CompanyDetails
+  socialMedia: SocialMediaSettings
 }
 
 const GeneralSettings = () => {
@@ -44,6 +51,11 @@ const GeneralSettings = () => {
       phone: '',
       town: '',
       address: '',
+    },
+    socialMedia: {
+      facebook: '',
+      instagram: '',
+      olx: '',
     },
   })
   const formRef = useRef<HTMLFormElement>(null)
@@ -77,6 +89,11 @@ const GeneralSettings = () => {
             phone: settings.company?.phone || '',
             town: settings.company?.town || '',
             address: settings.company?.address || '',
+          },
+          socialMedia: {
+            facebook: settings.socialMedia?.facebook || '',
+            instagram: settings.socialMedia?.instagram || '',
+            olx: settings.socialMedia?.olx || '',
           },
         })
       }
@@ -155,6 +172,11 @@ const GeneralSettings = () => {
           phone: formData.company.phone,
           town: formData.company.town,
           address: formData.company.address,
+        },
+        socialMedia: {
+          facebook: formData.socialMedia.facebook,
+          instagram: formData.socialMedia.instagram,
+          olx: formData.socialMedia.olx,
         },
       },
     })
@@ -409,6 +431,80 @@ const GeneralSettings = () => {
                   type="text"
                   value={formData.company.address}
                   placeholder="Street Name 123"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Social Media Section */}
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              Social Media
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {/* Facebook */}
+              <div className="w-full">
+                <div className="mb-2 block">
+                  <Label
+                    className="text-base"
+                    htmlFor="socialMediaFacebook"
+                    value="Facebook"
+                  />
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    Facebook page URL
+                  </p>
+                </div>
+                <TextInput
+                  name="socialMedia.facebook"
+                  onChange={handleInputChange}
+                  id="socialMediaFacebook"
+                  type="url"
+                  value={formData.socialMedia.facebook}
+                  placeholder="https://facebook.com/yourpage"
+                />
+              </div>
+
+              {/* Instagram */}
+              <div className="w-full">
+                <div className="mb-2 block">
+                  <Label
+                    className="text-base"
+                    htmlFor="socialMediaInstagram"
+                    value="Instagram"
+                  />
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    Instagram profile URL
+                  </p>
+                </div>
+                <TextInput
+                  name="socialMedia.instagram"
+                  onChange={handleInputChange}
+                  id="socialMediaInstagram"
+                  type="url"
+                  value={formData.socialMedia.instagram}
+                  placeholder="https://instagram.com/yourprofile"
+                />
+              </div>
+
+              {/* OLX */}
+              <div className="w-full">
+                <div className="mb-2 block">
+                  <Label
+                    className="text-base"
+                    htmlFor="socialMediaOlx"
+                    value="OLX"
+                  />
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    OLX store URL
+                  </p>
+                </div>
+                <TextInput
+                  name="socialMedia.olx"
+                  onChange={handleInputChange}
+                  id="socialMediaOlx"
+                  type="url"
+                  value={formData.socialMedia.olx}
+                  placeholder="https://olx.ba/korisnik/yourstore"
                 />
               </div>
             </div>
