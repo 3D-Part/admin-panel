@@ -26,7 +26,7 @@ type ProductsTableType = {
   onWarningModalOpen: (product: ProductData) => void
 }
 
-const S3_URL = process.env.S3_URL
+// const S3_URL = process.env.S3_URL
 
 export const ProductsTable: React.FC<ProductsTableType> = ({
   onWarningModalOpen,
@@ -45,9 +45,7 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
     changeCurrentPage,
     totalPages,
     count,
-    changeProductFilter,
     changeActiveProduct,
-    addNewProducts,
     resetProductsState,
     sortFiled,
     sortOrder,
@@ -107,13 +105,7 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
       changeIsAddProductsOnSaleModalOpen,
       changeIsRemoveProductsFromSaleModalOpen,
     } = useUISliceStore()
-    const {
-      changeActiveProduct,
-      addNewProducts,
-      currentPage,
-      itemsPerPage,
-      fetchProducts,
-    } = useProductsStore()
+    const { changeActiveProduct, addNewProducts } = useProductsStore()
 
     const addProductOnSale = () => {
       changeActiveProduct(product)
@@ -220,7 +212,7 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
     const { name, category, manufacturer, sku, price, quantity, images } =
       product
     const mainImage = images.find((image) => image.isMain) || images[0]
-    const activeImageId = mainImage ? `${S3_URL}/${mainImage.imageId}` : ''
+    // const activeImageId = mainImage ? `${S3_URL}/${mainImage.imageId}` : ''
 
     const editProduct = () => {
       // Only allow edit if user has write permission

@@ -82,7 +82,6 @@ export const manufactureSlice: StateCreator<ManufactureSliceInterface> = (
   fetchAllManufactures: async (forceRefresh = false) => {
     // Don't fetch if we already have data and don't need to force refresh
     if (get().allManufactures.length > 0 && !forceRefresh) {
-      console.log('Manufactures already loaded, skipping API call')
       return true
     }
 
@@ -123,7 +122,6 @@ export const manufactureSlice: StateCreator<ManufactureSliceInterface> = (
       }
 
       set({ allManufactures })
-      console.log(`Loaded ${allManufactures.length} manufactures in chunks`)
       return true
     } catch (error) {
       console.error('Error with getting data:', error)

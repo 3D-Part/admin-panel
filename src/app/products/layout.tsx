@@ -10,12 +10,12 @@ export default function ProductsLayout({
 }) {
   const { resetProductsState } = useProductsStore()
 
-  useEffect(() => {
-    // Reset products state when navigating away from products section
-    return () => {
-      resetProductsState()
-    }
-  }, [resetProductsState])
+  // useEffect(() => {
+  //   // Reset products state when navigating away from products section
+  //   return () => {
+  //     resetProductsState()
+  //   }
+  // }, [resetProductsState])
 
   return <>{children}</>
 }

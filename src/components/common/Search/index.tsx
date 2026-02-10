@@ -5,14 +5,16 @@ import { IoCloseCircleOutline } from 'react-icons/io5'
 
 interface SearchProps {
   getData: (value: string) => void
+  defaultValue?: string
   //   setValue: (value: string) => void;
 }
 
 const Search: React.FC<SearchProps> = ({
   getData,
+  defaultValue = '',
   //   setValue,
 }) => {
-  const [query, setQuery] = useState('')
+  const [query, setQuery] = useState(defaultValue)
   const isFirstRender = useRef(true)
 
   useEffect(() => {

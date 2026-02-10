@@ -16,6 +16,7 @@ const ProductsSearch = () => {
     fetchProducts,
     changeCurrentPage,
     changeProductFilter,
+    productFilters,
   } = useProductsStore()
 
   const fetchProductsData = useCallback(
@@ -29,8 +30,6 @@ const ProductsSearch = () => {
       //     },
       //   },
       // }
-
-      console.log('value: ', value)
 
       const filters = {
         key: `${value}`,
@@ -68,7 +67,10 @@ const ProductsSearch = () => {
         </Dropdown.Item>
       </Dropdown>
       <div className="flex-1 md:flex-none min-w-0">
-        <Search getData={fetchProductsData} />
+        <Search
+          getData={fetchProductsData}
+          defaultValue={(productFilters as { key?: string })?.key || ''}
+        />
       </div>
       {loader && <Spinner aria-label="Loading..." size="sm" />}
     </div>
