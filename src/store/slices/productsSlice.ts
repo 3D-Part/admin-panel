@@ -137,6 +137,7 @@ export const productsSlice: StateCreator<ProductsSliceInterface> = (
     if (product.details) _productData.details = product.details
     if (product.manufacturerId)
       _productData.manufacturerId = product.manufacturerId
+    if (product.keywords) _productData.keywords = product.keywords
 
     try {
       const data = await ProductsAPI.addNewProduct(_productData)
@@ -160,6 +161,7 @@ export const productsSlice: StateCreator<ProductsSliceInterface> = (
       name: product.name,
       description: product.description,
       details: product.details,
+      keywords: product.keywords,
       isPublished: product.isPublished,
       isMostSold: product.isMostSold,
       isRecommended: product.isRecommended,
