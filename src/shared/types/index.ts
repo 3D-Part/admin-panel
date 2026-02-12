@@ -202,6 +202,7 @@ export interface ProductData {
   name: string
   description: string
   details: string
+  keywords?: string[]
   sku: string
   categoryId: string
   manufacturerId: string
@@ -235,6 +236,7 @@ export interface ProductFormBody {
   name: string
   description?: string
   details?: string
+  keywords?: string[]
   isPublished: boolean
   isMostSold: boolean
   isRecommended: boolean

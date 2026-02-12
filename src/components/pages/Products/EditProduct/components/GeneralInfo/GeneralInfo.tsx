@@ -1,5 +1,5 @@
 'use client'
-import { Loader } from '@/components/common'
+import { Loader, Keywords } from '@/components/common'
 import {
   useManufactureStore,
   useCategoryStore,
@@ -31,6 +31,7 @@ const GeneralInfo = () => {
   const [isShoppingCartRecommended, setIsShoppingCartRecommended] =
     useState(false)
   const [loader, setLoader] = useState(true)
+  const [keywords, setKeywords] = useState<string[]>([])
 
   // const [parentCategory, setParentCategoryId] = useState('')
 
@@ -63,14 +64,19 @@ const GeneralInfo = () => {
     productDataRef.current.details = text
   }
 
-  const resetData = () => {
-    formRef.current && formRef.current.reset()
-    productDataRef.current = {} as ProductFormBody
-    setIsPublished(true)
-    setIsMostSold(false)
-    setIsRecommended(false)
-    setIsShoppingCartRecommended(false)
+  const handleKeywordsChange = (newKeywords: string[]) => {
+    setKeywords(newKeywords)
+    productDataRef.current.keywords = newKeywords
   }
+
+  // const resetData = () => {
+  //   formRef.current && formRef.current.reset()
+  //   productDataRef.current = {} as ProductFormBody
+  //   setIsPublished(true)
+  //   setIsMostSold(false)
+  //   setIsRecommended(false)
+  //   setIsShoppingCartRecommended(false)
+  // }
 
   const changeIsPublished = () => {
     setIsPublished(!isPublished)
@@ -167,6 +173,9 @@ const GeneralInfo = () => {
     if (activeProduct.manufacturerId) {
       _activeProductFormData.manufacturerId = activeProduct.manufacturerId
     }
+    if (activeProduct.keywords) {
+      _activeProductFormData.keywords = activeProduct.keywords
+    }
 
     productDataRef.current = _activeProductFormData
   }, [activeProduct])
@@ -187,6 +196,7 @@ const GeneralInfo = () => {
     setIsMostSold(activeProduct.isMostSold)
     setIsRecommended(activeProduct.isRecommended)
     setIsShoppingCartRecommended(activeProduct.isShoppingCartRecommended)
+    setKeywords(activeProduct.keywords || [])
     // if (activeProduct.category) {
     //   setParentCategoryId(activeProduct.category.id)
     // }
@@ -214,7 +224,6 @@ const GeneralInfo = () => {
           defaultValue={activeProduct.name}
         />
       </div>
-
       {/* SKU */}
       <div className="w-full">
         <div className="mb-2 block">
@@ -229,7 +238,6 @@ const GeneralInfo = () => {
           defaultValue={activeProduct.sku}
         />
       </div>
-
       {/* PRICE */}
       <div className="w-full">
         <div className="mb-2 block">
@@ -245,7 +253,6 @@ const GeneralInfo = () => {
           defaultValue={activeProduct.price}
         />
       </div>
-
       {/* QUANTITY */}
       <div className="w-full">
         <div className="mb-2 block">
@@ -260,7 +267,6 @@ const GeneralInfo = () => {
           defaultValue={activeProduct.quantity}
         />
       </div>
-
       {/* WEIGHT */}
       <div className="w-full">
         <div className="mb-2 block">
@@ -278,7 +284,6 @@ const GeneralInfo = () => {
           defaultValue={activeProduct.weight}
         />
       </div>
-
       {/* CATEGORY */}
       <div className="w-full">
         <div className="mb-2 block">
@@ -301,7 +306,6 @@ const GeneralInfo = () => {
           })}
         </Select>
       </div>
-
       {/* MANUFACTURER */}
       <div className="w-full">
         <div className="mb-2 block">
@@ -323,7 +327,6 @@ const GeneralInfo = () => {
           })}
         </Select>
       </div>
-
       {/* DESCRIPTION */}
       <div className="w-full">
         <div className="mb-2 block">
@@ -342,7 +345,6 @@ const GeneralInfo = () => {
           defaultValue={activeProduct.description}
         />
       </div>
-
       {/* DETAILS */}
       <div className="w-full">
         <div className="mb-2 block">
@@ -355,7 +357,13 @@ const GeneralInfo = () => {
           defaultValue={activeProduct.details}
         />
       </div>
-
+      {/* KEYWORDS */}
+      <Keywords
+        keywords={keywords}
+        onChange={handleKeywordsChange}
+        label="Search Keywords"
+        placeholder="Add search keyword..."
+      />
       {/* TOGGLE SWITCHES */}
       <div className="w-full space-y-4">
         {/* IS PUBLISHED */}
@@ -386,7 +394,6 @@ const GeneralInfo = () => {
           onChange={changeIsShoppingCartRecommended}
         />
       </div>
-
       <Button className="mt-6" type="submit" color="purple">
         Save changes
       </Button>

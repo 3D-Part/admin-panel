@@ -1,5 +1,5 @@
 'use client'
-import { Loader } from '@/components/common'
+import { Loader, Keywords } from '@/components/common'
 import {
   useManufactureStore,
   useCategoryStore,
@@ -33,6 +33,7 @@ const GeneralInfo = () => {
   const [isShoppingCartRecommended, setIsShoppingCartRecommended] =
     useState(false)
   const [loader, setLoader] = useState(true)
+  const [keywords, setKeywords] = useState<string[]>([])
 
   const router = useRouter()
 
@@ -65,6 +66,11 @@ const GeneralInfo = () => {
     productDataRef.current.details = text
   }
 
+  const handleKeywordsChange = (newKeywords: string[]) => {
+    setKeywords(newKeywords)
+    productDataRef.current.keywords = newKeywords
+  }
+
   const resetData = () => {
     formRef.current && formRef.current.reset()
     productDataRef.current = {} as ProductFormBody
@@ -72,6 +78,7 @@ const GeneralInfo = () => {
     setIsMostSold(false)
     setIsRecommended(false)
     setIsShoppingCartRecommended(false)
+    setKeywords([])
   }
 
   const changeIsPublished = () => {
@@ -317,6 +324,14 @@ const GeneralInfo = () => {
           id="details"
         />
       </div>
+
+      {/* KEYWORDS */}
+      <Keywords
+        keywords={keywords}
+        onChange={handleKeywordsChange}
+        label="Search Keywords"
+        placeholder="Add search keyword..."
+      />
 
       {/* TOGGLE SWITCHES */}
       <div className="w-full space-y-4">
