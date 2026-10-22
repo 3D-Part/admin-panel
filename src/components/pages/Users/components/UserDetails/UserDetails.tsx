@@ -96,9 +96,14 @@ const UserDetails: React.FC<UserDetailsType> = ({
   }
 
   const handleDiscountSave = async () => {
-    const discountValue = parseFloat(discountRef.current?.value || '0') || 0
-    if (discountValue < 0 || discountValue > 100) {
-      toast('Discount must be between 0 and 100', {
+    const discountValue = Number(discountRef.current?.value || '0') || 0
+    // same limits as the API
+    if (
+      !Number.isInteger(discountValue) ||
+      discountValue < 0 ||
+      discountValue > 40
+    ) {
+      toast('Discount must be a whole number between 0 and 40', {
         hideProgressBar: true,
         autoClose: 2000,
         type: 'error',
@@ -182,7 +187,7 @@ const UserDetails: React.FC<UserDetailsType> = ({
                   id="discount"
                   type="number"
                   min="0"
-                  max="100"
+                  max="40"
                   step="1"
                   ref={discountRef}
                   defaultValue={user.discount || 0}
