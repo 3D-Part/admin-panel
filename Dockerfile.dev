@@ -1,0 +1,19 @@
+# Development image for the 3DPart admin panel (Next.js).
+# Source is bind-mounted by docker-compose; this image carries node_modules.
+FROM node:22-bullseye-slim
+
+WORKDIR /app
+# .next is a named volume in docker-compose: pre-creating it here as node means
+# the volume inherits that ownership instead of being root-only.
+RUN mkdir -p /app/.next && chown -R node:node /app
+
+USER node
+
+COPY --chown=node:node package*.json ./
+RUN npm install
+
+COPY --chown=node:node . .
+
+EXPOSE 3000
+
+CMD ["npm", "run", "dev"]
