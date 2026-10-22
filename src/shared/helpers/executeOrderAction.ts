@@ -2,8 +2,18 @@ import { OrdersAPI } from '@/services'
 import { OrderFormBody } from '../types'
 import { OrderStatusEnum } from '../enums'
 
-const { orderAccept, orderDecline, orderFinish, orderShipping } = OrdersAPI
+const {
+  orderAccept,
+  orderDecline,
+  orderFinish,
+  orderShipping,
+  orderSetStatus,
+} = OrdersAPI
 
+/**
+ * Four statuses have side effects on the server (stock, points, e-mails) and
+ * keep their own endpoints; every other status is a plain status change.
+ */
 async function executeOrderAction(
   orderId: string,
   status: string,
@@ -27,7 +37,7 @@ async function executeOrderAction(
       responseData = await orderFinish(orderId)
       break
     default:
-      console.error('status unknown:', status)
+      responseData = await orderSetStatus(orderId, status)
   }
 
   return responseData

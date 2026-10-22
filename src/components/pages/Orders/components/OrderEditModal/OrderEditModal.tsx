@@ -1,8 +1,10 @@
 'use client'
 
-import { OrderStatusEnum } from '@/shared/enums'
+import { ORDER_STATUS_FLOW, OrderStatusEnum } from '@/shared/enums'
 import executeOrderAction from '@/shared/helpers/executeOrderAction'
 import getOrderStatusStyle from '@/shared/helpers/getOrderStatusStyle'
+import getOrderStatusLabel from '@/shared/helpers/getOrderStatusLabel'
+import { OrdersAPI } from '@/services'
 import { Order, PaginationData } from '@/shared/types'
 import { useOrdersStore } from '@/store/store'
 import { Badge, Button, Dropdown, Label, Modal, Textarea } from 'flowbite-react'
@@ -27,17 +29,12 @@ const OrderEditModal: React.FC<ModalType> = ({
   const { Item } = Dropdown
 
   const [activeStatus, setActiveStatus] = useState('')
+  const [internalNote, setInternalNote] = useState('')
   const [loading, setLoading] = useState(false)
 
   const declineMessageRef = useRef('')
 
-  const orderStatus = [
-    OrderStatusEnum.Pending,
-    OrderStatusEnum.Accepted,
-    OrderStatusEnum.Declined,
-    OrderStatusEnum.Shipping,
-    OrderStatusEnum.Finished,
-  ]
+  const orderStatus = ORDER_STATUS_FLOW
 
   const { currentPage, itemsPerPage, fetchOrders } = useOrdersStore()
 
@@ -45,6 +42,7 @@ const OrderEditModal: React.FC<ModalType> = ({
     if (!initialValue) return
 
     setActiveStatus(initialValue.status)
+    setInternalNote(initialValue.internalNote ?? '')
   }, [initialValue])
 
   useEffect(() => {
@@ -77,6 +75,17 @@ const OrderEditModal: React.FC<ModalType> = ({
 
     let response
     setLoading(true)
+
+    if (internalNote !== (initialValue.internalNote ?? '')) {
+      await OrdersAPI.orderUpdateNote(initialValue.id, internalNote)
+    }
+
+    if (activeStatus === initialValue.status) {
+      await fetchOrdersData()
+      setLoading(false)
+      setIsModalOpen(false)
+      return
+    }
 
     if (activeStatus === OrderStatusEnum.Declined) {
       const _body = {
@@ -133,7 +142,7 @@ const OrderEditModal: React.FC<ModalType> = ({
                     className="text-sm font-medium text-gray-700 dark:text-gray-300"
                   />
                   <Dropdown
-                    label={activeStatus ? activeStatus : 'Select status'}
+                    label={activeStatus ? getOrderStatusLabel(activeStatus) : 'Select status'}
                     className="mt-1 !bg-gray-700"
                   >
                     {orderStatus.map((status) => {
@@ -148,7 +157,7 @@ const OrderEditModal: React.FC<ModalType> = ({
                           <Badge
                             className={`justify-center w-full ${statusStyle}`}
                           >
-                            {status}
+                            {getOrderStatusLabel(status)}
                           </Badge>
                         </Item>
                       )
@@ -181,6 +190,28 @@ const OrderEditModal: React.FC<ModalType> = ({
                 </div>
               </div>
             )}
+            {/* Internal note */}
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                Napomena
+              </h3>
+              <div>
+                <Label
+                  htmlFor="internalNote"
+                  value="Interna napomena, kupac je ne vidi"
+                  className="text-sm font-medium text-gray-700 dark:text-gray-300"
+                />
+                <Textarea
+                  id="internalNote"
+                  name="internalNote"
+                  value={internalNote}
+                  onChange={(e) => setInternalNote(e.target.value)}
+                  placeholder="npr. kupac trazi racun na firmu"
+                  rows={3}
+                  className="mt-1"
+                />
+              </div>
+            </div>
           </form>
         </Modal.Body>
 
@@ -188,7 +219,7 @@ const OrderEditModal: React.FC<ModalType> = ({
           <div className="flex flex-col sm:flex-row gap-2 w-full">
             <Button
               isProcessing={loading}
-              disabled={loading || !activeStatus}
+              disabled={loading}
               onClick={saveFunction}
               className="w-full sm:w-auto order-2 sm:order-1"
             >

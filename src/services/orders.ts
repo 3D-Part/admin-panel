@@ -80,6 +80,46 @@ const orderFinish = async (id: string): Promise<any | null> => {
   }
 }
 
+const orderSetStatus = async (
+  id: string,
+  status: string
+): Promise<any | null> => {
+  try {
+    const data: any = await API.patch(`${API_BASE_URL}/order/${id}/status`, {
+      status,
+    })
+    return data
+  } catch (error) {
+    console.error('Error changing order status:', error)
+    return null
+  }
+}
+
+const orderUpdateNote = async (
+  id: string,
+  internalNote: string
+): Promise<any | null> => {
+  try {
+    const data: any = await API.patch(`${API_BASE_URL}/order/${id}/note`, {
+      internalNote,
+    })
+    return data
+  } catch (error) {
+    console.error('Error saving order note:', error)
+    return null
+  }
+}
+
+const orderStatusHistory = async (id: string): Promise<any | null> => {
+  try {
+    const data: any = await API.get(`${API_BASE_URL}/order/${id}/history`)
+    return data
+  } catch (error) {
+    console.error('Error fetching order history:', error)
+    return null
+  }
+}
+
 const orderContactMessage = async (
   id: string,
   body: OrderFormBody
@@ -102,6 +142,9 @@ const OrdersAPI = {
   orderDecline,
   orderShipping,
   orderFinish,
+  orderSetStatus,
+  orderUpdateNote,
+  orderStatusHistory,
   orderContactMessage,
 }
 

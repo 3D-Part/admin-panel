@@ -42,7 +42,7 @@ type ProductCardType = {
 }
 
 const ProductCard: React.FC<ProductCardType> = ({ product }) => {
-  const { name, price, quantity, sku, total } = product
+  const { name, price, quantity, sku, total, backorderQuantity } = product
 
   return (
     <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-3">
@@ -50,9 +50,16 @@ const ProductCard: React.FC<ProductCardType> = ({ product }) => {
         <h4 className="font-semibold text-gray-900 dark:text-white text-sm">
           {name}
         </h4>
-        <Badge color="gray" className="text-xs">
-          {sku}
-        </Badge>
+        <div className="flex gap-2">
+          {!!backorderQuantity && (
+            <Badge color="warning" className="text-xs">
+              To procure: {backorderQuantity} pcs
+            </Badge>
+          )}
+          <Badge color="gray" className="text-xs">
+            {sku}
+          </Badge>
+        </div>
       </div>
 
       <div className="grid grid-cols-3 gap-3 text-xs">
@@ -105,6 +112,7 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
     points,
     jib,
     user,
+    hasBackorder,
   } = order
 
   const formattedDate = dateTimeFormat(createdAt)
@@ -134,6 +142,16 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
       </Modal.Header>
 
       <Modal.Body className="space-y-6">
+        {hasBackorder && (
+          <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4 text-sm text-amber-900 dark:text-amber-100">
+            <p className="font-semibold">Backorder</p>
+            <p>
+              Some products were not in stock when this order was placed. The
+              customer was told delivery will take longer. Procure the missing
+              pieces (marked below) before shipping.
+            </p>
+          </div>
+        )}
         {/* Customer Information */}
         {user && (
           <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">

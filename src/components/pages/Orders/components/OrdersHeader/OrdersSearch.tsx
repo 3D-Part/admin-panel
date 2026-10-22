@@ -6,14 +6,24 @@ import { useOrdersStore } from '@/store/store'
 import { Dropdown, Spinner } from 'flowbite-react'
 import React, { useCallback, useState } from 'react'
 
-type SearchField = 'orderNumber' | 'fullName' | 'city' | 'status'
+type SearchField =
+  | 'orderNumber'
+  | 'fullName'
+  | 'companyName'
+  | 'jib'
+  | 'city'
+  | 'status'
 
 const searchFieldLabels: Record<SearchField, string> = {
   orderNumber: 'ORDER #',
   fullName: 'FULL NAME',
+  companyName: 'COMPANY',
+  jib: 'JIB',
   city: 'CITY',
   status: 'STATUS',
 }
+
+const searchFields = Object.keys(searchFieldLabels) as SearchField[]
 
 const OrdersSearch = () => {
   const [loader, setLoader] = useState(false)
@@ -56,26 +66,13 @@ const OrdersSearch = () => {
   return (
     <div className="flex gap-2 items-center w-full md:w-auto">
       <Dropdown dismissOnClick label={searchFieldLabels[searchBy]} size="sm">
-        <Dropdown.Item onClick={() => setSearchBy('orderNumber')}>
-          <span className="font-medium text-cyan-600 cursor-pointer hover:underline dark:text-cyan-500">
-            <p>ORDER #</p>
-          </span>
-        </Dropdown.Item>
-        <Dropdown.Item onClick={() => setSearchBy('fullName')}>
-          <span className="font-medium text-cyan-600 cursor-pointer hover:underline dark:text-cyan-500">
-            <p>FULL NAME</p>
-          </span>
-        </Dropdown.Item>
-        <Dropdown.Item onClick={() => setSearchBy('city')}>
-          <span className="font-medium text-cyan-600 cursor-pointer hover:underline dark:text-cyan-500">
-            <p>CITY</p>
-          </span>
-        </Dropdown.Item>
-        <Dropdown.Item onClick={() => setSearchBy('status')}>
-          <span className="font-medium text-cyan-600 cursor-pointer hover:underline dark:text-cyan-500">
-            <p>STATUS</p>
-          </span>
-        </Dropdown.Item>
+        {searchFields.map((field) => (
+          <Dropdown.Item key={field} onClick={() => setSearchBy(field)}>
+            <span className="font-medium text-cyan-600 cursor-pointer hover:underline dark:text-cyan-500">
+              <p>{searchFieldLabels[field]}</p>
+            </span>
+          </Dropdown.Item>
+        ))}
       </Dropdown>
       <div className="flex-1 md:flex-none min-w-0">
         <Search getData={fetchOrdersData} />

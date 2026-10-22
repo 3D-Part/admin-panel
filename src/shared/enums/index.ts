@@ -52,7 +52,29 @@ export enum ErrorCodeEnum {
 export enum OrderStatusEnum {
   Pending = 'PENDING',
   Accepted = 'ACCEPTED',
-  Declined = 'DECLINED',
+  ProformaSent = 'PROFORMA_SENT',
   Shipping = 'SHIPPING',
+  InvoiceIssued = 'INVOICE_ISSUED',
+  AwaitingPayment = 'AWAITING_PAYMENT',
+  Paid = 'PAID',
+  InvoiceSent = 'INVOICE_SENT',
   Finished = 'FINISHED',
+  Returned = 'RETURNED',
+  Declined = 'DECLINED',
 }
+
+/** Workflow order, used to lay out the status dropdown. */
+export const ORDER_STATUS_FLOW: OrderStatusEnum[] = [
+  OrderStatusEnum.Pending,
+  OrderStatusEnum.Accepted,
+  OrderStatusEnum.ProformaSent,
+  OrderStatusEnum.Shipping,
+  OrderStatusEnum.InvoiceIssued,
+  OrderStatusEnum.AwaitingPayment,
+  OrderStatusEnum.Paid,
+  OrderStatusEnum.InvoiceSent,
+  OrderStatusEnum.Finished,
+  OrderStatusEnum.Returned,
+  OrderStatusEnum.Declined,
+]
+

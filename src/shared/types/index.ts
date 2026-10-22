@@ -284,6 +284,7 @@ export interface OrderProduct {
   price: string
   total: string
   image: string
+  backorderQuantity?: number
 }
 
 export interface Order {
@@ -311,6 +312,9 @@ export interface Order {
   userId: string
   points: number
   user: User
+  internalNote?: string | null
+  statusChangedAt?: string | null
+  hasBackorder?: boolean
 }
 
 export interface OrdersData {
