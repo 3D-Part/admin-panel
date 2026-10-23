@@ -204,6 +204,9 @@ export interface ProductData {
   details: string
   keywords?: string[]
   sku: string
+  // internal barcode code (P000123), set by the API
+  code?: string
+  ean?: string | null
   categoryId: string
   manufacturerId: string
   createdAt: string

@@ -209,7 +209,7 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
 
   // Generate mobile cards
   const mobileCards = currentPageProducts.map((product) => {
-    const { name, category, manufacturer, sku, price, quantity, images } =
+    const { name, category, manufacturer, sku, code, price, quantity, images } =
       product
     const mainImage = images.find((image) => image.isMain) || images[0]
     // const activeImageId = mainImage ? `${S3_URL}/${mainImage.imageId}` : ''
@@ -227,7 +227,7 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
       <MobileCardBuilder
         key={product.id}
         title={name}
-        subtitle={sku}
+        subtitle={code ? `${code} · ${sku}` : sku}
         onClick={hasWritePermission ? editProduct : undefined}
         items={[
           {
@@ -297,7 +297,9 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
               <Table.HeadCell className="table-cell w-1/6">
                 Manufacturer
               </Table.HeadCell>
-              <Table.HeadCell className="table-cell w-1/6">SKU</Table.HeadCell>
+              <Table.HeadCell className="table-cell w-1/6">
+                Šifra / SKU
+              </Table.HeadCell>
               <Table.HeadCell className="table-cell w-1/12">
                 Price
               </Table.HeadCell>

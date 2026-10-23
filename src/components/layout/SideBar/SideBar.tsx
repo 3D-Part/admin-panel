@@ -11,7 +11,7 @@ import {
 import { MdUnsubscribe } from 'react-icons/md'
 import { IoMdPricetags, IoMdSettings } from 'react-icons/io'
 import { FaUsers, FaShopify } from 'react-icons/fa'
-import { FaUsersCog } from 'react-icons/fa'
+import { FaUsersCog, FaWarehouse } from 'react-icons/fa'
 
 import { usePathname } from 'next/navigation'
 import { useRouter } from 'next/navigation'
@@ -132,6 +132,13 @@ const SideBar = () => {
             requiredPermissions: [PermissionEnum.ORDERS_READ],
           },
         ],
+      },
+      {
+        name: 'Magacin',
+        href: URLPartsEnum.Warehouse,
+        icon: FaWarehouse,
+        open: false,
+        requiredPermissions: PERMISSION_GROUPS.PRODUCTS,
       },
       {
         name: 'Promo Codes',

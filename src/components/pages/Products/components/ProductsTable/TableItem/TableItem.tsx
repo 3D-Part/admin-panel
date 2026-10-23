@@ -26,7 +26,8 @@ export const TableItem: React.FC<TableItemType> = ({
   onWarningModalOpen,
 }) => {
   const [activeImageId, setActiveImageId] = useState('')
-  const { name, category, manufacturer, sku, price, quantity, images } = product
+  const { name, category, manufacturer, sku, code, price, quantity, images } =
+    product
 
   const router = useRouter()
   const { currentUser } = useCurrentUserStore()
@@ -159,6 +160,11 @@ export const TableItem: React.FC<TableItemType> = ({
           )}
         </Table.Cell>
         <Table.Cell className="table-cell w-1/6">
+          {code && (
+            <span className="block font-mono text-sm font-semibold text-gray-900 dark:text-white">
+              {code}
+            </span>
+          )}
           <span className="font-mono text-sm text-gray-600 dark:text-gray-400">
             {sku}
           </span>
