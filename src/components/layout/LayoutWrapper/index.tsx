@@ -2,7 +2,7 @@
 
 import { URLPartsEnum } from '@/shared/enums'
 import { usePathname } from 'next/navigation'
-import React from 'react'
+import React, { Suspense } from 'react'
 import Header from '../Header/Header'
 import SideBar from '../SideBar/SideBar'
 
@@ -16,7 +16,9 @@ const LayoutWrapper = () => {
   return (
     <>
       <Header />
-      <SideBar />
+      <Suspense>
+        <SideBar />
+      </Suspense>
     </>
   )
 }

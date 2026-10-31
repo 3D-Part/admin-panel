@@ -249,7 +249,7 @@ const GeneralSettings = () => {
         {/* Scrollable Content */}
         <div className="flex-1 overflow-y-auto space-y-6 pb-4">
           {/* Banner Settings Section */}
-          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+          <div id="banner" className="scroll-mt-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
               Banner Settings
             </h3>
@@ -278,7 +278,7 @@ const GeneralSettings = () => {
           </div>
 
           {/* Discount Tiers Section */}
-          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+          <div id="discount-tiers" className="scroll-mt-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
               Discount Tiers
             </h3>
@@ -307,7 +307,7 @@ const GeneralSettings = () => {
           </div>
 
           {/* Page Images Section */}
-          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+          <div id="page-images" className="scroll-mt-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
               Page Images
             </h3>
@@ -322,7 +322,7 @@ const GeneralSettings = () => {
           </div>
 
           {/* Tidio Section */}
-          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+          <div id="tidio" className="scroll-mt-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
               Tidio Chat
             </h3>
@@ -339,7 +339,7 @@ const GeneralSettings = () => {
           </div>
 
           {/* Delivery Settings Section */}
-          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+          <div id="delivery" className="scroll-mt-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
               Delivery Settings
             </h3>
@@ -395,7 +395,7 @@ const GeneralSettings = () => {
           </div>
 
           {/* Company Details Section */}
-          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+          <div id="company" className="scroll-mt-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
               Company Details
             </h3>
@@ -519,7 +519,7 @@ const GeneralSettings = () => {
           </div>
 
           {/* Social Media Section */}
-          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+          <div id="social-media" className="scroll-mt-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
               Social Media
             </h3>

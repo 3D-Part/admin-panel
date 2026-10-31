@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { Button, Checkbox, Label, Select, TextInput } from 'flowbite-react'
+import { Badge, Button, Checkbox, Label, Select, TextInput } from 'flowbite-react'
 import { HiTrash } from 'react-icons/hi'
 import { toast } from 'react-toastify'
 import { StoreManagerAPI } from '@/services'
@@ -34,6 +34,34 @@ const PageImages: React.FC<{
   const change = (id: string, changes: Partial<PageImage>) =>
     onChange(value.map((image) => (image.id === id ? { ...image, ...changes } : image)))
 
+  const pageLabel = (page: string) => {
+    if (page === 'home') return 'Home page slider'
+    if (page === 'all') return 'All products'
+    if (page === 'product') return 'All product pages'
+    const slug = page.replace('category:', '')
+    const category = allCategories.find((x) => x.slug === slug)
+    return `Category: ${category?.name ?? slug}`
+  }
+
+  // same conditions the site uses to decide what to show
+  const status = (image: PageImage): { color: string; text: string } => {
+    if (!image.desktop) {
+      return { color: 'failure', text: 'Not shown: desktop image is missing' }
+    }
+    if (!image.active) {
+      return { color: 'gray', text: 'Not shown: switched off' }
+    }
+    if (!image.mobile) {
+      return {
+        color: 'warning',
+        text: `Active on ${pageLabel(image.page)}, phones get the desktop image`,
+      }
+    }
+    return { color: 'success', text: `Active on ${pageLabel(image.page)}` }
+  }
+
+  const activeImages = value.filter((image) => image.active && image.desktop)
+
   const upload = async (file: File): Promise<string | null> => {
     const s3Data = await getS3FormData()
     if (!s3Data) return null
@@ -65,11 +93,27 @@ const PageImages: React.FC<{
 
   return (
     <div className="space-y-4">
+      <div className="p-3 text-sm rounded bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white">
+        <p className="font-semibold mb-1">
+          Active images: {activeImages.length} of {value.length}
+        </p>
+        {activeImages.map((image) => (
+          <p key={image.id}>
+            {pageLabel(image.page)}: {image.alt || 'image without description'}
+          </p>
+        ))}
+        <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+          Changes reach the site after Save Settings.
+        </p>
+      </div>
       {value.map((image) => (
         <div
           key={image.id}
           className="grid gap-3 sm:grid-cols-2 p-3 border border-gray-200 dark:border-gray-700 rounded"
         >
+          <div className="sm:col-span-2 flex">
+            <Badge color={status(image).color}>{status(image).text}</Badge>
+          </div>
           <div>
             <Label htmlFor={`page-${image.id}`} value="Page" />
             <Select
@@ -79,6 +123,7 @@ const PageImages: React.FC<{
             >
               <option value="home">Home page</option>
               <option value="all">All products</option>
+              <option value="product">All product pages</option>
               {allCategories.map((category) => (
                 <option key={category.id} value={`category:${category.slug}`}>
                   Category: {category.name}

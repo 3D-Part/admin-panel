@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useState } from 'react'
 import { Badge, Button, Table, TextInput } from 'flowbite-react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { HiBell, HiExclamationCircle } from 'react-icons/hi'
 import { toast } from 'react-toastify'
 import { BackofficeAPI } from '@/services'
@@ -158,13 +159,15 @@ const StockTab = () => {
 }
 
 const ActionsNeededPage = () => {
-  const [tab, setTab] = useState<string | number>('actions')
+  const router = useRouter()
+  const pathname = usePathname()
+  const tab = useSearchParams().get('tab') === 'stock' ? 'stock' : 'actions'
 
   return (
     <div className="w-full h-full overflow-y-auto p-4">
       <Tabs.ModernTabs
         activeTab={tab}
-        onTabChange={setTab}
+        onTabChange={(id) => router.replace(`${pathname}?tab=${id}`)}
         tabs={[
           {
             id: 'actions',

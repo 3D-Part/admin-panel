@@ -148,7 +148,7 @@ const Analytics = () => {
             />
           </div>
 
-          <section>
+          <section id="revenue-by-day">
             <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">
               Revenue by day
             </h3>
@@ -164,7 +164,7 @@ const Analytics = () => {
             </div>
           </section>
 
-          <section>
+          <section id="filaments">
             <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
               Filaments
             </h3>
@@ -180,7 +180,7 @@ const Analytics = () => {
             <RowsTable rows={data.filaments.rows} />
           </section>
 
-          <section>
+          <section id="top-products">
             <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">
               Top products
             </h3>

@@ -13,7 +13,7 @@ import { IoMdPricetags, IoMdSettings } from 'react-icons/io'
 import { FaUsers, FaShopify } from 'react-icons/fa'
 import { FaUsersCog, FaWarehouse, FaChartLine, FaFileInvoice, FaExclamationTriangle } from 'react-icons/fa'
 
-import { usePathname } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
 import { URLPartsEnum } from '@/shared/enums'
 import { useUISliceStore, useCurrentUserStore } from '@/store/store'
@@ -22,11 +22,23 @@ import {
   PERMISSION_GROUPS,
 } from '@/shared/helpers/permissions'
 import { PermissionEnum } from '@/shared/types'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+
+const FIRST_TAB: Record<string, string> = {
+  [URLPartsEnum.Warehouse]: 'scanner',
+  [URLPartsEnum.ActionsNeeded]: 'actions',
+}
 
 const SideBar = () => {
   const pathname = usePathname()
+  const searchParams = useSearchParams()
   const router = useRouter()
+  // a #section does not change the route, so the last clicked one is remembered
+  const [clickedSection, setClickedSection] = useState('')
+
+  useEffect(() => {
+    setClickedSection('')
+  }, [pathname])
   const { currentUser } = useCurrentUserStore()
 
   const { changeIsMobileMenuOpen, isMobileMenuOpen } = useUISliceStore()
@@ -144,6 +156,18 @@ const SideBar = () => {
         icon: FaFileInvoice,
         open: false,
         requiredPermissions: [PermissionEnum.ORDERS_READ],
+        children: [
+          {
+            name: 'All proformas',
+            href: URLPartsEnum.Proformas,
+            requiredPermissions: [PermissionEnum.ORDERS_READ],
+          },
+          {
+            name: 'New proforma',
+            href: `${URLPartsEnum.Proformas}?new=1`,
+            requiredPermissions: [PermissionEnum.ORDERS_READ],
+          },
+        ],
       },
       {
         name: 'Analytics',
@@ -151,6 +175,28 @@ const SideBar = () => {
         icon: FaChartLine,
         open: false,
         requiredPermissions: [PermissionEnum.ORDERS_READ],
+        children: [
+          {
+            name: 'Overview',
+            href: URLPartsEnum.Analytics,
+            requiredPermissions: [PermissionEnum.ORDERS_READ],
+          },
+          {
+            name: 'Revenue by day',
+            href: `${URLPartsEnum.Analytics}#revenue-by-day`,
+            requiredPermissions: [PermissionEnum.ORDERS_READ],
+          },
+          {
+            name: 'Filaments',
+            href: `${URLPartsEnum.Analytics}#filaments`,
+            requiredPermissions: [PermissionEnum.ORDERS_READ],
+          },
+          {
+            name: 'Top products',
+            href: `${URLPartsEnum.Analytics}#top-products`,
+            requiredPermissions: [PermissionEnum.ORDERS_READ],
+          },
+        ],
       },
       {
         name: 'Actions needed',
@@ -158,6 +204,18 @@ const SideBar = () => {
         icon: FaExclamationTriangle,
         open: false,
         requiredPermissions: [PermissionEnum.PRODUCT_READ],
+        children: [
+          {
+            name: 'Actions needed',
+            href: `${URLPartsEnum.ActionsNeeded}?tab=actions`,
+            requiredPermissions: [PermissionEnum.PRODUCT_READ],
+          },
+          {
+            name: 'Stock alerts',
+            href: `${URLPartsEnum.ActionsNeeded}?tab=stock`,
+            requiredPermissions: [PermissionEnum.PRODUCT_READ],
+          },
+        ],
       },
       {
         name: 'Warehouse',
@@ -165,6 +223,28 @@ const SideBar = () => {
         icon: FaWarehouse,
         open: false,
         requiredPermissions: PERMISSION_GROUPS.PRODUCTS,
+        children: [
+          {
+            name: 'Scanner',
+            href: `${URLPartsEnum.Warehouse}?tab=scanner`,
+            requiredPermissions: [PermissionEnum.PRODUCT_READ],
+          },
+          {
+            name: 'Inventory',
+            href: `${URLPartsEnum.Warehouse}?tab=inventory`,
+            requiredPermissions: [PermissionEnum.PRODUCT_READ],
+          },
+          {
+            name: 'Labels',
+            href: `${URLPartsEnum.Warehouse}?tab=labels`,
+            requiredPermissions: [PermissionEnum.PRODUCT_READ],
+          },
+          {
+            name: 'History',
+            href: `${URLPartsEnum.Warehouse}?tab=history`,
+            requiredPermissions: [PermissionEnum.PRODUCT_READ],
+          },
+        ],
       },
       {
         name: 'Promo Codes',
@@ -220,11 +300,20 @@ const SideBar = () => {
         open: true,
         requiredPermissions: PERMISSION_GROUPS.ADMIN,
         children: [
-          {
-            name: 'General',
-            href: URLPartsEnum.SettingsGeneral,
+          ...[
+            ['General', ''],
+            ['Banner', '#banner'],
+            ['Discount tiers', '#discount-tiers'],
+            ['Page images', '#page-images'],
+            ['Tidio chat', '#tidio'],
+            ['Delivery', '#delivery'],
+            ['Company details', '#company'],
+            ['Social media', '#social-media'],
+          ].map(([name, section]) => ({
+            name,
+            href: `${URLPartsEnum.SettingsGeneral}${section}`,
             requiredPermissions: [PermissionEnum.ADMIN_ONLY],
-          },
+          })),
           {
             name: 'Menu',
             href: URLPartsEnum.SettingsMenu,
@@ -279,6 +368,20 @@ const SideBar = () => {
 
   const menuItems = getFilteredMenuItems()
 
+  const isActive = (href: string) => {
+    const [path, section] = href.split('#')
+    const [route, query] = path.split('?')
+    if (route !== pathname) return false
+    if (section !== undefined) return clickedSection === section
+    if (query) {
+      const [key, value] = query.split('=')
+      const current = searchParams.get(key)
+      // no ?tab yet means the page is showing its first tab
+      return current === value || (!current && value === FIRST_TAB[route])
+    }
+    return !clickedSection && !searchParams.get('new')
+  }
+
   return (
     <>
       <Sidebar
@@ -295,7 +398,8 @@ const SideBar = () => {
                   <Sidebar.Collapse
                     key={menuItem.name}
                     icon={menuItem.icon}
-                    open={pathname.includes(menuItem.href)}
+                    // all open, so everything is visible without digging
+                    open
                     label={menuItem.name}
                   >
                     {menuItem.children.map((item) => {
@@ -305,11 +409,12 @@ const SideBar = () => {
                           key={item.name}
                           onClick={() => {
                             closeMobileMenu()
+                            setClickedSection(item.href.split('#')[1] ?? '')
                             router.push(item.href, {
                               // shallow: true,
                             })
                           }}
-                          active={pathname === item.href}
+                          active={isActive(item.href)}
                         >
                           {item.name}
                         </Sidebar.Item>

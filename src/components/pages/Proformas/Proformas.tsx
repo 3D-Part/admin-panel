@@ -12,6 +12,7 @@ import {
   TextInput,
 } from 'flowbite-react'
 import { HiPlus, HiTrash } from 'react-icons/hi'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { toast } from 'react-toastify'
 import { BackofficeAPI, WarehouseAPI } from '@/services'
 import { Proforma, ProformaBody, ProformaItem } from '@/services/backoffice'
@@ -340,6 +341,16 @@ const Proformas = () => {
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState('')
   const [editing, setEditing] = useState<Proforma | 'new' | null>(null)
+  const router = useRouter()
+  const pathname = usePathname()
+  const wantsNew = useSearchParams().get('new') === '1'
+
+  // the sidebar link opens the form once, and closing it stays closed
+  useEffect(() => {
+    if (!wantsNew) return
+    setEditing('new')
+    router.replace(pathname)
+  }, [wantsNew, pathname, router])
 
   const load = useCallback(async () => {
     const data = await BackofficeAPI.getProformas(
