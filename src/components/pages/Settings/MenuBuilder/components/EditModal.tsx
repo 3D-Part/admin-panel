@@ -1,3 +1,4 @@
+import { modalRoot } from '@/shared/helpers/modalRoot'
 import React, { useState, useRef, useEffect } from 'react'
 import { Button, Modal, Select, TextInput } from 'flowbite-react'
 import { useCategoryStore, useManufactureStore } from '@/store/store'
@@ -105,7 +106,7 @@ const EditModal: React.FC<EditModalProps> = ({
   const availableParents = allItems.filter((i) => i.id !== item?.id)
 
   return (
-    <Modal show={isOpen} onClose={onClose} size="md">
+    <Modal root={modalRoot()} show={isOpen} onClose={onClose} size="md">
       <Modal.Header>{item ? 'Edit Menu Item' : 'Add Menu Item'}</Modal.Header>
       <form onSubmit={handleSubmit}>
         <Modal.Body className="space-y-4">

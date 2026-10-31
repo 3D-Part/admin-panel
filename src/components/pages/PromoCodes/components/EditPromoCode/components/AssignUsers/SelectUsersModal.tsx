@@ -1,4 +1,5 @@
 'use client'
+import { modalRoot } from '@/shared/helpers/modalRoot'
 
 import { Loader } from '@/components/common'
 import PromoCodesAPI from '@/services/promoCodes'
@@ -144,7 +145,7 @@ const SelectUsersModal: React.FC<SelectUsersModalType> = ({
   if (!isOpen) return <></>
 
   return (
-    <Modal show={isOpen} onClose={onClose}>
+    <Modal root={modalRoot()} show={isOpen} onClose={onClose}>
       <Modal.Header>Assign users to promo code:</Modal.Header>
       <Modal.Body className="flex flex-col gap-6">
         {/* SELECTED USERS */}

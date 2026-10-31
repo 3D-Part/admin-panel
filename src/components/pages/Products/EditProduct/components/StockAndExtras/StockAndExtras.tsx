@@ -3,9 +3,13 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Checkbox, Label, TextInput, ToggleSwitch } from 'flowbite-react'
 import { toast } from 'react-toastify'
-import { BackofficeAPI, ProductsAPI } from '@/services'
-import { useCategoryStore, useProductsStore } from '@/store/store'
-import { PRODUCT_ICONS } from '@/shared/helpers/productIcons'
+import { BackofficeAPI, ProductsAPI, StoreManagerAPI } from '@/services'
+import {
+  useCategoryStore,
+  useProductsStore,
+  useS3ManagerStore,
+} from '@/store/store'
+import { CUSTOM_ICON, PRODUCT_ICONS } from '@/shared/helpers/productIcons'
 
 const toNumber = (value: string) => (value.trim() === '' ? null : Number(value))
 
@@ -23,6 +27,8 @@ const StockAndExtras = () => {
   const [categoryIds, setCategoryIds] = useState<string[]>([])
   const [categoryFilter, setCategoryFilter] = useState('')
   const [saving, setSaving] = useState(false)
+  const [uploading, setUploading] = useState(false)
+  const { getS3FormData } = useS3ManagerStore()
 
   useEffect(() => {
     fetchAllCategories()
@@ -35,6 +41,26 @@ const StockAndExtras = () => {
       if (ids) setCategoryIds(ids)
     })
   }, [fetchAllCategories, product.id])
+
+  const uploadIcon = async (file?: File) => {
+    if (!file) return
+    setUploading(true)
+    const s3Data = await getS3FormData()
+    let uploaded = false
+    if (s3Data) {
+      const formData = new FormData()
+      for (const [key, field] of Object.entries(s3Data.fields)) {
+        formData.append(key, field)
+      }
+      formData.append('file', file)
+      uploaded = await StoreManagerAPI.uploadImagesOnS3(formData, s3Data.url)
+      if (uploaded) {
+        setIcons((current) => [...current, `${CUSTOM_ICON}${s3Data.fields.key}`])
+      }
+    }
+    setUploading(false)
+    if (!uploaded) toast('Upload failed', { type: 'error', autoClose: 2000 })
+  }
 
   const toggle = (list: string[], value: string) =>
     list.includes(value) ? list.filter((x) => x !== value) : [...list, value]
@@ -142,6 +168,34 @@ const StockAndExtras = () => {
               <Label htmlFor={`icon-${id}`} value={label} />
             </div>
           ))}
+        </div>
+        <div className="flex flex-wrap items-center gap-3 mt-3">
+          {icons
+            .filter((icon) => icon.startsWith(CUSTOM_ICON))
+            .map((icon) => (
+              <button
+                key={icon}
+                type="button"
+                title="Remove this icon"
+                onClick={() => setIcons(toggle(icons, icon))}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  alt="Custom icon"
+                  className="w-8 h-8 object-contain rounded border border-gray-300 dark:border-gray-600"
+                  src={`${process.env.S3_URL}/${icon.slice(CUSTOM_ICON.length)}`}
+                />
+              </button>
+            ))}
+          <label className="text-sm text-gray-900 dark:text-white">
+            Upload your own icon:{' '}
+            <input
+              type="file"
+              accept="image/png,image/svg+xml,image/webp"
+              disabled={uploading}
+              onChange={(e) => uploadIcon(e.target.files?.[0])}
+            />
+          </label>
         </div>
       </div>
 

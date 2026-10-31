@@ -1,4 +1,5 @@
 'use client'
+import { modalRoot } from '@/shared/helpers/modalRoot'
 
 import { Button, Label, Modal, Select, TextInput, Textarea } from 'flowbite-react'
 import React, { useEffect, useState } from 'react'
@@ -150,7 +151,7 @@ const AssetFormModal: React.FC<AssetFormModalProps> = ({
   }
 
   return (
-    <Modal dismissible show={isOpen} onClose={onClose} size="3xl">
+    <Modal root={modalRoot()} dismissible show={isOpen} onClose={onClose} size="3xl">
       <Modal.Header>
         {current ? (
           <span>

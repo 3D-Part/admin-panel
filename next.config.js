@@ -18,11 +18,11 @@ const nextConfig = {
   },
 
   images: {
-    domains: [
+    remotePatterns: [
       'bucket3dparts.s3.eu-central-1.amazonaws.com',
       'bucket3dpart.s3.eu-central-1.amazonaws.com',
       ...(s3Hostname ? [s3Hostname] : []),
-    ],
+    ].map((hostname) => ({ hostname })),
   },
 
   async redirects() {

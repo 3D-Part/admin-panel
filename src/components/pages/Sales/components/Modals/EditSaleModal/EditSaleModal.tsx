@@ -1,4 +1,5 @@
 'use client'
+import { modalRoot } from '@/shared/helpers/modalRoot'
 
 import isoToDatetimeLocal from '@/shared/helpers/isoToDatetimeLocal'
 import { PaginationData, SalesFormData } from '@/shared/types'
@@ -153,7 +154,7 @@ const EditSaleModal = () => {
   useModalScroll(isSaleEditModalOpen)
 
   return (
-    <Modal
+    <Modal root={modalRoot()}
       dismissible
       show={isSaleEditModalOpen}
       onClose={closeModal}

@@ -1,4 +1,5 @@
 'use client'
+import { modalRoot } from '@/shared/helpers/modalRoot'
 
 import { Loader } from '@/components/common'
 import {
@@ -130,7 +131,7 @@ const CategoryEditModal: React.FC<ModalType> = ({
 
   return (
     <>
-      <Modal
+      <Modal root={modalRoot()}
         dismissible
         show={isOpen}
         onClose={onClose}

@@ -7,6 +7,7 @@ export { default as ThemeToggle } from './ThemeSwitcher/ThemeToggle'
 export { default as ThemeProvider } from './ThemeProvider'
 export { default as Keywords } from './Keywords'
 export { default as InlineNumber } from './InlineNumber'
+export { default as InlineText } from './InlineText'
 export {
   ResponsiveTable,
   MobileTableCard,

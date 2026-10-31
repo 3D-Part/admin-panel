@@ -1,4 +1,5 @@
 'use client'
+import { modalRoot } from '@/shared/helpers/modalRoot'
 
 import { DeleteProductsOnSaleFormData, PaginationData } from '@/shared/types'
 import {
@@ -112,7 +113,7 @@ const RemoveProductsFromSaleModal = () => {
     selectedIds.length === activeProduct.productOnSale.length
 
   return (
-    <Modal
+    <Modal root={modalRoot()}
       dismissible
       show={isRemoveProductsFromSaleModalOpen}
       onClose={closeModal}

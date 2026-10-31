@@ -1,4 +1,5 @@
 'use client'
+import { modalRoot } from '@/shared/helpers/modalRoot'
 
 import React, { useCallback, useEffect, useState } from 'react'
 import {
@@ -162,7 +163,7 @@ const ProformaModal: React.FC<{
   }
 
   return (
-    <Modal show size="4xl" onClose={onClose}>
+    <Modal root={modalRoot()} show size="4xl" onClose={onClose}>
       <Modal.Header>
         {proforma ? `Proforma ${proforma.number}` : 'New proforma'}
       </Modal.Header>

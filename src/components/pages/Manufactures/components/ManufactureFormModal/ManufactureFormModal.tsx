@@ -1,4 +1,5 @@
 'use client'
+import { modalRoot } from '@/shared/helpers/modalRoot'
 
 import { Loader } from '@/components/common'
 import { ManufacturerFormBody, ManufacturerData } from '@/shared/types'
@@ -63,7 +64,7 @@ const ManufactureFormModal: React.FC<ModalType> = ({
 
   return (
     <>
-      <Modal dismissible show={isOpen} onClose={onClose} size="lg">
+      <Modal root={modalRoot()} dismissible show={isOpen} onClose={onClose} size="lg">
         <Modal.Header className="border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center gap-3">
             <span className="font-semibold text-gray-900 dark:text-white">

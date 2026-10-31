@@ -5,6 +5,8 @@ import { Pagination, Table } from 'flowbite-react'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { TableItem } from './TableItem/TableItem'
 import {
+  useCategoryStore,
+  useManufactureStore,
   useProductsStore,
   useUISliceStore,
   useCurrentUserStore,
@@ -92,6 +94,13 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
   useEffect(() => {
     fetchProductsData()
   }, [currentPage, fetchProductsData, sortFiled, sortOrder])
+
+  const { fetchAllCategories } = useCategoryStore()
+  const { fetchAllManufactures } = useManufactureStore()
+  useEffect(() => {
+    fetchAllCategories()
+    fetchAllManufactures()
+  }, [fetchAllCategories, fetchAllManufactures])
 
   const [costs, setCosts] = useState<Record<string, number>>({})
   useEffect(() => {

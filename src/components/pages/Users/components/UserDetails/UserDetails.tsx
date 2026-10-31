@@ -1,4 +1,5 @@
 'use client'
+import { modalRoot } from '@/shared/helpers/modalRoot'
 import { CustomerProfileForm } from '@/components/common/CustomerFlag/CustomerFlag'
 
 import OrderDetails from '@/components/pages/Orders/components/OrderDetails'
@@ -156,7 +157,7 @@ const UserDetails: React.FC<UserDetailsType> = ({
 
   return (
     <>
-      <Modal
+      <Modal root={modalRoot()}
         className={`${isOrderDetailsVisible ? 'hiddne' : ''}`}
         dismissible
         show={isOpen}

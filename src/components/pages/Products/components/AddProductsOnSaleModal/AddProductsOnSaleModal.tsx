@@ -1,4 +1,5 @@
 'use client'
+import { modalRoot } from '@/shared/helpers/modalRoot'
 
 import {
   DeleteProductsOnSaleFormData,
@@ -184,7 +185,7 @@ const AddProductsOnSaleModal = () => {
   useModalScroll(isAddProductsOnSaleModalOpen)
 
   return (
-    <Modal
+    <Modal root={modalRoot()}
       dismissible
       show={isAddProductsOnSaleModalOpen}
       onClose={closeModal}

@@ -7,3 +7,6 @@ export const PRODUCT_ICONS = [
   { id: 'premium', label: 'Premium quality' },
   { id: 'warranty', label: 'Warranty' },
 ]
+
+// An uploaded icon is stored as this prefix plus its image key
+export const CUSTOM_ICON = 'image:'

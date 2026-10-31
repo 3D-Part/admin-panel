@@ -1,4 +1,5 @@
 'use client'
+import { modalRoot } from '@/shared/helpers/modalRoot'
 
 import { Button, Modal } from 'flowbite-react'
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
@@ -30,7 +31,7 @@ const WarningModal: React.FC<ModalType> = ({
 }) => {
   return (
     <>
-      <Modal dismissible show={isOpen} size="lg" popup onClose={onClose}>
+      <Modal root={modalRoot()} dismissible show={isOpen} size="lg" popup onClose={onClose}>
         <Modal.Header />
         <Modal.Body>
           <div className="text-center">

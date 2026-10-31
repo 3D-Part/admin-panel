@@ -1,4 +1,5 @@
 'use client'
+import { modalRoot } from '@/shared/helpers/modalRoot'
 
 import { PaginationData, SalesFormData } from '@/shared/types'
 import { useSalesSliceStore, useUISliceStore } from '@/store/store'
@@ -71,7 +72,7 @@ const AddNewSaleModal = () => {
   useModalScroll(isSaleAddNewModalOpen)
 
   return (
-    <Modal
+    <Modal root={modalRoot()}
       dismissible
       show={isSaleAddNewModalOpen}
       onClose={closeModal}

@@ -2,13 +2,15 @@ import { URLPartsEnum } from '@/shared/enums'
 
 import { PaginationData, ProductData, ProductFormBody } from '@/shared/types'
 import {
+  useCategoryStore,
+  useManufactureStore,
   useProductsStore,
   useUISliceStore,
   useCurrentUserStore,
 } from '@/store/store'
-import { Avatar, Badge, Dropdown, Table, ToggleSwitch } from 'flowbite-react'
+import { Avatar, Badge, Dropdown, Select, Table, ToggleSwitch } from 'flowbite-react'
 import { BackofficeAPI, ProductsAPI } from '@/services'
-import { InlineNumber } from '@/components/common'
+import { InlineNumber, InlineText } from '@/components/common'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { HiDotsVertical } from 'react-icons/hi'
@@ -35,10 +37,35 @@ export const TableItem: React.FC<TableItemType> = ({
 
   const router = useRouter()
   const { currentUser } = useCurrentUserStore()
+  const { allCategories: categories } = useCategoryStore()
+  const { allManufactures: manufacturers } = useManufactureStore()
   const [published, setPublished] = useState(Boolean(product.isPublished))
 
   const saveField = async (body: Record<string, unknown>) =>
     Boolean(await ProductsAPI.editProducts(product.id, body as any))
+
+  const [categoryId, setCategoryId] = useState(product.categoryId)
+  const [manufacturerId, setManufacturerId] = useState(product.manufacturerId ?? '')
+
+  useEffect(() => {
+    setCategoryId(product.categoryId)
+    setManufacturerId(product.manufacturerId ?? '')
+    setPublished(Boolean(product.isPublished))
+  }, [product])
+
+  const saveSelect = async (
+    field: string,
+    value: string,
+    previous: string,
+    setValue: (value: string) => void
+  ) => {
+    setValue(value)
+    if (await saveField({ [field]: value })) {
+      toast('Saved', { type: 'success', autoClose: 1500 })
+    } else {
+      setValue(previous)
+    }
+  }
 
   const togglePublished = async (value: boolean) => {
     setPublished(value)
@@ -131,56 +158,89 @@ export const TableItem: React.FC<TableItemType> = ({
   return (
     <>
       <Table.Row className="table-row">
-        <Table.Cell
-          onClick={hasWritePermission ? editProduct : undefined}
-          className={`whitespace-nowrap font-medium table-cell w-1/3 ${
-            hasWritePermission ? 'cursor-pointer' : ''
-          }`}
-        >
-          <div className="flex justify-start items-center gap-4">
-            <Avatar
-              alt="product"
-              placeholderInitials="3D"
-              img={activeImageId}
-              size="md"
-              rounded
-              className="rounded-xl shadow-md border-2 border-gray-200 dark:border-gray-700"
-            />
-            <span
-              title={name}
-              className="flex-1 font-semibold text-gray-900 dark:text-white overflow-hidden truncate"
+        <Table.Cell className="font-medium table-cell w-1/3">
+          <div className="flex justify-start items-center gap-3 min-w-[220px]">
+            <button
+              type="button"
+              aria-label={`Open ${name}`}
+              onClick={hasWritePermission ? editProduct : undefined}
             >
-              {name}
-            </span>
+              <Avatar
+                alt="product"
+                placeholderInitials="3D"
+                img={activeImageId}
+                size="md"
+                rounded
+                className="rounded-xl shadow-md border-2 border-gray-200 dark:border-gray-700"
+              />
+            </button>
+            <InlineText
+              label={`Name of ${name}`}
+              value={name}
+              editable={hasWritePermission}
+              onSave={(value) => saveField({ name: value })}
+            />
           </div>
         </Table.Cell>
         <Table.Cell className="table-cell w-1/6">
-          {category ? (
-            <span className="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400">
-              {category.name}
-            </span>
+          {hasWritePermission ? (
+            <Select
+              sizing="sm"
+              aria-label={`Category of ${name}`}
+              value={categoryId}
+              onChange={(e) => saveSelect('categoryId', e.target.value, categoryId, setCategoryId)}
+            >
+              {!categories.some((c) => c.id === categoryId) && category && (
+                <option value={categoryId}>{category.name}</option>
+              )}
+              {categories.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </Select>
           ) : (
-            <span className="text-gray-400 dark:text-gray-500">—</span>
+            category?.name ?? '—'
           )}
         </Table.Cell>
         <Table.Cell className="table-cell w-1/6">
-          {manufacturer ? (
-            <span className="text-gray-700 dark:text-gray-300">
-              {manufacturer.name}
-            </span>
+          {hasWritePermission ? (
+            <Select
+              sizing="sm"
+              aria-label={`Manufacturer of ${name}`}
+              value={manufacturerId}
+              onChange={(e) =>
+                e.target.value &&
+                saveSelect('manufacturerId', e.target.value, manufacturerId, setManufacturerId)
+              }
+            >
+              <option value="">—</option>
+              {!manufacturers.some((m) => m.id === manufacturerId) && manufacturer && (
+                <option value={manufacturerId}>{manufacturer.name}</option>
+              )}
+              {manufacturers.map((m) => (
+                <option key={m.id} value={m.id}>
+                  {m.name}
+                </option>
+              ))}
+            </Select>
           ) : (
-            <span className="text-gray-400 dark:text-gray-500">—</span>
+            manufacturer?.name ?? '—'
           )}
         </Table.Cell>
         <Table.Cell className="table-cell w-1/6">
           {code && (
-            <span className="block font-mono text-sm font-semibold text-gray-900 dark:text-white">
+            <span className="block font-mono text-xs font-semibold text-gray-900 dark:text-white">
               {code}
             </span>
           )}
-          <span className="font-mono text-sm text-gray-600 dark:text-gray-400">
-            {sku}
-          </span>
+          <InlineText
+            label={`SKU of ${name}`}
+            value={sku}
+            className="w-24"
+            editable={hasWritePermission}
+            onSave={(value) => saveField({ sku: value })}
+          />
         </Table.Cell>
         <Table.Cell className="table-cell w-1/12">
           <div className="flex flex-col items-start gap-1">

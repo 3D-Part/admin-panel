@@ -1,3 +1,4 @@
+import { modalRoot } from '@/shared/helpers/modalRoot'
 import React, { useState, useCallback, useRef, useEffect } from 'react'
 import { Modal, Button, Label, Spinner } from 'flowbite-react'
 import { PermissionEnum, EditEmployeeData, User } from '@/shared/types'
@@ -237,7 +238,7 @@ const EditEmployeeModal: React.FC<EditEmployeeModalProps> = ({
   ]
 
   return (
-    <Modal show={isOpen} onClose={handleClose} size="4xl">
+    <Modal root={modalRoot()} show={isOpen} onClose={handleClose} size="4xl">
       <Modal.Header className="dark:bg-gray-800 dark:text-white">
         Edit Employee
       </Modal.Header>

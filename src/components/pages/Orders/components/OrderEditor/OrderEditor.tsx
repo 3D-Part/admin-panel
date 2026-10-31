@@ -1,4 +1,5 @@
 'use client'
+import { modalRoot } from '@/shared/helpers/modalRoot'
 
 import React, { useEffect, useState } from 'react'
 import { Alert, Button, Label, Modal, TextInput } from 'flowbite-react'
@@ -130,7 +131,7 @@ const OrderEditor: React.FC<{
   ].includes(order.status as OrderStatusEnum)
 
   return (
-    <Modal show size="4xl" onClose={onClose}>
+    <Modal root={modalRoot()} show size="4xl" onClose={onClose}>
       <Modal.Header>Edit order #{order.orderNumber}</Modal.Header>
       <Modal.Body className="space-y-6">
         {stockTaken && (

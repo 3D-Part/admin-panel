@@ -1,3 +1,4 @@
+import { modalRoot } from '@/shared/helpers/modalRoot'
 import dateTimeFormat from '@/shared/helpers/dateTimeFormat'
 import { Order, OrderProduct } from '@/shared/types'
 import { Button, Modal, Badge } from 'flowbite-react'
@@ -156,7 +157,7 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
   const formattedDate = dateTimeFormat(createdAt)
 
   return (
-    <Modal dismissible show={isOpen} onClose={onClose} size="4xl">
+    <Modal root={modalRoot()} dismissible show={isOpen} onClose={onClose} size="4xl">
       <Modal.Header className="border-b border-gray-200 dark:border-gray-700">
         <div className="flex flex-col sm:flex-row sm:items-center gap-2">
           <span className="font-semibold text-gray-900 dark:text-white">

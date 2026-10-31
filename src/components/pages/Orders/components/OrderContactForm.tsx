@@ -1,4 +1,5 @@
 'use client'
+import { modalRoot } from '@/shared/helpers/modalRoot'
 
 import { WarningModal } from '@/components/common'
 import { OrdersAPI } from '@/services'
@@ -76,7 +77,7 @@ const OrderContactForm: React.FC<ModalType> = ({
 
   return (
     <>
-      <Modal dismissible show={isOpen} onClose={onClose} size="lg">
+      <Modal root={modalRoot()} dismissible show={isOpen} onClose={onClose} size="lg">
         <Modal.Header className="border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center gap-3">
             <span className="font-semibold text-gray-900 dark:text-white">
