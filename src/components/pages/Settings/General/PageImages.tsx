@@ -36,6 +36,7 @@ const PageImages: React.FC<{
 
   const pageLabel = (page: string) => {
     if (page === 'home') return 'Home page slider'
+    if (page === 'shop') return 'All shop pages'
     if (page === 'all') return 'All products'
     if (page === 'product') return 'All product pages'
     const slug = page.replace('category:', '')
@@ -122,6 +123,7 @@ const PageImages: React.FC<{
               onChange={(e) => change(image.id, { page: e.target.value })}
             >
               <option value="home">Home page</option>
+              <option value="shop">All shop pages</option>
               <option value="all">All products</option>
               <option value="product">All product pages</option>
               {allCategories.map((category) => (
