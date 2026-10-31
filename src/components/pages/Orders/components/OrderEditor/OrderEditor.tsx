@@ -135,7 +135,7 @@ const OrderEditor: React.FC<{
       <Modal.Body className="space-y-6">
         {stockTaken && (
           <Alert color="info">
-            Stock was already taken for this order, so quantity changes also
+            If stock was already taken for this order, quantity changes also
             change the stock.
           </Alert>
         )}
