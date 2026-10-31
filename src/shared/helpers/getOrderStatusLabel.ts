@@ -1,21 +1,21 @@
 import { OrderStatusEnum } from '../enums'
 
 /**
- * What the shop calls each status. The stored values stay in English so the
- * existing orders keep working; only the screen speaks Bosnian.
+ * What each status is called on screen. The stored values stay as they are, so
+ * existing orders keep working.
  */
 const orderStatusLabels: Record<string, string> = {
-  [OrderStatusEnum.Pending]: 'Nova',
-  [OrderStatusEnum.Accepted]: 'Prihvaćeno',
-  [OrderStatusEnum.ProformaSent]: 'Predračun poslan',
-  [OrderStatusEnum.Shipping]: 'Roba se pakuje',
-  [OrderStatusEnum.InvoiceIssued]: 'Račun otkucan',
-  [OrderStatusEnum.AwaitingPayment]: 'Roba čeka uplatu',
-  [OrderStatusEnum.Paid]: 'Roba uplaćena',
-  [OrderStatusEnum.InvoiceSent]: 'Faktura poslana',
-  [OrderStatusEnum.Finished]: 'Kraj',
-  [OrderStatusEnum.Returned]: 'Roba vraćena',
-  [OrderStatusEnum.Declined]: 'Otkazano',
+  [OrderStatusEnum.Pending]: 'New',
+  [OrderStatusEnum.Accepted]: 'Accepted',
+  [OrderStatusEnum.ProformaSent]: 'Proforma sent',
+  [OrderStatusEnum.Shipping]: 'Packing',
+  [OrderStatusEnum.InvoiceIssued]: 'Receipt issued',
+  [OrderStatusEnum.AwaitingPayment]: 'Awaiting payment',
+  [OrderStatusEnum.Paid]: 'Paid',
+  [OrderStatusEnum.InvoiceSent]: 'Invoice sent',
+  [OrderStatusEnum.Finished]: 'Finished',
+  [OrderStatusEnum.Returned]: 'Returned',
+  [OrderStatusEnum.Declined]: 'Cancelled',
 }
 
 const getOrderStatusLabel = (status: string): string =>

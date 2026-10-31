@@ -38,6 +38,9 @@ export enum URLPartsEnum {
   Employees = '/employees',
 
   Warehouse = '/warehouse',
+  Analytics = '/analytics',
+  ActionsNeeded = '/actions-needed',
+  Proformas = '/proformas',
 
   Settings = '/settings',
   SettingsGeneral = '/settings/general',

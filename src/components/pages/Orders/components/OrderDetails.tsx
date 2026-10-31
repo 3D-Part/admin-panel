@@ -1,7 +1,14 @@
 import dateTimeFormat from '@/shared/helpers/dateTimeFormat'
 import { Order, OrderProduct } from '@/shared/types'
 import { Button, Modal, Badge } from 'flowbite-react'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { toast } from 'react-toastify'
+import { BackofficeAPI } from '@/services'
+import { CustomerProfileForm } from '@/components/common/CustomerFlag/CustomerFlag'
+import { URLPartsEnum } from '@/shared/enums'
+import { useOrdersStore } from '@/store/store'
+import OrderEditor from './OrderEditor/OrderEditor'
 
 type OrderDetailsType = {
   isOpen: boolean
@@ -91,6 +98,37 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
   order,
   onClose,
 }) => {
+  const router = useRouter()
+  const { fetchOrders, currentPage, itemsPerPage } = useOrdersStore()
+  const [currentOrder, setCurrentOrder] = useState(order)
+  const [packing, setPacking] = useState<OrderProduct[] | null>(null)
+  const [isEditing, setIsEditing] = useState(false)
+
+  useEffect(() => {
+    setCurrentOrder(order)
+  }, [order])
+
+  // the lines in the order they get packed: by manufacturer, then by product
+  useEffect(() => {
+    if (!isOpen || !currentOrder?.id) return
+    let active = true
+    setPacking(null)
+    BackofficeAPI.getPackingList(currentOrder.id).then((list) => {
+      if (active && list) setPacking(list)
+    })
+    return () => {
+      active = false
+    }
+  }, [isOpen, currentOrder])
+
+  const createProforma = async () => {
+    const proforma = await BackofficeAPI.createProformaFromOrder(currentOrder.id)
+    if (proforma) {
+      toast(`${proforma.number} created`, { type: 'success', autoClose: 2000 })
+      router.push(URLPartsEnum.Proformas)
+    }
+  }
+
   const {
     createdAt,
     city,
@@ -113,7 +151,7 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
     jib,
     user,
     hasBackorder,
-  } = order
+  } = currentOrder
 
   const formattedDate = dateTimeFormat(createdAt)
 
@@ -307,13 +345,15 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
           </div>
         )}
 
+        {currentOrder.email && <CustomerProfileForm email={currentOrder.email} />}
+
         {/* Products */}
         <div>
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            Products ({products.length})
+            Products ({currentOrder.products.length})
           </h3>
           <div className="space-y-3">
-            {products.map((product) => (
+            {(packing ?? currentOrder.products).map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
@@ -321,10 +361,35 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
       </Modal.Body>
 
       <Modal.Footer className="border-t border-gray-200 dark:border-gray-700">
+        <Button
+          color="purple"
+          onClick={() => setIsEditing(true)}
+          className="w-full sm:w-auto"
+        >
+          Edit order
+        </Button>
+        <Button
+          color="light"
+          onClick={createProforma}
+          className="w-full sm:w-auto"
+        >
+          Create proforma
+        </Button>
         <Button onClick={onClose} className="w-full sm:w-auto">
           Close
         </Button>
       </Modal.Footer>
+      {isEditing && (
+        <OrderEditor
+          order={currentOrder}
+          onClose={() => setIsEditing(false)}
+          onSaved={(saved) => {
+            setCurrentOrder({ ...currentOrder, ...saved })
+            setIsEditing(false)
+            fetchOrders({ offset: (currentPage - 1) * itemsPerPage, limit: itemsPerPage })
+          }}
+        />
+      )}
     </Modal>
   )
 }

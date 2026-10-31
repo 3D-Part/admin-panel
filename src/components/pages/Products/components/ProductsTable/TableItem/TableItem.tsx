@@ -6,7 +6,9 @@ import {
   useUISliceStore,
   useCurrentUserStore,
 } from '@/store/store'
-import { Avatar, Dropdown, Table } from 'flowbite-react'
+import { Avatar, Badge, Dropdown, Table, ToggleSwitch } from 'flowbite-react'
+import { BackofficeAPI, ProductsAPI } from '@/services'
+import { InlineNumber } from '@/components/common'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { HiDotsVertical } from 'react-icons/hi'
@@ -16,6 +18,7 @@ import { PermissionEnum } from '@/shared/types'
 
 type TableItemType = {
   product: ProductData
+  purchasePrice?: number
   onWarningModalOpen: (product: ProductData) => void
 }
 
@@ -23,6 +26,7 @@ const S3_URL = process.env.S3_URL
 
 export const TableItem: React.FC<TableItemType> = ({
   product,
+  purchasePrice,
   onWarningModalOpen,
 }) => {
   const [activeImageId, setActiveImageId] = useState('')
@@ -31,6 +35,15 @@ export const TableItem: React.FC<TableItemType> = ({
 
   const router = useRouter()
   const { currentUser } = useCurrentUserStore()
+  const [published, setPublished] = useState(Boolean(product.isPublished))
+
+  const saveField = async (body: Record<string, unknown>) =>
+    Boolean(await ProductsAPI.editProducts(product.id, body as any))
+
+  const togglePublished = async (value: boolean) => {
+    setPublished(value)
+    if (!(await saveField({ isPublished: value }))) setPublished(!value)
+  }
 
   const {
     changeIsAddProductsOnSaleModalOpen,
@@ -170,20 +183,47 @@ export const TableItem: React.FC<TableItemType> = ({
           </span>
         </Table.Cell>
         <Table.Cell className="table-cell w-1/12">
-          <span className="font-semibold text-green-600 dark:text-green-400">
-            {price} KM
-          </span>
+          <div className="flex flex-col items-start gap-1">
+            <ToggleSwitch
+              disabled={!hasWritePermission}
+              checked={published}
+              label={published ? 'Published' : 'Hidden'}
+              onChange={togglePublished}
+            />
+            {product.productOnSale.length > 0 && (
+              <Badge color="failure" className="w-fit">
+                On sale
+              </Badge>
+            )}
+          </div>
         </Table.Cell>
         <Table.Cell className="table-cell w-1/12">
-          <span
-            className={`font-medium ${
-              quantity > 0
-                ? 'text-green-600 dark:text-green-400'
-                : 'text-red-600 dark:text-red-400'
-            }`}
-          >
-            {quantity}
-          </span>
+          <InlineNumber
+            label={`Price of ${name}`}
+            value={price}
+            editable={hasWritePermission}
+            onSave={(value) => saveField({ price: value })}
+          />
+        </Table.Cell>
+        <Table.Cell className="table-cell w-1/12">
+          <InlineNumber
+            label={`Purchase price of ${name}`}
+            value={purchasePrice}
+            placeholder="Add"
+            editable={hasWritePermission}
+            onSave={async (value) =>
+              Boolean(await BackofficeAPI.setProductCost(product.id, value))
+            }
+          />
+        </Table.Cell>
+        <Table.Cell className="table-cell w-1/12">
+          <InlineNumber
+            label={`Quantity of ${name}`}
+            value={quantity}
+            whole
+            editable={hasWritePermission}
+            onSave={(value) => saveField({ quantity: value })}
+          />
         </Table.Cell>
         <Table.Cell className="table-cell w-1/12">
           {hasWritePermission && (

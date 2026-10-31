@@ -8,6 +8,7 @@ import { Button, Label, TextInput } from 'flowbite-react'
 import React, { SyntheticEvent, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import { Loader } from '@/components/common'
+import PromoCategories from '@/components/pages/PromoCodes/components/PromoCategories/PromoCategories'
 import PromoCodeHeader from '../AddEditPromoCodeHedaer/Header'
 import { URLPartsEnum } from '@/shared/enums'
 import { useRouter } from 'next/navigation'
@@ -21,6 +22,7 @@ const AddNewPromoCode: React.FC<AddNewPromoCodeType> = ({ initialValue }) => {
   const promoCodeDataRef = useRef<PromoCodeFormBody>({} as PromoCodeFormBody)
   const formRef = useRef<HTMLFormElement>(null)
 
+  const [categoryIds, setCategoryIds] = useState<string[]>(initialValue?.categoryIds ?? [])
   const router = useRouter()
 
   const { addNewPromoCode, changeActivePromoCode } = usePromoCodesSliceStore()
@@ -51,6 +53,7 @@ const AddNewPromoCode: React.FC<AddNewPromoCodeType> = ({ initialValue }) => {
       startsAt: promoCodeDataRef.current.startsAt,
       endsAt: promoCodeDataRef.current.endsAt,
       discountPercentage: promoCodeDataRef.current.discountPercentage,
+      categoryIds,
     }
 
     const requestData = await addNewPromoCode(_promoCode)
@@ -121,6 +124,8 @@ const AddNewPromoCode: React.FC<AddNewPromoCodeType> = ({ initialValue }) => {
             }
           />
         </div>
+
+        <PromoCategories value={categoryIds} onChange={setCategoryIds} />
 
         {/* START DATE */}
         <div className="w-full">

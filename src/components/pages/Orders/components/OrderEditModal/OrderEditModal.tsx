@@ -193,12 +193,12 @@ const OrderEditModal: React.FC<ModalType> = ({
             {/* Internal note */}
             <div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Napomena
+                Note
               </h3>
               <div>
                 <Label
                   htmlFor="internalNote"
-                  value="Interna napomena, kupac je ne vidi"
+                  value="Internal note, the customer does not see it"
                   className="text-sm font-medium text-gray-700 dark:text-gray-300"
                 />
                 <Textarea
@@ -206,7 +206,7 @@ const OrderEditModal: React.FC<ModalType> = ({
                   name="internalNote"
                   value={internalNote}
                   onChange={(e) => setInternalNote(e.target.value)}
-                  placeholder="npr. kupac trazi racun na firmu"
+                  placeholder="e.g. the customer wants the invoice on the company"
                   rows={3}
                   className="mt-1"
                 />

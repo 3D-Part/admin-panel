@@ -1,11 +1,12 @@
 'use client'
 
-import { HiAdjustments, HiUserCircle } from 'react-icons/hi'
+import { HiAdjustments, HiCube, HiUserCircle } from 'react-icons/hi'
 import { MdDashboard } from 'react-icons/md'
 import { useState } from 'react'
 import GeneralInfo from '../GeneralInfo/GeneralInfo'
 import Gallery from '../Gallery/Gallery'
 import ProductAttributes from '../ProductAttributes/ProductAttributes'
+import StockAndExtras from '../StockAndExtras/StockAndExtras'
 
 export const TabsMenu = () => {
   const [activeTab, setActiveTab] = useState(0)
@@ -30,6 +31,13 @@ export const TabsMenu = () => {
       title: 'Attributes',
       icon: HiAdjustments,
       content: <ProductAttributes />,
+      disabled: false,
+    },
+    {
+      id: 3,
+      title: 'Stock & extras',
+      icon: HiCube,
+      content: <StockAndExtras />,
       disabled: false,
     },
   ]

@@ -7,12 +7,14 @@ import { Button, Label, TextInput } from 'flowbite-react'
 import React, { SyntheticEvent, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import { Loader } from '@/components/common'
+import PromoCategories from '@/components/pages/PromoCodes/components/PromoCategories/PromoCategories'
 import PromoCodeHeader from '../AddEditPromoCodeHedaer/Header'
 import isoToDatetimeLocal from '@/shared/helpers/isoToDatetimeLocal'
 import AssignUsers from './components/AssignUsers/AssignUsers'
 
 const EditPromoCode: React.FC = () => {
   const { editPromoCode, activePromoCode } = usePromoCodesSliceStore()
+  const [categoryIds, setCategoryIds] = useState<string[]>((activePromoCode as any)?.categoryIds ?? [])
 
   const [loader, setLoader] = useState(false)
   const promoCodeDataRef = useRef<PromoCodeFormBody>({
@@ -52,6 +54,7 @@ const EditPromoCode: React.FC = () => {
       startsAt: promoCodeDataRef.current.startsAt,
       endsAt: promoCodeDataRef.current.endsAt,
       discountPercentage: promoCodeDataRef.current.discountPercentage,
+      categoryIds,
     }
 
     setLoader(true)
@@ -120,6 +123,8 @@ const EditPromoCode: React.FC = () => {
             }
           />
         </div>
+
+        <PromoCategories value={categoryIds} onChange={setCategoryIds} />
 
         {/* START DATE */}
         <div className="w-full">

@@ -1,3 +1,5 @@
+import { InlineNumber } from '@/components/common'
+import { BackofficeAPI } from '@/services'
 import { ManufacturerData } from '@/shared/types'
 import { Table } from 'flowbite-react'
 import React from 'react'
@@ -37,6 +39,18 @@ export const TableItem: React.FC<TableItemType> = ({
           }`}
         >
           <div className="flex justify-start items-center gap-6">{name}</div>
+        </Table.Cell>
+        <Table.Cell>
+          <InlineNumber
+            label={`Packing position of ${name}`}
+            value={manufacture.sortPriority}
+            placeholder="Last"
+            whole
+            editable={hasWritePermission}
+            onSave={async (value) =>
+              Boolean(await BackofficeAPI.setManufacturerSort(manufacture.id, value))
+            }
+          />
         </Table.Cell>
         <Table.Cell>
           {hasWritePermission && (

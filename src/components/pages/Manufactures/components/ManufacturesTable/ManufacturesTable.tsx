@@ -118,6 +118,7 @@ export const ManufacturesTable: React.FC<ManufacturesTableType> = ({
           <Table className="w-full">
             <Table.Head className="table-header">
               <Table.HeadCell className="table-cell">Name</Table.HeadCell>
+              <Table.HeadCell className="table-cell">Packing position</Table.HeadCell>
 
               <Table.HeadCell className="table-cell">
                 <span className="sr-only">Actions</span>

@@ -3,6 +3,7 @@
 import { Pagination, Table } from 'flowbite-react'
 import React, { useCallback, useEffect, useState } from 'react'
 import { TableItem } from './TableItem/TableItem'
+import { useCustomerProfiles } from '@/components/common/CustomerFlag/CustomerFlag'
 import { useUsersSliceStore } from '@/store/store'
 import {
   Loader,
@@ -46,6 +47,8 @@ export const UsersTable = () => {
   // useEffect(() => {
   //   changeManufactureFilter({});
   // }, []);
+
+  const profiles = useCustomerProfiles(currentPageUsers.map((u) => u.email))
 
   const loaderBg =
     currentPageUsers.length > 0
@@ -154,7 +157,13 @@ export const UsersTable = () => {
 
             <Table.Body className="divide-y divide-gray-100 dark:divide-gray-800">
               {currentPageUsers.map((user) => {
-                return <TableItem key={user.id} user={user} />
+                return (
+                  <TableItem
+                    key={user.id}
+                    user={user}
+                    profile={profiles[user.email?.toLowerCase()]}
+                  />
+                )
               })}
             </Table.Body>
           </Table>

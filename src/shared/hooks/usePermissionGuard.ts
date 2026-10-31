@@ -36,6 +36,9 @@ const ROUTE_PERMISSIONS: Record<string, PermissionEnum[]> = {
   [URLPartsEnum.Users]: [PermissionEnum.USER_READ],
   [URLPartsEnum.Employees]: [PermissionEnum.EMPLOYEE_READ],
   [URLPartsEnum.Warehouse]: [PermissionEnum.PRODUCT_READ],
+  [URLPartsEnum.Analytics]: [PermissionEnum.ORDERS_READ],
+  [URLPartsEnum.ActionsNeeded]: [PermissionEnum.PRODUCT_READ],
+  [URLPartsEnum.Proformas]: [PermissionEnum.ORDERS_READ],
   [URLPartsEnum.Subscribers]: [], // No specific permission required
   [URLPartsEnum.SettingsMenu]: [PermissionEnum.ADMIN_ONLY], // Admin only access
 }

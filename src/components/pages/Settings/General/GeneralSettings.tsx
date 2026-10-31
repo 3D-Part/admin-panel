@@ -5,6 +5,7 @@ import { Button, Label, TextInput } from 'flowbite-react'
 import { useShopSettingsStore } from '@/store/store'
 import { toast } from 'react-toastify'
 import { HiPlus, HiTrash } from 'react-icons/hi'
+import PageImages, { PageImage } from './PageImages'
 
 interface BannerSettings {
   text: string
@@ -33,6 +34,9 @@ interface SettingsFormData {
   delivery: DeliverySettings
   company: CompanyDetails
   socialMedia: SocialMediaSettings
+  tiers: { bronze: string; silver: string; gold: string }
+  tidio: { key: string }
+  pageImages: PageImage[]
 }
 
 const GeneralSettings = () => {
@@ -57,6 +61,9 @@ const GeneralSettings = () => {
       instagram: '',
       olx: '',
     },
+    tiers: { bronze: '', silver: '', gold: '' },
+    tidio: { key: '' },
+    pageImages: [],
   })
   const formRef = useRef<HTMLFormElement>(null)
 
@@ -95,6 +102,13 @@ const GeneralSettings = () => {
             instagram: settings.socialMedia?.instagram || '',
             olx: settings.socialMedia?.olx || '',
           },
+          tiers: {
+            bronze: String(settings.tiers?.bronze ?? ''),
+            silver: String(settings.tiers?.silver ?? ''),
+            gold: String(settings.tiers?.gold ?? ''),
+          },
+          tidio: { key: settings.tidio?.key ?? '' },
+          pageImages: settings.pageImages ?? [],
         })
       }
 
@@ -178,6 +192,13 @@ const GeneralSettings = () => {
           instagram: formData.socialMedia.instagram,
           olx: formData.socialMedia.olx,
         },
+        tiers: {
+          bronze: parseFloat(formData.tiers.bronze) || 0,
+          silver: parseFloat(formData.tiers.silver) || 0,
+          gold: parseFloat(formData.tiers.gold) || 0,
+        },
+        tidio: { key: formData.tidio.key.trim() },
+        pageImages: formData.pageImages.filter((image) => image.desktop),
       },
     })
 
@@ -254,6 +275,67 @@ const GeneralSettings = () => {
                 />
               </div>
             </div>
+          </div>
+
+          {/* Discount Tiers Section */}
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
+              Discount Tiers
+            </h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+              Percentages for each customer tier. On a product already on sale
+              the customer gets the better of the two: a 10% sale with a 15%
+              tier gives 15% in total, not 25%. The tier is set per customer in
+              Users.
+            </p>
+            <div className="grid gap-4 sm:grid-cols-3">
+              {(['bronze', 'silver', 'gold'] as const).map((tier) => (
+                <div key={tier}>
+                  <Label htmlFor={`tier-${tier}`} value={`${tier[0].toUpperCase()}${tier.slice(1)} (%)`} />
+                  <TextInput
+                    id={`tier-${tier}`}
+                    name={`tiers.${tier}`}
+                    type="number"
+                    min="0"
+                    max="100"
+                    value={formData.tiers[tier]}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Page Images Section */}
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
+              Page Images
+            </h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+              Banners on the pages you choose. On the home page they join the
+              slider, elsewhere they show above the products.
+            </p>
+            <PageImages
+              value={formData.pageImages}
+              onChange={(pageImages) => setFormData({ ...formData, pageImages })}
+            />
+          </div>
+
+          {/* Tidio Section */}
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
+              Tidio Chat
+            </h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+              Public key from Tidio → Settings → Developer. The chat shows on the
+              site as soon as this is saved, and leaving it empty turns it off.
+            </p>
+            <TextInput
+              id="tidioKey"
+              name="tidio.key"
+              value={formData.tidio.key}
+              onChange={handleInputChange}
+            />
           </div>
 
           {/* Delivery Settings Section */}

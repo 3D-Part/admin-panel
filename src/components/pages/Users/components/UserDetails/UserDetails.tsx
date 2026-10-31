@@ -1,8 +1,9 @@
 'use client'
+import { CustomerProfileForm } from '@/components/common/CustomerFlag/CustomerFlag'
 
 import OrderDetails from '@/components/pages/Orders/components/OrderDetails'
 import { User, Order } from '@/shared/types'
-import { Button, Modal, Table, TextInput, Label } from 'flowbite-react'
+import { Button, Modal, Table, TextInput, Label, Select } from 'flowbite-react'
 import React, { useState, useRef } from 'react'
 import { toast } from 'react-toastify'
 import UsersAPI from '@/services/users'
@@ -90,6 +91,24 @@ const UserDetails: React.FC<UserDetailsType> = ({
     reservedPoints,
   } = user
 
+  const [tier, setTier] = useState((user as any).tier ?? '')
+
+  const handleTierChange = async (value: string) => {
+    const previous = tier
+    setTier(value)
+    setIsUpdating(true)
+    const result = await UsersAPI.updateUserProfile(id, {
+      tier: value || null,
+    } as any)
+    setIsUpdating(false)
+    if (result) {
+      toast('Tier updated', { hideProgressBar: true, autoClose: 2000, type: 'success' })
+      if (onUserUpdated) onUserUpdated(result)
+    } else {
+      setTier(previous)
+    }
+  }
+
   const selectActiveOrder = (activeOrder: Order) => {
     setActiveOrder(activeOrder)
     setIsOrderDetailsVisible(true)
@@ -174,6 +193,28 @@ const UserDetails: React.FC<UserDetailsType> = ({
                 value={String(reservedPoints)}
               />
             </div>
+
+            <div className="w-full mt-4 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+              <Label htmlFor="customer-tier" value="Discount tier" />
+              <div className="flex gap-3 items-center mt-1">
+                <Select
+                  id="customer-tier"
+                  value={tier}
+                  onChange={(e) => handleTierChange(e.target.value)}
+                  disabled={isUpdating}
+                >
+                  <option value="">No tier</option>
+                  <option value="BRONZE">Bronze</option>
+                  <option value="SILVER">Silver</option>
+                  <option value="GOLD">Gold</option>
+                </Select>
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  Percentages are set in Settings → General
+                </span>
+              </div>
+            </div>
+
+            <CustomerProfileForm email={email} />
 
             {/* Discount Section */}
             <div className="w-full mt-4 p-4 rounded-lg bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800">

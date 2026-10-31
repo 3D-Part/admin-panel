@@ -27,6 +27,7 @@ export interface GetNewAccessTokenResponseData {
 
 // MANUFACTURERS
 export interface ManufacturerData {
+  sortPriority?: number | null
   id: string
   name: string
   createdAt: string
@@ -420,6 +421,7 @@ export interface PromoCodesData {
 }
 
 export interface PromoCodeFormBody {
+  categoryIds?: string[]
   code: string
   startsAt: string
   endsAt: string

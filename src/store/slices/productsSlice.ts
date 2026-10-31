@@ -214,11 +214,6 @@ export const productsSlice: StateCreator<ProductsSliceInterface> = (
       totalPages: 1,
       count: 0,
       productFilters: {},
-  onlyOutOfStock: false,
-
-  changeOnlyOutOfStock: (data: boolean) => {
-    set({ onlyOutOfStock: data })
-  },
     })
   },
 })

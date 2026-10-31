@@ -1,4 +1,6 @@
 'use client'
+import { CustomerFlagBadge } from '@/components/common/CustomerFlag/CustomerFlag'
+import { CustomerProfile } from '@/services/backoffice'
 
 import { User } from '@/shared/types'
 import { Table } from 'flowbite-react'
@@ -7,9 +9,10 @@ import UserDetails from '../../UserDetails/UserDetails'
 
 type TableItemType = {
   user: User
+  profile?: CustomerProfile
 }
 
-export const TableItem: React.FC<TableItemType> = ({ user }) => {
+export const TableItem: React.FC<TableItemType> = ({ user, profile }) => {
   const [isUserDetailsOpen, setIsUserDetailsOpen] = useState(false)
 
   const { fullName, email, phone, city, street, availablePoints, usedPoints } =
@@ -24,6 +27,7 @@ export const TableItem: React.FC<TableItemType> = ({ user }) => {
         >
           <div className="flex justify-start items-center gap-6">
             {fullName}
+            <CustomerFlagBadge profile={profile} />
           </div>
         </Table.Cell>
         <Table.Cell className="whitespace-nowrap font-medium table-cell w-2/5">

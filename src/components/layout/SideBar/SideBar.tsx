@@ -11,7 +11,7 @@ import {
 import { MdUnsubscribe } from 'react-icons/md'
 import { IoMdPricetags, IoMdSettings } from 'react-icons/io'
 import { FaUsers, FaShopify } from 'react-icons/fa'
-import { FaUsersCog, FaWarehouse } from 'react-icons/fa'
+import { FaUsersCog, FaWarehouse, FaChartLine, FaFileInvoice, FaExclamationTriangle } from 'react-icons/fa'
 
 import { usePathname } from 'next/navigation'
 import { useRouter } from 'next/navigation'
@@ -137,6 +137,27 @@ const SideBar = () => {
             requiredPermissions: [PermissionEnum.ORDERS_READ],
           },
         ],
+      },
+      {
+        name: 'Proformas',
+        href: URLPartsEnum.Proformas,
+        icon: FaFileInvoice,
+        open: false,
+        requiredPermissions: [PermissionEnum.ORDERS_READ],
+      },
+      {
+        name: 'Analytics',
+        href: URLPartsEnum.Analytics,
+        icon: FaChartLine,
+        open: false,
+        requiredPermissions: [PermissionEnum.ORDERS_READ],
+      },
+      {
+        name: 'Actions needed',
+        href: URLPartsEnum.ActionsNeeded,
+        icon: FaExclamationTriangle,
+        open: false,
+        requiredPermissions: [PermissionEnum.PRODUCT_READ],
       },
       {
         name: 'Warehouse',

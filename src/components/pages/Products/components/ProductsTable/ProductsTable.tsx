@@ -1,4 +1,5 @@
 'use client'
+import { BackofficeAPI } from '@/services'
 
 import { Pagination, Table } from 'flowbite-react'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
@@ -91,6 +92,14 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
   useEffect(() => {
     fetchProductsData()
   }, [currentPage, fetchProductsData, sortFiled, sortOrder])
+
+  const [costs, setCosts] = useState<Record<string, number>>({})
+  useEffect(() => {
+    if (currentPageProducts.length === 0) return
+    BackofficeAPI.getProductCosts(currentPageProducts.map((p) => p.id)).then(
+      (data) => setCosts(data ?? {})
+    )
+  }, [currentPageProducts])
 
   useEffect(() => {
     if (currentPage > totalPages && currentPage > 1) {
@@ -298,10 +307,16 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
                 Manufacturer
               </Table.HeadCell>
               <Table.HeadCell className="table-cell w-1/6">
-                Šifra / SKU
+                Code / SKU
+              </Table.HeadCell>
+              <Table.HeadCell className="table-cell w-1/12">
+                Status
               </Table.HeadCell>
               <Table.HeadCell className="table-cell w-1/12">
                 Price
+              </Table.HeadCell>
+              <Table.HeadCell className="table-cell w-1/12">
+                Purchase
               </Table.HeadCell>
               <Table.HeadCell className="table-cell w-1/12">
                 Quantity
@@ -316,6 +331,7 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
                   <TableItem
                     key={product.id}
                     product={product}
+                    purchasePrice={costs[product.id]}
                     onWarningModalOpen={onWarningModalOpen}
                   />
                 )
