@@ -69,7 +69,7 @@ const ProductResult: React.FC<ProductResultProps> = ({
     e.preventDefault()
     const amount = Number(quantity)
     if (!Number.isInteger(amount) || amount < (type === 'INVENTORY' ? 0 : 1)) {
-      toast('Unesite ispravnu količinu', { type: 'error', autoClose: 2000 })
+      toast('Enter a valid quantity', { type: 'error', autoClose: 2000 })
       return
     }
 
@@ -85,7 +85,7 @@ const ProductResult: React.FC<ProductResultProps> = ({
       setProduct({ ...product, quantity: result.product.quantity })
       setNote('')
       toast(
-        `${movementLabels[type]} upisan — stanje ${result.product.quantity} kom`,
+        `${movementLabels[type]} saved — stock ${result.product.quantity} pcs`,
         { type: 'success', autoClose: 2000 }
       )
       loadMovements()
@@ -97,7 +97,7 @@ const ProductResult: React.FC<ProductResultProps> = ({
     const updated = await WarehouseAPI.assignEan(product.id, null)
     if (updated) {
       setProduct({ ...product, ean: null })
-      toast('Bar kod proizvođača uklonjen', { type: 'success', autoClose: 2000 })
+      toast('Manufacturer barcode removed', { type: 'success', autoClose: 2000 })
     }
   }
 
@@ -134,22 +134,22 @@ const ProductResult: React.FC<ProductResultProps> = ({
             <span>{Number(product.price).toFixed(2)} KM</span>
           </div>
           <div className="flex flex-wrap gap-2">
-            {!product.isPublished && <Badge color="gray">Nije objavljen</Badge>}
-            {scannedEan && <Badge color="info">Pronađen po EAN-u</Badge>}
+            {!product.isPublished && <Badge color="gray">Not published</Badge>}
+            {scannedEan && <Badge color="info">Found by EAN</Badge>}
           </div>
         </div>
         <div
           className={`ml-auto shrink-0 flex flex-col items-center justify-center px-4 rounded-lg border ${stockLevelClasses[level]}`}
         >
           <span className="text-3xl font-bold">{product.quantity ?? 0}</span>
-          <span className="text-xs">na stanju</span>
+          <span className="text-xs">in stock</span>
         </div>
       </div>
 
       {(product.lowStockWarning != null || product.lowStockCritical != null) && (
         <p className="text-xs text-gray-500 dark:text-gray-400">
-          Granice: žuto na {product.lowStockWarning ?? '—'} kom, crveno na{' '}
-          {product.lowStockCritical ?? '—'} kom
+          Limits: yellow at {product.lowStockWarning ?? '—'} pcs, red at{' '}
+          {product.lowStockCritical ?? '—'} pcs
         </p>
       )}
 
@@ -171,7 +171,7 @@ const ProductResult: React.FC<ProductResultProps> = ({
           <div className="w-32">
             <Label
               htmlFor="movement-quantity"
-              value={type === 'INVENTORY' ? 'Izbrojano kom' : 'Količina'}
+              value={type === 'INVENTORY' ? 'Counted pcs' : 'Quantity'}
             />
             <TextInput
               id="movement-quantity"
@@ -183,37 +183,37 @@ const ProductResult: React.FC<ProductResultProps> = ({
             />
           </div>
           <div className="flex-1 min-w-[12rem]">
-            <Label htmlFor="movement-note" value="Napomena (nije obavezno)" />
+            <Label htmlFor="movement-note" value="Note (optional)" />
             <TextInput
               id="movement-note"
               value={note}
               maxLength={500}
               placeholder={
                 type === 'OUT'
-                  ? 'npr. oštećeno, za radionicu'
+                  ? 'e.g. damaged, for the workshop'
                   : type === 'IN'
-                  ? 'npr. dobavljač, broj fakture'
+                  ? 'e.g. supplier, invoice number'
                   : ''
               }
               onChange={(e) => setNote(e.target.value)}
             />
           </div>
           <Button type="submit" disabled={saving}>
-            Potvrdi {movementLabels[type].toLowerCase()}
+            Confirm {movementLabels[type].toLowerCase()}
           </Button>
           <Button
             type="button"
             color="light"
             onClick={() => onPrintLabel(product)}
           >
-            Etiketa
+            Label
           </Button>
         </div>
       </form>
 
       <div>
         <h4 className="mb-1 text-sm font-semibold text-gray-900 dark:text-white">
-          Istorija
+          History
         </h4>
         <MovementList movements={movements} />
       </div>

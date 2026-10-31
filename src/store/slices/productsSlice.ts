@@ -13,6 +13,8 @@ export interface ProductsSliceInterface {
   sortFiled: string
   sortOrder: 'ASC' | 'DESC'
   productFilters: {}
+  onlyOutOfStock: boolean
+  changeOnlyOutOfStock: (data: boolean) => void
   changeCurrentPage: (data: number) => void
   changeItemsPerPage: (data: number) => void
   changeProductFilter: (data: {}) => void
@@ -40,6 +42,11 @@ export const productsSlice: StateCreator<ProductsSliceInterface> = (
   sortFiled: 'createdAt',
   sortOrder: 'DESC',
   productFilters: {},
+  onlyOutOfStock: false,
+
+  changeOnlyOutOfStock: (data: boolean) => {
+    set({ onlyOutOfStock: data })
+  },
 
   changeCurrentPage: (data: number) => {
     set({ currentPage: data })
@@ -84,7 +91,15 @@ export const productsSlice: StateCreator<ProductsSliceInterface> = (
       const data = await ProductsAPI.getProducts(
         sort,
         paginationData,
-        get().productFilters
+        get().onlyOutOfStock
+          ? {
+              ...get().productFilters,
+              filters: {
+                ...(get().productFilters as { filters?: {} }).filters,
+                quantity: { lt: 1 },
+              },
+            }
+          : get().productFilters
       )
 
       if (data) {
@@ -199,6 +214,11 @@ export const productsSlice: StateCreator<ProductsSliceInterface> = (
       totalPages: 1,
       count: 0,
       productFilters: {},
+  onlyOutOfStock: false,
+
+  changeOnlyOutOfStock: (data: boolean) => {
+    set({ onlyOutOfStock: data })
+  },
     })
   },
 })

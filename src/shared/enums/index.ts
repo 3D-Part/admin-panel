@@ -9,6 +9,7 @@ export enum URLPartsEnum {
 
   Products = '/products',
   AddNewProduct = '/products/add-new',
+  OutOfStockProducts = '/products/out-of-stock',
   EditProduct = '/products/edit',
 
   Manufacturers = '/manufacturers',

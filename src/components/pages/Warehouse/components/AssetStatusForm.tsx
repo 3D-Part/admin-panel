@@ -51,7 +51,7 @@ const AssetStatusForm: React.FC<AssetStatusFormProps> = ({
 
     if (result) {
       setNote('')
-      toast('Status upisan', { type: 'success', autoClose: 2000 })
+      toast('Status saved', { type: 'success', autoClose: 2000 })
       onChanged(result.asset)
     }
   }
@@ -73,38 +73,38 @@ const AssetStatusForm: React.FC<AssetStatusFormProps> = ({
         </Select>
       </div>
       <div>
-        <Label htmlFor="asset-location" value="Lokacija" />
+        <Label htmlFor="asset-location" value="Location" />
         <TextInput
           id="asset-location"
           value={location}
           maxLength={100}
-          placeholder="npr. Magacin, Radionica, Teren"
+          placeholder="e.g. Warehouse, Workshop, Field"
           onChange={(e) => setLocation(e.target.value)}
         />
       </div>
       <div>
-        <Label htmlFor="asset-assigned" value="Zaduženo kod" />
+        <Label htmlFor="asset-assigned" value="Assigned to" />
         <TextInput
           id="asset-assigned"
           value={assignedTo}
           maxLength={100}
-          placeholder="ime osobe"
+          placeholder="person's name"
           onChange={(e) => setAssignedTo(e.target.value)}
         />
       </div>
       <div>
-        <Label htmlFor="asset-status-note" value="Napomena" />
+        <Label htmlFor="asset-status-note" value="Note" />
         <TextInput
           id="asset-status-note"
           value={note}
           maxLength={500}
-          placeholder="npr. poslano na servis zbog mlaznice"
+          placeholder="e.g. sent for nozzle repair"
           onChange={(e) => setNote(e.target.value)}
         />
       </div>
       <div className="sm:col-span-2">
         <Button type="submit" disabled={saving || unchanged}>
-          Sačuvaj promjenu
+          Save change
         </Button>
       </div>
     </form>

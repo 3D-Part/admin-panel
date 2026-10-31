@@ -42,7 +42,7 @@ const History: React.FC = () => {
         value={type}
         onChange={(e) => setType(e.target.value)}
       >
-        <option value="">Sve promjene</option>
+        <option value="">All changes</option>
         {(Object.keys(movementLabels) as MovementType[]).map((value) => (
           <option key={value} value={value}>
             {movementLabels[value]}
@@ -54,7 +54,7 @@ const History: React.FC = () => {
 
       {rows.length < count && (
         <Button color="gray" className="self-center" onClick={() => load(rows.length)}>
-          Učitaj još ({count - rows.length})
+          Load more ({count - rows.length})
         </Button>
       )}
     </div>

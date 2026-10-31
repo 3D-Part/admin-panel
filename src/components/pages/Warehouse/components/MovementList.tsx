@@ -25,7 +25,7 @@ const MovementList: React.FC<MovementListProps> = ({
   if (movements.length === 0) {
     return (
       <p className="text-sm text-gray-500 dark:text-gray-400">
-        Još nema zapisa.
+        No records yet.
       </p>
     )
   }
@@ -49,12 +49,12 @@ const MovementList: React.FC<MovementListProps> = ({
                       : 'text-green-700 dark:text-green-400'
                   }`}
                 >
-                  {signed(movement.quantityChange)} kom
+                  {signed(movement.quantityChange)} pcs
                 </span>
               )}
               {movement.quantityAfter != null && (
                 <span className="text-gray-600 dark:text-gray-300">
-                  → stanje {movement.quantityAfter}
+                  → stock {movement.quantityAfter}
                 </span>
               )}
 

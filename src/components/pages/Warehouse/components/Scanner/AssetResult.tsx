@@ -51,15 +51,15 @@ const AssetResult: React.FC<AssetResultProps> = ({
             {asset.serialNumber && <span>S/N {asset.serialNumber}</span>}
           </div>
           <div className="flex flex-wrap gap-3 text-sm text-gray-600 dark:text-gray-300">
-            <span>Lokacija: {asset.location || '—'}</span>
-            <span>Zaduženo: {asset.assignedTo || '—'}</span>
+            <span>Location: {asset.location || '—'}</span>
+            <span>Assigned to: {asset.assignedTo || '—'}</span>
           </div>
         </div>
         <Badge color={assetStatusColor[asset.status]} size="sm" className="ml-auto">
           {assetStatusLabels[asset.status]}
         </Badge>
         <Button size="sm" color="light" onClick={() => onPrintLabel(asset)}>
-          Etiketa
+          Label
         </Button>
       </div>
 
@@ -74,7 +74,7 @@ const AssetResult: React.FC<AssetResultProps> = ({
 
       <div>
         <h4 className="mb-1 text-sm font-semibold text-gray-900 dark:text-white">
-          Istorija
+          History
         </h4>
         <MovementList movements={movements} />
       </div>

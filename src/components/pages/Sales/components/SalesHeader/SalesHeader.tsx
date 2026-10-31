@@ -8,6 +8,7 @@ import { URLPartsEnum } from '@/shared/enums'
 import { useUISliceStore, useCurrentUserStore } from '@/store/store'
 import { hasPermission } from '@/shared/helpers/permissions'
 import { PermissionEnum } from '@/shared/types'
+import SalesSearch from './SalesSearch'
 
 export const SalesHeader = () => {
   const router = useRouter()
@@ -22,8 +23,8 @@ export const SalesHeader = () => {
   )
 
   return (
-    <div className="w-full flex justify-end items-center flex-wrap gap-4">
-      {/* <ManufacturesSearch /> */}
+    <div className="w-full flex justify-between items-center flex-wrap gap-4">
+      <SalesSearch />
       {hasWritePermission && (
         <Button
           className="cursor-pointer"

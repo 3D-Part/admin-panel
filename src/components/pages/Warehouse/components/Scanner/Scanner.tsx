@@ -115,12 +115,12 @@ const Scanner: React.FC<ScannerProps> = ({ onPrintProduct, onPrintAsset }) => {
           sizing="lg"
           value={value}
           autoComplete="off"
-          placeholder="Skenirajte ili upišite šifru, EAN ili SKU"
+          placeholder="Scan or type a code, EAN or SKU"
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={onInputKeyDown}
         />
         <Button type="submit" size="lg" disabled={loading}>
-          {loading ? <Spinner size="sm" /> : 'Traži'}
+          {loading ? <Spinner size="sm" /> : 'Search'}
         </Button>
         <Button
           type="button"
@@ -129,13 +129,12 @@ const Scanner: React.FC<ScannerProps> = ({ onPrintProduct, onPrintAsset }) => {
           onClick={() => setCameraOpen((open) => !open)}
         >
           <HiCamera className="w-5 h-5 mr-2" />
-          Kamera
+          Camera
         </Button>
       </form>
 
       <p className="text-xs text-gray-500 dark:text-gray-400">
-        USB čitač radi odmah, samo skenirajte. Na telefonu koristite dugme
-        Kamera.
+        USB scanners work right away, just scan. On a phone use the Camera button.
       </p>
 
       {cameraOpen && (
@@ -159,11 +158,11 @@ const Scanner: React.FC<ScannerProps> = ({ onPrintProduct, onPrintAsset }) => {
       {result && total > 1 && !picked && (
         <div className="flex flex-col gap-2 p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
           <p className="text-sm text-gray-900 dark:text-white">
-            Za kod{' '}
+            For code{' '}
             <span className="font-mono text-gray-600 dark:text-gray-300">
               {result.code}
             </span>{' '}
-            pronađeno: {total}. Izaberite:
+            found: {total}. Choose one:
           </p>
           <ul className="divide-y divide-gray-200 dark:divide-gray-700">
             {[...result.products, ...result.assets].map((item) => (
@@ -178,7 +177,7 @@ const Scanner: React.FC<ScannerProps> = ({ onPrintProduct, onPrintAsset }) => {
                     {item.name}
                   </span>
                   {isProduct(item) && (
-                    <span className="text-gray-500">{item.quantity} kom</span>
+                    <span className="text-gray-500">{item.quantity} pcs</span>
                   )}
                 </button>
               </li>

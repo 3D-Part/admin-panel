@@ -4,16 +4,13 @@ import {
   WarehouseProduct,
 } from '@/shared/types/warehouse'
 
-// Stored values stay in English (like order statuses); the screen speaks
-// Bosnian because the warehouse is used by the staff.
-
 export const assetStatusLabels: Record<AssetStatus, string> = {
-  IN_USE: 'U upotrebi',
-  IN_STORAGE: 'U magacinu',
-  ON_LOAN: 'Zaduženo / na terenu',
-  IN_SERVICE: 'Na servisu',
-  BROKEN: 'Neispravno',
-  WRITTEN_OFF: 'Otpisano',
+  IN_USE: 'In use',
+  IN_STORAGE: 'In storage',
+  ON_LOAN: 'On loan / in the field',
+  IN_SERVICE: 'In service',
+  BROKEN: 'Broken',
+  WRITTEN_OFF: 'Written off',
 }
 
 export const assetStatusOrder: AssetStatus[] = [
@@ -36,14 +33,14 @@ export const assetStatusColor: Record<AssetStatus, string> = {
 }
 
 export const movementLabels: Record<MovementType, string> = {
-  IN: 'Ulaz',
-  OUT: 'Izlaz',
-  RETURN: 'Povrat',
-  INVENTORY: 'Inventura',
-  ORDER: 'Narudžba',
-  ADJUSTMENT: 'Izmjena u adminu',
-  CREATED: 'Uneseno',
-  STATUS: 'Promjena statusa',
+  IN: 'Stock in',
+  OUT: 'Stock out',
+  RETURN: 'Return',
+  INVENTORY: 'Stock count',
+  ORDER: 'Order',
+  ADJUSTMENT: 'Admin edit',
+  CREATED: 'Created',
+  STATUS: 'Status change',
 }
 
 export const movementColor: Record<MovementType, string> = {
@@ -83,7 +80,7 @@ export const stockLevelClasses: Record<StockLevel, string> = {
 }
 
 export const formatDateTime = (value: string) =>
-  new Date(value).toLocaleString('bs-BA', {
+  new Date(value).toLocaleString('en-GB', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',

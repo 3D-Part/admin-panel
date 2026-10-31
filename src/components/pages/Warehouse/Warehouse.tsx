@@ -10,7 +10,7 @@ import Assets from './components/Assets/Assets'
 import Labels, { assetLabel, productLabel } from './components/Labels/Labels'
 import History from './components/History'
 
-const TABS = ['skener', 'inventar', 'etikete', 'istorija'] as const
+const TABS = ['scanner', 'inventory', 'labels', 'history'] as const
 type TabId = (typeof TABS)[number]
 
 const Warehouse = () => {
@@ -19,7 +19,7 @@ const Warehouse = () => {
   const searchParams = useSearchParams()
   const requested = searchParams.get('tab') as TabId | null
   const activeTab: TabId =
-    requested && TABS.includes(requested) ? requested : 'skener'
+    requested && TABS.includes(requested) ? requested : 'scanner'
 
   // shared so Scanner and Inventory can send items to the label list
   const [labelItems, setLabelItems] = useState<LabelItem[]>([])
@@ -34,7 +34,7 @@ const Warehouse = () => {
       })
       return next
     })
-    goTo('etikete')
+    goTo('labels')
   }
 
   return (
@@ -44,8 +44,8 @@ const Warehouse = () => {
         onTabChange={(tab) => goTo(tab as TabId)}
         tabs={[
           {
-            id: 'skener',
-            title: 'Skener',
+            id: 'scanner',
+            title: 'Scanner',
             icon: HiQrcode,
             content: (
               <Scanner
@@ -57,8 +57,8 @@ const Warehouse = () => {
             ),
           },
           {
-            id: 'inventar',
-            title: 'Inventar',
+            id: 'inventory',
+            title: 'Inventory',
             icon: HiCube,
             content: (
               <Assets
@@ -67,14 +67,14 @@ const Warehouse = () => {
             ),
           },
           {
-            id: 'etikete',
-            title: 'Etikete',
+            id: 'labels',
+            title: 'Labels',
             icon: HiTag,
             content: <Labels items={labelItems} setItems={setLabelItems} />,
           },
           {
-            id: 'istorija',
-            title: 'Istorija',
+            id: 'history',
+            title: 'History',
             icon: HiClipboardList,
             content: <History />,
           },

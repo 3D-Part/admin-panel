@@ -67,11 +67,11 @@ const Assets: React.FC<AssetsProps> = ({ onPrintLabels }) => {
         <TextInput
           className="flex-1 min-w-[14rem]"
           value={search}
-          placeholder="naziv, šifra, lokacija, osoba, serijski broj"
+          placeholder="name, code, location, person, serial number"
           onChange={(e) => setSearch(e.target.value)}
         />
         <Select value={status} onChange={(e) => setStatus(e.target.value)}>
-          <option value="">Svi statusi</option>
+          <option value="">All statuses</option>
           {assetStatusOrder.map((value) => (
             <option key={value} value={value}>
               {assetStatusLabels[value]}
@@ -85,17 +85,16 @@ const Assets: React.FC<AssetsProps> = ({ onPrintLabels }) => {
             onPrintLabels(rows.filter((asset) => selected.has(asset.id)))
           }
         >
-          Etikete ({selected.size})
+          Labels ({selected.size})
         </Button>
         <Button onClick={() => open()}>
           <HiPlus className="w-4 h-4 mr-1" />
-          Novo sredstvo
+          New item
         </Button>
       </div>
 
       <p className="text-sm text-gray-500 dark:text-gray-400">
-        Stvari koje firma posjeduje, a ne prodaje: printeri, alat, oprema. Svaka
-        dobija svoju šifru (INV…) i istoriju statusa.
+        Things the company owns but does not sell: printers, tools, equipment. Each gets its own code (INV…) and status history.
       </p>
 
       <div className="overflow-x-auto">
@@ -104,7 +103,7 @@ const Assets: React.FC<AssetsProps> = ({ onPrintLabels }) => {
             <Table.HeadCell className="w-8">
               <input
                 type="checkbox"
-                aria-label="Izaberi sve"
+                aria-label="Select all"
                 checked={rows.length > 0 && selected.size === rows.length}
                 onChange={(e) =>
                   setSelected(
@@ -115,11 +114,11 @@ const Assets: React.FC<AssetsProps> = ({ onPrintLabels }) => {
                 }
               />
             </Table.HeadCell>
-            <Table.HeadCell>Šifra</Table.HeadCell>
-            <Table.HeadCell>Naziv</Table.HeadCell>
+            <Table.HeadCell>Code</Table.HeadCell>
+            <Table.HeadCell>Name</Table.HeadCell>
             <Table.HeadCell>Status</Table.HeadCell>
-            <Table.HeadCell>Lokacija</Table.HeadCell>
-            <Table.HeadCell>Zaduženo</Table.HeadCell>
+            <Table.HeadCell>Location</Table.HeadCell>
+            <Table.HeadCell>Assigned to</Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y">
             {rows.map((asset) => (
@@ -131,7 +130,7 @@ const Assets: React.FC<AssetsProps> = ({ onPrintLabels }) => {
                 <Table.Cell onClick={(e) => e.stopPropagation()}>
                   <input
                     type="checkbox"
-                    aria-label={`Izaberi ${asset.code}`}
+                    aria-label={`Select ${asset.code}`}
                     checked={selected.has(asset.id)}
                     onChange={() => toggle(asset.id)}
                   />
@@ -160,14 +159,14 @@ const Assets: React.FC<AssetsProps> = ({ onPrintLabels }) => {
         </Table>
         {rows.length === 0 && (
           <p className="p-4 text-sm text-gray-500 dark:text-gray-400">
-            Nema unesenih sredstava.
+            No items yet.
           </p>
         )}
       </div>
 
       {rows.length < count && (
         <Button color="gray" className="self-center" onClick={() => load(rows.length)}>
-          Učitaj još ({count - rows.length})
+          Load more ({count - rows.length})
         </Button>
       )}
 

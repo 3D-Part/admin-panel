@@ -16,7 +16,7 @@ export type LabelFormat = {
 export const LABEL_FORMATS: LabelFormat[] = [
   {
     id: 'a4-3x8',
-    name: 'A4 list, 24 kom (70 × 37 mm)',
+    name: 'A4 sheet, 24 pcs (70 × 37 mm)',
     pageSize: 'A4',
     pageMargin: '0.5mm 0 0 0',
     columns: 3,
@@ -26,7 +26,7 @@ export const LABEL_FORMATS: LabelFormat[] = [
   },
   {
     id: 'a4-4x10',
-    name: 'A4 list, 40 kom (52,5 × 29,7 mm)',
+    name: 'A4 sheet, 40 pcs (52.5 × 29.7 mm)',
     pageSize: 'A4',
     pageMargin: '0',
     columns: 4,
@@ -36,7 +36,7 @@ export const LABEL_FORMATS: LabelFormat[] = [
   },
   {
     id: 'roll-50x30',
-    name: 'Štampač etiketa 50 × 30 mm',
+    name: 'Label printer 50 × 30 mm',
     pageSize: '50mm 30mm',
     pageMargin: '0',
     columns: 1,
@@ -46,7 +46,7 @@ export const LABEL_FORMATS: LabelFormat[] = [
   },
   {
     id: 'roll-40x25',
-    name: 'Štampač etiketa 40 × 25 mm',
+    name: 'Label printer 40 × 25 mm',
     pageSize: '40mm 25mm',
     pageMargin: '0',
     columns: 1,

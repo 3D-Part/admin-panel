@@ -29,7 +29,7 @@ const CameraScanner: React.FC<CameraScannerProps> = ({
     const start = async () => {
       if (!navigator.mediaDevices?.getUserMedia) {
         setError(
-          'Kamera nije dostupna. Preglednik je dozvoljava samo preko https veze ili na localhost-u.'
+          'Camera unavailable. The browser only allows it over https or on localhost.'
         )
         return
       }
@@ -70,8 +70,8 @@ const CameraScanner: React.FC<CameraScannerProps> = ({
       } catch (e: any) {
         setError(
           e?.name === 'NotAllowedError'
-            ? 'Pristup kameri je odbijen. Dozvolite kameru u podešavanjima preglednika.'
-            : 'Kamera nije dostupna na ovom uređaju.'
+            ? 'Camera access denied. Allow the camera in the browser settings.'
+            : 'No camera available on this device.'
         )
       }
     }
@@ -97,13 +97,12 @@ const CameraScanner: React.FC<CameraScannerProps> = ({
             playsInline
           />
           <p className="text-xs text-gray-500 dark:text-gray-400">
-            Usmjerite kameru na bar kod. Ako ga ne čita, približite ga da bude
-            oštar i preko većeg dijela slike.
+            Point the camera at the barcode. If it does not read, move closer so it is sharp and fills most of the image.
           </p>
         </>
       )}
       <Button color="gray" size="sm" onClick={onClose}>
-        Zatvori kameru
+        Close camera
       </Button>
     </div>
   )

@@ -101,7 +101,7 @@ const AssetFormModal: React.FC<AssetFormModalProps> = ({
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!form.name.trim()) {
-      toast('Unesite naziv', { type: 'error', autoClose: 2000 })
+      toast('Enter a name', { type: 'error', autoClose: 2000 })
       return
     }
 
@@ -123,7 +123,7 @@ const AssetFormModal: React.FC<AssetFormModalProps> = ({
     setSaving(false)
 
     if (saved) {
-      toast(current ? 'Sačuvano' : `Uneseno pod šifrom ${saved.code}`, {
+      toast(current ? 'Saved' : `Created with code ${saved.code}`, {
         type: 'success',
         autoClose: 2500,
       })
@@ -138,12 +138,12 @@ const AssetFormModal: React.FC<AssetFormModalProps> = ({
     if (!current) return
     if (
       !window.confirm(
-        `Obrisati ${current.code} ${current.name} zajedno sa istorijom? Za stvari koje više ne koristite izaberite status Otpisano.`
+        `Delete ${current.code} ${current.name} with its history? For items no longer in use, choose the Written off status instead.`
       )
     )
       return
     if (await WarehouseAPI.deleteAsset(current.id)) {
-      toast('Obrisano', { type: 'success', autoClose: 2000 })
+      toast('Deleted', { type: 'success', autoClose: 2000 })
       onSaved()
       onClose()
     }
@@ -157,33 +157,33 @@ const AssetFormModal: React.FC<AssetFormModalProps> = ({
             <span className="font-mono">{current.code}</span> {current.name}
           </span>
         ) : (
-          'Novo sredstvo'
+          'New item'
         )}
       </Modal.Header>
       <Modal.Body className="flex flex-col gap-6 max-h-[75vh] overflow-y-auto">
         <form id="asset-form" onSubmit={submit} className="grid gap-3 sm:grid-cols-2">
           <div className="sm:col-span-2">
-            <Label htmlFor="asset-name" value="Naziv *" />
+            <Label htmlFor="asset-name" value="Name *" />
             <TextInput
               id="asset-name"
               value={form.name}
               maxLength={200}
-              placeholder="npr. Bambu Lab X1C, akumulatorska bušilica"
+              placeholder="e.g. Bambu Lab X1C, cordless drill"
               onChange={set('name')}
             />
           </div>
           <div>
-            <Label htmlFor="asset-category" value="Vrsta" />
+            <Label htmlFor="asset-category" value="Type" />
             <TextInput
               id="asset-category"
               value={form.category}
               maxLength={100}
-              placeholder="npr. Printer, Alat, Računar"
+              placeholder="e.g. Printer, Tool, Computer"
               onChange={set('category')}
             />
           </div>
           <div>
-            <Label htmlFor="asset-serial" value="Serijski broj" />
+            <Label htmlFor="asset-serial" value="Serial number" />
             <TextInput
               id="asset-serial"
               value={form.serialNumber}
@@ -208,7 +208,7 @@ const AssetFormModal: React.FC<AssetFormModalProps> = ({
                 </Select>
               </div>
               <div>
-                <Label htmlFor="asset-new-location" value="Lokacija" />
+                <Label htmlFor="asset-new-location" value="Location" />
                 <TextInput
                   id="asset-new-location"
                   value={form.location}
@@ -217,7 +217,7 @@ const AssetFormModal: React.FC<AssetFormModalProps> = ({
                 />
               </div>
               <div>
-                <Label htmlFor="asset-new-assigned" value="Zaduženo kod" />
+                <Label htmlFor="asset-new-assigned" value="Assigned to" />
                 <TextInput
                   id="asset-new-assigned"
                   value={form.assignedTo}
@@ -228,7 +228,7 @@ const AssetFormModal: React.FC<AssetFormModalProps> = ({
             </>
           )}
           <div>
-            <Label htmlFor="asset-date" value="Datum nabavke" />
+            <Label htmlFor="asset-date" value="Purchase date" />
             <TextInput
               id="asset-date"
               type="date"
@@ -237,7 +237,7 @@ const AssetFormModal: React.FC<AssetFormModalProps> = ({
             />
           </div>
           <div>
-            <Label htmlFor="asset-price" value="Nabavna cijena (KM)" />
+            <Label htmlFor="asset-price" value="Purchase price (KM)" />
             <TextInput
               id="asset-price"
               type="number"
@@ -248,7 +248,7 @@ const AssetFormModal: React.FC<AssetFormModalProps> = ({
             />
           </div>
           <div className="sm:col-span-2">
-            <Label htmlFor="asset-note" value="Napomena" />
+            <Label htmlFor="asset-note" value="Note" />
             <Textarea
               id="asset-note"
               rows={2}
@@ -263,7 +263,7 @@ const AssetFormModal: React.FC<AssetFormModalProps> = ({
           <>
             <div className="flex flex-col gap-2">
               <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
-                Status, lokacija, zaduženje
+                Status, location, assignment
               </h4>
               <AssetStatusForm
                 asset={current}
@@ -276,7 +276,7 @@ const AssetFormModal: React.FC<AssetFormModalProps> = ({
             </div>
             <div>
               <h4 className="mb-1 text-sm font-semibold text-gray-900 dark:text-white">
-                Istorija
+                History
               </h4>
               <MovementList movements={movements} />
             </div>
@@ -285,19 +285,19 @@ const AssetFormModal: React.FC<AssetFormModalProps> = ({
       </Modal.Body>
       <Modal.Footer className="flex flex-wrap gap-2">
         <Button type="submit" form="asset-form" disabled={saving}>
-          {current ? 'Sačuvaj podatke' : 'Unesi'}
+          {current ? 'Save details' : 'Create'}
         </Button>
         {current && (
           <Button color="light" onClick={() => onPrintLabel(current)}>
-            Etiketa
+            Label
           </Button>
         )}
         <Button color="gray" onClick={onClose}>
-          Zatvori
+          Close
         </Button>
         {current && currentUser?.role === 'admin' && (
           <Button color="failure" className="ml-auto" onClick={remove}>
-            Obriši
+            Delete
           </Button>
         )}
       </Modal.Footer>

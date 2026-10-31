@@ -51,6 +51,11 @@ const SideBar = () => {
             requiredPermissions: [PermissionEnum.PRODUCT_READ],
           },
           {
+            name: 'Out of stock',
+            href: URLPartsEnum.OutOfStockProducts,
+            requiredPermissions: [PermissionEnum.PRODUCT_READ],
+          },
+          {
             name: 'Add new product',
             href: URLPartsEnum.AddNewProduct,
             requiredPermissions: [PermissionEnum.PRODUCT_WRITE],
@@ -134,7 +139,7 @@ const SideBar = () => {
         ],
       },
       {
-        name: 'Magacin',
+        name: 'Warehouse',
         href: URLPartsEnum.Warehouse,
         icon: FaWarehouse,
         open: false,

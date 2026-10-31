@@ -14,6 +14,7 @@ import { URLPartsEnum } from '@/shared/enums'
 const ROUTE_PERMISSIONS: Record<string, PermissionEnum[]> = {
   [URLPartsEnum.Products]: [PermissionEnum.PRODUCT_READ],
   [URLPartsEnum.AddNewProduct]: [PermissionEnum.PRODUCT_WRITE],
+  [URLPartsEnum.OutOfStockProducts]: [PermissionEnum.PRODUCT_READ],
   [URLPartsEnum.EditProduct]: [PermissionEnum.PRODUCT_WRITE],
   [URLPartsEnum.Categories]: [PermissionEnum.CATEGORY_READ],
   [URLPartsEnum.AddNewCategory]: [PermissionEnum.CATEGORY_WRITE],

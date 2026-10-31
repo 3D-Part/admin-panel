@@ -37,7 +37,7 @@ const UnknownCode: React.FC<UnknownCodeProps> = ({ code, onAssigned }) => {
   const assign = async (product: WarehouseProduct) => {
     const updated = await WarehouseAPI.assignEan(product.id, code)
     if (updated) {
-      toast(`Bar kod ${code} dodijeljen artiklu ${product.code}`, {
+      toast(`Barcode ${code} assigned to product ${product.code}`, {
         type: 'success',
         autoClose: 2500,
       })
@@ -48,23 +48,21 @@ const UnknownCode: React.FC<UnknownCodeProps> = ({ code, onAssigned }) => {
   return (
     <div className="flex flex-col gap-3 p-4 border border-yellow-300 dark:border-yellow-700 rounded-lg bg-yellow-50 dark:bg-yellow-900/20">
       <p className="text-sm text-gray-900 dark:text-white">
-        Ništa nema kod <span className="font-mono font-semibold">{code}</span>.
+        Nothing found for <span className="font-mono font-semibold">{code}</span>.
       </p>
 
       {isInternal ? (
         <p className="text-sm text-gray-600 dark:text-gray-300">
-          Ovo izgleda kao naša šifra, ali takav artikal ili sredstvo ne postoji
-          — možda je obrisan.
+          This looks like our code, but no such product or item exists. It may have been deleted.
         </p>
       ) : (
         <>
           <p className="text-sm text-gray-600 dark:text-gray-300">
-            Ako je ovo bar kod proizvođača, pronađite artikal kojem pripada i
-            sljedeće skeniranje će ga naći odmah.
+            If this is a manufacturer barcode, find the product it belongs to and the next scan will find it right away.
           </p>
           <TextInput
             value={search}
-            placeholder="naziv, šifra ili SKU artikla"
+            placeholder="product name, code or SKU"
             onChange={(e) => setSearch(e.target.value)}
           />
           {results.length > 0 && (
@@ -80,11 +78,11 @@ const UnknownCode: React.FC<UnknownCodeProps> = ({ code, onAssigned }) => {
                   </span>
                   {product.ean && (
                     <span className="text-xs text-gray-500">
-                      ima EAN {product.ean}
+                      has EAN {product.ean}
                     </span>
                   )}
                   <Button size="xs" onClick={() => assign(product)}>
-                    Dodijeli
+                    Assign
                   </Button>
                 </li>
               ))}

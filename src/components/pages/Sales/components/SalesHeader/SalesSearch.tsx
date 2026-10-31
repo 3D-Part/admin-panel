@@ -2,57 +2,41 @@
 
 import { Search } from '@/components/common'
 import { PaginationData } from '@/shared/types'
-import { useCategoryStore, useManufactureStore } from '@/store/store'
+import { useSalesSliceStore } from '@/store/store'
 import { Spinner } from 'flowbite-react'
 import React, { useCallback, useState } from 'react'
 
 const SalesSearch = () => {
   const [loader, setLoader] = useState(false)
 
-  const {
-    itemsPerPage,
-    fetchManufactures,
-    changeCurrentPage,
-    changeManufactureFilter,
-  } = useManufactureStore()
+  const { itemsPerPage, fetchSales, changeCurrentPage, changeSalesFilter } =
+    useSalesSliceStore()
 
-  const fetchCategoriesData = useCallback(
+  const fetchSalesData = useCallback(
     async (value: string) => {
       changeCurrentPage(1)
-
-      const filters = {
+      changeSalesFilter({
         filters: {
           name: {
             like: `%${value}%`,
           },
         },
-      }
-
-      changeManufactureFilter(filters)
+      })
 
       setLoader(true)
       const paginationData: PaginationData = {
         offset: 0,
         limit: itemsPerPage,
       }
-      const data = await fetchManufactures(paginationData)
-      if (data) {
-        setLoader(false)
-      } else {
-        setLoader(true)
-      }
+      await fetchSales(paginationData)
+      setLoader(false)
     },
-    [
-      changeCurrentPage,
-      changeManufactureFilter,
-      fetchManufactures,
-      itemsPerPage,
-    ]
+    [changeCurrentPage, changeSalesFilter, fetchSales, itemsPerPage]
   )
 
   return (
     <div className="flex gap-8 items-center">
-      <Search getData={fetchCategoriesData} />
+      <Search getData={fetchSalesData} />
       {loader && <Spinner aria-label="Loading..." size="lg" />}
     </div>
   )
