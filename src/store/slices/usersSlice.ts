@@ -1,6 +1,7 @@
 import { StateCreator } from 'zustand'
 import { PaginationData, User, UsersData } from '@/shared/types'
 import UsersAPI from '@/services/users'
+import BackofficeAPI from '@/services/backoffice'
 
 export interface UsersSliceInterface {
   allUsers: User[]
@@ -13,6 +14,8 @@ export interface UsersSliceInterface {
   sortFiled: string
   sortOrder: 'ASC' | 'DESC'
   usersFilters: {}
+  disputedOnly: boolean
+  changeDisputedOnly: (data: boolean) => void
   changeActiveUser: (data: User) => void
   changeCurrentPage: (data: number) => void
   changeItemsPerPage: (data: number) => void
@@ -38,6 +41,11 @@ export const usersSlice: StateCreator<UsersSliceInterface> = (set, get) => ({
   sortFiled: 'createdAt',
   sortOrder: 'DESC',
   usersFilters: {},
+  disputedOnly: false,
+
+  changeDisputedOnly: (data: boolean) => {
+    set({ disputedOnly: data })
+  },
 
   changeActiveUser: (data: User) => {
     set({ activeUser: data })
@@ -66,11 +74,18 @@ export const usersSlice: StateCreator<UsersSliceInterface> = (set, get) => ({
     }
 
     try {
-      const data = await UsersAPI.getUsers(
-        sort,
-        paginationData,
-        get().usersFilters
-      )
+      let filters: { filters?: object } = get().usersFilters
+      if (get().disputedOnly) {
+        const emails = await BackofficeAPI.getDisputedCustomers()
+        if (!emails?.length) {
+          set({ currentPageUsers: [], totalPages: 1, count: 0 })
+          return true
+        }
+        filters = {
+          filters: { ...filters.filters, email: { in: emails.join(',') } },
+        }
+      }
+      const data = await UsersAPI.getUsers(sort, paginationData, filters)
       if (data) {
         set({ currentPageUsers: data.rows })
         set({ totalPages: Math.ceil(data.count / get().itemsPerPage) })

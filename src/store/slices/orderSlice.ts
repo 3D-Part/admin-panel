@@ -12,6 +12,8 @@ export interface OrdersSliceInterface {
   sortFiled: string
   sortOrder: 'ASC' | 'DESC'
   orderFilter: object
+  disputedOnly: boolean
+  changeDisputedOnly: (data: boolean) => void
   changeCurrentPage: (data: number) => void
   changeItemsPerPage: (data: number) => void
   changeOrderFilter: (data: object) => void
@@ -30,6 +32,11 @@ export const ordersSlice: StateCreator<OrdersSliceInterface> = (set, get) => ({
   sortFiled: 'createdAt',
   sortOrder: 'DESC',
   orderFilter: {},
+  disputedOnly: false,
+
+  changeDisputedOnly: (data: boolean) => {
+    set({ disputedOnly: data })
+  },
 
   changeCurrentPage: (data: number) => {
     set({ currentPage: data })
@@ -54,10 +61,13 @@ export const ordersSlice: StateCreator<OrdersSliceInterface> = (set, get) => ({
     }
 
     try {
+      const orderFilter = get().orderFilter as { filters?: object }
       const data = await OrdersAPI.getOrders(
         sort,
         paginationData,
-        get().orderFilter
+        get().disputedOnly
+          ? { filters: { ...orderFilter.filters, disputed: { is: true } } }
+          : orderFilter
       )
       if (data) {
         set({ currentPageOrders: data.rows })

@@ -1,14 +1,16 @@
 import { modalRoot } from '@/shared/helpers/modalRoot'
 import dateTimeFormat from '@/shared/helpers/dateTimeFormat'
 import { Order, OrderProduct } from '@/shared/types'
-import { Button, Modal, Badge } from 'flowbite-react'
+import { Button, Modal, Badge, ToggleSwitch } from 'flowbite-react'
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
-import { BackofficeAPI } from '@/services'
+import { BackofficeAPI, OrdersAPI } from '@/services'
 import { CustomerProfileForm } from '@/components/common/CustomerFlag/CustomerFlag'
 import { URLPartsEnum } from '@/shared/enums'
-import { useOrdersStore } from '@/store/store'
+import { useCurrentUserStore, useOrdersStore } from '@/store/store'
+import { hasPermission } from '@/shared/helpers/permissions'
+import { PermissionEnum } from '@/shared/types'
 import OrderEditor from './OrderEditor/OrderEditor'
 
 type OrderDetailsType = {
@@ -101,6 +103,12 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
 }) => {
   const router = useRouter()
   const { fetchOrders, currentPage, itemsPerPage } = useOrdersStore()
+  const { currentUser } = useCurrentUserStore()
+  const hasWritePermission = hasPermission(
+    currentUser?.permissions,
+    PermissionEnum.ORDERS_WRITE,
+    currentUser?.role
+  )
   const [currentOrder, setCurrentOrder] = useState(order)
   const [packing, setPacking] = useState<OrderProduct[] | null>(null)
   const [isEditing, setIsEditing] = useState(false)
@@ -121,6 +129,19 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
       active = false
     }
   }, [isOpen, currentOrder])
+
+  const changeDisputed = async (disputed: boolean) => {
+    const updated = await OrdersAPI.orderSetDisputed(currentOrder.id, disputed)
+    if (!updated) {
+      toast('Could not save', { type: 'error', autoClose: 2000 })
+      return
+    }
+    setCurrentOrder({ ...currentOrder, disputed })
+    fetchOrders({
+      offset: (currentPage - 1) * itemsPerPage,
+      limit: itemsPerPage,
+    })
+  }
 
   const createProforma = async () => {
     const proforma = await BackofficeAPI.createProformaFromOrder(currentOrder.id)
@@ -345,6 +366,13 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
             </div>
           </div>
         )}
+
+        <ToggleSwitch
+          checked={Boolean(currentOrder.disputed)}
+          disabled={!hasWritePermission}
+          label="Disputed order (only this one, not the customer's other orders)"
+          onChange={changeDisputed}
+        />
 
         {currentOrder.email && <CustomerProfileForm email={currentOrder.email} />}
 

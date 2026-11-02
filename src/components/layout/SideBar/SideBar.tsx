@@ -29,6 +29,8 @@ const FIRST_TAB: Record<string, string> = {
   [URLPartsEnum.ActionsNeeded]: 'actions',
 }
 
+const OPEN_GROUPS_KEY = 'sidebarOpenGroups'
+
 const SideBar = () => {
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -368,6 +370,41 @@ const SideBar = () => {
 
   const menuItems = getFilteredMenuItems()
 
+  // The group of the current page opens by itself, the rest stay as last left
+  const [openGroups, setOpenGroups] = useState<string[]>([])
+  const currentGroup = menuItems.find((menuItem) =>
+    menuItem.children?.some((child) => child.href.split(/[?#]/)[0] === pathname)
+  )?.name
+
+  const saveOpenGroups = (groups: string[]) => {
+    setOpenGroups(groups)
+    try {
+      localStorage.setItem(OPEN_GROUPS_KEY, JSON.stringify(groups))
+    } catch {}
+  }
+
+  useEffect(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem(OPEN_GROUPS_KEY) ?? '[]')
+      if (Array.isArray(saved)) setOpenGroups(saved)
+    } catch {}
+  }, [])
+
+  useEffect(() => {
+    if (currentGroup) {
+      setOpenGroups((groups) =>
+        groups.includes(currentGroup) ? groups : [...groups, currentGroup]
+      )
+    }
+  }, [currentGroup, pathname])
+
+  const toggleGroup = (name: string) =>
+    saveOpenGroups(
+      openGroups.includes(name)
+        ? openGroups.filter((group) => group !== name)
+        : [...openGroups, name]
+    )
+
   const isActive = (href: string) => {
     const [path, section] = href.split('#')
     const [route, query] = path.split('?')
@@ -398,8 +435,8 @@ const SideBar = () => {
                   <Sidebar.Collapse
                     key={menuItem.name}
                     icon={menuItem.icon}
-                    // all open, so everything is visible without digging
-                    open
+                    open={openGroups.includes(menuItem.name)}
+                    onClick={() => toggleGroup(menuItem.name)}
                     label={menuItem.name}
                   >
                     {menuItem.children.map((item) => {

@@ -317,6 +317,7 @@ export interface Order {
   points: number
   user: User
   internalNote?: string | null
+  disputed?: boolean
   statusChangedAt?: string | null
   hasBackorder?: boolean
 }

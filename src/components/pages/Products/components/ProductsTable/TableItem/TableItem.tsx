@@ -158,6 +158,21 @@ export const TableItem: React.FC<TableItemType> = ({
   return (
     <>
       <Table.Row className="table-row">
+        <Table.Cell className="table-cell w-1/12">
+          <div className="flex flex-col items-start gap-1">
+            <ToggleSwitch
+              disabled={!hasWritePermission}
+              checked={published}
+              label={published ? 'Published' : 'Hidden'}
+              onChange={togglePublished}
+            />
+            {product.productOnSale.length > 0 && (
+              <Badge color="failure" className="w-fit">
+                On sale
+              </Badge>
+            )}
+          </div>
+        </Table.Cell>
         <Table.Cell className="font-medium table-cell w-1/3">
           <div className="flex justify-start items-center gap-3 min-w-[220px]">
             <button
@@ -241,21 +256,6 @@ export const TableItem: React.FC<TableItemType> = ({
             editable={hasWritePermission}
             onSave={(value) => saveField({ sku: value })}
           />
-        </Table.Cell>
-        <Table.Cell className="table-cell w-1/12">
-          <div className="flex flex-col items-start gap-1">
-            <ToggleSwitch
-              disabled={!hasWritePermission}
-              checked={published}
-              label={published ? 'Published' : 'Hidden'}
-              onChange={togglePublished}
-            />
-            {product.productOnSale.length > 0 && (
-              <Badge color="failure" className="w-fit">
-                On sale
-              </Badge>
-            )}
-          </div>
         </Table.Cell>
         <Table.Cell className="table-cell w-1/12">
           <InlineNumber

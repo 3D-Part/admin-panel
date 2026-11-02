@@ -1,22 +1,26 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { Button, Label, Select, Textarea } from 'flowbite-react'
+import { Badge, Button, Label, Select, Textarea } from 'flowbite-react'
 import { toast } from 'react-toastify'
 import { BackofficeAPI } from '@/services'
-import { CustomerFlag, CustomerProfile } from '@/services/backoffice'
+import { CustomerFlag, CustomerProfile, DisputedFlag } from '@/services/backoffice'
 
-const FLAG_COLOR: Record<CustomerFlag, string> = {
-  RED: 'bg-red-500',
-  BLUE: 'bg-blue-500',
-  GREEN: 'bg-green-500',
+const DISPUTED_REASONS: Record<DisputedFlag, string> = {
+  NO_PICKUP: 'Did not collect the order',
+  LATE_PAY: 'Late or missing payment',
+  COMPLAINTS: 'Too many complaints',
+  ABUSIVE: 'Abusive behaviour',
+  OTHER: 'Other reason',
 }
 
-const FLAG_LABEL: Record<CustomerFlag, string> = {
-  RED: 'Red: difficult customer',
-  BLUE: 'Blue: needs attention',
-  GREEN: 'Green: good customer',
+const OTHER_FLAGS = {
+  BLUE: { label: 'Needs attention', color: 'bg-blue-500' },
+  GREEN: { label: 'Good customer', color: 'bg-green-500' },
 }
+
+const isDisputed = (flag: CustomerFlag): flag is DisputedFlag =>
+  flag in DISPUTED_REASONS
 
 export const useCustomerProfiles = (emails: string[]) => {
   const [profiles, setProfiles] = useState<Record<string, CustomerProfile>>({})
@@ -37,20 +41,23 @@ export const CustomerFlagBadge: React.FC<{ profile?: CustomerProfile }> = ({
 }) => {
   if (!profile || (!profile.flag && !profile.note)) return null
 
+  const flag = profile.flag
+  const flagLabel = !flag
+    ? ''
+    : isDisputed(flag)
+    ? `Disputed: ${DISPUTED_REASONS[flag]}`
+    : OTHER_FLAGS[flag].label
+
   return (
     <span
-      title={[
-        profile.flag ? FLAG_LABEL[profile.flag] : '',
-        profile.note || '',
-      ]
-        .filter(Boolean)
-        .join('\n')}
+      title={[flagLabel, profile.note || ''].filter(Boolean).join('\n')}
       className="flex items-center gap-1 shrink-0"
     >
-      {profile.flag && (
+      {flag && isDisputed(flag) && <Badge color="failure">Disputed</Badge>}
+      {flag && !isDisputed(flag) && (
         <span
-          aria-label={FLAG_LABEL[profile.flag]}
-          className={`w-3 h-3 rounded-full ${FLAG_COLOR[profile.flag]}`}
+          aria-label={flagLabel}
+          className={`w-3 h-3 rounded-full ${OTHER_FLAGS[flag].color}`}
         />
       )}
       {profile.note && (
@@ -89,18 +96,29 @@ export const CustomerProfileForm: React.FC<{ email: string }> = ({ email }) => {
   return (
     <div className="w-full p-4 rounded-lg border border-gray-200 dark:border-gray-700 space-y-3">
       <div>
-        <Label htmlFor="customer-flag" value="Customer flag (staff only)" />
+        <Label htmlFor="customer-flag" value="Customer status (staff only)" />
         <Select
           id="customer-flag"
           value={flag}
           onChange={(e) => setFlag(e.target.value as CustomerFlag | '')}
         >
-          <option value="">No flag</option>
-          {(Object.keys(FLAG_LABEL) as CustomerFlag[]).map((value) => (
-            <option key={value} value={value}>
-              {FLAG_LABEL[value]}
-            </option>
-          ))}
+          <option value="">No status</option>
+          <optgroup label="Disputed customer, reason:">
+            {(Object.keys(DISPUTED_REASONS) as DisputedFlag[]).map((value) => (
+              <option key={value} value={value}>
+                {DISPUTED_REASONS[value]}
+              </option>
+            ))}
+          </optgroup>
+          <optgroup label="Other">
+            {(Object.keys(OTHER_FLAGS) as (keyof typeof OTHER_FLAGS)[]).map(
+              (value) => (
+                <option key={value} value={value}>
+                  {OTHER_FLAGS[value].label}
+                </option>
+              )
+            )}
+          </optgroup>
         </Select>
       </div>
       <div>

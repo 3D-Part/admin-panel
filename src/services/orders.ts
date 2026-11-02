@@ -110,6 +110,21 @@ const orderUpdateNote = async (
   }
 }
 
+const orderSetDisputed = async (
+  id: string,
+  disputed: boolean
+): Promise<any | null> => {
+  try {
+    const data: any = await API.patch(`${API_BASE_URL}/order/${id}/disputed`, {
+      disputed,
+    })
+    return data
+  } catch (error) {
+    console.error('Error saving disputed order:', error)
+    return null
+  }
+}
+
 const orderStatusHistory = async (id: string): Promise<any | null> => {
   try {
     const data: any = await API.get(`${API_BASE_URL}/order/${id}/history`)
@@ -144,6 +159,7 @@ const OrdersAPI = {
   orderFinish,
   orderSetStatus,
   orderUpdateNote,
+  orderSetDisputed,
   orderStatusHistory,
   orderContactMessage,
 }

@@ -237,6 +237,10 @@ const GeneralInfo = () => {
           type="text"
           defaultValue={activeProduct.sku}
         />
+        <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+          Your product number, for example 230012. The internal code (P000895)
+          is created automatically and the barcode (EAN) is added in Warehouse.
+        </p>
       </div>
       {/* PRICE */}
       <div className="w-full">

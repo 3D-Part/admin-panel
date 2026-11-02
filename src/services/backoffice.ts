@@ -3,7 +3,13 @@ import { API } from '@/shared/helpers'
 const API_BASE_URL = process.env.API_KEY
 const BASE = `${API_BASE_URL}/backoffice`
 
-export type CustomerFlag = 'RED' | 'BLUE' | 'GREEN'
+export type DisputedFlag =
+  | 'NO_PICKUP'
+  | 'LATE_PAY'
+  | 'COMPLAINTS'
+  | 'ABUSIVE'
+  | 'OTHER'
+export type CustomerFlag = DisputedFlag | 'BLUE' | 'GREEN'
 export type CustomerProfile = { flag: CustomerFlag | null; note: string | null }
 
 export type AnalyticsRow = {
@@ -85,6 +91,7 @@ export type Proforma = {
   total: string
   note: string | null
   validUntil: string | null
+  sentAt: string | null
   createdAt: string
 }
 
@@ -157,6 +164,8 @@ const BackofficeAPI = {
         emails: emails.join(','),
       })
     ),
+  getDisputedCustomers: () =>
+    attempt(() => API.get<string[]>(`${BASE}/customers/disputed`)),
   saveCustomerProfile: (body: {
     email: string
     flag: CustomerFlag | null
@@ -178,6 +187,8 @@ const BackofficeAPI = {
     ),
   updateProforma: (id: string, body: ProformaBody) =>
     attempt(() => API.put<ProformaBody, Proforma>(`${BASE}/proformas/${id}`, body)),
+  sendProforma: (id: string) =>
+    attempt(() => API.post<unknown, Proforma>(`${BASE}/proformas/${id}/send`, {})),
   deleteProforma: (id: string) =>
     attempt(() => API.remove<unknown>(`${BASE}/proformas/${id}`)),
 }

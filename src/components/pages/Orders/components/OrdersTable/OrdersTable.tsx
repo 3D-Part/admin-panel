@@ -3,7 +3,6 @@
 import { Pagination, Table } from 'flowbite-react'
 import React, { useCallback, useEffect, useState } from 'react'
 import { TableItem } from './TableItem/TableItem'
-import { useCustomerProfiles } from '@/components/common/CustomerFlag/CustomerFlag'
 import { useOrdersStore, useCurrentUserStore } from '@/store/store'
 import {
   Loader,
@@ -65,8 +64,6 @@ export const OrdersTable = () => {
       setLoader(true)
     }
   }, [currentPage, fetchOrders, itemsPerPage])
-
-  const profiles = useCustomerProfiles(currentPageOrders.map((o) => o.email))
 
   const loaderBg =
     currentPageOrders.length > 0
@@ -229,7 +226,6 @@ export const OrdersTable = () => {
                     <TableItem
                       key={order.id}
                       order={order}
-                      profile={profiles[order.email?.toLowerCase()]}
                     />
                   )
                 })}

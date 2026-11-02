@@ -107,15 +107,18 @@ const ProformaModal: React.FC<{
   const [validUntil, setValidUntil] = useState(proforma?.validUntil ?? '')
   const [search, setSearch] = useState('')
   const [results, setResults] = useState<WarehouseProduct[]>([])
+  const [searched, setSearched] = useState(false)
   const [saving, setSaving] = useState(false)
 
   useEffect(() => {
+    setSearched(false)
     if (search.trim().length < 2) {
       setResults([])
       return
     }
     const timeout = setTimeout(async () => {
-      setResults(await WarehouseAPI.searchProducts(search, 8))
+      setResults(await WarehouseAPI.searchProducts(search, 20))
+      setSearched(true)
     }, 300)
     return () => clearTimeout(timeout)
   }, [search])
@@ -168,7 +171,8 @@ const ProformaModal: React.FC<{
       <Modal.Header>
         {proforma ? `Proforma ${proforma.number}` : 'New proforma'}
       </Modal.Header>
-      <Modal.Body className="space-y-6">
+      {/* long forms scroll inside the window, so search results stay reachable */}
+      <Modal.Body className="space-y-6 max-h-[70vh] overflow-y-auto">
         <div className="grid gap-3 sm:grid-cols-3">
           {CUSTOMER_FIELDS.map((field) => (
             <div key={field.name}>
@@ -191,7 +195,7 @@ const ProformaModal: React.FC<{
             onChange={(e) => setSearch(e.target.value)}
           />
           {results.length > 0 && (
-            <ul className="divide-y divide-gray-200 dark:divide-gray-700 rounded border border-gray-200 dark:border-gray-700">
+            <ul className="max-h-60 overflow-y-auto divide-y divide-gray-200 dark:divide-gray-700 rounded border border-gray-200 dark:border-gray-700">
               {results.map((product) => (
                 <li key={product.id}>
                   <button
@@ -213,12 +217,17 @@ const ProformaModal: React.FC<{
                   >
                     {product.name}{' '}
                     <span className="text-gray-500">
-                      {Number(product.price).toFixed(2)} KM
+                      {product.sku} · {Number(product.price).toFixed(2)} KM
                     </span>
                   </button>
                 </li>
               ))}
             </ul>
+          )}
+          {searched && results.length === 0 && (
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              No product found for &quot;{search.trim()}&quot;
+            </p>
           )}
           <Button
             size="xs"
@@ -369,6 +378,22 @@ const Proformas = () => {
     return () => clearTimeout(timeout)
   }, [load])
 
+  const send = async (proforma: Proforma) => {
+    const email = proforma.customer?.email?.trim()
+    if (!email) {
+      toast('Add the customer email first', { type: 'error', autoClose: 3000 })
+      return
+    }
+    if (!window.confirm(`Send ${proforma.number} to ${email}?`)) return
+    const sent = await BackofficeAPI.sendProforma(proforma.id)
+    if (sent) {
+      toast(`Sent to ${email}`, { type: 'success', autoClose: 2000 })
+      load()
+    } else {
+      toast('Could not send the email', { type: 'error', autoClose: 3000 })
+    }
+  }
+
   const remove = async (proforma: Proforma) => {
     if (!window.confirm(`Delete ${proforma.number}?`)) return
     await BackofficeAPI.deleteProforma(proforma.id)
@@ -401,6 +426,7 @@ const Proformas = () => {
             <Table.HeadCell>Customer</Table.HeadCell>
             <Table.HeadCell>Date</Table.HeadCell>
             <Table.HeadCell>Total</Table.HeadCell>
+            <Table.HeadCell>Sent</Table.HeadCell>
             <Table.HeadCell>
               <span className="sr-only">Actions</span>
             </Table.HeadCell>
@@ -422,7 +448,15 @@ const Proformas = () => {
                 </Table.Cell>
                 <Table.Cell>{Number(proforma.total).toFixed(2)} KM</Table.Cell>
                 <Table.Cell>
+                  {proforma.sentAt
+                    ? new Date(proforma.sentAt).toLocaleDateString('en-GB')
+                    : 'Not sent'}
+                </Table.Cell>
+                <Table.Cell>
                   <div className="flex justify-end gap-2">
+                    <Button size="xs" color="purple" onClick={() => send(proforma)}>
+                      {proforma.sentAt ? 'Send again' : 'Send'}
+                    </Button>
                     <Button size="xs" color="light" onClick={() => printProforma(proforma)}>
                       Print
                     </Button>

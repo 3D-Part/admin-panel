@@ -1,5 +1,3 @@
-import { CustomerFlagBadge } from '@/components/common/CustomerFlag/CustomerFlag'
-import { CustomerProfile } from '@/services/backoffice'
 import { Order } from '@/shared/types'
 import { Badge, Table } from 'flowbite-react'
 import React, { useState } from 'react'
@@ -14,10 +12,9 @@ import { PermissionEnum } from '@/shared/types'
 
 type TableItemType = {
   order: Order
-  profile?: CustomerProfile
 }
 
-export const TableItem: React.FC<TableItemType> = ({ order, profile }) => {
+export const TableItem: React.FC<TableItemType> = ({ order }) => {
   const {
     fullName,
     email,
@@ -74,7 +71,11 @@ export const TableItem: React.FC<TableItemType> = ({ order, profile }) => {
               )}
               <span>{fullName}</span>
             </div>
-            <CustomerFlagBadge profile={profile} />
+            {order.disputed && (
+              <Badge color="failure" className="shrink-0">
+                Disputed
+              </Badge>
+            )}
             {internalNote && (
               <span
                 title={internalNote}
