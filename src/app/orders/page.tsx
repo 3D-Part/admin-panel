@@ -1,8 +1,13 @@
 import Orders from '@/components/pages/Orders/Orders'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 const OrdersPage = () => {
-  return <Orders />
+  // ?view=offers is read on the client
+  return (
+    <Suspense>
+      <Orders />
+    </Suspense>
+  )
 }
 
 export default OrdersPage

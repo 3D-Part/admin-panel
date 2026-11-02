@@ -17,6 +17,7 @@ import { toast } from 'react-toastify'
 import { BackofficeAPI, WarehouseAPI } from '@/services'
 import { Proforma, ProformaBody, ProformaItem } from '@/services/backoffice'
 import { WarehouseProduct } from '@/shared/types/warehouse'
+import { useShopSettingsStore } from '@/store/store'
 
 const PAGE_SIZE = 15
 
@@ -41,7 +42,7 @@ const escapeHtml = (value: unknown) =>
       ] as string
   )
 
-const printProforma = (proforma: Proforma) => {
+const printProforma = (proforma: Proforma, seller: Record<string, string>) => {
   const customer = proforma.customer || {}
   const rows = proforma.items
     .map(
@@ -72,7 +73,11 @@ const printProforma = (proforma: Proforma) => {
     <h1>Predračun ${escapeHtml(proforma.number)}</h1>
     <p>Datum: ${new Date(proforma.createdAt).toLocaleDateString('bs-BA')}
     ${proforma.validUntil ? `<br/>Važi do: ${new Date(proforma.validUntil).toLocaleDateString('bs-BA')}` : ''}</p>
-    <p>${[customer.companyName, customer.jib && `JIB: ${customer.jib}`, customer.companyPdv && `PDV: ${customer.companyPdv}`, customer.fullName, customer.street, [customer.postCode, customer.city].filter(Boolean).join(' '), customer.email, customer.phone]
+    <p><strong>Izdao:</strong> 3D Part${[seller.address, seller.town, seller.phone && `Tel: ${seller.phone}`, seller.bankAccount && `Žiro račun: ${seller.bankAccount}`]
+      .filter(Boolean)
+      .map((line) => `<br/>${escapeHtml(line)}`)
+      .join('')}</p>
+    <p><strong>Kupac:</strong><br/>${[customer.companyName, customer.jib && `JIB: ${customer.jib}`, customer.companyPdv && `PDV: ${customer.companyPdv}`, customer.fullName, customer.street, [customer.postCode, customer.city].filter(Boolean).join(' '), customer.email, customer.phone]
       .filter(Boolean)
       .map(escapeHtml)
       .join('<br/>')}</p>
@@ -345,6 +350,15 @@ const ProformaModal: React.FC<{
 }
 
 const Proformas = () => {
+  const { getShopSettings } = useShopSettingsStore()
+  const [seller, setSeller] = useState<Record<string, string>>({})
+
+  useEffect(() => {
+    getShopSettings().then((data) =>
+      setSeller((data?.settings as any)?.company ?? {})
+    )
+  }, [getShopSettings])
+
   const [rows, setRows] = useState<Proforma[]>([])
   const [count, setCount] = useState(0)
   const [page, setPage] = useState(1)
@@ -457,7 +471,7 @@ const Proformas = () => {
                     <Button size="xs" color="purple" onClick={() => send(proforma)}>
                       {proforma.sentAt ? 'Send again' : 'Send'}
                     </Button>
-                    <Button size="xs" color="light" onClick={() => printProforma(proforma)}>
+                    <Button size="xs" color="light" onClick={() => printProforma(proforma, seller)}>
                       Print
                     </Button>
                     <Button size="xs" color="gray" onClick={() => setEditing(proforma)}>

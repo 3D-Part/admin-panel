@@ -1,7 +1,8 @@
 'use client'
 import { modalRoot } from '@/shared/helpers/modalRoot'
 
-import isoToDatetimeLocal from '@/shared/helpers/isoToDatetimeLocal'
+import isoToDatetimeLocal, { datetimeLocalToIso } from '@/shared/helpers/isoToDatetimeLocal'
+import SaleProductSearch from './SaleProductSearch'
 import { PaginationData, SalesFormData } from '@/shared/types'
 import { useSalesSliceStore, useUISliceStore } from '@/store/store'
 import { Button, Label, Modal, TextInput } from 'flowbite-react'
@@ -68,7 +69,11 @@ const EditSaleModal = () => {
 
     setLoading(true)
 
-    const response = await editSale(activeSale.id, salesDataRef.current)
+    const response = await editSale(activeSale.id, {
+      ...salesDataRef.current,
+      startsAt: datetimeLocalToIso(salesDataRef.current.startsAt),
+      endsAt: datetimeLocalToIso(salesDataRef.current.endsAt),
+    })
 
     if (response) {
       toast('Sale is updated', {
@@ -269,6 +274,8 @@ const EditSaleModal = () => {
               </div>
             </div>
           </div>
+
+          <SaleProductSearch />
 
           {/* Products on Sale */}
           {activeSale && activeSale?.productOnSale?.length > 0 && (

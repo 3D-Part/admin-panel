@@ -20,9 +20,15 @@ export type PageImage = {
 const S3_URL = process.env.S3_URL
 
 const PageImages: React.FC<{
+  scope: 'home' | 'pages'
   value: PageImage[]
   onChange: (value: PageImage[]) => void
-}> = ({ value, onChange }) => {
+}> = ({ scope, value, onChange }) => {
+  // the list holds both kinds, each tab shows and adds its own
+  const images = value.filter((image) =>
+    scope === 'home' ? image.page === 'home' : image.page !== 'home'
+  )
+
   const { fetchAllCategories, allCategories } = useCategoryStore()
   const { getS3FormData } = useS3ManagerStore()
   const [uploading, setUploading] = useState(false)
@@ -61,7 +67,7 @@ const PageImages: React.FC<{
     return { color: 'success', text: `Active on ${pageLabel(image.page)}` }
   }
 
-  const activeImages = value.filter((image) => image.active && image.desktop)
+  const activeImages = images.filter((image) => image.active && image.desktop)
 
   const upload = async (file: File): Promise<string | null> => {
     const s3Data = await getS3FormData()
@@ -96,7 +102,7 @@ const PageImages: React.FC<{
     <div className="space-y-4">
       <div className="p-3 text-sm rounded bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white">
         <p className="font-semibold mb-1">
-          Active images: {activeImages.length} of {value.length}
+          Active images: {activeImages.length} of {images.length}
         </p>
         {activeImages.map((image) => (
           <p key={image.id}>
@@ -107,7 +113,7 @@ const PageImages: React.FC<{
           Changes reach the site after Save Settings.
         </p>
       </div>
-      {value.map((image) => (
+      {images.map((image) => (
         <div
           key={image.id}
           className="grid gap-3 sm:grid-cols-2 p-3 border border-gray-200 dark:border-gray-700 rounded"
@@ -115,24 +121,25 @@ const PageImages: React.FC<{
           <div className="sm:col-span-2 flex">
             <Badge color={status(image).color}>{status(image).text}</Badge>
           </div>
-          <div>
-            <Label htmlFor={`page-${image.id}`} value="Page" />
-            <Select
-              id={`page-${image.id}`}
-              value={image.page}
-              onChange={(e) => change(image.id, { page: e.target.value })}
-            >
-              <option value="home">Home page</option>
-              <option value="shop">All shop pages</option>
-              <option value="all">All products</option>
-              <option value="product">All product pages</option>
-              {allCategories.map((category) => (
-                <option key={category.id} value={`category:${category.slug}`}>
-                  Category: {category.name}
-                </option>
-              ))}
-            </Select>
-          </div>
+          {scope === 'pages' && (
+            <div>
+              <Label htmlFor={`page-${image.id}`} value="Page" />
+              <Select
+                id={`page-${image.id}`}
+                value={image.page}
+                onChange={(e) => change(image.id, { page: e.target.value })}
+              >
+                <option value="shop">All shop pages</option>
+                <option value="all">All products</option>
+                <option value="product">All product pages</option>
+                {allCategories.map((category) => (
+                  <option key={category.id} value={`category:${category.slug}`}>
+                    Category: {category.name}
+                  </option>
+                ))}
+              </Select>
+            </div>
+          )}
           <div>
             <Label htmlFor={`link-${image.id}`} value="Link when clicked (optional)" />
             <TextInput
@@ -206,7 +213,7 @@ const PageImages: React.FC<{
             ...value,
             {
               id: `${Date.now()}`,
-              page: 'home',
+              page: scope === 'home' ? 'home' : 'all',
               desktop: '',
               mobile: '',
               alt: '',

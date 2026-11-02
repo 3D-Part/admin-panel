@@ -2,6 +2,7 @@
 import { modalRoot } from '@/shared/helpers/modalRoot'
 import { CustomerProfileForm } from '@/components/common/CustomerFlag/CustomerFlag'
 
+import getOrderStatusLabel from '@/shared/helpers/getOrderStatusLabel'
 import OrderDetails from '@/components/pages/Orders/components/OrderDetails'
 import { User, Order } from '@/shared/types'
 import { Button, Modal, Table, TextInput, Label, Select } from 'flowbite-react'
@@ -51,7 +52,7 @@ const OrderWrapper: React.FC<OrderWrapperType> = ({ order, onClick }) => {
       <Table.Cell className="cursor-pointer">{orderNumber}</Table.Cell>
       <Table.Cell>{price}</Table.Cell>
       <Table.Cell>{products.length}</Table.Cell>
-      <Table.Cell>{status}</Table.Cell>
+      <Table.Cell>{getOrderStatusLabel(status)}</Table.Cell>
       <Table.Cell>{total}KM</Table.Cell>
     </Table.Row>
   )
@@ -74,6 +75,19 @@ const UserDetails: React.FC<UserDetailsType> = ({
   const [activeOrder, setActiveOrder] = useState<Order>({} as Order)
   const discountRef = useRef<HTMLInputElement>(null)
   const [isUpdating, setIsUpdating] = useState(false)
+  const [isSendingReset, setIsSendingReset] = useState(false)
+
+  const sendPasswordReset = async () => {
+    setIsSendingReset(true)
+    const sent = await UsersAPI.sendPasswordResetEmail(user.email)
+    setIsSendingReset(false)
+    toast(
+      sent
+        ? `Email sent to ${user.email}. The customer picks the new password.`
+        : 'The email could not be sent',
+      { type: sent ? 'success' : 'error', autoClose: 3000 }
+    )
+  }
 
   const {
     id,
@@ -280,7 +294,15 @@ const UserDetails: React.FC<UserDetailsType> = ({
             </div>
           )}
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer className="justify-between">
+          <Button
+            color="gray"
+            disabled={isSendingReset}
+            isProcessing={isSendingReset}
+            onClick={sendPasswordReset}
+          >
+            Send password reset email
+          </Button>
           <Button onClick={onClose}>Close</Button>
         </Modal.Footer>
       </Modal>

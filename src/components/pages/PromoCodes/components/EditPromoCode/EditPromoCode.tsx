@@ -9,7 +9,7 @@ import { toast } from 'react-toastify'
 import { Loader } from '@/components/common'
 import PromoCategories from '@/components/pages/PromoCodes/components/PromoCategories/PromoCategories'
 import PromoCodeHeader from '../AddEditPromoCodeHedaer/Header'
-import isoToDatetimeLocal from '@/shared/helpers/isoToDatetimeLocal'
+import isoToDatetimeLocal, { datetimeLocalToIso } from '@/shared/helpers/isoToDatetimeLocal'
 import AssignUsers from './components/AssignUsers/AssignUsers'
 
 const EditPromoCode: React.FC = () => {
@@ -51,8 +51,8 @@ const EditPromoCode: React.FC = () => {
 
     const _promoCode: PromoCodeFormBody = {
       code: promoCodeDataRef.current.code,
-      startsAt: promoCodeDataRef.current.startsAt,
-      endsAt: promoCodeDataRef.current.endsAt,
+      startsAt: datetimeLocalToIso(promoCodeDataRef.current.startsAt),
+      endsAt: datetimeLocalToIso(promoCodeDataRef.current.endsAt),
       discountPercentage: promoCodeDataRef.current.discountPercentage,
       categoryIds,
     }

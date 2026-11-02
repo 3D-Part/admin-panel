@@ -7,13 +7,15 @@ import { OrderStatusEnum } from '../enums'
 const orderStatusLabels: Record<string, string> = {
   [OrderStatusEnum.Pending]: 'New',
   [OrderStatusEnum.Accepted]: 'Accepted',
-  [OrderStatusEnum.ProformaSent]: 'Proforma sent',
-  [OrderStatusEnum.Shipping]: 'Packing',
+  [OrderStatusEnum.ProformaSent]: 'Offer',
+  [OrderStatusEnum.Preparing]: 'In preparation',
+  [OrderStatusEnum.Shipping]: 'In delivery',
+  [OrderStatusEnum.ReadyForPickup]: 'Ready for pickup',
   [OrderStatusEnum.InvoiceIssued]: 'Receipt issued',
   [OrderStatusEnum.AwaitingPayment]: 'Awaiting payment',
   [OrderStatusEnum.Paid]: 'Paid',
   [OrderStatusEnum.InvoiceSent]: 'Invoice sent',
-  [OrderStatusEnum.Finished]: 'Finished',
+  [OrderStatusEnum.Finished]: 'Receipt issued',
   [OrderStatusEnum.Returned]: 'Returned',
   [OrderStatusEnum.Declined]: 'Cancelled',
 }

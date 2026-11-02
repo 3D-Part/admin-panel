@@ -1,7 +1,7 @@
 'use client'
 import { modalRoot } from '@/shared/helpers/modalRoot'
 
-import { ORDER_STATUS_FLOW, OrderStatusEnum } from '@/shared/enums'
+import { ORDER_STATUS_EMAILS, ORDER_STATUS_FLOW, OrderStatusEnum } from '@/shared/enums'
 import executeOrderAction from '@/shared/helpers/executeOrderAction'
 import getOrderStatusStyle from '@/shared/helpers/getOrderStatusStyle'
 import getOrderStatusLabel from '@/shared/helpers/getOrderStatusLabel'
@@ -164,6 +164,17 @@ const OrderEditModal: React.FC<ModalType> = ({
                       )
                     })}
                   </Dropdown>
+                  <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                    You can move an order to any status, also back. Stock follows
+                    by itself: New, Offer, Returned and Cancelled hold no stock,
+                    every other status does.
+                  </p>
+                  {activeStatus !== initialValue?.status &&
+                    ORDER_STATUS_EMAILS[activeStatus as OrderStatusEnum] && (
+                      <p className="mt-1 text-sm font-medium text-amber-600 dark:text-amber-400">
+                        {ORDER_STATUS_EMAILS[activeStatus as OrderStatusEnum]}
+                      </p>
+                    )}
                 </div>
               </div>
             </div>

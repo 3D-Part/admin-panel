@@ -57,6 +57,7 @@ export type ActionNeeded = {
   purchasePrice: number | null
   soldQuantity: number
   reason: string
+  note: string | null
 }
 
 export type StockAlert = {
@@ -67,6 +68,7 @@ export type StockAlert = {
   quantity: number
   lowStockWarning: number | null
   lowStockCritical: number | null
+  note: string | null
   level: 'warning' | 'critical'
 }
 
@@ -139,6 +141,10 @@ const BackofficeAPI = {
   setProductCost: (id: string, purchasePrice: number | null) =>
     attempt(() =>
       API.put<unknown, unknown>(`${BASE}/products/${id}/cost`, { purchasePrice })
+    ),
+  setProductNote: (id: string, note: string) =>
+    attempt(() =>
+      API.put<unknown, unknown>(`${BASE}/products/${id}/note`, { note })
     ),
   getProductCategories: (id: string) =>
     attempt(() => API.get<string[]>(`${BASE}/products/${id}/categories`)),

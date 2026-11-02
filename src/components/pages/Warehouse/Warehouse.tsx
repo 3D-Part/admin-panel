@@ -13,6 +13,10 @@ import History from './components/History'
 const TABS = ['scanner', 'inventory', 'labels', 'history'] as const
 type TabId = (typeof TABS)[number]
 
+const TabHelp: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <p className="mb-4 text-sm text-gray-500 dark:text-gray-400">{children}</p>
+)
+
 const Warehouse = () => {
   const router = useRouter()
   const pathname = usePathname()
@@ -48,12 +52,18 @@ const Warehouse = () => {
             title: 'Scanner',
             icon: HiQrcode,
             content: (
+              <>
+              <TabHelp>
+                Goods arrived or left? Scan the barcode (or type it), then add or
+                remove pieces. The site stock changes right away.
+              </TabHelp>
               <Scanner
                 onPrintProduct={(product: WarehouseProduct) =>
                   addLabels([productLabel(product)])
                 }
                 onPrintAsset={(asset: Asset) => addLabels([assetLabel(asset)])}
               />
+              </>
             ),
           },
           {
@@ -61,22 +71,44 @@ const Warehouse = () => {
             title: 'Inventory',
             icon: HiCube,
             content: (
+              <>
+              <TabHelp>
+                Things the shop owns and does not sell, such as printers and
+                tools. Products for sale are not here, they are in Products.
+              </TabHelp>
               <Assets
                 onPrintLabels={(assets) => addLabels(assets.map(assetLabel))}
               />
+              </>
             ),
           },
           {
             id: 'labels',
             title: 'Labels',
             icon: HiTag,
-            content: <Labels items={labelItems} setItems={setLabelItems} />,
+            content: (
+              <>
+                <TabHelp>
+                  Print barcode stickers. Add items from Scanner or Inventory,
+                  choose the sticker size and print.
+                </TabHelp>
+                <Labels items={labelItems} setItems={setLabelItems} />
+              </>
+            ),
           },
           {
             id: 'history',
             title: 'History',
             icon: HiClipboardList,
-            content: <History />,
+            content: (
+              <>
+                <TabHelp>
+                  Every stock change, who made it and why. Nothing to do here,
+                  look here when a number does not add up.
+                </TabHelp>
+                <History />
+              </>
+            ),
           },
         ]}
       />

@@ -26,6 +26,7 @@ export enum URLPartsEnum {
   Users = '/users',
 
   Subscribers = '/subscribers',
+  Guide = '/guide',
 
   PromoCodes = '/promocodes',
   AddNewPromoCode = '/promocodes/add-new',
@@ -59,7 +60,9 @@ export enum OrderStatusEnum {
   Pending = 'PENDING',
   Accepted = 'ACCEPTED',
   ProformaSent = 'PROFORMA_SENT',
+  Preparing = 'PREPARING',
   Shipping = 'SHIPPING',
+  ReadyForPickup = 'READY_FOR_PICKUP',
   InvoiceIssued = 'INVOICE_ISSUED',
   AwaitingPayment = 'AWAITING_PAYMENT',
   Paid = 'PAID',
@@ -69,18 +72,28 @@ export enum OrderStatusEnum {
   Declined = 'DECLINED',
 }
 
-/** Workflow order, used to lay out the status dropdown. */
+/** The four steps of an order, in the order they happen. */
+export const ORDER_STEPS: OrderStatusEnum[] = [
+  OrderStatusEnum.Accepted,
+  OrderStatusEnum.Preparing,
+  OrderStatusEnum.Shipping,
+  OrderStatusEnum.Finished,
+]
+
+/** What the status dropdown offers. Older statuses stay readable on old orders. */
 export const ORDER_STATUS_FLOW: OrderStatusEnum[] = [
   OrderStatusEnum.Pending,
-  OrderStatusEnum.Accepted,
+  ...ORDER_STEPS,
+  OrderStatusEnum.ReadyForPickup,
   OrderStatusEnum.ProformaSent,
-  OrderStatusEnum.Shipping,
-  OrderStatusEnum.InvoiceIssued,
-  OrderStatusEnum.AwaitingPayment,
-  OrderStatusEnum.Paid,
-  OrderStatusEnum.InvoiceSent,
-  OrderStatusEnum.Finished,
   OrderStatusEnum.Returned,
   OrderStatusEnum.Declined,
 ]
+
+/** The customer gets an email when an order moves to one of these for the first time. */
+export const ORDER_STATUS_EMAILS: Partial<Record<OrderStatusEnum, string>> = {
+  [OrderStatusEnum.Accepted]: 'A new order: the customer gets an email that it is accepted.',
+  [OrderStatusEnum.Shipping]: 'The customer gets an email that the order is on its way, once per order.',
+  [OrderStatusEnum.Declined]: 'The customer gets an email with the reason you write below.',
+}
 

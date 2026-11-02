@@ -1,6 +1,7 @@
 import { StateCreator } from 'zustand'
 import { PaginationData, OrdersData, Order } from '@/shared/types'
 import { OrdersAPI } from '@/services'
+import { OrderStatusEnum } from '@/shared/enums'
 
 export interface OrdersSliceInterface {
   allOrders: Order[]
@@ -13,7 +14,9 @@ export interface OrdersSliceInterface {
   sortOrder: 'ASC' | 'DESC'
   orderFilter: object
   disputedOnly: boolean
+  offersOnly: boolean
   changeDisputedOnly: (data: boolean) => void
+  changeOffersOnly: (data: boolean) => void
   changeCurrentPage: (data: number) => void
   changeItemsPerPage: (data: number) => void
   changeOrderFilter: (data: object) => void
@@ -33,9 +36,14 @@ export const ordersSlice: StateCreator<OrdersSliceInterface> = (set, get) => ({
   sortOrder: 'DESC',
   orderFilter: {},
   disputedOnly: false,
+  offersOnly: false,
 
   changeDisputedOnly: (data: boolean) => {
     set({ disputedOnly: data })
+  },
+
+  changeOffersOnly: (data: boolean) => {
+    set({ offersOnly: data })
   },
 
   changeCurrentPage: (data: number) => {
@@ -62,13 +70,18 @@ export const ordersSlice: StateCreator<OrdersSliceInterface> = (set, get) => ({
 
     try {
       const orderFilter = get().orderFilter as { filters?: object }
-      const data = await OrdersAPI.getOrders(
-        sort,
-        paginationData,
-        get().disputedOnly
-          ? { filters: { ...orderFilter.filters, disputed: { is: true } } }
-          : orderFilter
-      )
+      const data = await OrdersAPI.getOrders(sort, paginationData, {
+        filters: {
+          ...orderFilter.filters,
+          // offers have their own list and stay out of the orders
+          status: get().offersOnly
+            ? { is: OrderStatusEnum.ProformaSent }
+            : (orderFilter.filters as any)?.status ?? {
+                not: OrderStatusEnum.ProformaSent,
+              },
+          ...(get().disputedOnly && { disputed: { is: true } }),
+        },
+      })
       if (data) {
         set({ currentPageOrders: data.rows })
         set({ totalPages: Math.ceil(data.count / get().itemsPerPage) })

@@ -318,6 +318,7 @@ export interface Order {
   user: User
   internalNote?: string | null
   disputed?: boolean
+  billingStatus?: string | null
   statusChangedAt?: string | null
   hasBackorder?: boolean
 }

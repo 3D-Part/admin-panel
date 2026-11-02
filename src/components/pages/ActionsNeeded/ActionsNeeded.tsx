@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useCallback, useEffect, useState } from 'react'
-import { Badge, Button, Table, TextInput } from 'flowbite-react'
+import { Badge, Button, Table, Textarea, TextInput } from 'flowbite-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { HiBell, HiExclamationCircle } from 'react-icons/hi'
 import { toast } from 'react-toastify'
@@ -9,6 +9,39 @@ import { BackofficeAPI } from '@/services'
 import { ActionNeeded, StockAlert } from '@/services/backoffice'
 import Tabs from '@/components/common/Tabs/Tabs'
 import { Loader } from '@/components/common'
+
+/** One note per product, shared by both tabs. Saved when the field is left. */
+const ProductNote: React.FC<{
+  productId: string
+  name: string
+  note: string | null
+}> = ({ productId, name, note }) => {
+  const [value, setValue] = useState(note ?? '')
+  const [saved, setSaved] = useState(note ?? '')
+
+  const save = async () => {
+    if (value.trim() === saved) return
+    const response = await BackofficeAPI.setProductNote(productId, value)
+    if (response) {
+      setSaved(value.trim())
+      toast('Note saved', { type: 'success', autoClose: 1500 })
+    } else {
+      toast('The note was not saved', { type: 'error', autoClose: 2000 })
+    }
+  }
+
+  return (
+    <Textarea
+      aria-label={`Note for ${name}`}
+      className="min-w-[12rem] text-sm"
+      rows={2}
+      placeholder="Your note"
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+      onBlur={save}
+    />
+  )
+}
 
 const ActionRow: React.FC<{ action: ActionNeeded; onSaved: () => void }> = ({
   action,
@@ -58,6 +91,13 @@ const ActionRow: React.FC<{ action: ActionNeeded; onSaved: () => void }> = ({
           </Button>
         </div>
       </Table.Cell>
+      <Table.Cell>
+        <ProductNote
+          productId={action.productId}
+          name={action.name}
+          note={action.note}
+        />
+      </Table.Cell>
     </Table.Row>
   )
 }
@@ -85,6 +125,7 @@ const ActionsTab = () => {
           <Table.HeadCell>Why it is listed</Table.HeadCell>
           <Table.HeadCell>Selling price</Table.HeadCell>
           <Table.HeadCell>Purchase price</Table.HeadCell>
+          <Table.HeadCell>Note</Table.HeadCell>
         </Table.Head>
         <Table.Body className="divide-y divide-gray-100 dark:divide-gray-800">
           {rows.map((action) => (
@@ -129,6 +170,7 @@ const StockTab = () => {
           <Table.HeadCell>In stock</Table.HeadCell>
           <Table.HeadCell>Limits</Table.HeadCell>
           <Table.HeadCell>Status</Table.HeadCell>
+          <Table.HeadCell>Note</Table.HeadCell>
         </Table.Head>
         <Table.Body className="divide-y divide-gray-100 dark:divide-gray-800">
           {ordered.map((alert) => (
@@ -149,6 +191,13 @@ const StockTab = () => {
                 >
                   {alert.level === 'critical' ? 'Order now' : 'Running low'}
                 </Badge>
+              </Table.Cell>
+              <Table.Cell>
+                <ProductNote
+                  productId={alert.id}
+                  name={alert.name}
+                  note={alert.note}
+                />
               </Table.Cell>
             </Table.Row>
           ))}

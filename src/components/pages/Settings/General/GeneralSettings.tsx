@@ -5,7 +5,53 @@ import { Button, Label, TextInput } from 'flowbite-react'
 import { useShopSettingsStore } from '@/store/store'
 import { toast } from 'react-toastify'
 import { HiPlus, HiTrash } from 'react-icons/hi'
+import { useSearchParams } from 'next/navigation'
 import PageImages, { PageImage } from './PageImages'
+import BillingOptions from './BillingOptions'
+import {
+  BillingOption,
+  readBillingOptions,
+} from '@/shared/helpers/billingOptions'
+
+// Each section is its own item in the sidebar, what it does is said up front
+const TABS: Record<string, { title: string; help: string }> = {
+  banner: {
+    title: 'Top banner',
+    help: 'The line of text at the very top of the site, for example a sale announcement. Leave it empty to hide it.',
+  },
+  'home-slider': {
+    title: 'Home slider',
+    help: 'The big images that slide on the home page. Add an image, upload it for desktop and for phones, and it joins the slider.',
+  },
+  'page-images': {
+    title: 'Page images',
+    help: 'One banner above the products of the page you choose: a category, all products, or every product page. Nothing here changes the home slider.',
+  },
+  'discount-tiers': {
+    title: 'Discount tiers',
+    help: 'How much each customer tier saves. On a product already on sale the customer gets the better of the two: a 10% sale with a 15% tier gives 15% in total, not 25%. The tier is set per customer in Users.',
+  },
+  'invoice-statuses': {
+    title: 'Invoice statuses',
+    help: 'The choices in the Invoice column of Orders: where the paperwork of an order stands. Customers never see them.',
+  },
+  delivery: {
+    title: 'Delivery',
+    help: 'What delivery costs the customer, and from which order value it is free.',
+  },
+  company: {
+    title: 'Company details',
+    help: 'Your contact details on the site and on proformas. The bank account is what customers pay a proforma to.',
+  },
+  'social-media': {
+    title: 'Social media',
+    help: 'The links in the footer of the site.',
+  },
+  tidio: {
+    title: 'Tidio chat',
+    help: 'Public key from Tidio → Settings → Developer. The chat shows on the site as soon as this is saved, and leaving it empty turns it off.',
+  },
+}
 
 interface BannerSettings {
   text: string
@@ -21,6 +67,7 @@ interface CompanyDetails {
   phone: string
   town: string
   address: string
+  bankAccount: string
 }
 
 interface SocialMediaSettings {
@@ -37,9 +84,12 @@ interface SettingsFormData {
   tiers: { bronze: string; silver: string; gold: string }
   tidio: { key: string }
   pageImages: PageImage[]
+  billingOptions: BillingOption[]
 }
 
 const GeneralSettings = () => {
+  const requestedTab = useSearchParams().get('tab') ?? ''
+  const tab = TABS[requestedTab] ? requestedTab : 'banner'
   const [loading, setLoading] = useState(false)
   const [initialLoading, setInitialLoading] = useState(true)
   const [formData, setFormData] = useState<SettingsFormData>({
@@ -55,6 +105,7 @@ const GeneralSettings = () => {
       phone: '',
       town: '',
       address: '',
+      bankAccount: '',
     },
     socialMedia: {
       facebook: '',
@@ -64,6 +115,7 @@ const GeneralSettings = () => {
     tiers: { bronze: '', silver: '', gold: '' },
     tidio: { key: '' },
     pageImages: [],
+    billingOptions: [],
   })
   const formRef = useRef<HTMLFormElement>(null)
 
@@ -96,6 +148,7 @@ const GeneralSettings = () => {
             phone: settings.company?.phone || '',
             town: settings.company?.town || '',
             address: settings.company?.address || '',
+            bankAccount: settings.company?.bankAccount || '',
           },
           socialMedia: {
             facebook: settings.socialMedia?.facebook || '',
@@ -109,6 +162,7 @@ const GeneralSettings = () => {
           },
           tidio: { key: settings.tidio?.key ?? '' },
           pageImages: settings.pageImages ?? [],
+          billingOptions: readBillingOptions(settings),
         })
       }
 
@@ -186,6 +240,7 @@ const GeneralSettings = () => {
           phone: formData.company.phone,
           town: formData.company.town,
           address: formData.company.address,
+          bankAccount: formData.company.bankAccount.trim(),
         },
         socialMedia: {
           facebook: formData.socialMedia.facebook,
@@ -199,6 +254,9 @@ const GeneralSettings = () => {
         },
         tidio: { key: formData.tidio.key.trim() },
         pageImages: formData.pageImages.filter((image) => image.desktop),
+        billingOptions: formData.billingOptions.filter((option) =>
+          option.label.trim()
+        ),
       },
     })
 
@@ -234,10 +292,10 @@ const GeneralSettings = () => {
       {/* Header */}
       <div className="flex-shrink-0 mb-6">
         <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-          General Settings
+          {TABS[tab].title}
         </h2>
-        <p className="text-gray-500 dark:text-gray-400 mt-2">
-          Manage your shop configuration and preferences
+        <p className="text-gray-500 dark:text-gray-400 mt-2 max-w-3xl">
+          {TABS[tab].help}
         </p>
       </div>
 
@@ -248,11 +306,8 @@ const GeneralSettings = () => {
       >
         {/* Scrollable Content */}
         <div className="flex-1 overflow-y-auto space-y-6 pb-4">
-          {/* Banner Settings Section */}
+          {tab === 'banner' && (
           <div id="banner" className="scroll-mt-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Banner Settings
-            </h3>
             <div className="space-y-4">
               <div className="w-full">
                 <div className="mb-2 block">
@@ -276,18 +331,10 @@ const GeneralSettings = () => {
               </div>
             </div>
           </div>
+          )}
 
-          {/* Discount Tiers Section */}
+          {tab === 'discount-tiers' && (
           <div id="discount-tiers" className="scroll-mt-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
-              Discount Tiers
-            </h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-              Percentages for each customer tier. On a product already on sale
-              the customer gets the better of the two: a 10% sale with a 15%
-              tier gives 15% in total, not 25%. The tier is set per customer in
-              Users.
-            </p>
             <div className="grid gap-4 sm:grid-cols-3">
               {(['bronze', 'silver', 'gold'] as const).map((tier) => (
                 <div key={tier}>
@@ -305,31 +352,31 @@ const GeneralSettings = () => {
               ))}
             </div>
           </div>
+          )}
 
-          {/* Page Images Section */}
-          <div id="page-images" className="scroll-mt-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
-              Page Images
-            </h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-              Banners on the pages you choose. On the home page they join the
-              slider, elsewhere they show above the products.
-            </p>
-            <PageImages
-              value={formData.pageImages}
-              onChange={(pageImages) => setFormData({ ...formData, pageImages })}
-            />
-          </div>
+          {(tab === 'home-slider' || tab === 'page-images') && (
+            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+              <PageImages
+                scope={tab === 'home-slider' ? 'home' : 'pages'}
+                value={formData.pageImages}
+                onChange={(pageImages) => setFormData({ ...formData, pageImages })}
+              />
+            </div>
+          )}
 
-          {/* Tidio Section */}
+          {tab === 'invoice-statuses' && (
+            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+              <BillingOptions
+                value={formData.billingOptions}
+                onChange={(billingOptions) =>
+                  setFormData({ ...formData, billingOptions })
+                }
+              />
+            </div>
+          )}
+
+          {tab === 'tidio' && (
           <div id="tidio" className="scroll-mt-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
-              Tidio Chat
-            </h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-              Public key from Tidio → Settings → Developer. The chat shows on the
-              site as soon as this is saved, and leaving it empty turns it off.
-            </p>
             <TextInput
               id="tidioKey"
               name="tidio.key"
@@ -337,12 +384,10 @@ const GeneralSettings = () => {
               onChange={handleInputChange}
             />
           </div>
+          )}
 
-          {/* Delivery Settings Section */}
+          {tab === 'delivery' && (
           <div id="delivery" className="scroll-mt-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Delivery Settings
-            </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Delivery Cost */}
               <div className="w-full">
@@ -393,12 +438,10 @@ const GeneralSettings = () => {
               </div>
             </div>
           </div>
+          )}
 
-          {/* Company Details Section */}
+          {tab === 'company' && (
           <div id="company" className="scroll-mt-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Company Details
-            </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Company Emails */}
               <div className="w-full sm:col-span-2">
@@ -472,6 +515,27 @@ const GeneralSettings = () => {
                 />
               </div>
 
+              {/* Bank account */}
+              <div className="w-full">
+                <div className="mb-2 block">
+                  <Label
+                    className="text-base"
+                    htmlFor="companyBankAccount"
+                    value="Bank account"
+                  />
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    Printed and emailed on proformas
+                  </p>
+                </div>
+                <TextInput
+                  name="company.bankAccount"
+                  onChange={handleInputChange}
+                  id="companyBankAccount"
+                  type="text"
+                  value={formData.company.bankAccount}
+                />
+              </div>
+
               {/* Company Town */}
               <div className="w-full">
                 <div className="mb-2 block">
@@ -517,12 +581,10 @@ const GeneralSettings = () => {
               </div>
             </div>
           </div>
+          )}
 
-          {/* Social Media Section */}
+          {tab === 'social-media' && (
           <div id="social-media" className="scroll-mt-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Social Media
-            </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {/* Facebook */}
               <div className="w-full">
@@ -591,6 +653,8 @@ const GeneralSettings = () => {
               </div>
             </div>
           </div>
+          )}
+
         </div>
 
         {/* Fixed Save Button */}

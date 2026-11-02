@@ -110,6 +110,21 @@ const orderUpdateNote = async (
   }
 }
 
+const orderSetBilling = async (
+  id: string,
+  billingStatus: string | null
+): Promise<any | null> => {
+  try {
+    const data: any = await API.patch(`${API_BASE_URL}/order/${id}/billing`, {
+      billingStatus,
+    })
+    return data
+  } catch (error) {
+    console.error('Error saving invoice status:', error)
+    return null
+  }
+}
+
 const orderSetDisputed = async (
   id: string,
   disputed: boolean
@@ -160,6 +175,7 @@ const OrdersAPI = {
   orderSetStatus,
   orderUpdateNote,
   orderSetDisputed,
+  orderSetBilling,
   orderStatusHistory,
   orderContactMessage,
 }

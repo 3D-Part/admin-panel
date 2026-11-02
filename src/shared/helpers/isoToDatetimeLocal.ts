@@ -1,14 +1,21 @@
+const pad = (value: number) => String(value).padStart(2, '0')
+
+/** Stored time to what a datetime-local input shows, in the viewer's time zone. */
 const isoToDatetimeLocal = (isoString: string) => {
   if (!isoString) return ''
 
-  // Remove milliseconds and time zone offset
-  var dateTime = isoString.replace(/\.\d+Z$/, '')
+  const date = new Date(isoString)
+  if (isNaN(date.getTime())) return ''
 
-  // Convert T to space
-  dateTime = dateTime.replace('T', ' ')
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`
+}
 
-  // Return formatted datetime string
-  return dateTime
+/** What a datetime-local input holds to the exact moment the server stores. */
+export const datetimeLocalToIso = (value?: string) => {
+  if (!value) return value as string
+
+  const date = new Date(value)
+  return isNaN(date.getTime()) ? value : date.toISOString()
 }
 
 export default isoToDatetimeLocal

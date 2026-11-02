@@ -1,5 +1,6 @@
 'use client'
 import { modalRoot } from '@/shared/helpers/modalRoot'
+import { datetimeLocalToIso } from '@/shared/helpers/isoToDatetimeLocal'
 
 import { PaginationData, SalesFormData } from '@/shared/types'
 import { useSalesSliceStore, useUISliceStore } from '@/store/store'
@@ -11,9 +12,12 @@ import { useModalScroll } from '@/shared/hooks/useModalScroll'
 const AddNewSaleModal = () => {
   const [loading, setLoading] = useState(false)
 
-  const { changeIsSaleAddNewModalOpen, isSaleAddNewModalOpen } =
-    useUISliceStore()
-  const { addNewSale, fetchSales, currentPage, itemsPerPage } =
+  const {
+    changeIsSaleAddNewModalOpen,
+    changeIsSaleEditModalOpen,
+    isSaleAddNewModalOpen,
+  } = useUISliceStore()
+  const { addNewSale, changeActiveSale, fetchSales, currentPage, itemsPerPage } =
     useSalesSliceStore()
 
   const fetchSalesData = async () => {
@@ -50,7 +54,11 @@ const AddNewSaleModal = () => {
   const onSave = async () => {
     setLoading(true)
 
-    const response = await addNewSale(salesDataRef.current)
+    const response = await addNewSale({
+      ...salesDataRef.current,
+      startsAt: datetimeLocalToIso(salesDataRef.current.startsAt),
+      endsAt: datetimeLocalToIso(salesDataRef.current.endsAt),
+    })
 
     if (response) {
       toast('Sale is created', {
@@ -62,6 +70,12 @@ const AddNewSaleModal = () => {
     fetchSalesData()
     setLoading(false)
     changeIsSaleAddNewModalOpen(false)
+
+    // the next thing to do with a new sale is to put products on it
+    if (response) {
+      changeActiveSale({ ...response, productOnSale: response.productOnSale ?? [] })
+      changeIsSaleEditModalOpen(true)
+    }
   }
 
   useEffect(() => {

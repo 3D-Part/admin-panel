@@ -7,11 +7,12 @@ import {
   HiShoppingBag,
   HiLibrary,
   HiDocumentText,
+  HiQuestionMarkCircle,
 } from 'react-icons/hi'
 import { MdUnsubscribe } from 'react-icons/md'
 import { IoMdPricetags, IoMdSettings } from 'react-icons/io'
 import { FaUsers, FaShopify } from 'react-icons/fa'
-import { FaUsersCog, FaWarehouse, FaChartLine, FaFileInvoice, FaExclamationTriangle } from 'react-icons/fa'
+import { FaUsersCog, FaWarehouse, FaChartLine, FaExclamationTriangle } from 'react-icons/fa'
 
 import { usePathname, useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
@@ -25,6 +26,7 @@ import { PermissionEnum } from '@/shared/types'
 import { useEffect, useState } from 'react'
 
 const FIRST_TAB: Record<string, string> = {
+  [URLPartsEnum.SettingsGeneral]: 'banner',
   [URLPartsEnum.Warehouse]: 'scanner',
   [URLPartsEnum.ActionsNeeded]: 'actions',
 }
@@ -52,6 +54,14 @@ const SideBar = () => {
   // Filter menu items based on user permissions
   const getFilteredMenuItems = () => {
     const allMenuItems = [
+      {
+        name: 'Guide',
+        href: URLPartsEnum.Guide,
+        icon: HiQuestionMarkCircle,
+        open: false,
+        // for everyone, whatever else they may see
+        requiredPermissions: [] as PermissionEnum[],
+      },
       {
         name: 'Products',
         href: '/products',
@@ -146,27 +156,23 @@ const SideBar = () => {
             requiredPermissions: [PermissionEnum.ORDERS_READ],
           },
           {
-            name: 'Order Emails',
-            href: URLPartsEnum.OrderEmails,
+            name: 'Offers',
+            href: `${URLPartsEnum.Orders}?view=offers`,
             requiredPermissions: [PermissionEnum.ORDERS_READ],
           },
-        ],
-      },
-      {
-        name: 'Proformas',
-        href: URLPartsEnum.Proformas,
-        icon: FaFileInvoice,
-        open: false,
-        requiredPermissions: [PermissionEnum.ORDERS_READ],
-        children: [
           {
-            name: 'All proformas',
+            name: 'Proformas',
             href: URLPartsEnum.Proformas,
             requiredPermissions: [PermissionEnum.ORDERS_READ],
           },
           {
             name: 'New proforma',
             href: `${URLPartsEnum.Proformas}?new=1`,
+            requiredPermissions: [PermissionEnum.ORDERS_READ],
+          },
+          {
+            name: 'Order Emails',
+            href: URLPartsEnum.OrderEmails,
             requiredPermissions: [PermissionEnum.ORDERS_READ],
           },
         ],
@@ -303,17 +309,18 @@ const SideBar = () => {
         requiredPermissions: PERMISSION_GROUPS.ADMIN,
         children: [
           ...[
-            ['General', ''],
-            ['Banner', '#banner'],
-            ['Discount tiers', '#discount-tiers'],
-            ['Page images', '#page-images'],
-            ['Tidio chat', '#tidio'],
-            ['Delivery', '#delivery'],
-            ['Company details', '#company'],
-            ['Social media', '#social-media'],
-          ].map(([name, section]) => ({
+            ['Top banner', 'banner'],
+            ['Home slider', 'home-slider'],
+            ['Page images', 'page-images'],
+            ['Discount tiers', 'discount-tiers'],
+            ['Invoice statuses', 'invoice-statuses'],
+            ['Delivery', 'delivery'],
+            ['Company details', 'company'],
+            ['Social media', 'social-media'],
+            ['Tidio chat', 'tidio'],
+          ].map(([name, tab]) => ({
             name,
-            href: `${URLPartsEnum.SettingsGeneral}${section}`,
+            href: `${URLPartsEnum.SettingsGeneral}?tab=${tab}`,
             requiredPermissions: [PermissionEnum.ADMIN_ONLY],
           })),
           {
@@ -329,11 +336,13 @@ const SideBar = () => {
     return allMenuItems
       .filter((menuItem) => {
         // Check if user has permission for this menu item
-        const hasMenuPermission = hasAnyPermission(
-          currentUser?.permissions,
-          menuItem.requiredPermissions,
-          currentUser?.role
-        )
+        const hasMenuPermission =
+          menuItem.requiredPermissions.length === 0 ||
+          hasAnyPermission(
+            currentUser?.permissions,
+            menuItem.requiredPermissions,
+            currentUser?.role
+          )
 
         // If menu item has children, also check if user has permission for any child
         if (menuItem.children) {
@@ -416,7 +425,9 @@ const SideBar = () => {
       // no ?tab yet means the page is showing its first tab
       return current === value || (!current && value === FIRST_TAB[route])
     }
-    return !clickedSection && !searchParams.get('new')
+    return (
+      !clickedSection && !searchParams.get('new') && !searchParams.get('view')
+    )
   }
 
   return (

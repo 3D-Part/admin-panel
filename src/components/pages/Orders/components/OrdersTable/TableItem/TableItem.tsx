@@ -2,6 +2,9 @@ import { Order } from '@/shared/types'
 import { Badge, Table } from 'flowbite-react'
 import React, { useState } from 'react'
 import OrderStatus from '../../OrderStatus/OrderStatus'
+import OrderSteps from '../../OrderStatus/OrderSteps'
+import BillingSelect from '../../OrderStatus/BillingSelect'
+import { BillingOption } from '@/shared/helpers/billingOptions'
 import { BiMessageDetail, BiNote } from 'react-icons/bi'
 import OrderContactForm from '../../OrderContactForm'
 import OrderEditModal from '../../OrderEditModal/OrderEditModal'
@@ -12,9 +15,10 @@ import { PermissionEnum } from '@/shared/types'
 
 type TableItemType = {
   order: Order
+  billingOptions: BillingOption[]
 }
 
-export const TableItem: React.FC<TableItemType> = ({ order }) => {
+export const TableItem: React.FC<TableItemType> = ({ order, billingOptions }) => {
   const {
     fullName,
     email,
@@ -106,7 +110,17 @@ export const TableItem: React.FC<TableItemType> = ({ order }) => {
           }
           className={hasWritePermission ? 'cursor-pointer' : ''}
         >
-          <OrderStatus status={status} />
+          <div className="flex items-center gap-3">
+            <OrderSteps status={status} />
+            <OrderStatus status={status} />
+          </div>
+        </Table.Cell>
+        <Table.Cell>
+          <BillingSelect
+            order={order}
+            options={billingOptions}
+            disabled={!hasWritePermission}
+          />
         </Table.Cell>
         <Table.Cell
           onClick={

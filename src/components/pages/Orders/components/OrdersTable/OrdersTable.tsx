@@ -3,7 +3,7 @@
 import { Pagination, Table } from 'flowbite-react'
 import React, { useCallback, useEffect, useState } from 'react'
 import { TableItem } from './TableItem/TableItem'
-import { useOrdersStore, useCurrentUserStore } from '@/store/store'
+import { useOrdersStore, useCurrentUserStore, useShopSettingsStore } from '@/store/store'
 import {
   Loader,
   ResponsiveTableWrapper,
@@ -11,6 +11,9 @@ import {
 } from '@/components/common'
 import { PaginationData, Order } from '@/shared/types'
 import OrderStatus from '../OrderStatus/OrderStatus'
+import OrderSteps from '../OrderStatus/OrderSteps'
+import BillingSelect from '../OrderStatus/BillingSelect'
+import { BillingOption, readBillingOptions } from '@/shared/helpers/billingOptions'
 import { BiMessageDetail } from 'react-icons/bi'
 import OrderDetails from '../OrderDetails'
 import OrderContactForm from '../OrderContactForm'
@@ -38,6 +41,14 @@ export const OrdersTable = () => {
   } = useOrdersStore()
 
   const { currentUser } = useCurrentUserStore()
+  const { getShopSettings } = useShopSettingsStore()
+  const [billingOptions, setBillingOptions] = useState<BillingOption[]>([])
+
+  useEffect(() => {
+    getShopSettings().then((data) =>
+      setBillingOptions(readBillingOptions(data?.settings))
+    )
+  }, [getShopSettings])
 
   const hasReadPermission = hasPermission(
     currentUser?.permissions,
@@ -171,7 +182,22 @@ export const OrdersTable = () => {
                     : ''
                 }
               >
-                <OrderStatus status={status} />
+                <div className="flex items-center justify-end gap-2">
+                  <OrderSteps status={status} />
+                  <OrderStatus status={status} />
+                </div>
+              </div>
+            ),
+          },
+          {
+            label: 'Invoice',
+            value: (
+              <div onClick={(e) => e.stopPropagation()}>
+                <BillingSelect
+                  order={order}
+                  options={billingOptions}
+                  disabled={!hasWritePermission}
+                />
               </div>
             ),
           },
@@ -215,6 +241,7 @@ export const OrdersTable = () => {
                 <Table.HeadCell className="table-cell">Date</Table.HeadCell>
                 <Table.HeadCell className="table-cell">Total</Table.HeadCell>
                 <Table.HeadCell className="table-cell">Status</Table.HeadCell>
+                <Table.HeadCell className="table-cell">Invoice</Table.HeadCell>
                 <Table.HeadCell className="table-cell">
                   <span className="sr-only">Actions</span>
                 </Table.HeadCell>
@@ -226,6 +253,7 @@ export const OrdersTable = () => {
                     <TableItem
                       key={order.id}
                       order={order}
+                      billingOptions={billingOptions}
                     />
                   )
                 })}

@@ -1,4 +1,5 @@
 'use client'
+import { datetimeLocalToIso } from '@/shared/helpers/isoToDatetimeLocal'
 
 import { PromoCodeFormBody } from '@/shared/types'
 
@@ -50,8 +51,8 @@ const AddNewPromoCode: React.FC<AddNewPromoCodeType> = ({ initialValue }) => {
 
     const _promoCode: PromoCodeFormBody = {
       code: promoCodeDataRef.current.code,
-      startsAt: promoCodeDataRef.current.startsAt,
-      endsAt: promoCodeDataRef.current.endsAt,
+      startsAt: datetimeLocalToIso(promoCodeDataRef.current.startsAt),
+      endsAt: datetimeLocalToIso(promoCodeDataRef.current.endsAt),
       discountPercentage: promoCodeDataRef.current.discountPercentage,
       categoryIds,
     }

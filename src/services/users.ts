@@ -80,7 +80,18 @@ const updateUserProfile = async (
   }
 }
 
+const sendPasswordResetEmail = async (email: string): Promise<boolean> => {
+  try {
+    await API.post(`${API_BASE_URL}/auth/request-password-reset`, { email })
+    return true
+  } catch (error) {
+    console.error('Error sending password reset email:', error)
+    return false
+  }
+}
+
 const UsersAPI = {
+  sendPasswordResetEmail,
   getUsers,
   createEmployee,
   editEmployee,
