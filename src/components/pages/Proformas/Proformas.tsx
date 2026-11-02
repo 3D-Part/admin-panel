@@ -435,7 +435,7 @@ const Proformas = () => {
             {rows.map((proforma) => (
               <Table.Row key={proforma.id}>
                 <Table.Cell
-                  className="cursor-pointer font-mono text-gray-900 dark:text-white"
+                  className="cursor-pointer whitespace-nowrap font-mono text-gray-900 dark:text-white"
                   onClick={() => setEditing(proforma)}
                 >
                   {proforma.number}

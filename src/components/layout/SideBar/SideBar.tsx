@@ -436,6 +436,11 @@ const SideBar = () => {
                     key={menuItem.name}
                     icon={menuItem.icon}
                     open={openGroups.includes(menuItem.name)}
+                    className={
+                      openGroups.includes(menuItem.name)
+                        ? '[&>svg:last-child]:rotate-180'
+                        : ''
+                    }
                     onClick={() => toggleGroup(menuItem.name)}
                     label={menuItem.name}
                   >

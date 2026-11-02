@@ -308,10 +308,10 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
         <div className="table-body-container ">
           <Table className="w-full">
             <Table.Head className="table-header">
-              <Table.HeadCell className="table-cell w-1/12">
+              <Table.HeadCell className="table-cell w-44">
                 Status
               </Table.HeadCell>
-              <Table.HeadCell className="table-cell w-1/3">Name</Table.HeadCell>
+              <Table.HeadCell className="table-cell w-1/4">Name</Table.HeadCell>
               <Table.HeadCell className="table-cell w-1/6">
                 Category
               </Table.HeadCell>

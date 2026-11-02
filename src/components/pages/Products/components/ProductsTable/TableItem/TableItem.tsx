@@ -158,7 +158,7 @@ export const TableItem: React.FC<TableItemType> = ({
   return (
     <>
       <Table.Row className="table-row">
-        <Table.Cell className="table-cell w-1/12">
+        <Table.Cell className="table-cell w-44 whitespace-nowrap">
           <div className="flex flex-col items-start gap-1">
             <ToggleSwitch
               disabled={!hasWritePermission}
@@ -173,7 +173,7 @@ export const TableItem: React.FC<TableItemType> = ({
             )}
           </div>
         </Table.Cell>
-        <Table.Cell className="font-medium table-cell w-1/3">
+        <Table.Cell className="font-medium table-cell w-1/4">
           <div className="flex justify-start items-center gap-3 min-w-[220px]">
             <button
               type="button"
