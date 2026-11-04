@@ -6,9 +6,14 @@ import getOrderStatusLabel from '@/shared/helpers/getOrderStatusLabel'
 import OrderDetails from '@/components/pages/Orders/components/OrderDetails'
 import { User, Order } from '@/shared/types'
 import { Button, Modal, Table, TextInput, Label, Select } from 'flowbite-react'
-import React, { useState, useRef } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { toast } from 'react-toastify'
 import UsersAPI from '@/services/users'
+import { BackofficeAPI } from '@/services'
+import { CustomerTier } from '@/services/backoffice'
+
+const tierName = (tier: string | null) =>
+  tier ? `${tier[0]}${tier.slice(1).toLowerCase()}` : 'No tier'
 
 type UserDetailType = {
   name: string
@@ -107,6 +112,11 @@ const UserDetails: React.FC<UserDetailsType> = ({
   } = user
 
   const [tier, setTier] = useState((user as any).tier ?? '')
+  const [tierInfo, setTierInfo] = useState<CustomerTier | null>(null)
+
+  useEffect(() => {
+    BackofficeAPI.getCustomerTier(id).then(setTierInfo)
+  }, [id, tier])
 
   const handleTierChange = async (value: string) => {
     const previous = tier
@@ -224,9 +234,19 @@ const UserDetails: React.FC<UserDetailsType> = ({
                   <option value="GOLD">Gold</option>
                 </Select>
                 <span className="text-sm text-gray-500 dark:text-gray-400">
-                  Percentages are set in Settings → General
+                  Set by hand. Percentages and thresholds are in Settings →
+                  Discount tiers
                 </span>
               </div>
+              {tierInfo && (
+                <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">
+                  Spent {tierInfo.spend.toFixed(2)} KM
+                  {tierInfo.period === '12m' ? ' in the last 12 months' : ' in total'}
+                  {tierInfo.spendTier && `, enough for ${tierName(tierInfo.spendTier)}`}
+                  . The customer gets{' '}
+                  <strong>{tierName(tierInfo.tier)}</strong>.
+                </p>
+              )}
             </div>
 
             <CustomerProfileForm email={email} />

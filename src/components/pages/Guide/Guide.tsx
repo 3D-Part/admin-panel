@@ -48,6 +48,14 @@ const SECTIONS: Record<Language, Section[]> = {
       title: 'Customers',
       lines: [
         'Users → open a customer: mark them disputed with a reason, or use Send password reset email. The customer picks the new password.',
+        'Settings → Discount tiers: set how much a customer has to spend for each tier, counted over everything or only the last 12 months. A tier set by hand stays.',
+      ],
+    },
+    {
+      title: 'Employees and reports',
+      lines: [
+        'Employees → edit: tick what the person may see. Analytics, Warehouse and Proformas each have their own box.',
+        'Export on Orders, Products and Users saves a CSV that opens in Excel. Analytics filters by category, manufacturer and customer.',
       ],
     },
     {
@@ -97,6 +105,14 @@ const SECTIONS: Record<Language, Section[]> = {
       title: 'Kupci (Users)',
       lines: [
         'Users → otvori kupca: označi ga kao spornog uz razlog, ili klikni Send password reset email. Kupac sam bira novu lozinku.',
+        'Settings → Discount tiers: upiši koliko kupac treba da potroši za svaki tier, ukupno ili samo u zadnjih 12 mjeseci. Tier postavljen ručno ostaje.',
+      ],
+    },
+    {
+      title: 'Zaposleni i izvještaji (Employees, Export)',
+      lines: [
+        'Employees → izmjena: označi šta osoba smije da vidi. Analytics, Warehouse i Proformas imaju svaki svoje polje.',
+        'Export na Orders, Products i Users snima CSV koji se otvara u Excelu. Analytics se filtrira po kategoriji, brendu i kupcu.',
       ],
     },
     {

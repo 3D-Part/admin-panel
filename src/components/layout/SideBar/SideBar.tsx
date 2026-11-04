@@ -163,12 +163,12 @@ const SideBar = () => {
           {
             name: 'Proformas',
             href: URLPartsEnum.Proformas,
-            requiredPermissions: [PermissionEnum.ORDERS_READ],
+            requiredPermissions: [PermissionEnum.PROFORMA_READ],
           },
           {
             name: 'New proforma',
             href: `${URLPartsEnum.Proformas}?new=1`,
-            requiredPermissions: [PermissionEnum.ORDERS_READ],
+            requiredPermissions: [PermissionEnum.PROFORMA_WRITE],
           },
           {
             name: 'Order Emails',
@@ -182,27 +182,42 @@ const SideBar = () => {
         href: URLPartsEnum.Analytics,
         icon: FaChartLine,
         open: false,
-        requiredPermissions: [PermissionEnum.ORDERS_READ],
+        requiredPermissions: [PermissionEnum.ANALYTICS_READ],
         children: [
           {
             name: 'Overview',
             href: URLPartsEnum.Analytics,
-            requiredPermissions: [PermissionEnum.ORDERS_READ],
+            requiredPermissions: [PermissionEnum.ANALYTICS_READ],
           },
           {
             name: 'Revenue by day',
             href: `${URLPartsEnum.Analytics}#revenue-by-day`,
-            requiredPermissions: [PermissionEnum.ORDERS_READ],
+            requiredPermissions: [PermissionEnum.ANALYTICS_READ],
           },
           {
             name: 'Filaments',
             href: `${URLPartsEnum.Analytics}#filaments`,
-            requiredPermissions: [PermissionEnum.ORDERS_READ],
+            requiredPermissions: [PermissionEnum.ANALYTICS_READ],
           },
           {
             name: 'Top products',
             href: `${URLPartsEnum.Analytics}#top-products`,
-            requiredPermissions: [PermissionEnum.ORDERS_READ],
+            requiredPermissions: [PermissionEnum.ANALYTICS_READ],
+          },
+          {
+            name: 'By category',
+            href: `${URLPartsEnum.Analytics}#by-category`,
+            requiredPermissions: [PermissionEnum.ANALYTICS_READ],
+          },
+          {
+            name: 'By manufacturer',
+            href: `${URLPartsEnum.Analytics}#by-manufacturer`,
+            requiredPermissions: [PermissionEnum.ANALYTICS_READ],
+          },
+          {
+            name: 'Top customers',
+            href: `${URLPartsEnum.Analytics}#top-customers`,
+            requiredPermissions: [PermissionEnum.ANALYTICS_READ],
           },
         ],
       },
@@ -230,27 +245,27 @@ const SideBar = () => {
         href: URLPartsEnum.Warehouse,
         icon: FaWarehouse,
         open: false,
-        requiredPermissions: PERMISSION_GROUPS.PRODUCTS,
+        requiredPermissions: PERMISSION_GROUPS.WAREHOUSE,
         children: [
           {
             name: 'Scanner',
             href: `${URLPartsEnum.Warehouse}?tab=scanner`,
-            requiredPermissions: [PermissionEnum.PRODUCT_READ],
+            requiredPermissions: [PermissionEnum.WAREHOUSE_READ],
           },
           {
             name: 'Inventory',
             href: `${URLPartsEnum.Warehouse}?tab=inventory`,
-            requiredPermissions: [PermissionEnum.PRODUCT_READ],
+            requiredPermissions: [PermissionEnum.WAREHOUSE_READ],
           },
           {
             name: 'Labels',
             href: `${URLPartsEnum.Warehouse}?tab=labels`,
-            requiredPermissions: [PermissionEnum.PRODUCT_READ],
+            requiredPermissions: [PermissionEnum.WAREHOUSE_READ],
           },
           {
             name: 'History',
             href: `${URLPartsEnum.Warehouse}?tab=history`,
-            requiredPermissions: [PermissionEnum.PRODUCT_READ],
+            requiredPermissions: [PermissionEnum.WAREHOUSE_READ],
           },
         ],
       },

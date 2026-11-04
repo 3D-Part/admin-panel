@@ -74,6 +74,9 @@ export const PERMISSION_GROUPS = {
   SALES: [PermissionEnum.SALE_READ, PermissionEnum.SALE_WRITE],
   USERS: [PermissionEnum.USER_READ],
   EMPLOYEES: [PermissionEnum.EMPLOYEE_READ, PermissionEnum.EMPLOYEE_WRITE],
+  PROFORMAS: [PermissionEnum.PROFORMA_READ, PermissionEnum.PROFORMA_WRITE],
+  ANALYTICS: [PermissionEnum.ANALYTICS_READ],
+  WAREHOUSE: [PermissionEnum.WAREHOUSE_READ, PermissionEnum.WAREHOUSE_WRITE],
   SUBSCRIBERS: [], // No specific permission required for subscribers
   ADMIN: [PermissionEnum.ADMIN_ONLY], // Admin only permissions
 }

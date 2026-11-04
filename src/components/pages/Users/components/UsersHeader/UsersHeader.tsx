@@ -5,6 +5,7 @@ import { ToggleSwitch } from 'flowbite-react'
 import { useUsersSliceStore } from '@/store/store'
 import UsersSearch from './UsersSearch'
 import UsersSort from './UsersSort'
+import { ExportButton } from '@/components/common'
 
 export const UsersHeader = () => {
   const { disputedOnly, changeDisputedOnly, changeCurrentPage, fetchUsers, itemsPerPage } =
@@ -25,6 +26,7 @@ export const UsersHeader = () => {
         }}
       />
       <UsersSort />
+      <ExportButton kind="customers" />
     </div>
   )
 }

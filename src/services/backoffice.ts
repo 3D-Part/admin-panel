@@ -37,6 +37,10 @@ export type Analytics = {
   }
   days: { date: string; orders: number; revenue: number }[]
   topProducts: AnalyticsRow[]
+  byCategory: AnalyticsRow[]
+  byManufacturer: AnalyticsRow[]
+  // name is the company or the person, sku holds the email
+  topCustomers: (AnalyticsRow & { orders: number })[]
   filaments: {
     rows: AnalyticsRow[]
     quantity: number
@@ -46,6 +50,24 @@ export type Analytics = {
     missingCost: number
   }
 }
+
+export type AnalyticsFilters = {
+  from: string
+  to: string
+  categoryId?: string
+  manufacturerId?: string
+  customer?: string
+}
+
+export type CustomerTier = {
+  tier: string | null
+  manualTier: string | null
+  spendTier: string | null
+  spend: number
+  period: 'all' | '12m'
+}
+
+export type ExportKind = 'orders' | 'products' | 'customers'
 
 export type ActionNeeded = {
   type: 'MISSING_PURCHASE_PRICE' | 'SOLD_BELOW_COST'
@@ -126,8 +148,24 @@ const attempt = async <T>(request: () => Promise<T>): Promise<T | null> => {
 }
 
 const BackofficeAPI = {
-  getAnalytics: (from: string, to: string) =>
-    attempt(() => API.get<Analytics>(`${BASE}/analytics`, { from, to })),
+  getAnalytics: (filters: AnalyticsFilters) =>
+    attempt(() => API.get<Analytics>(`${BASE}/analytics`, filters)),
+  getCustomerTier: (userId: string) =>
+    attempt(() => API.get<CustomerTier>(`${BASE}/customers/${userId}/tier`)),
+  // the file is built by the API, the browser only saves it
+  downloadExport: async (kind: ExportKind, params: Record<string, string> = {}) => {
+    const csv = await attempt(() => API.get<string>(`${BASE}/export/${kind}`, params))
+    if (csv === null) return false
+    // Excel needs the BOM to read č, ć, š and ž; keep it if axios dropped it
+    const text = csv.startsWith('\uFEFF') ? csv : `\uFEFF${csv}`
+    const url = URL.createObjectURL(new Blob([text], { type: 'text/csv;charset=utf-8' }))
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `${kind}-${new Date().toISOString().slice(0, 10)}.csv`
+    link.click()
+    URL.revokeObjectURL(url)
+    return true
+  },
   getActionsNeeded: () =>
     attempt(() => API.get<ActionNeeded[]>(`${BASE}/actions-needed`)),
   getStockAlerts: () =>

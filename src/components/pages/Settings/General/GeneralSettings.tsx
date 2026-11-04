@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useRef, useState, SyntheticEvent } from 'react'
-import { Button, Label, TextInput } from 'flowbite-react'
+import { Button, Label, Radio, TextInput } from 'flowbite-react'
 import { useShopSettingsStore } from '@/store/store'
 import { toast } from 'react-toastify'
 import { HiPlus, HiTrash } from 'react-icons/hi'
@@ -29,7 +29,7 @@ const TABS: Record<string, { title: string; help: string }> = {
   },
   'discount-tiers': {
     title: 'Discount tiers',
-    help: 'How much each customer tier saves. On a product already on sale the customer gets the better of the two: a 10% sale with a 15% tier gives 15% in total, not 25%. The tier is set per customer in Users.',
+    help: 'How much each customer tier saves, and how much a customer has to spend to reach it. On a product already on sale the customer gets the better of the two: a 10% sale with a 15% tier gives 15% in total, not 25%. A tier set by hand in Users stays, spending can only raise it.',
   },
   'invoice-statuses': {
     title: 'Invoice statuses',
@@ -82,6 +82,8 @@ interface SettingsFormData {
   company: CompanyDetails
   socialMedia: SocialMediaSettings
   tiers: { bronze: string; silver: string; gold: string }
+  tierThresholds: { bronze: string; silver: string; gold: string }
+  tierPeriod: 'all' | '12m'
   tidio: { key: string }
   pageImages: PageImage[]
   billingOptions: BillingOption[]
@@ -113,6 +115,8 @@ const GeneralSettings = () => {
       olx: '',
     },
     tiers: { bronze: '', silver: '', gold: '' },
+    tierThresholds: { bronze: '', silver: '', gold: '' },
+    tierPeriod: 'all',
     tidio: { key: '' },
     pageImages: [],
     billingOptions: [],
@@ -160,6 +164,12 @@ const GeneralSettings = () => {
             silver: String(settings.tiers?.silver ?? ''),
             gold: String(settings.tiers?.gold ?? ''),
           },
+          tierThresholds: {
+            bronze: String(settings.tierThresholds?.bronze || ''),
+            silver: String(settings.tierThresholds?.silver || ''),
+            gold: String(settings.tierThresholds?.gold || ''),
+          },
+          tierPeriod: settings.tierPeriod === '12m' ? '12m' : 'all',
           tidio: { key: settings.tidio?.key ?? '' },
           pageImages: settings.pageImages ?? [],
           billingOptions: readBillingOptions(settings),
@@ -252,6 +262,12 @@ const GeneralSettings = () => {
           silver: parseFloat(formData.tiers.silver) || 0,
           gold: parseFloat(formData.tiers.gold) || 0,
         },
+        tierThresholds: {
+          bronze: parseFloat(formData.tierThresholds.bronze) || 0,
+          silver: parseFloat(formData.tierThresholds.silver) || 0,
+          gold: parseFloat(formData.tierThresholds.gold) || 0,
+        },
+        tierPeriod: formData.tierPeriod,
         tidio: { key: formData.tidio.key.trim() },
         pageImages: formData.pageImages.filter((image) => image.desktop),
         billingOptions: formData.billingOptions.filter((option) =>
@@ -351,6 +367,49 @@ const GeneralSettings = () => {
                 </div>
               ))}
             </div>
+
+            <h4 className="mt-6 mb-1 font-semibold text-gray-900 dark:text-white">
+              Reached by spending
+            </h4>
+            <p className="mb-3 text-sm text-gray-500 dark:text-gray-400">
+              A customer who spends this much gets the tier by themselves. Leave
+              a field empty and that tier is only given by hand. New, offered,
+              cancelled and returned orders do not count.
+            </p>
+            <div className="grid gap-4 sm:grid-cols-3">
+              {(['bronze', 'silver', 'gold'] as const).map((tier) => (
+                <div key={tier}>
+                  <Label htmlFor={`tier-threshold-${tier}`} value={`${tier[0].toUpperCase()}${tier.slice(1)} from (KM)`} />
+                  <TextInput
+                    id={`tier-threshold-${tier}`}
+                    name={`tierThresholds.${tier}`}
+                    type="number"
+                    min="0"
+                    value={formData.tierThresholds[tier]}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              ))}
+            </div>
+            <fieldset className="mt-4 space-y-2">
+              <legend className="mb-1 text-sm font-medium text-gray-900 dark:text-white">
+                Spending that counts
+              </legend>
+              {([
+                ['all', 'Everything the customer ever spent'],
+                ['12m', 'Only the last 12 months'],
+              ] as const).map(([period, label]) => (
+                <div key={period} className="flex items-center gap-2">
+                  <Radio
+                    id={`tier-period-${period}`}
+                    name="tierPeriod"
+                    checked={formData.tierPeriod === period}
+                    onChange={() => setFormData({ ...formData, tierPeriod: period })}
+                  />
+                  <Label htmlFor={`tier-period-${period}`} value={label} />
+                </div>
+              ))}
+            </fieldset>
           </div>
           )}
 

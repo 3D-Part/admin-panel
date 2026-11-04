@@ -214,6 +214,24 @@ const EditEmployeeModal: React.FC<EditEmployeeModalProps> = ({
       permissions: [PermissionEnum.ORDERS_READ, PermissionEnum.ORDERS_WRITE],
     },
     {
+      title: 'Proformas',
+      permissions: [
+        PermissionEnum.PROFORMA_READ,
+        PermissionEnum.PROFORMA_WRITE,
+      ],
+    },
+    {
+      title: 'Analytics',
+      permissions: [PermissionEnum.ANALYTICS_READ],
+    },
+    {
+      title: 'Warehouse',
+      permissions: [
+        PermissionEnum.WAREHOUSE_READ,
+        PermissionEnum.WAREHOUSE_WRITE,
+      ],
+    },
+    {
       title: 'Promo Codes',
       permissions: [
         PermissionEnum.PROMO_CODE_READ,

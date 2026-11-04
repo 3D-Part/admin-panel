@@ -1,13 +1,15 @@
 'use client'
 
 import React, { useCallback, useEffect, useState } from 'react'
-import { Alert, Button, Label, Table, TextInput } from 'flowbite-react'
-import { BackofficeAPI } from '@/services'
+import { Alert, Button, Label, Select, Table, TextInput } from 'flowbite-react'
+import { BackofficeAPI, CategoriesAPI, ManufacturesAPI } from '@/services'
 import { Analytics as AnalyticsData, AnalyticsRow } from '@/services/backoffice'
 import { Loader } from '@/components/common'
 
 const money = (value: number) => `${value.toFixed(2)} KM`
 const isoDay = (date: Date) => date.toISOString().slice(0, 10)
+
+type Option = { id: string; name: string }
 
 const Tile: React.FC<{ label: string; value: string; hint?: string }> = ({
   label,
@@ -21,11 +23,14 @@ const Tile: React.FC<{ label: string; value: string; hint?: string }> = ({
   </div>
 )
 
-const RowsTable: React.FC<{ rows: AnalyticsRow[] }> = ({ rows }) => (
+const RowsTable: React.FC<{
+  rows: (AnalyticsRow & { orders?: number })[]
+  label?: string
+}> = ({ rows, label = 'Product' }) => (
   <div className="overflow-x-auto">
     <Table>
       <Table.Head>
-        <Table.HeadCell>Product</Table.HeadCell>
+        <Table.HeadCell>{label}</Table.HeadCell>
         <Table.HeadCell>Sold</Table.HeadCell>
         <Table.HeadCell>Revenue</Table.HeadCell>
         <Table.HeadCell>Purchase cost</Table.HeadCell>
@@ -37,6 +42,11 @@ const RowsTable: React.FC<{ rows: AnalyticsRow[] }> = ({ rows }) => (
           <Table.Row key={row.id}>
             <Table.Cell className="text-gray-900 dark:text-white">
               {row.name}
+              {row.orders !== undefined && (
+                <span className="block text-xs text-gray-500 dark:text-gray-400">
+                  {row.sku} · {row.orders} orders
+                </span>
+              )}
             </Table.Cell>
             <Table.Cell>{row.quantity}</Table.Cell>
             <Table.Cell>{money(row.revenue)}</Table.Cell>
@@ -67,18 +77,57 @@ const Analytics = () => {
     isoDay(new Date(today.getTime() - 30 * 86400000))
   )
   const [to, setTo] = useState(isoDay(today))
+  const [categoryId, setCategoryId] = useState('')
+  const [manufacturerId, setManufacturerId] = useState('')
+  const [customerInput, setCustomerInput] = useState('')
+  const [customer, setCustomer] = useState('')
+  const [categories, setCategories] = useState<Option[]>([])
+  const [manufacturers, setManufacturers] = useState<Option[]>([])
   const [data, setData] = useState<AnalyticsData | null>(null)
   const [loading, setLoading] = useState(true)
 
+  useEffect(() => {
+    const sort = { field: 'name', order: 'ASC' as const }
+    const all = { offset: 0, limit: 1000 }
+    CategoriesAPI.getCategories(sort, all).then((result) =>
+      setCategories(result?.rows ?? [])
+    )
+    ManufacturesAPI.getManufactures(sort, all).then((result) =>
+      setManufacturers(result?.rows ?? [])
+    )
+  }, [])
+
+  // typing a name should not fire a request on every key
+  useEffect(() => {
+    const timer = setTimeout(() => setCustomer(customerInput.trim()), 400)
+    return () => clearTimeout(timer)
+  }, [customerInput])
+
   const load = useCallback(async () => {
     setLoading(true)
-    setData(await BackofficeAPI.getAnalytics(from, to))
+    setData(
+      await BackofficeAPI.getAnalytics({
+        from,
+        to,
+        ...(categoryId && { categoryId }),
+        ...(manufacturerId && { manufacturerId }),
+        ...(customer && { customer }),
+      })
+    )
     setLoading(false)
-  }, [from, to])
+  }, [from, to, categoryId, manufacturerId, customer])
 
   useEffect(() => {
     load()
   }, [load])
+
+  const filtered = Boolean(categoryId || manufacturerId || customer)
+  const clearFilters = () => {
+    setCategoryId('')
+    setManufacturerId('')
+    setCustomerInput('')
+    setCustomer('')
+  }
 
   const maxRevenue = Math.max(1, ...(data?.days ?? []).map((day) => day.revenue))
 
@@ -106,7 +155,58 @@ const Analytics = () => {
             onChange={(e) => setTo(e.target.value)}
           />
         </div>
+        <div>
+          <Label htmlFor="analytics-category" value="Category" />
+          <Select
+            id="analytics-category"
+            value={categoryId}
+            onChange={(e) => setCategoryId(e.target.value)}
+          >
+            <option value="">All categories</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </Select>
+        </div>
+        <div>
+          <Label htmlFor="analytics-manufacturer" value="Manufacturer" />
+          <Select
+            id="analytics-manufacturer"
+            value={manufacturerId}
+            onChange={(e) => setManufacturerId(e.target.value)}
+          >
+            <option value="">All manufacturers</option>
+            {manufacturers.map((manufacturer) => (
+              <option key={manufacturer.id} value={manufacturer.id}>
+                {manufacturer.name}
+              </option>
+            ))}
+          </Select>
+        </div>
+        <div>
+          <Label htmlFor="analytics-customer" value="Customer" />
+          <TextInput
+            id="analytics-customer"
+            placeholder="Name, company or email"
+            value={customerInput}
+            onChange={(e) => setCustomerInput(e.target.value)}
+          />
+        </div>
+        {filtered && (
+          <Button color="gray" onClick={clearFilters}>
+            Clear filters
+          </Button>
+        )}
       </div>
+      {filtered && (
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          A category includes its subcategories. With a category or
+          manufacturer chosen, only those products count, and each order
+          carries its share of delivery.
+        </p>
+      )}
 
       {loading && <Loader />}
 
@@ -187,9 +287,39 @@ const Analytics = () => {
             <RowsTable rows={data.topProducts} />
           </section>
 
-          <Button color="gray" size="sm" onClick={load}>
-            Refresh
-          </Button>
+          <section id="by-category">
+            <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">
+              By category
+            </h3>
+            <RowsTable rows={data.byCategory} label="Category" />
+          </section>
+
+          <section id="by-manufacturer">
+            <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">
+              By manufacturer
+            </h3>
+            <RowsTable rows={data.byManufacturer} label="Manufacturer" />
+          </section>
+
+          <section id="top-customers">
+            <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">
+              Top customers
+            </h3>
+            <RowsTable rows={data.topCustomers} label="Customer" />
+          </section>
+
+          <div className="flex flex-wrap gap-2">
+            <Button color="gray" size="sm" onClick={load}>
+              Refresh
+            </Button>
+            <Button
+              color="gray"
+              size="sm"
+              onClick={() => BackofficeAPI.downloadExport('orders', { from, to })}
+            >
+              Export orders of this period (CSV)
+            </Button>
+          </div>
         </>
       )}
     </div>

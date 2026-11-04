@@ -6,6 +6,7 @@ import { HiPlus } from 'react-icons/hi'
 import { URLPartsEnum } from '@/shared/enums'
 import ProductsSearch from './ProductsSearch'
 import ProductsSort from './ProductsSort'
+import { ExportButton } from '@/components/common'
 import { useCurrentUserStore } from '@/store/store'
 import { hasPermission } from '@/shared/helpers/permissions'
 import { PermissionEnum } from '@/shared/types'
@@ -24,6 +25,7 @@ export const ProductsOverviewHeader = () => {
         <ProductsSearch />
       </div>
       <ProductsSort />
+      <ExportButton kind="products" />
       {hasWritePermission && (
         <Button
           href={URLPartsEnum.AddNewProduct}

@@ -5,6 +5,7 @@ import { ToggleSwitch } from 'flowbite-react'
 import { useOrdersStore } from '@/store/store'
 import OrdersSearch from './OrdersSearch'
 import OrdersSort from './OrdersSort'
+import { ExportButton } from '@/components/common'
 
 export const OrdersHeader = () => {
   const { disputedOnly, changeDisputedOnly, changeCurrentPage, fetchOrders, itemsPerPage } =
@@ -25,6 +26,7 @@ export const OrdersHeader = () => {
         }}
       />
       <OrdersSort />
+      <ExportButton kind="orders" />
     </div>
   )
 }
