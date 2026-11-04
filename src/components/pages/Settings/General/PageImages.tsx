@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import React, { useEffect, useState } from 'react'
 import { Badge, Button, Checkbox, Label, Select, TextInput } from 'flowbite-react'
@@ -41,30 +42,30 @@ const PageImages: React.FC<{
     onChange(value.map((image) => (image.id === id ? { ...image, ...changes } : image)))
 
   const pageLabel = (page: string) => {
-    if (page === 'home') return 'Home page slider'
-    if (page === 'shop') return 'All shop pages'
-    if (page === 'all') return 'All products'
-    if (page === 'product') return 'All product pages'
+    if (page === 'home') return tx("Home page slider")
+    if (page === 'shop') return tx("All shop pages")
+    if (page === 'all') return tx("All products")
+    if (page === 'product') return tx("All product pages")
     const slug = page.replace('category:', '')
     const category = allCategories.find((x) => x.slug === slug)
-    return `Category: ${category?.name ?? slug}`
+    return tx("Category: {slug}", { slug: category?.name ?? slug })
   }
 
   // same conditions the site uses to decide what to show
   const status = (image: PageImage): { color: string; text: string } => {
     if (!image.desktop) {
-      return { color: 'failure', text: 'Not shown: desktop image is missing' }
+      return { color: 'failure', text: tx("Not shown: desktop image is missing") }
     }
     if (!image.active) {
-      return { color: 'gray', text: 'Not shown: switched off' }
+      return { color: 'gray', text: tx("Not shown: switched off") }
     }
     if (!image.mobile) {
       return {
         color: 'warning',
-        text: `Active on ${pageLabel(image.page)}, phones get the desktop image`,
+        text: tx("Active on {page}, phones get the desktop image", { page: pageLabel(image.page) }),
       }
     }
-    return { color: 'success', text: `Active on ${pageLabel(image.page)}` }
+    return { color: 'success', text: tx("Active on {page}", { page: pageLabel(image.page) }) }
   }
 
   const activeImages = images.filter((image) => image.active && image.desktop)
@@ -94,7 +95,7 @@ const PageImages: React.FC<{
     if (key) {
       change(id, { [field]: key })
     } else {
-      toast('Upload failed', { type: 'error', autoClose: 2000 })
+      toast(tx("Upload failed"), { type: 'error', autoClose: 2000 })
     }
   }
 
@@ -110,7 +111,7 @@ const PageImages: React.FC<{
           </p>
         ))}
         <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-          Changes reach the site after Save Settings.
+          {tx("Changes reach the site after Save Settings.")}
         </p>
       </div>
       {images.map((image) => (
@@ -123,15 +124,15 @@ const PageImages: React.FC<{
           </div>
           {scope === 'pages' && (
             <div>
-              <Label htmlFor={`page-${image.id}`} value="Page" />
+              <Label htmlFor={`page-${image.id}`} value={tx("Page")} />
               <Select
                 id={`page-${image.id}`}
                 value={image.page}
                 onChange={(e) => change(image.id, { page: e.target.value })}
               >
-                <option value="shop">All shop pages</option>
-                <option value="all">All products</option>
-                <option value="product">All product pages</option>
+                <option value="shop">{tx("All shop pages")}</option>
+                <option value="all">{tx("All products")}</option>
+                <option value="product">{tx("All product pages")}</option>
                 {allCategories.map((category) => (
                   <option key={category.id} value={`category:${category.slug}`}>
                     Category: {category.name}
@@ -141,11 +142,11 @@ const PageImages: React.FC<{
             </div>
           )}
           <div>
-            <Label htmlFor={`link-${image.id}`} value="Link when clicked (optional)" />
+            <Label htmlFor={`link-${image.id}`} value={tx("Link when clicked (optional)")} />
             <TextInput
               id={`link-${image.id}`}
               value={image.link}
-              placeholder="/shop/sale"
+              placeholder={tx("/shop/sale")}
               onChange={(e) => change(image.id, { link: e.target.value })}
             />
           </div>
@@ -155,8 +156,8 @@ const PageImages: React.FC<{
                 htmlFor={`${field}-${image.id}`}
                 value={
                   field === 'desktop'
-                    ? 'Desktop image, 2880 x 1080'
-                    : 'Phone image, 1080 x 1680'
+                    ? tx("Desktop image, 2880 x 1080")
+                    : tx("Phone image, 1080 x 1680")
                 }
               />
               <input
@@ -178,7 +179,7 @@ const PageImages: React.FC<{
             </div>
           ))}
           <div>
-            <Label htmlFor={`alt-${image.id}`} value="Image description, for Google" />
+            <Label htmlFor={`alt-${image.id}`} value={tx("Image description, for Google")} />
             <TextInput
               id={`alt-${image.id}`}
               value={image.alt}
@@ -192,12 +193,12 @@ const PageImages: React.FC<{
                 checked={image.active}
                 onChange={(e) => change(image.id, { active: e.target.checked })}
               />
-              <Label htmlFor={`active-${image.id}`} value="Shown on the site" />
+              <Label htmlFor={`active-${image.id}`} value={tx("Shown on the site")} />
             </div>
             <Button
               size="xs"
               color="failure"
-              aria-label="Remove image"
+              aria-label={tx("Remove image")}
               onClick={() => onChange(value.filter((x) => x.id !== image.id))}
             >
               <HiTrash />
@@ -223,7 +224,7 @@ const PageImages: React.FC<{
           ])
         }
       >
-        Add image
+        {tx("Add image")}
       </Button>
     </div>
   )

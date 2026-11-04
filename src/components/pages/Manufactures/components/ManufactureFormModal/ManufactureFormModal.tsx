@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 import { modalRoot } from '@/shared/helpers/modalRoot'
 
 import { Loader } from '@/components/common'
@@ -68,7 +69,7 @@ const ManufactureFormModal: React.FC<ModalType> = ({
         <Modal.Header className="border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center gap-3">
             <span className="font-semibold text-gray-900 dark:text-white">
-              {initialValue ? 'Edit Manufacturer' : 'Add New Manufacturer'}
+              {initialValue ? tx("Edit Manufacturer") : tx("Add New Manufacturer")}
             </span>
             {initialValue && (
               <span className="text-sm text-gray-500 dark:text-gray-400">
@@ -84,13 +85,13 @@ const ManufactureFormModal: React.FC<ModalType> = ({
               {/* Manufacturer Information */}
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                  Manufacturer Information
+                  {tx("Manufacturer Information")}
                 </h3>
                 <div className="space-y-4">
                   <div>
                     <Label
                       htmlFor="manufacturerName"
-                      value="Manufacturer Name"
+                      value={tx("Manufacturer Name")}
                       className="text-sm font-medium text-gray-700 dark:text-gray-300"
                     />
                     <TextInput
@@ -101,7 +102,7 @@ const ManufactureFormModal: React.FC<ModalType> = ({
                       type="text"
                       defaultValue={initialValue?.name ? initialValue.name : ''}
                       className="mt-1"
-                      placeholder="Enter manufacturer name..."
+                      placeholder={tx("Enter manufacturer name...")}
                     />
                   </div>
                 </div>
@@ -121,14 +122,14 @@ const ManufactureFormModal: React.FC<ModalType> = ({
               className="w-full sm:w-auto order-2 sm:order-1"
               disabled={!manufacturerDataRef.current.name}
             >
-              {initialValue ? 'Update Manufacturer' : 'Create Manufacturer'}
+              {initialValue ? tx("Update Manufacturer") : tx("Create Manufacturer")}
             </Button>
             <Button
               color="gray"
               onClick={onClose}
               className="w-full sm:w-auto order-1 sm:order-2"
             >
-              Cancel
+              {tx("Cancel")}
             </Button>
           </div>
         </Modal.Footer>

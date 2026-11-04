@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 import { CustomerFlagBadge } from '@/components/common/CustomerFlag/CustomerFlag'
 import { CustomerProfile } from '@/services/backoffice'
 
@@ -47,7 +48,7 @@ export const TableItem: React.FC<TableItemType> = ({ user, profile }) => {
                 {availablePoints}
               </span>
               <span className="text-gray-500 dark:text-gray-400 text-xs">
-                available
+                {tx("available")}
               </span>
             </div>
             <div className="w-px h-4 bg-gray-300 dark:bg-gray-600"></div>
@@ -56,7 +57,7 @@ export const TableItem: React.FC<TableItemType> = ({ user, profile }) => {
                 {usedPoints}
               </span>
               <span className="text-gray-400 dark:text-gray-500 text-xs">
-                used
+                {tx("used")}
               </span>
             </div>
           </div>
@@ -65,10 +66,10 @@ export const TableItem: React.FC<TableItemType> = ({ user, profile }) => {
         {/* <Table.Cell>
             <div className="flex justify-end items-center gap-8">
                 <span className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
-                    <p>Edit</p>
+                    <p>{tx("Edit")}</p>
                 </span>
                 <span className="font-medium text-red-500 hover:underline dark:text-red-500">
-                    <p>Remove</p>
+                    <p>{tx("Remove")}</p>
                 </span>
             </div>
         </Table.Cell> */}

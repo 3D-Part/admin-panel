@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import React, { useEffect, useState } from 'react'
 import { Button, Checkbox, Label, TextInput, ToggleSwitch } from 'flowbite-react'
@@ -59,7 +60,7 @@ const StockAndExtras = () => {
       }
     }
     setUploading(false)
-    if (!uploaded) toast('Upload failed', { type: 'error', autoClose: 2000 })
+    if (!uploaded) toast(tx("Upload failed"), { type: 'error', autoClose: 2000 })
   }
 
   const toggle = (list: string[], value: string) =>
@@ -68,7 +69,7 @@ const StockAndExtras = () => {
   const save = async () => {
     const limits = [toNumber(warning), toNumber(critical), toNumber(sortPriority)]
     if (limits.some((value) => value !== null && !Number.isInteger(value))) {
-      toast('Limits and position must be whole numbers', {
+      toast(tx("Limits and position must be whole numbers"), {
         type: 'error',
         autoClose: 2000,
       })
@@ -92,7 +93,7 @@ const StockAndExtras = () => {
 
     if (updated && cost && categories) {
       changeActiveProduct({ ...product, ...body })
-      toast('Saved', { type: 'success', autoClose: 2000 })
+      toast(tx("Saved"), { type: 'success', autoClose: 2000 })
     }
   }
 
@@ -106,7 +107,7 @@ const StockAndExtras = () => {
     <div className="flex flex-col gap-6 max-w-3xl pb-8">
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <Label htmlFor="purchase-price" value="Purchase price (KM), staff only" />
+          <Label htmlFor="purchase-price" value={tx("Purchase price (KM), staff only")} />
           <TextInput
             id="purchase-price"
             type="number"
@@ -117,7 +118,7 @@ const StockAndExtras = () => {
           />
         </div>
         <div>
-          <Label htmlFor="sort-priority" value="Packing position, lowest first" />
+          <Label htmlFor="sort-priority" value={tx("Packing position, lowest first")} />
           <TextInput
             id="sort-priority"
             type="number"
@@ -126,7 +127,7 @@ const StockAndExtras = () => {
           />
         </div>
         <div>
-          <Label htmlFor="low-warning" value="Yellow alert at (pcs)" />
+          <Label htmlFor="low-warning" value={tx("Yellow alert at (pcs)")} />
           <TextInput
             id="low-warning"
             type="number"
@@ -136,7 +137,7 @@ const StockAndExtras = () => {
           />
         </div>
         <div>
-          <Label htmlFor="low-critical" value="Red alert at (pcs)" />
+          <Label htmlFor="low-critical" value={tx("Red alert at (pcs)")} />
           <TextInput
             id="low-critical"
             type="number"
@@ -149,13 +150,13 @@ const StockAndExtras = () => {
 
       <ToggleSwitch
         checked={isBackorder}
-        label="Made to order: the shop shows it as available by order only"
+        label={tx("Made to order: the shop shows it as available by order only")}
         onChange={setIsBackorder}
       />
 
       <div>
         <p className="mb-2 text-sm font-medium text-gray-900 dark:text-white">
-          Icons shown in the shop
+          {tx("Icons shown in the shop")}
         </p>
         <div className="flex flex-wrap gap-4">
           {PRODUCT_ICONS.map(({ id, label }) => (
@@ -165,7 +166,7 @@ const StockAndExtras = () => {
                 checked={icons.includes(id)}
                 onChange={() => setIcons(toggle(icons, id))}
               />
-              <Label htmlFor={`icon-${id}`} value={label} />
+              <Label htmlFor={`icon-${id}`} value={tx(label)} />
             </div>
           ))}
         </div>
@@ -176,12 +177,12 @@ const StockAndExtras = () => {
               <button
                 key={icon}
                 type="button"
-                title="Remove this icon"
+                title={tx("Remove this icon")}
                 onClick={() => setIcons(toggle(icons, icon))}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  alt="Custom icon"
+                  alt={tx("Custom icon")}
                   className="w-8 h-8 object-contain rounded border border-gray-300 dark:border-gray-600"
                   src={`${process.env.S3_URL}/${icon.slice(CUSTOM_ICON.length)}`}
                 />
@@ -204,7 +205,7 @@ const StockAndExtras = () => {
           Also show in these categories ({categoryIds.length})
         </p>
         <TextInput
-          placeholder="Filter categories"
+          placeholder={tx("Filter categories")}
           value={categoryFilter}
           onChange={(e) => setCategoryFilter(e.target.value)}
         />
@@ -223,7 +224,7 @@ const StockAndExtras = () => {
       </div>
 
       <Button className="self-start" disabled={saving} onClick={save}>
-        Save
+        {tx("Save")}
       </Button>
     </div>
   )

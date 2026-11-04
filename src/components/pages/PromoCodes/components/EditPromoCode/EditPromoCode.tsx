@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { PromoCodeFormBody } from '@/shared/types'
 import { usePromoCodesSliceStore } from '@/store/store'
@@ -75,7 +76,7 @@ const EditPromoCode: React.FC = () => {
   if (loader) {
     return (
       <div className="flex flex-col  w-full ">
-        <PromoCodeHeader title="Edit promo code:" />
+        <PromoCodeHeader title={tx("Edit promo code:")} />
         <Loader />
       </div>
     )
@@ -83,7 +84,7 @@ const EditPromoCode: React.FC = () => {
 
   return (
     <div className="flex flex-col  w-full ">
-      <PromoCodeHeader title="Edit promo code:" />
+      <PromoCodeHeader title={tx("Edit promo code:")} />
 
       <form
         ref={formRef}
@@ -93,7 +94,7 @@ const EditPromoCode: React.FC = () => {
         {/* CODE NAME */}
         <div className="w-full">
           <div className="mb-2 block">
-            <Label htmlFor="code" value="Name (Code)  " />
+            <Label htmlFor="code" value={tx("Name (Code)  ")} />
           </div>
           <TextInput
             name="code"
@@ -108,7 +109,7 @@ const EditPromoCode: React.FC = () => {
         {/* DISCOUNT */}
         <div className="w-full">
           <div className="mb-2 block">
-            <Label htmlFor="discountPercentage" value="Discount percentage" />
+            <Label htmlFor="discountPercentage" value={tx("Discount percentage")} />
           </div>
           <TextInput
             name="discountPercentage"
@@ -129,7 +130,7 @@ const EditPromoCode: React.FC = () => {
         {/* START DATE */}
         <div className="w-full">
           <div className="mb-2 block">
-            <Label htmlFor="startsAt" value="Start time" />
+            <Label htmlFor="startsAt" value={tx("Start time")} />
           </div>
           <TextInput
             name="startsAt"
@@ -144,7 +145,7 @@ const EditPromoCode: React.FC = () => {
         {/* END DATE */}
         <div className="w-full">
           <div className="mb-2 block">
-            <Label htmlFor="endsAt" value="End time" />
+            <Label htmlFor="endsAt" value={tx("End time")} />
           </div>
           <TextInput
             name="endsAt"
@@ -159,7 +160,7 @@ const EditPromoCode: React.FC = () => {
         <AssignUsers />
 
         <Button className="mt-6" type="submit" color="purple">
-          Save
+          {tx("Save")}
         </Button>
       </form>
     </div>

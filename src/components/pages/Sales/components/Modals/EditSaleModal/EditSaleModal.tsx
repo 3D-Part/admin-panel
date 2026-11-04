@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 import { modalRoot } from '@/shared/helpers/modalRoot'
 
 import isoToDatetimeLocal, { datetimeLocalToIso } from '@/shared/helpers/isoToDatetimeLocal'
@@ -76,7 +77,7 @@ const EditSaleModal = () => {
     })
 
     if (response) {
-      toast('Sale is updated', {
+      toast(tx("Sale is updated"), {
         hideProgressBar: true,
         autoClose: 2000,
         type: 'success',
@@ -95,7 +96,7 @@ const EditSaleModal = () => {
     const response = await removeSale(activeSale.id)
 
     if (response) {
-      toast('Sale is removed', {
+      toast(tx("Sale is removed"), {
         hideProgressBar: true,
         autoClose: 2000,
         type: 'success',
@@ -121,20 +122,20 @@ const EditSaleModal = () => {
         // Manually remove the product from the active sale in the slice
         removeProductFromActiveSale(productId)
 
-        toast('Product removed from sale', {
+        toast(tx("Product removed from sale"), {
           hideProgressBar: true,
           autoClose: 2000,
           type: 'success',
         })
       } else {
-        toast('Failed to remove product from sale', {
+        toast(tx("Failed to remove product from sale"), {
           hideProgressBar: true,
           autoClose: 2000,
           type: 'error',
         })
       }
     } catch (error) {
-      toast('Failed to remove product from sale', {
+      toast(tx("Failed to remove product from sale"), {
         hideProgressBar: true,
         autoClose: 2000,
         type: 'error',
@@ -169,7 +170,7 @@ const EditSaleModal = () => {
       <Modal.Header className="border-b border-gray-200 dark:border-gray-700 px-4 sm:px-6 py-4">
         <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 w-full">
           <span className="font-semibold text-gray-900 dark:text-white text-lg">
-            Edit Sale
+            {tx("Edit Sale")}
           </span>
           {activeSale?.name && (
             <span className="text-sm text-gray-500 dark:text-gray-400 truncate">
@@ -197,12 +198,12 @@ const EditSaleModal = () => {
                   d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
-              Sale Information
+              {tx("Sale Information")}
             </h3>
             <div>
               <Label
                 htmlFor="name"
-                value="Sale Name"
+                value={tx("Sale Name")}
                 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block"
               />
               <TextInput
@@ -212,7 +213,7 @@ const EditSaleModal = () => {
                 required
                 type="text"
                 defaultValue={activeSale?.name ? activeSale.name : ''}
-                placeholder="Enter sale name..."
+                placeholder={tx("Enter sale name...")}
                 className="w-full"
               />
             </div>
@@ -234,14 +235,14 @@ const EditSaleModal = () => {
                   d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                 />
               </svg>
-              Sale Period
+              {tx("Sale Period")}
             </h3>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
               {/* START DATE */}
               <div>
                 <Label
                   htmlFor="startsAt"
-                  value="Start Date & Time"
+                  value={tx("Start Date & Time")}
                   className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block"
                 />
                 <TextInput
@@ -259,7 +260,7 @@ const EditSaleModal = () => {
               <div>
                 <Label
                   htmlFor="endsAt"
-                  value="End Date & Time"
+                  value={tx("End Date & Time")}
                   className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block"
                 />
                 <TextInput
@@ -351,7 +352,7 @@ const EditSaleModal = () => {
                           type="button"
                           onClick={() => handleRemoveProduct(product.id)}
                           className="p-2 sm:p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors duration-200 touch-manipulation"
-                          title="Remove from sale"
+                          title={tx("Remove from sale")}
                         >
                           <svg
                             className="w-4 h-4"
@@ -387,7 +388,7 @@ const EditSaleModal = () => {
             size="sm"
             color="purple"
           >
-            Update Sale
+            {tx("Update Sale")}
           </Button>
           <Button
             isProcessing={loading}
@@ -396,7 +397,7 @@ const EditSaleModal = () => {
             className="flex-1 sm:w-auto order-2 h-10 touch-manipulation"
             size="sm"
           >
-            Remove Sale
+            {tx("Remove Sale")}
           </Button>
           <Button
             disabled={loading}
@@ -405,7 +406,7 @@ const EditSaleModal = () => {
             className="hidden sm:block sm:w-auto order-3 h-10 touch-manipulation"
             size="sm"
           >
-            Cancel
+            {tx("Cancel")}
           </Button>
         </div>
       </Modal.Footer>

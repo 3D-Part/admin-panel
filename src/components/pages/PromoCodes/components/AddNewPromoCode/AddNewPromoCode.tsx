@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 import { datetimeLocalToIso } from '@/shared/helpers/isoToDatetimeLocal'
 
 import { PromoCodeFormBody } from '@/shared/types'
@@ -77,7 +78,7 @@ const AddNewPromoCode: React.FC<AddNewPromoCodeType> = ({ initialValue }) => {
   if (loader) {
     return (
       <div className="flex flex-col  w-full ">
-        <PromoCodeHeader title="Add new promo code:" />
+        <PromoCodeHeader title={tx("Add new promo code:")} />
         <Loader />
       </div>
     )
@@ -85,7 +86,7 @@ const AddNewPromoCode: React.FC<AddNewPromoCodeType> = ({ initialValue }) => {
 
   return (
     <div className="flex flex-col  w-full ">
-      <PromoCodeHeader title="Add new promo code:" />
+      <PromoCodeHeader title={tx("Add new promo code:")} />
 
       <form
         ref={formRef}
@@ -95,7 +96,7 @@ const AddNewPromoCode: React.FC<AddNewPromoCodeType> = ({ initialValue }) => {
         {/* CODE NAME */}
         <div className="w-full">
           <div className="mb-2 block">
-            <Label htmlFor="code" value="Name (Code)  " />
+            <Label htmlFor="code" value={tx("Name (Code)  ")} />
           </div>
           <TextInput
             name="code"
@@ -110,7 +111,7 @@ const AddNewPromoCode: React.FC<AddNewPromoCodeType> = ({ initialValue }) => {
         {/* DISCOUNT */}
         <div className="w-full">
           <div className="mb-2 block">
-            <Label htmlFor="discountPercentage" value="Discount percentage" />
+            <Label htmlFor="discountPercentage" value={tx("Discount percentage")} />
           </div>
           <TextInput
             name="discountPercentage"
@@ -131,7 +132,7 @@ const AddNewPromoCode: React.FC<AddNewPromoCodeType> = ({ initialValue }) => {
         {/* START DATE */}
         <div className="w-full">
           <div className="mb-2 block">
-            <Label htmlFor="startsAt" value="Start time" />
+            <Label htmlFor="startsAt" value={tx("Start time")} />
           </div>
           <TextInput
             name="startsAt"
@@ -146,7 +147,7 @@ const AddNewPromoCode: React.FC<AddNewPromoCodeType> = ({ initialValue }) => {
         {/* END DATE */}
         <div className="w-full">
           <div className="mb-2 block">
-            <Label htmlFor="endsAt" value="End time" />
+            <Label htmlFor="endsAt" value={tx("End time")} />
           </div>
           <TextInput
             name="endsAt"
@@ -159,7 +160,7 @@ const AddNewPromoCode: React.FC<AddNewPromoCodeType> = ({ initialValue }) => {
         </div>
 
         <Button className="mt-6" type="submit" color="purple">
-          Save
+          {tx("Save")}
         </Button>
       </form>
     </div>

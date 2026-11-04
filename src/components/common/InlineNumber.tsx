@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
@@ -42,7 +43,7 @@ const InlineNumber: React.FC<InlineNumberType> = ({
         parsed < 0 ||
         (whole && !Number.isInteger(parsed)))
     if (invalid || (parsed === null && whole)) {
-      toast('Enter a valid number', { type: 'error', autoClose: 2000 })
+      toast(tx("Enter a valid number"), { type: 'error', autoClose: 2000 })
       setText(saved)
       return
     }

@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { Badge } from 'flowbite-react'
 import React from 'react'
@@ -25,7 +26,7 @@ const MovementList: React.FC<MovementListProps> = ({
   if (movements.length === 0) {
     return (
       <p className="text-sm text-gray-500 dark:text-gray-400">
-        No records yet.
+        {tx("No records yet.")}
       </p>
     )
   }
@@ -38,7 +39,7 @@ const MovementList: React.FC<MovementListProps> = ({
           <li key={movement.id} className="py-2 flex flex-col gap-1 text-sm">
             <div className="flex flex-wrap items-center gap-2">
               <Badge color={movementColor[movement.type]}>
-                {movementLabels[movement.type]}
+                {tx(movementLabels[movement.type])}
               </Badge>
 
               {movement.quantityChange != null && (
@@ -62,9 +63,9 @@ const MovementList: React.FC<MovementListProps> = ({
                 movement.statusBefore !== movement.statusAfter && (
                   <span className="text-gray-700 dark:text-gray-200">
                     {movement.statusBefore
-                      ? `${assetStatusLabels[movement.statusBefore]} → `
+                      ? `${tx(assetStatusLabels[movement.statusBefore])} → `
                       : ''}
-                    {assetStatusLabels[movement.statusAfter]}
+                    {tx(assetStatusLabels[movement.statusAfter])}
                   </span>
                 )}
 

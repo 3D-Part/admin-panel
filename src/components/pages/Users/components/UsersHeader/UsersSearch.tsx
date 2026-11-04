@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { Search } from '@/components/common'
 import { PaginationData } from '@/shared/types'
@@ -56,19 +57,19 @@ const UsersSearch = () => {
       <Dropdown dismissOnClick label={searchFieldLabels[searchBy]} size="sm">
         <Dropdown.Item onClick={() => setSearchBy('email')}>
           <span className="font-medium text-cyan-600 cursor-pointer hover:underline dark:text-cyan-500">
-            <p>EMAIL</p>
+            <p>{tx("EMAIL")}</p>
           </span>
         </Dropdown.Item>
         <Dropdown.Item onClick={() => setSearchBy('fullName')}>
           <span className="font-medium text-cyan-600 cursor-pointer hover:underline dark:text-cyan-500">
-            <p>FULL NAME</p>
+            <p>{tx("FULL NAME")}</p>
           </span>
         </Dropdown.Item>
       </Dropdown>
       <div className="flex-1 md:flex-none min-w-0">
         <Search getData={fetchUsersData} />
       </div>
-      {loader && <Spinner aria-label="Loading..." size="sm" />}
+      {loader && <Spinner aria-label={tx("Loading...")} size="sm" />}
     </div>
   )
 }

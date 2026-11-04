@@ -1,3 +1,4 @@
+import { tx } from '@/shared/i18n'
 import { Order } from '@/shared/types'
 import { Badge, Table } from 'flowbite-react'
 import React, { useState } from 'react'
@@ -77,7 +78,7 @@ export const TableItem: React.FC<TableItemType> = ({ order, billingOptions }) =>
             </div>
             {order.disputed && (
               <Badge color="failure" className="shrink-0">
-                Disputed
+                {tx("Disputed")}
               </Badge>
             )}
             {internalNote && (
@@ -91,10 +92,10 @@ export const TableItem: React.FC<TableItemType> = ({ order, billingOptions }) =>
             {hasBackorder && (
               <Badge
                 color="warning"
-                title="Some products were ordered above the stock level and have to be procured"
+                title={tx("Some products were ordered above the stock level and have to be procured")}
                 className="shrink-0"
               >
-                Backorder
+                {tx("Backorder")}
               </Badge>
             )}
           </div>

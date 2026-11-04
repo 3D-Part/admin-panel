@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { Search } from '@/components/common'
 import { PaginationData } from '@/shared/types'
@@ -52,7 +53,7 @@ const OrderEmailsSearch = () => {
       <div className="flex-1 md:flex-none min-w-0">
         <Search getData={fetchEmailsData} />
       </div>
-      {loader && <Spinner aria-label="Loading..." size="sm" />}
+      {loader && <Spinner aria-label={tx("Loading...")} size="sm" />}
     </div>
   )
 }

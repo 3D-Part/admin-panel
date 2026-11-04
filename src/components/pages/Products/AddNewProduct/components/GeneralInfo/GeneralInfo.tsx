@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 import { Loader, Keywords } from '@/components/common'
 import {
   useManufactureStore,
@@ -174,7 +175,7 @@ const GeneralInfo = () => {
       {/* NAME */}
       <div className="w-full">
         <div className="mb-2 block">
-          <Label className="text-base" htmlFor="name" value="Product name" />
+          <Label className="text-base" htmlFor="name" value={tx("Product name")} />
         </div>
         <TextInput
           name="name"
@@ -188,7 +189,7 @@ const GeneralInfo = () => {
       {/* SKU */}
       <div className="w-full">
         <div className="mb-2 block">
-          <Label className="text-base" htmlFor="sku" value="SKU" />
+          <Label className="text-base" htmlFor="sku" value={tx("SKU")} />
         </div>
         <TextInput
           onChange={handleInputChange}
@@ -206,7 +207,7 @@ const GeneralInfo = () => {
       {/* PRICE */}
       <div className="w-full">
         <div className="mb-2 block">
-          <Label className="text-base" htmlFor="price" value="Price" />
+          <Label className="text-base" htmlFor="price" value={tx("Price")} />
         </div>
         <TextInput
           onChange={handleInputChange}
@@ -221,7 +222,7 @@ const GeneralInfo = () => {
       {/* QUANTITY */}
       <div className="w-full">
         <div className="mb-2 block">
-          <Label className="text-base" htmlFor="quantity" value="Quantity" />
+          <Label className="text-base" htmlFor="quantity" value={tx("Quantity")} />
         </div>
         <TextInput
           onChange={handleInputChange}
@@ -235,7 +236,7 @@ const GeneralInfo = () => {
       {/* WEIGHT */}
       <div className="w-full">
         <div className="mb-2 block">
-          <Label className="text-base" htmlFor="weight" value="Weight" />
+          <Label className="text-base" htmlFor="weight" value={tx("Weight")} />
         </div>
         <TextInput
           onChange={handleInputChange}
@@ -253,7 +254,7 @@ const GeneralInfo = () => {
       {/* CATEGORY */}
       <div className="w-full">
         <div className="mb-2 block">
-          <Label className="text-base" htmlFor="categoryId" value="Category" />
+          <Label className="text-base" htmlFor="categoryId" value={tx("Category")} />
         </div>
         <Select
           onChange={handleInputChange}
@@ -261,7 +262,7 @@ const GeneralInfo = () => {
           name="categoryId"
           required
         >
-          <option value={''}>None</option>
+          <option value={''}>{tx("None")}</option>
           {allCategories.map((category) => {
             return (
               <option value={category.id} key={category.id}>
@@ -275,14 +276,14 @@ const GeneralInfo = () => {
       {/* MANUFACTURER */}
       <div className="w-full">
         <div className="mb-2 block">
-          <Label htmlFor="manufacturerId" value="Manufacturer" />
+          <Label htmlFor="manufacturerId" value={tx("Manufacturer")} />
         </div>
         <Select
           onChange={handleInputChange}
           id="manufacturerId"
           name="manufacturerId"
         >
-          <option value={''}>None</option>
+          <option value={''}>{tx("None")}</option>
           {allManufactures.map((manufacture) => {
             return (
               <option key={manufacture.id} value={manufacture.id}>
@@ -299,12 +300,12 @@ const GeneralInfo = () => {
           <Label
             className="text-base"
             htmlFor="description"
-            value="Description"
+            value={tx("Description")}
           />
         </div>
         {/* <TextEditor
           handleEditorChange={handleDescriptionChange}
-          placeholder="Product description..."
+          placeholder={tx("Product description...")}
           id="description"
         /> */}
 
@@ -312,7 +313,7 @@ const GeneralInfo = () => {
           onChange={handleInputChange}
           id="description"
           name="description"
-          placeholder="Product description..."
+          placeholder={tx("Product description...")}
           rows={4}
         />
       </div>
@@ -320,11 +321,11 @@ const GeneralInfo = () => {
       {/* DETAILS */}
       <div className="w-full">
         <div className="mb-2 block">
-          <Label className="text-base" htmlFor="details" value="Details" />
+          <Label className="text-base" htmlFor="details" value={tx("Details")} />
         </div>
         <TextEditor
           handleEditorChange={handleDetailsChange}
-          placeholder="Product details..."
+          placeholder={tx("Product details...")}
           id="details"
         />
       </div>
@@ -333,8 +334,8 @@ const GeneralInfo = () => {
       <Keywords
         keywords={keywords}
         onChange={handleKeywordsChange}
-        label="Search Keywords"
-        placeholder="Add search keyword..."
+        label={tx("Search Keywords")}
+        placeholder={tx("Add search keyword...")}
       />
 
       {/* TOGGLE SWITCHES */}
@@ -342,34 +343,34 @@ const GeneralInfo = () => {
         {/* IS PUBLISHED */}
         <ToggleSwitch
           checked={isPublished}
-          label="Published"
+          label={tx("Published")}
           onChange={changeIsPublished}
         />
 
         {/* IS MOST SOLD */}
         <ToggleSwitch
           checked={isMostSold}
-          label="Most sold"
+          label={tx("Most sold")}
           onChange={changeIsMostSold}
         />
 
         {/* IS RECOMMENDED / IS SUPER OFFER */}
         <ToggleSwitch
           checked={isRecommended}
-          label="Super offer"
+          label={tx("Super offer")}
           onChange={changeIsRecommended}
         />
 
         {/* IS SHOPPING CART RECOMMENDED */}
         <ToggleSwitch
           checked={isShoppingCartRecommended}
-          label="Shopping cart recommended"
+          label={tx("Shopping cart recommended")}
           onChange={changeIsShoppingCartRecommended}
         />
       </div>
 
       <Button className="mt-6" type="submit" color="purple">
-        Save
+        {tx("Save")}
       </Button>
     </form>
   )

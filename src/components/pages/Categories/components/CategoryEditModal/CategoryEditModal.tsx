@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 import { modalRoot } from '@/shared/helpers/modalRoot'
 
 import { Loader } from '@/components/common'
@@ -141,7 +142,7 @@ const CategoryEditModal: React.FC<ModalType> = ({
         <Modal.Header className="border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center gap-3">
             <span className="font-semibold text-gray-900 dark:text-white">
-              {initialValue ? 'Edit Category' : 'Add New Category'}
+              {initialValue ? tx("Edit Category") : tx("Add New Category")}
             </span>
             {initialValue && (
               <span className="text-sm text-gray-500 dark:text-gray-400">
@@ -157,13 +158,13 @@ const CategoryEditModal: React.FC<ModalType> = ({
               {/* Basic Information */}
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                  Basic Information
+                  {tx("Basic Information")}
                 </h3>
                 <div className="space-y-4">
                   <div>
                     <Label
                       htmlFor="categoryName"
-                      value="Category Name"
+                      value={tx("Category Name")}
                       className="text-sm font-medium text-gray-700 dark:text-gray-300"
                     />
                     <TextInput
@@ -174,14 +175,14 @@ const CategoryEditModal: React.FC<ModalType> = ({
                       type="text"
                       defaultValue={initialValue?.name ? initialValue.name : ''}
                       className="mt-1"
-                      placeholder="Enter category name..."
+                      placeholder={tx("Enter category name...")}
                     />
                   </div>
 
                   <div>
                     <Label
                       htmlFor="urlSlug"
-                      value="URL Slug"
+                      value={tx("URL Slug")}
                       className="text-sm font-medium text-gray-700 dark:text-gray-300"
                     />
                     <TextInput
@@ -192,7 +193,7 @@ const CategoryEditModal: React.FC<ModalType> = ({
                       type="text"
                       defaultValue={initialValue?.slug ? initialValue.slug : ''}
                       className="mt-1"
-                      placeholder="category-slug"
+                      placeholder={tx("category-slug")}
                     />
                   </div>
                 </div>
@@ -201,12 +202,12 @@ const CategoryEditModal: React.FC<ModalType> = ({
               {/* Description */}
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                  Description
+                  {tx("Description")}
                 </h3>
                 <div>
                   <Label
                     htmlFor="description"
-                    value="Category Description"
+                    value={tx("Category Description")}
                     className="text-sm font-medium text-gray-700 dark:text-gray-300"
                   />
                   <Textarea
@@ -216,7 +217,7 @@ const CategoryEditModal: React.FC<ModalType> = ({
                     }
                     id="description"
                     name="description"
-                    placeholder="Enter category description..."
+                    placeholder={tx("Enter category description...")}
                     rows={3}
                     className="mt-1"
                   />
@@ -226,12 +227,12 @@ const CategoryEditModal: React.FC<ModalType> = ({
               {/* Parent Category */}
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                  Parent Category
+                  {tx("Parent Category")}
                 </h3>
                 <div>
                   <Label
                     htmlFor="category"
-                    value="Select Parent Category"
+                    value={tx("Select Parent Category")}
                     className="text-sm font-medium text-gray-700 dark:text-gray-300"
                   />
                   <Select
@@ -245,7 +246,7 @@ const CategoryEditModal: React.FC<ModalType> = ({
                     }
                     className="mt-1"
                   >
-                    <option value={''}>No parent category</option>
+                    <option value={''}>{tx("No parent category")}</option>
                     {allCategories.map((category) => {
                       return (
                         <option key={category.id} value={category.id}>
@@ -260,7 +261,7 @@ const CategoryEditModal: React.FC<ModalType> = ({
               {/* Attributes */}
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                  Category Attributes
+                  {tx("Category Attributes")}
                 </h3>
                 <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
                   <CategoryAttribute
@@ -284,14 +285,14 @@ const CategoryEditModal: React.FC<ModalType> = ({
               className="w-full sm:w-auto order-2 sm:order-1"
               color="purple"
             >
-              {initialValue ? 'Update Category' : 'Create Category'}
+              {initialValue ? tx("Update Category") : tx("Create Category")}
             </Button>
             <Button
               color="gray"
               onClick={onClose}
               className="w-full sm:w-auto order-1 sm:order-2"
             >
-              Cancel
+              {tx("Cancel")}
             </Button>
           </div>
         </Modal.Footer>

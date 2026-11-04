@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import React, { useEffect, useRef, useState } from 'react'
 import { CategoriesTable } from './components/CategoriesTable/CategoriesTable'
@@ -80,7 +81,7 @@ export const Categories = () => {
     )
 
     if (response) {
-      const toastMessage = `category ${activeCategoryRef.current.name} is removed`
+      const toastMessage = tx("category {name} is removed", { name: activeCategoryRef.current.name })
       toast(toastMessage, {
         hideProgressBar: true,
         autoClose: 2000,
@@ -98,7 +99,7 @@ export const Categories = () => {
     } else {
       const res = await editCategory(activeCategoryRef.current?.id, category)
       if (res) {
-        const toastMessage = `category ${activeCategoryRef.current.name} is changed!`
+        const toastMessage = tx("category {name} is changed!", { name: activeCategoryRef.current.name })
         toast(toastMessage, {
           hideProgressBar: true,
           autoClose: 2000,
@@ -139,7 +140,7 @@ export const Categories = () => {
         onSave={onWarningModalConfirm}
         isOpen={isWarningModalOpen}
         onClose={onWarningModalClose}
-        message={`Are you sure you want to delete ${activeCategoryRef.current?.name}?`}
+        message={tx("Are you sure you want to delete {name}?", { name: activeCategoryRef.current?.name })}
       />
     </div>
   )

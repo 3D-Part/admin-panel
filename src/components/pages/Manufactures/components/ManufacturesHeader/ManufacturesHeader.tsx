@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import React from 'react'
 import { Button } from 'flowbite-react'
@@ -29,7 +30,7 @@ export const ManufacturesHeader = () => {
           onClick={() => router.push(URLPartsEnum.AddNewManufacturer)}
           color="purple"
         >
-          Add new <HiPlus className="ml-2" />
+          {tx("Add new")}{' '}<HiPlus className="ml-2" />
         </Button>
       )}
     </div>

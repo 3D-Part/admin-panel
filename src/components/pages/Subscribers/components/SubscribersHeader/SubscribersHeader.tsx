@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import React, { useState } from 'react'
 import { Button } from 'flowbite-react'
@@ -24,7 +25,7 @@ export const SubscribersHeader = () => {
           onClick={toggleFormModalVisible}
           color="purple"
         >
-          Send email
+          {tx("Send email")}
           <BiMessageDetail className="ml-2" />
         </Button>
       </div>

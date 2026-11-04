@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { Pagination, Table } from 'flowbite-react'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -84,25 +85,25 @@ export const UsersTable = () => {
         onClick={() => handleUserClick(user)}
         items={[
           {
-            label: 'Phone',
+            label: tx("Phone"),
             value: phone || (
               <span className="text-gray-400 dark:text-gray-500">—</span>
             ),
           },
           {
-            label: 'City',
+            label: tx("City"),
             value: city || (
               <span className="text-gray-400 dark:text-gray-500">—</span>
             ),
           },
           {
-            label: 'Street',
+            label: tx("Street"),
             value: street || (
               <span className="text-gray-400 dark:text-gray-500">—</span>
             ),
           },
           {
-            label: 'Points',
+            label: tx("Points"),
             value: (
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-1">
@@ -110,7 +111,7 @@ export const UsersTable = () => {
                     {availablePoints}
                   </span>
                   <span className="text-gray-500 dark:text-gray-400 text-xs">
-                    available
+                    {tx("available")}
                   </span>
                 </div>
                 <div className="w-px h-4 bg-gray-300 dark:bg-gray-600"></div>
@@ -119,7 +120,7 @@ export const UsersTable = () => {
                     {usedPoints}
                   </span>
                   <span className="text-gray-400 dark:text-gray-500 text-xs">
-                    used
+                    {tx("used")}
                   </span>
                 </div>
               </div>
@@ -142,16 +143,16 @@ export const UsersTable = () => {
         <div className="table-body-container ">
           <Table className="w-full">
             <Table.Head className="table-header">
-              <Table.HeadCell className="table-cell w-1/6">Name</Table.HeadCell>
+              <Table.HeadCell className="table-cell w-1/6">{tx("Name")}</Table.HeadCell>
               <Table.HeadCell className="table-cell w-2/5">
-                Email
+                {tx("Email")}
               </Table.HeadCell>
               <Table.HeadCell className="table-cell w-1/8">
-                Phone
+                {tx("Phone")}
               </Table.HeadCell>
-              <Table.HeadCell className="table-cell w-1/8">City</Table.HeadCell>
+              <Table.HeadCell className="table-cell w-1/8">{tx("City")}</Table.HeadCell>
               <Table.HeadCell className="table-cell w-1/6">
-                Points
+                {tx("Points")}
               </Table.HeadCell>
             </Table.Head>
 

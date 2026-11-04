@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { Button } from 'flowbite-react'
 import React, { useEffect, useRef, useState } from 'react'
@@ -29,7 +30,7 @@ const CameraScanner: React.FC<CameraScannerProps> = ({
     const start = async () => {
       if (!navigator.mediaDevices?.getUserMedia) {
         setError(
-          'Camera unavailable. The browser only allows it over https or on localhost.'
+          tx("Camera unavailable. The browser only allows it over https or on localhost.")
         )
         return
       }
@@ -70,8 +71,8 @@ const CameraScanner: React.FC<CameraScannerProps> = ({
       } catch (e: any) {
         setError(
           e?.name === 'NotAllowedError'
-            ? 'Camera access denied. Allow the camera in the browser settings.'
-            : 'No camera available on this device.'
+            ? tx("Camera access denied. Allow the camera in the browser settings.")
+            : tx("No camera available on this device.")
         )
       }
     }
@@ -97,12 +98,12 @@ const CameraScanner: React.FC<CameraScannerProps> = ({
             playsInline
           />
           <p className="text-xs text-gray-500 dark:text-gray-400">
-            Point the camera at the barcode. If it does not read, move closer so it is sharp and fills most of the image.
+            {tx("Point the camera at the barcode. If it does not read, move closer so it is sharp and fills most of the image.")}
           </p>
         </>
       )}
       <Button color="gray" size="sm" onClick={onClose}>
-        Close camera
+        {tx("Close camera")}
       </Button>
     </div>
   )

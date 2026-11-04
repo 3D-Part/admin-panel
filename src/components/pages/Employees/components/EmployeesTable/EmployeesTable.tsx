@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { Pagination, Table } from 'flowbite-react'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -58,7 +59,7 @@ export const EmployeesTable = () => {
         subtitle={email}
         items={[
           {
-            label: 'Email',
+            label: tx("Email"),
             value: email,
           },
         ]}
@@ -78,10 +79,10 @@ export const EmployeesTable = () => {
         <div className="table-body-container ">
           <Table className="w-full">
             <Table.Head className="table-header">
-              <Table.HeadCell className="table-cell">Name</Table.HeadCell>
-              <Table.HeadCell className="table-cell">Email</Table.HeadCell>
+              <Table.HeadCell className="table-cell">{tx("Name")}</Table.HeadCell>
+              <Table.HeadCell className="table-cell">{tx("Email")}</Table.HeadCell>
               <Table.HeadCell className="table-cell">
-                <span className="sr-only">Actions</span>
+                <span className="sr-only">{tx("Actions")}</span>
               </Table.HeadCell>
             </Table.Head>
             <Table.Body className="divide-y divide-gray-100 dark:divide-gray-800">

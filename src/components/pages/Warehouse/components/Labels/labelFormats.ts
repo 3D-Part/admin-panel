@@ -1,3 +1,4 @@
+import { tx } from '@/shared/i18n'
 export type LabelFormat = {
   id: string
   name: string
@@ -56,7 +57,7 @@ export const LABEL_FORMATS: LabelFormat[] = [
   },
   {
     id: 'roll-62x29',
-    name: 'Brother 62 × 29 mm',
+    name: tx("Brother 62 × 29 mm"),
     pageSize: '62mm 29mm',
     pageMargin: '0',
     columns: 1,

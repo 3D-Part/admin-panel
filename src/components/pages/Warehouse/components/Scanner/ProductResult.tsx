@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { Badge, Button, Label, TextInput } from 'flowbite-react'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -69,7 +70,7 @@ const ProductResult: React.FC<ProductResultProps> = ({
     e.preventDefault()
     const amount = Number(quantity)
     if (!Number.isInteger(amount) || amount < (type === 'INVENTORY' ? 0 : 1)) {
-      toast('Enter a valid quantity', { type: 'error', autoClose: 2000 })
+      toast(tx("Enter a valid quantity"), { type: 'error', autoClose: 2000 })
       return
     }
 
@@ -85,7 +86,7 @@ const ProductResult: React.FC<ProductResultProps> = ({
       setProduct({ ...product, quantity: result.product.quantity })
       setNote('')
       toast(
-        `${movementLabels[type]} saved — stock ${result.product.quantity} pcs`,
+        tx("{type} saved — stock {quantity} pcs", { type: tx(movementLabels[type]), quantity: result.product.quantity }),
         { type: 'success', autoClose: 2000 }
       )
       loadMovements()
@@ -97,7 +98,7 @@ const ProductResult: React.FC<ProductResultProps> = ({
     const updated = await WarehouseAPI.assignEan(product.id, null)
     if (updated) {
       setProduct({ ...product, ean: null })
-      toast('Manufacturer barcode removed', { type: 'success', autoClose: 2000 })
+      toast(tx("Manufacturer barcode removed"), { type: 'success', autoClose: 2000 })
     }
   }
 
@@ -127,22 +128,22 @@ const ProductResult: React.FC<ProductResultProps> = ({
                   className="text-xs text-red-600 hover:underline"
                   onClick={removeEan}
                 >
-                  ukloni
+                  {tx("ukloni")}
                 </button>
               </span>
             )}
             <span>{Number(product.price).toFixed(2)} KM</span>
           </div>
           <div className="flex flex-wrap gap-2">
-            {!product.isPublished && <Badge color="gray">Not published</Badge>}
-            {scannedEan && <Badge color="info">Found by EAN</Badge>}
+            {!product.isPublished && <Badge color="gray">{tx("Not published")}</Badge>}
+            {scannedEan && <Badge color="info">{tx("Found by EAN")}</Badge>}
           </div>
         </div>
         <div
           className={`ml-auto shrink-0 flex flex-col items-center justify-center px-4 rounded-lg border ${stockLevelClasses[level]}`}
         >
           <span className="text-3xl font-bold">{product.quantity ?? 0}</span>
-          <span className="text-xs">in stock</span>
+          <span className="text-xs">{tx("in stock")}</span>
         </div>
       </div>
 
@@ -163,7 +164,7 @@ const ProductResult: React.FC<ProductResultProps> = ({
               color={type === movement ? 'info' : 'gray'}
               onClick={() => setType(movement)}
             >
-              {movementLabels[movement]}
+              {tx(movementLabels[movement])}
             </Button>
           ))}
         </div>
@@ -171,7 +172,7 @@ const ProductResult: React.FC<ProductResultProps> = ({
           <div className="w-32">
             <Label
               htmlFor="movement-quantity"
-              value={type === 'INVENTORY' ? 'Counted pcs' : 'Quantity'}
+              value={type === 'INVENTORY' ? tx("Counted pcs") : tx("Quantity")}
             />
             <TextInput
               id="movement-quantity"
@@ -183,7 +184,7 @@ const ProductResult: React.FC<ProductResultProps> = ({
             />
           </div>
           <div className="flex-1 min-w-[12rem]">
-            <Label htmlFor="movement-note" value="Note (optional)" />
+            <Label htmlFor="movement-note" value={tx("Note (optional)")} />
             <TextInput
               id="movement-note"
               value={note}
@@ -199,21 +200,21 @@ const ProductResult: React.FC<ProductResultProps> = ({
             />
           </div>
           <Button type="submit" disabled={saving}>
-            Confirm {movementLabels[type].toLowerCase()}
+            Confirm {tx(movementLabels[type]).toLowerCase()}
           </Button>
           <Button
             type="button"
             color="light"
             onClick={() => onPrintLabel(product)}
           >
-            Label
+            {tx("Label")}
           </Button>
         </div>
       </form>
 
       <div>
         <h4 className="mb-1 text-sm font-semibold text-gray-900 dark:text-white">
-          History
+          {tx("History")}
         </h4>
         <MovementList movements={movements} />
       </div>

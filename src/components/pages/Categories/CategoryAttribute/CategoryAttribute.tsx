@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 import React, { useEffect, useRef, useState } from 'react'
 import { Checkbox, Dropdown, Label } from 'flowbite-react'
 import { useAttributesStore } from '@/store/store'
@@ -91,7 +92,7 @@ const CategoryAttribute: React.FC<CategoryAttributeType> = ({
   return (
     <div className="w-full">
       <div className="mb-2 flex gap-2">
-        <Label htmlFor="categoryAttributes" value="Category Attributes" />
+        <Label htmlFor="categoryAttributes" value={tx("Category Attributes")} />
         {activeAttributes.length > 0 && (
           <div className="text-sm font-medium text-gray-900 dark:text-gray-300 flex flex-wrap gap-1">
             (
@@ -106,7 +107,7 @@ const CategoryAttribute: React.FC<CategoryAttributeType> = ({
           </div>
         )}
       </div>
-      <Dropdown dismissOnClick={false} label="Attributes">
+      <Dropdown dismissOnClick={false} label={tx("Attributes")}>
         {allAttributes.map((attribute) => {
           const checked = initialAttributes?.some(
             (initAttribute) => initAttribute.attribute.id === attribute.id

@@ -1,12 +1,9 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
-import { Button } from 'flowbite-react'
+import React from 'react'
+import { Language, useLanguageStore } from '@/shared/i18n'
 
-type Language = 'en' | 'sr'
 type Section = { title: string; lines: string[] }
-
-const LANGUAGE_KEY = 'guideLanguage'
 
 const SECTIONS: Record<Language, Section[]> = {
   en: [
@@ -63,83 +60,73 @@ const SECTIONS: Record<Language, Section[]> = {
       lines: [
         'Every part has its own item in the sidebar. Home slider is for the home page, Page images for everything else.',
         'Nothing reaches the site until you click Save Settings.',
+        'The EN | SR switch at the top right changes the language of the admin.',
       ],
     },
   ],
   sr: [
     {
-      title: 'Narudžbe (Orders)',
+      title: 'Narudžbe',
       lines: [
-        'Klikni na status da ga promijeniš. Koraci: Accepted (prihvaćeno) → In preparation (u pripremi) → In delivery (u dostavi) → Receipt issued (račun izdan). Kružići pokazuju dokle je narudžba stigla.',
-        'Sa svakog statusa možeš se vratiti nazad. Stanje se samo ispravi: New, Offer, Returned i Cancelled ne drže robu sa stanja.',
-        'Kupac dobija mejl na Accepted (kod novih narudžbi), na prvi In delivery i na Cancelled.',
-        'Kolona Invoice je papirologija: predračun poslan, uplaćeno, fakturisano. Biraš je odmah u redu narudžbe.',
-        'Sporna narudžba: otvori narudžbu i uključi Disputed. Označena je samo ta narudžba. Disputed only na vrhu prikazuje samo sporne.',
+        'Klikni na status da ga promijeniš. Koraci: Prihvaćena → U pripremi → U dostavi → Račun izdan. Kružići pokazuju dokle je narudžba stigla.',
+        'Sa svakog statusa možeš se vratiti nazad. Stanje se samo ispravi: Nova, Ponuda, Vraćena i Otkazana ne drže robu sa stanja.',
+        'Kupac dobija mejl na Prihvaćena (kod novih narudžbi), na prvi U dostavi i na Otkazana.',
+        'Kolona Račun je papirologija: predračun poslan, plaćeno, fakturisano. Biraš je odmah u redu narudžbe.',
+        'Sporna narudžba: otvori narudžbu i uključi Sporna narudžba. Označena je samo ta narudžba. Samo sporne na vrhu prikazuje samo njih.',
       ],
     },
     {
-      title: 'Ponude i predračuni (Offers, Proformas)',
+      title: 'Ponude i predračuni',
       lines: [
-        'Stavi narudžbu na Offer i ona prelazi u Orders → Offers. Ne drži robu sa stanja i ne ulazi u analitiku dok je ne prihvatiš.',
-        'Proformas → Send šalje predračun kupcu na mejl. Prvo upiši žiro račun u Settings → Company details.',
+        'Stavi narudžbu na Ponuda i ona prelazi u Narudžbe → Ponude. Ne drži robu sa stanja i ne ulazi u analitiku dok je ne prihvatiš.',
+        'Predračuni → Pošalji šalje predračun kupcu na mejl. Prvo upiši žiro račun u Podešavanja → Podaci o firmi.',
       ],
     },
     {
-      title: 'Artikli i akcije (Products, Sales)',
+      title: 'Artikli i akcije',
       lines: [
-        'Internal code / SKU je vaša šifra, a EAN je bar kod na pakovanju.',
-        'Sales → otvori akciju → Add products: pronađi artikal, upiši akcijsku cijenu i klikni Add. Akcija se na sajtu vidi samo između svojih datuma.',
-        'Actions needed pokazuje šta treba popraviti, a svaki red ima polje za vašu napomenu.',
+        'Interna šifra / SKU je vaša šifra, a EAN je bar kod na pakovanju.',
+        'Akcije → otvori akciju → Dodaj artikle: pronađi artikal, upiši akcijsku cijenu i klikni Dodaj. Akcija se na sajtu vidi samo između svojih datuma.',
+        'Potrebne radnje pokazuje šta treba popraviti, a svaki red ima polje za vašu napomenu.',
       ],
     },
     {
-      title: 'Magacin (Warehouse)',
+      title: 'Magacin',
       lines: [
-        'Scanner: roba je stigla ili otišla, pa skeniraš i dodaš ili skineš komade. Stanje na sajtu se odmah mijenja.',
-        'Inventory: stvari koje firma posjeduje, a ne prodaje (printeri, alat). Artikli za prodaju nisu tu.',
-        'Labels štampa naljepnice s bar kodom. History pokazuje svaku promjenu stanja.',
+        'Skener: roba je stigla ili otišla, pa skeniraš i dodaš ili skineš komade. Stanje na sajtu se odmah mijenja.',
+        'Inventar: stvari koje firma posjeduje, a ne prodaje (printeri, alat). Artikli za prodaju nisu tu.',
+        'Naljepnice štampa naljepnice s bar kodom. Istorija pokazuje svaku promjenu stanja.',
         'Narudžbe same skidaju i vraćaju stanje, zato stanje za narudžbu nikad ne ispravljaj ručno.',
       ],
     },
     {
-      title: 'Kupci (Users)',
+      title: 'Kupci',
       lines: [
-        'Users → otvori kupca: označi ga kao spornog uz razlog, ili klikni Send password reset email. Kupac sam bira novu lozinku.',
-        'Settings → Discount tiers: upiši koliko kupac treba da potroši za svaki tier, ukupno ili samo u zadnjih 12 mjeseci. Tier postavljen ručno ostaje.',
+        'Kupci → otvori kupca: označi ga kao spornog uz razlog, ili klikni Pošalji mejl za novu lozinku. Kupac sam bira novu lozinku.',
+        'Podešavanja → Tierovi popusta: upiši koliko kupac treba da potroši za svaki tier, ukupno ili samo u zadnjih 12 mjeseci. Tier postavljen ručno ostaje.',
       ],
     },
     {
-      title: 'Zaposleni i izvještaji (Employees, Export)',
+      title: 'Zaposleni i izvještaji',
       lines: [
-        'Employees → izmjena: označi šta osoba smije da vidi. Analytics, Warehouse i Proformas imaju svaki svoje polje.',
-        'Export na Orders, Products i Users snima CSV koji se otvara u Excelu. Analytics se filtrira po kategoriji, brendu i kupcu.',
+        'Zaposleni → izmjena: označi šta osoba smije da vidi. Analitika, Magacin i Predračuni imaju svaki svoje polje.',
+        'Izvoz na Narudžbama, Artiklima i Kupcima snima CSV koji se otvara u Excelu. Analitika se filtrira po kategoriji, proizvođaču i kupcu.',
       ],
     },
     {
-      title: 'Podešavanja (Settings)',
+      title: 'Podešavanja',
       lines: [
-        'Svaki dio ima svoju stavku u sidebaru. Home slider je za početnu stranicu, a Page images za sve ostale.',
-        'Ništa ne ide na sajt dok ne klikneš Save Settings.',
+        'Svaki dio ima svoju stavku u meniju lijevo. Slajder na početnoj je za početnu stranicu, a Slike stranica za sve ostale.',
+        'Ništa ne ide na sajt dok ne klikneš Sačuvaj podešavanja.',
+        'Jezik admina mijenjaš dugmetom EN | SR gore desno.',
       ],
     },
   ],
 }
 
 const Guide = () => {
-  const [language, setLanguage] = useState<Language>('en')
-
-  useEffect(() => {
-    try {
-      if (localStorage.getItem(LANGUAGE_KEY) === 'sr') setLanguage('sr')
-    } catch {}
-  }, [])
-
-  const changeLanguage = (next: Language) => {
-    setLanguage(next)
-    try {
-      localStorage.setItem(LANGUAGE_KEY, next)
-    } catch {}
-  }
+  // the language switch in the header covers the guide as well
+  const language = useLanguageStore((state) => state.language)
 
   return (
     <div className="w-full h-full overflow-y-auto p-4 space-y-4">
@@ -147,22 +134,6 @@ const Guide = () => {
         <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
           {language === 'en' ? 'Guide' : 'Uputstvo'}
         </h2>
-        <Button.Group>
-          <Button
-            size="sm"
-            color={language === 'en' ? 'purple' : 'gray'}
-            onClick={() => changeLanguage('en')}
-          >
-            EN
-          </Button>
-          <Button
-            size="sm"
-            color={language === 'sr' ? 'purple' : 'gray'}
-            onClick={() => changeLanguage('sr')}
-          >
-            SR
-          </Button>
-        </Button.Group>
       </div>
       {SECTIONS[language].map(({ title, lines }) => (
         <section

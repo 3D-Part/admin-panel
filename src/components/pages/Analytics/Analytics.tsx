@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import React, { useCallback, useEffect, useState } from 'react'
 import { Alert, Button, Label, Select, Table, TextInput } from 'flowbite-react'
@@ -42,11 +43,11 @@ const RowsTable: React.FC<{
     <Table>
       <Table.Head>
         <Table.HeadCell>{label}</Table.HeadCell>
-        <Table.HeadCell>Sold</Table.HeadCell>
-        <Table.HeadCell>Revenue</Table.HeadCell>
-        <Table.HeadCell>Purchase cost</Table.HeadCell>
-        <Table.HeadCell>Shipping</Table.HeadCell>
-        <Table.HeadCell>Profit</Table.HeadCell>
+        <Table.HeadCell>{tx("Sold")}</Table.HeadCell>
+        <Table.HeadCell>{tx("Revenue")}</Table.HeadCell>
+        <Table.HeadCell>{tx("Purchase cost")}</Table.HeadCell>
+        <Table.HeadCell>{tx("Shipping")}</Table.HeadCell>
+        <Table.HeadCell>{tx("Profit")}</Table.HeadCell>
       </Table.Head>
       <Table.Body className="divide-y divide-gray-100 dark:divide-gray-800">
         {rows.map((row) => (
@@ -61,7 +62,7 @@ const RowsTable: React.FC<{
             </Table.Cell>
             <Table.Cell>{row.quantity}</Table.Cell>
             <Table.Cell>{money(row.revenue)}</Table.Cell>
-            <Table.Cell>{row.hasCost ? money(row.cost) : 'Not set'}</Table.Cell>
+            <Table.Cell>{row.hasCost ? money(row.cost) : tx("Not set")}</Table.Cell>
             <Table.Cell>{money(row.shipping)}</Table.Cell>
             <Table.Cell
               className={
@@ -76,7 +77,7 @@ const RowsTable: React.FC<{
     </Table>
     {rows.length === 0 && (
       <p className="p-4 text-sm text-gray-500 dark:text-gray-400">
-        No sales in this period.
+        {tx("No sales in this period.")}
       </p>
     )}
   </div>
@@ -148,10 +149,10 @@ const Analytics = () => {
     <div className="w-full h-full overflow-y-auto p-4 space-y-6">
       <div className="flex flex-wrap items-end gap-4">
         <h2 className="mr-auto text-3xl font-bold text-gray-900 dark:text-white">
-          {TABS[tab]}
+          {tx(TABS[tab])}
         </h2>
         <div>
-          <Label htmlFor="analytics-from" value="From" />
+          <Label htmlFor="analytics-from" value={tx("From")} />
           <TextInput
             id="analytics-from"
             type="date"
@@ -160,7 +161,7 @@ const Analytics = () => {
           />
         </div>
         <div>
-          <Label htmlFor="analytics-to" value="To" />
+          <Label htmlFor="analytics-to" value={tx("To")} />
           <TextInput
             id="analytics-to"
             type="date"
@@ -169,13 +170,13 @@ const Analytics = () => {
           />
         </div>
         <div>
-          <Label htmlFor="analytics-category" value="Category" />
+          <Label htmlFor="analytics-category" value={tx("Category")} />
           <Select
             id="analytics-category"
             value={categoryId}
             onChange={(e) => setCategoryId(e.target.value)}
           >
-            <option value="">All categories</option>
+            <option value="">{tx("All categories")}</option>
             {categories.map((category) => (
               <option key={category.id} value={category.id}>
                 {category.name}
@@ -184,13 +185,13 @@ const Analytics = () => {
           </Select>
         </div>
         <div>
-          <Label htmlFor="analytics-manufacturer" value="Manufacturer" />
+          <Label htmlFor="analytics-manufacturer" value={tx("Manufacturer")} />
           <Select
             id="analytics-manufacturer"
             value={manufacturerId}
             onChange={(e) => setManufacturerId(e.target.value)}
           >
-            <option value="">All manufacturers</option>
+            <option value="">{tx("All manufacturers")}</option>
             {manufacturers.map((manufacturer) => (
               <option key={manufacturer.id} value={manufacturer.id}>
                 {manufacturer.name}
@@ -199,25 +200,23 @@ const Analytics = () => {
           </Select>
         </div>
         <div>
-          <Label htmlFor="analytics-customer" value="Customer" />
+          <Label htmlFor="analytics-customer" value={tx("Customer")} />
           <TextInput
             id="analytics-customer"
-            placeholder="Name, company or email"
+            placeholder={tx("Name, company or email")}
             value={customerInput}
             onChange={(e) => setCustomerInput(e.target.value)}
           />
         </div>
         {filtered && (
           <Button color="gray" onClick={clearFilters}>
-            Clear filters
+            {tx("Clear filters")}
           </Button>
         )}
       </div>
       {filtered && (
         <p className="text-sm text-gray-500 dark:text-gray-400">
-          A category includes its subcategories. With a category or
-          manufacturer chosen, only those products count, and each order
-          carries its share of delivery.
+          {tx("A category includes its subcategories. With a category or manufacturer chosen, only those products count, and each order carries its share of delivery.")}
         </p>
       )}
 
@@ -230,7 +229,7 @@ const Analytics = () => {
               {data.totals.missingCostItems} sold items have no purchase price,
               so the profit below is too high. Add the prices in{' '}
               <a className="underline" href="/actions-needed">
-                Actions needed
+                {tx("Actions needed")}
               </a>
               .
             </Alert>
@@ -239,25 +238,25 @@ const Analytics = () => {
           {tab === 'overview' && (
           <>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <Tile label="Orders" value={String(data.totals.orders)} />
-            <Tile label="Items sold" value={String(data.totals.itemsSold)} />
+            <Tile label={tx("Orders")} value={String(data.totals.orders)} />
+            <Tile label={tx("Items sold")} value={String(data.totals.itemsSold)} />
             <Tile
-              label="Revenue"
+              label={tx("Revenue")}
               value={money(data.totals.revenue)}
               hint="Products, after discounts"
             />
             <Tile
-              label="Profit"
+              label={tx("Profit")}
               value={money(data.totals.profit)}
               hint="Revenue + shipping charged - shipping cost - purchase cost"
             />
-            <Tile label="Purchase cost" value={money(data.totals.goodsCost)} />
+            <Tile label={tx("Purchase cost")} value={money(data.totals.goodsCost)} />
             <Tile
-              label="Shipping charged"
+              label={tx("Shipping charged")}
               value={money(data.totals.shippingCharged)}
             />
             <Tile
-              label="Shipping cost"
+              label={tx("Shipping cost")}
               value={money(data.totals.shippingCost)}
               hint="Delivery cost from the settings, per order"
             />
@@ -265,7 +264,7 @@ const Analytics = () => {
 
           <section id="revenue-by-day">
             <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">
-              Revenue by day
+              {tx("Revenue by day")}
             </h3>
             <div className="flex items-end gap-1 h-40 overflow-x-auto">
               {data.days.map((day) => (
@@ -285,7 +284,7 @@ const Analytics = () => {
           {tab === 'filaments' && (
           <section id="filaments">
             <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
-              Filaments
+              {tx("Filaments")}
             </h3>
             <p className="mb-3 text-sm text-gray-500 dark:text-gray-400">
               {data.filaments.quantity} pcs sold, revenue{' '}
@@ -303,7 +302,7 @@ const Analytics = () => {
           {tab === 'top-products' && (
           <section id="top-products">
             <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">
-              Top products
+              {tx("Top products")}
             </h3>
             <RowsTable rows={data.topProducts} />
           </section>
@@ -312,33 +311,33 @@ const Analytics = () => {
           {tab === 'by-category' && (
           <section id="by-category">
             <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">
-              By category
+              {tx("By category")}
             </h3>
-            <RowsTable rows={data.byCategory} label="Category" />
+            <RowsTable rows={data.byCategory} label={tx("Category")} />
           </section>
           )}
 
           {tab === 'by-manufacturer' && (
           <section id="by-manufacturer">
             <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">
-              By manufacturer
+              {tx("By manufacturer")}
             </h3>
-            <RowsTable rows={data.byManufacturer} label="Manufacturer" />
+            <RowsTable rows={data.byManufacturer} label={tx("Manufacturer")} />
           </section>
           )}
 
           {tab === 'top-customers' && (
           <section id="top-customers">
             <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">
-              Top customers
+              {tx("Top customers")}
             </h3>
-            <RowsTable rows={data.topCustomers} label="Customer" />
+            <RowsTable rows={data.topCustomers} label={tx("Customer")} />
           </section>
           )}
 
           <div className="flex flex-wrap gap-2">
             <Button color="gray" size="sm" onClick={load}>
-              Refresh
+              {tx("Refresh")}
             </Button>
             <Button
               color="gray"

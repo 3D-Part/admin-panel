@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import React, { useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
@@ -22,11 +23,10 @@ const Orders = () => {
       {offers && (
         <div className="mb-4">
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-            Offers
+            {tx("Offers")}
           </h2>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-            Orders you offered to a customer. They hold no stock and do not count
-            in analytics until you move them to Accepted.
+            {tx("Orders you offered to a customer. They hold no stock and do not count in analytics until you move them to Accepted.")}
           </p>
         </div>
       )}

@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { Pagination, Table } from 'flowbite-react'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -89,13 +90,13 @@ export const ManufacturesTable: React.FC<ManufacturesTableType> = ({
                   onClick={() => openEditModal(manufacture)}
                   className="font-medium table-action-link cursor-pointer hover:underline"
                 >
-                  Edit
+                  {tx("Edit")}
                 </span>
                 <span
                   onClick={() => onWarningModalOpen(manufacture)}
                   className="font-medium table-action-danger cursor-pointer hover:underline"
                 >
-                  Remove
+                  {tx("Remove")}
                 </span>
               </div>
             ) : null
@@ -117,11 +118,11 @@ export const ManufacturesTable: React.FC<ManufacturesTableType> = ({
         <div className="table-body-container ">
           <Table className="w-full">
             <Table.Head className="table-header">
-              <Table.HeadCell className="table-cell">Name</Table.HeadCell>
-              <Table.HeadCell className="table-cell">Packing position</Table.HeadCell>
+              <Table.HeadCell className="table-cell">{tx("Name")}</Table.HeadCell>
+              <Table.HeadCell className="table-cell">{tx("Packing position")}</Table.HeadCell>
 
               <Table.HeadCell className="table-cell">
-                <span className="sr-only">Actions</span>
+                <span className="sr-only">{tx("Actions")}</span>
               </Table.HeadCell>
             </Table.Head>
 

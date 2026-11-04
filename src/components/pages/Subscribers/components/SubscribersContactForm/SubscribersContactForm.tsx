@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 import { modalRoot } from '@/shared/helpers/modalRoot'
 
 import { WarningModal } from '@/components/common'
@@ -66,7 +67,7 @@ const SubscribersContactForm: React.FC<ModalType> = ({
     setIsWarningModalOpen(false)
 
     if (response !== null) {
-      toast(`Email is sent!`, {
+      toast(tx("Email is sent!"), {
         hideProgressBar: true,
         autoClose: 2000,
         type: 'success',
@@ -80,7 +81,7 @@ const SubscribersContactForm: React.FC<ModalType> = ({
         <Modal.Header className="border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center gap-3">
             <span className="font-semibold text-gray-900 dark:text-white">
-              Send Email to Subscribers
+              {tx("Send Email to Subscribers")}
             </span>
           </div>
         </Modal.Header>
@@ -90,14 +91,14 @@ const SubscribersContactForm: React.FC<ModalType> = ({
             {/* Email Information */}
             <div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Email Information
+                {tx("Email Information")}
               </h3>
               <div className="space-y-4">
                 {/* Subject */}
                 <div>
                   <Label
                     htmlFor="subject"
-                    value="Email Subject"
+                    value={tx("Email Subject")}
                     className="text-sm font-medium text-gray-700 dark:text-gray-300"
                   />
                   <TextInput
@@ -108,7 +109,7 @@ const SubscribersContactForm: React.FC<ModalType> = ({
                     type="text"
                     defaultValue=""
                     className="mt-1"
-                    placeholder="Enter email subject..."
+                    placeholder={tx("Enter email subject...")}
                   />
                 </div>
 
@@ -116,7 +117,7 @@ const SubscribersContactForm: React.FC<ModalType> = ({
                 <div>
                   <Label
                     htmlFor="headline"
-                    value="Email Headline"
+                    value={tx("Email Headline")}
                     className="text-sm font-medium text-gray-700 dark:text-gray-300"
                   />
                   <TextInput
@@ -127,7 +128,7 @@ const SubscribersContactForm: React.FC<ModalType> = ({
                     type="text"
                     defaultValue=""
                     className="mt-1"
-                    placeholder="Enter email headline..."
+                    placeholder={tx("Enter email headline...")}
                   />
                 </div>
               </div>
@@ -136,19 +137,19 @@ const SubscribersContactForm: React.FC<ModalType> = ({
             {/* Message Content */}
             <div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Message Content
+                {tx("Message Content")}
               </h3>
               <div>
                 <Label
                   htmlFor="content"
-                  value="Email message"
+                  value={tx("Email message")}
                   className="text-sm font-medium text-gray-700 dark:text-gray-300"
                 />
                 <Textarea
                   onChange={handleInputChange}
                   id="content"
                   name="content"
-                  placeholder="Write your email message here..."
+                  placeholder={tx("Write your email message here...")}
                   rows={4}
                   className="mt-1"
                 />
@@ -166,7 +167,7 @@ const SubscribersContactForm: React.FC<ModalType> = ({
               className="w-full sm:w-auto order-2 sm:order-1"
               color="purple"
             >
-              Send Email
+              {tx("Send Email")}
             </Button>
             <Button
               disabled={loading}
@@ -174,7 +175,7 @@ const SubscribersContactForm: React.FC<ModalType> = ({
               onClick={onClose}
               className="w-full sm:w-auto order-1 sm:order-2"
             >
-              Cancel
+              {tx("Cancel")}
             </Button>
           </div>
         </Modal.Footer>

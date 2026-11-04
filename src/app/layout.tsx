@@ -8,6 +8,7 @@ import RemoveProductsFromSaleModal from '@/components/pages/Products/components/
 import AuthCheck from '@/components/common/AuthCheck'
 import ThemeProvider from '@/components/common/ThemeProvider'
 import PermissionGuard from '@/components/common/PermissionGuard'
+import { LanguageProvider } from '@/components/common/LanguageSwitch/LanguageSwitch'
 
 export const metadata = {
   title: '3D Part',
@@ -23,6 +24,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="flex flex-col bg-white dark:bg-gray-900 h-auto md:h-screen md:overflow-hidden">
         <ThemeProvider>
+          <LanguageProvider>
           <AuthCheck>
             <PermissionGuard>
               <LayoutWrapper />
@@ -33,6 +35,7 @@ export default function RootLayout({
           <ToastContainer theme="colored" />
           <AddProductsOnSaleModal />
           <RemoveProductsFromSaleModal />
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>

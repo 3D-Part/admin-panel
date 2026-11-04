@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { Badge, Button } from 'flowbite-react'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -56,10 +57,10 @@ const AssetResult: React.FC<AssetResultProps> = ({
           </div>
         </div>
         <Badge color={assetStatusColor[asset.status]} size="sm" className="ml-auto">
-          {assetStatusLabels[asset.status]}
+          {tx(assetStatusLabels[asset.status])}
         </Badge>
         <Button size="sm" color="light" onClick={() => onPrintLabel(asset)}>
-          Label
+          {tx("Label")}
         </Button>
       </div>
 
@@ -74,7 +75,7 @@ const AssetResult: React.FC<AssetResultProps> = ({
 
       <div>
         <h4 className="mb-1 text-sm font-semibold text-gray-900 dark:text-white">
-          History
+          {tx("History")}
         </h4>
         <MovementList movements={movements} />
       </div>

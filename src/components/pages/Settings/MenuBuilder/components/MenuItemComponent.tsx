@@ -1,3 +1,4 @@
+import { tx } from '@/shared/i18n'
 import React, { useState } from 'react'
 import { HiChevronDown, HiChevronRight } from 'react-icons/hi'
 import type { MenuItemNode } from '@/store/slices/menuBuilderSlice'
@@ -65,7 +66,7 @@ const MenuItemComponent: React.FC<MenuItemComponentProps> = ({
               <button
                 onClick={toggleCollapse}
                 className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors flex-shrink-0"
-                title={isCollapsed ? 'Expand' : 'Collapse'}
+                title={isCollapsed ? tx("Expand") : tx("Collapse")}
               >
                 {isCollapsed ? (
                   <HiChevronRight className="h-4 w-4 text-gray-500 dark:text-gray-400" />

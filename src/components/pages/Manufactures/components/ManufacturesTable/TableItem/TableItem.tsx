@@ -1,3 +1,4 @@
+import { tx } from '@/shared/i18n'
 import { InlineNumber } from '@/components/common'
 import { BackofficeAPI } from '@/services'
 import { ManufacturerData } from '@/shared/types'
@@ -42,9 +43,9 @@ export const TableItem: React.FC<TableItemType> = ({
         </Table.Cell>
         <Table.Cell>
           <InlineNumber
-            label={`Packing position of ${name}`}
+            label={tx("Packing position of {name}", { name })}
             value={manufacture.sortPriority}
-            placeholder="Last"
+            placeholder={tx("Last")}
             whole
             editable={hasWritePermission}
             onSave={async (value) =>
@@ -59,13 +60,13 @@ export const TableItem: React.FC<TableItemType> = ({
                 onClick={() => openEditModal(manufacture)}
                 className="font-medium table-action-link cursor-pointer hover:underline"
               >
-                <p>Edit</p>
+                <p>{tx("Edit")}</p>
               </span>
               <span
                 onClick={() => onWarningModalOpen(manufacture)}
                 className="font-medium table-action-danger cursor-pointer hover:underline"
               >
-                <p>Remove</p>
+                <p>{tx("Remove")}</p>
               </span>
             </div>
           )}

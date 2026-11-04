@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { URLPartsEnum } from '@/shared/enums'
 import { Button } from 'flowbite-react'
@@ -18,7 +19,7 @@ const CategoryHeader = () => {
         <HiArrowCircleLeft className="text-xl text-white" />
       </Button>
       <h2 className="text-gray-900 dark:text-white text-2xl">
-        Add new category:
+        {tx("Add new category:")}
       </h2>
     </div>
   )

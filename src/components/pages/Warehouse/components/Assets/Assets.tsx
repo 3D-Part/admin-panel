@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { Badge, Button, Select, Table, TextInput } from 'flowbite-react'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -67,14 +68,14 @@ const Assets: React.FC<AssetsProps> = ({ onPrintLabels }) => {
         <TextInput
           className="flex-1 min-w-[14rem]"
           value={search}
-          placeholder="name, code, location, person, serial number"
+          placeholder={tx("name, code, location, person, serial number")}
           onChange={(e) => setSearch(e.target.value)}
         />
         <Select value={status} onChange={(e) => setStatus(e.target.value)}>
-          <option value="">All statuses</option>
+          <option value="">{tx("All statuses")}</option>
           {assetStatusOrder.map((value) => (
             <option key={value} value={value}>
-              {assetStatusLabels[value]}
+              {tx(assetStatusLabels[value])}
             </option>
           ))}
         </Select>
@@ -89,7 +90,7 @@ const Assets: React.FC<AssetsProps> = ({ onPrintLabels }) => {
         </Button>
         <Button onClick={() => open()}>
           <HiPlus className="w-4 h-4 mr-1" />
-          New item
+          {tx("New item")}
         </Button>
       </div>
 
@@ -103,7 +104,7 @@ const Assets: React.FC<AssetsProps> = ({ onPrintLabels }) => {
             <Table.HeadCell className="w-8">
               <input
                 type="checkbox"
-                aria-label="Select all"
+                aria-label={tx("Select all")}
                 checked={rows.length > 0 && selected.size === rows.length}
                 onChange={(e) =>
                   setSelected(
@@ -114,11 +115,11 @@ const Assets: React.FC<AssetsProps> = ({ onPrintLabels }) => {
                 }
               />
             </Table.HeadCell>
-            <Table.HeadCell>Code</Table.HeadCell>
-            <Table.HeadCell>Name</Table.HeadCell>
-            <Table.HeadCell>Status</Table.HeadCell>
-            <Table.HeadCell>Location</Table.HeadCell>
-            <Table.HeadCell>Assigned to</Table.HeadCell>
+            <Table.HeadCell>{tx("Code")}</Table.HeadCell>
+            <Table.HeadCell>{tx("Name")}</Table.HeadCell>
+            <Table.HeadCell>{tx("Status")}</Table.HeadCell>
+            <Table.HeadCell>{tx("Location")}</Table.HeadCell>
+            <Table.HeadCell>{tx("Assigned to")}</Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y">
             {rows.map((asset) => (
@@ -148,7 +149,7 @@ const Assets: React.FC<AssetsProps> = ({ onPrintLabels }) => {
                 </Table.Cell>
                 <Table.Cell>
                   <Badge color={assetStatusColor[asset.status]} className="w-fit">
-                    {assetStatusLabels[asset.status]}
+                    {tx(assetStatusLabels[asset.status])}
                   </Badge>
                 </Table.Cell>
                 <Table.Cell>{asset.location || '—'}</Table.Cell>
@@ -159,7 +160,7 @@ const Assets: React.FC<AssetsProps> = ({ onPrintLabels }) => {
         </Table>
         {rows.length === 0 && (
           <p className="p-4 text-sm text-gray-500 dark:text-gray-400">
-            No items yet.
+            {tx("No items yet.")}
           </p>
         )}
       </div>

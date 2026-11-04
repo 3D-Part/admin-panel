@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 import { modalRoot } from '@/shared/helpers/modalRoot'
 
 import React, { useEffect, useState } from 'react'
@@ -100,7 +101,7 @@ const OrderEditor: React.FC<{
 
   const save = async () => {
     if (lines.length === 0) {
-      toast('An order needs at least one product', {
+      toast(tx("An order needs at least one product"), {
         type: 'error',
         autoClose: 2000,
       })
@@ -119,7 +120,7 @@ const OrderEditor: React.FC<{
     })
     setSaving(false)
     if (saved) {
-      toast('Order saved', { type: 'success', autoClose: 2000 })
+      toast(tx("Order saved"), { type: 'success', autoClose: 2000 })
       onSaved(saved)
     }
   }
@@ -136,14 +137,13 @@ const OrderEditor: React.FC<{
       <Modal.Body className="space-y-6">
         {stockTaken && (
           <Alert color="info">
-            If stock was already taken for this order, quantity changes also
-            change the stock.
+            {tx("If stock was already taken for this order, quantity changes also change the stock.")}
           </Alert>
         )}
 
         <div className="space-y-2">
           <TextInput
-            placeholder="Add a product: name, code or SKU"
+            placeholder={tx("Add a product: name, code or SKU")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -211,7 +211,7 @@ const OrderEditor: React.FC<{
 
         <div className="grid gap-3 sm:grid-cols-2">
           <div>
-            <Label htmlFor="edit-discount" value="Discount (%)" />
+            <Label htmlFor="edit-discount" value={tx("Discount (%)")} />
             <TextInput
               id="edit-discount"
               type="number"
@@ -222,7 +222,7 @@ const OrderEditor: React.FC<{
             />
           </div>
           <div>
-            <Label htmlFor="edit-shipping" value="Shipping (KM)" />
+            <Label htmlFor="edit-shipping" value={tx("Shipping (KM)")} />
             <TextInput
               id="edit-shipping"
               type="number"
@@ -237,7 +237,7 @@ const OrderEditor: React.FC<{
         <div className="grid gap-3 sm:grid-cols-3">
           {CONTACT_FIELDS.map(({ name, label }) => (
             <div key={name}>
-              <Label htmlFor={`edit-${name}`} value={label} />
+              <Label htmlFor={`edit-${name}`} value={tx(label)} />
               <TextInput
                 id={`edit-${name}`}
                 value={contact[name]}
@@ -255,10 +255,10 @@ const OrderEditor: React.FC<{
       </Modal.Body>
       <Modal.Footer>
         <Button disabled={saving} onClick={save}>
-          Save
+          {tx("Save")}
         </Button>
         <Button color="gray" onClick={onClose}>
-          Close
+          {tx("Close")}
         </Button>
       </Modal.Footer>
     </Modal>

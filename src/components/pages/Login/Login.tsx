@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 import { Button, Label, TextInput } from 'flowbite-react'
 import { useRouter } from 'next/navigation'
 import { LoginData } from '@/shared/types'
@@ -62,7 +63,7 @@ const Login = () => {
           <div className="flex justify-center mb-6">
             <Image
               src="/assets/img/logo.png"
-              alt="Logo"
+              alt={tx("Logo")}
               width={128}
               height={128}
               className="rounded-xl"
@@ -71,10 +72,10 @@ const Login = () => {
 
           {/* Title */}
           <h1 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-2">
-            Welcome back
+            {tx("Welcome back")}
           </h1>
           <p className="text-center text-gray-500 dark:text-gray-400 mb-8">
-            Sign in to your account
+            {tx("Sign in to your account")}
           </p>
 
           {/* Form */}
@@ -82,12 +83,12 @@ const Login = () => {
             <div>
               <Label
                 htmlFor="email"
-                value="Email"
+                value={tx("Email")}
                 className="mb-2 block text-gray-700 dark:text-gray-300"
               />
               <TextInput
                 id="email"
-                placeholder="name@company.com"
+                placeholder={tx("name@company.com")}
                 required
                 type="email"
                 name="email"
@@ -99,7 +100,7 @@ const Login = () => {
             <div className="relative">
               <Label
                 htmlFor="password"
-                value="Password"
+                value={tx("Password")}
                 className="mb-2 block text-gray-700 dark:text-gray-300"
               />
               <div className="relative">
@@ -130,7 +131,7 @@ const Login = () => {
               isProcessing={isLoading}
               disabled={isLoading}
             >
-              Sign in
+              {tx("Sign in")}
             </Button>
           </form>
         </div>

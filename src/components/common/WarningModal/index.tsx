@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 import { modalRoot } from '@/shared/helpers/modalRoot'
 
 import { Button, Modal } from 'flowbite-react'
@@ -46,10 +47,10 @@ const WarningModal: React.FC<ModalType> = ({
                 color={buttonColor}
                 onClick={onSave}
               >
-                <span>Yes, I am sure</span>
+                <span>{tx("Yes, I am sure")}</span>
               </Button>
               <Button disabled={isLoading} color="gray" onClick={onClose}>
-                No, cancel
+                {tx("No, cancel")}
               </Button>
             </div>
           </div>

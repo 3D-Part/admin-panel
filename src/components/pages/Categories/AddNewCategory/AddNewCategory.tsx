@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { CategoryAttributeData, CategoryFormBody } from '@/shared/types'
 import { useCategoryStore } from '@/store/store'
@@ -80,7 +81,7 @@ const AddNewCategory: React.FC<AddNewCategoryType> = ({ initialValue }) => {
 
     const response = await addCategoryAttributesBulk(_data)
     if (response) {
-      toast(`Category attributes are added!`, {
+      toast(tx("Category attributes are added!"), {
         hideProgressBar: true,
         autoClose: 2000,
         type: 'success',
@@ -163,7 +164,7 @@ const AddNewCategory: React.FC<AddNewCategoryType> = ({ initialValue }) => {
       >
         <div className="w-full">
           <div className="mb-2 block">
-            <Label htmlFor="categoryName" value="Category Name" />
+            <Label htmlFor="categoryName" value={tx("Category Name")} />
           </div>
           <TextInput
             name="name"
@@ -178,7 +179,7 @@ const AddNewCategory: React.FC<AddNewCategoryType> = ({ initialValue }) => {
 
         <div className="w-full">
           <div className="mb-2 block">
-            <Label htmlFor="urlSlut" value="URL Slug" />
+            <Label htmlFor="urlSlut" value={tx("URL Slug")} />
           </div>
           <TextInput
             name="slug"
@@ -192,20 +193,20 @@ const AddNewCategory: React.FC<AddNewCategoryType> = ({ initialValue }) => {
 
         <div className="w-full">
           <div className="mb-2 block">
-            <Label htmlFor="description" value="Description" />
+            <Label htmlFor="description" value={tx("Description")} />
           </div>
           <Textarea
             onChange={handleInputChange}
             id="description"
             name="description"
-            placeholder="Category description..."
+            placeholder={tx("Category description...")}
             rows={4}
           />
         </div>
 
         <div className="w-full">
           <div className="mb-2 block">
-            <Label htmlFor="category" value="Parent Category" />
+            <Label htmlFor="category" value={tx("Parent Category")} />
           </div>
           <Select
             onChange={handleInputChange}
@@ -217,7 +218,7 @@ const AddNewCategory: React.FC<AddNewCategoryType> = ({ initialValue }) => {
                 : ''
             }
           >
-            <option value={''}>None</option>
+            <option value={''}>{tx("None")}</option>
             {allCategories.map((category) => {
               return (
                 <option key={category.id} value={category.id}>
@@ -231,7 +232,7 @@ const AddNewCategory: React.FC<AddNewCategoryType> = ({ initialValue }) => {
         <CategoryAttribute onAttributesChange={changeCategoryAttributeIds} />
 
         <Button className="mt-6" type="submit" color="purple">
-          Save
+          {tx("Save")}
         </Button>
       </form>
     </div>

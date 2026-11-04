@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import React from 'react'
 import Image from 'next/image'
@@ -9,6 +10,7 @@ import { URLPartsEnum } from '@/shared/enums'
 import AuthAPI from '@/services/auth'
 import { useUISliceStore, useCurrentUserStore } from '@/store/store'
 import ThemeSwitcher from '@/components/common/ThemeSwitcher'
+import LanguageSwitch from '@/components/common/LanguageSwitch/LanguageSwitch'
 
 const SideBar = () => {
   const router = useRouter()
@@ -38,7 +40,7 @@ const SideBar = () => {
           <span className="self-center whitespace-nowrap text-xl font-semibold text-gray-900 dark:text-white">
             <Image
               src="/assets/img/logo.png"
-              alt="me"
+              alt={tx("me")}
               width="138"
               height="44"
               priority
@@ -48,6 +50,7 @@ const SideBar = () => {
         </Navbar.Brand>
 
         <div className="flex gap-4 md:order-2 items-center text-white">
+          <LanguageSwitch />
           <ThemeSwitcher />
           <Dropdown
             inline
@@ -59,7 +62,7 @@ const SideBar = () => {
           >
             <Dropdown.Header>
               <span className="block text-sm font-semibold text-gray-900 dark:text-white">
-                {currentUser?.fullName || 'User'}
+                {currentUser?.fullName || tx("User")}
               </span>
               <span className="block truncate text-sm text-gray-600 dark:text-gray-400">
                 {currentUser?.email || 'user@example.com'}
@@ -70,7 +73,7 @@ const SideBar = () => {
               className="hover:bg-gray-50 dark:hover:bg-gray-800"
             >
               <span className="text-red-600 dark:text-red-400 font-medium">
-                Sign out
+                {tx("Sign out")}
               </span>
             </Dropdown.Item>
           </Dropdown>

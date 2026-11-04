@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import React, { useEffect } from 'react'
 import { Button } from 'flowbite-react'
@@ -27,7 +28,7 @@ const ThemeToggle = () => {
       className="bg-gray-700 hover:bg-gray-600 border-gray-600 text-white"
       size="sm"
       onClick={toggleTheme}
-      title={`Switch to ${isDark ? 'light' : 'dark'} mode`}
+      title={tx("Switch to {dark} mode", { dark: isDark ? 'light' : 'dark' })}
     >
       {isDark ? <HiSun className="h-5 w-5" /> : <HiMoon className="h-5 w-5" />}
     </Button>

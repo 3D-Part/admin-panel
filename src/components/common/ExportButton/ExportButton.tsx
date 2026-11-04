@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import React, { useState } from 'react'
 import { Button, Label, Modal, TextInput } from 'flowbite-react'
@@ -39,15 +40,15 @@ const ExportButton: React.FC<{ kind: ExportKind }> = ({ kind }) => {
         onClick={() => (kind === 'orders' ? setOpen(true) : download())}
       >
         <HiDownload className="mr-1 md:mr-2" />
-        <span className="hidden sm:inline">Export</span>
+        <span className="hidden sm:inline">{tx("Export")}</span>
       </Button>
       {kind === 'orders' && (
         <Modal root={modalRoot()} show={open} size="md" onClose={() => setOpen(false)}>
-          <Modal.Header>Export orders</Modal.Header>
+          <Modal.Header>{tx("Export orders")}</Modal.Header>
           <Modal.Body>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="export-from" value="From" />
+                <Label htmlFor="export-from" value={tx("From")} />
                 <TextInput
                   id="export-from"
                   type="date"
@@ -56,7 +57,7 @@ const ExportButton: React.FC<{ kind: ExportKind }> = ({ kind }) => {
                 />
               </div>
               <div>
-                <Label htmlFor="export-to" value="To" />
+                <Label htmlFor="export-to" value={tx("To")} />
                 <TextInput
                   id="export-to"
                   type="date"
@@ -66,15 +67,15 @@ const ExportButton: React.FC<{ kind: ExportKind }> = ({ kind }) => {
               </div>
             </div>
             <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">
-              Every order made in the period, whatever its status.
+              {tx("Every order made in the period, whatever its status.")}
             </p>
           </Modal.Body>
           <Modal.Footer>
             <Button color="purple" disabled={busy} onClick={() => download({ from, to })}>
-              Download CSV
+              {tx("Download CSV")}
             </Button>
             <Button color="gray" onClick={() => setOpen(false)}>
-              Cancel
+              {tx("Cancel")}
             </Button>
           </Modal.Footer>
         </Modal>

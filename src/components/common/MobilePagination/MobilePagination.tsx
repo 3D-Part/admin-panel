@@ -1,3 +1,4 @@
+import { tx } from '@/shared/i18n'
 import React from 'react'
 import {
   HiChevronLeft,
@@ -30,7 +31,7 @@ export const MobilePagination: React.FC<MobilePaginationProps> = ({
           onClick={goToFirst}
           disabled={currentPage === 1}
           className="flex items-center justify-center w-10 h-10 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-          aria-label="Go to first page"
+          aria-label={tx("Go to first page")}
         >
           <HiChevronDoubleLeft className="w-5 h-5" />
         </button>
@@ -40,7 +41,7 @@ export const MobilePagination: React.FC<MobilePaginationProps> = ({
           onClick={goToPrevious}
           disabled={currentPage === 1}
           className="flex items-center justify-center w-10 h-10 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-          aria-label="Go to previous page"
+          aria-label={tx("Go to previous page")}
         >
           <HiChevronLeft className="w-5 h-5" />
         </button>
@@ -55,7 +56,7 @@ export const MobilePagination: React.FC<MobilePaginationProps> = ({
           onClick={goToNext}
           disabled={currentPage === totalPages}
           className="flex items-center justify-center w-10 h-10 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-          aria-label="Go to next page"
+          aria-label={tx("Go to next page")}
         >
           <HiChevronRight className="w-5 h-5" />
         </button>

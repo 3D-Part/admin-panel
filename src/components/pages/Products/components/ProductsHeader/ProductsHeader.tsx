@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import React from 'react'
 import { Button } from 'flowbite-react'
@@ -34,7 +35,7 @@ export const ProductsOverviewHeader = () => {
           color="purple"
         >
           <HiPlus className="mr-1 md:mr-2" />
-          <span className="hidden sm:inline">Add new</span>
+          <span className="hidden sm:inline">{tx("Add new")}</span>
         </Button>
       )}
     </div>

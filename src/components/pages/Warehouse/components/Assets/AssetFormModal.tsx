@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 import { modalRoot } from '@/shared/helpers/modalRoot'
 
 import { Button, Label, Modal, Select, TextInput, Textarea } from 'flowbite-react'
@@ -102,7 +103,7 @@ const AssetFormModal: React.FC<AssetFormModalProps> = ({
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!form.name.trim()) {
-      toast('Enter a name', { type: 'error', autoClose: 2000 })
+      toast(tx("Enter a name"), { type: 'error', autoClose: 2000 })
       return
     }
 
@@ -124,7 +125,7 @@ const AssetFormModal: React.FC<AssetFormModalProps> = ({
     setSaving(false)
 
     if (saved) {
-      toast(current ? 'Saved' : `Created with code ${saved.code}`, {
+      toast(current ? tx("Saved") : tx("Created with code {code}", { code: saved.code }), {
         type: 'success',
         autoClose: 2500,
       })
@@ -139,12 +140,12 @@ const AssetFormModal: React.FC<AssetFormModalProps> = ({
     if (!current) return
     if (
       !window.confirm(
-        `Delete ${current.code} ${current.name} with its history? For items no longer in use, choose the Written off status instead.`
+        tx("Delete {code} {name} with its history? For items no longer in use, choose the Written off status instead.", { code: current.code, name: current.name })
       )
     )
       return
     if (await WarehouseAPI.deleteAsset(current.id)) {
-      toast('Deleted', { type: 'success', autoClose: 2000 })
+      toast(tx("Deleted"), { type: 'success', autoClose: 2000 })
       onSaved()
       onClose()
     }
@@ -158,33 +159,33 @@ const AssetFormModal: React.FC<AssetFormModalProps> = ({
             <span className="font-mono">{current.code}</span> {current.name}
           </span>
         ) : (
-          'New item'
+          tx("New item")
         )}
       </Modal.Header>
       <Modal.Body className="flex flex-col gap-6 max-h-[75vh] overflow-y-auto">
         <form id="asset-form" onSubmit={submit} className="grid gap-3 sm:grid-cols-2">
           <div className="sm:col-span-2">
-            <Label htmlFor="asset-name" value="Name *" />
+            <Label htmlFor="asset-name" value={tx("Name *")} />
             <TextInput
               id="asset-name"
               value={form.name}
               maxLength={200}
-              placeholder="e.g. Bambu Lab X1C, cordless drill"
+              placeholder={tx("e.g. Bambu Lab X1C, cordless drill")}
               onChange={set('name')}
             />
           </div>
           <div>
-            <Label htmlFor="asset-category" value="Type" />
+            <Label htmlFor="asset-category" value={tx("Type")} />
             <TextInput
               id="asset-category"
               value={form.category}
               maxLength={100}
-              placeholder="e.g. Printer, Tool, Computer"
+              placeholder={tx("e.g. Printer, Tool, Computer")}
               onChange={set('category')}
             />
           </div>
           <div>
-            <Label htmlFor="asset-serial" value="Serial number" />
+            <Label htmlFor="asset-serial" value={tx("Serial number")} />
             <TextInput
               id="asset-serial"
               value={form.serialNumber}
@@ -195,7 +196,7 @@ const AssetFormModal: React.FC<AssetFormModalProps> = ({
           {!current && (
             <>
               <div>
-                <Label htmlFor="asset-new-status" value="Status" />
+                <Label htmlFor="asset-new-status" value={tx("Status")} />
                 <Select
                   id="asset-new-status"
                   value={form.status}
@@ -203,13 +204,13 @@ const AssetFormModal: React.FC<AssetFormModalProps> = ({
                 >
                   {assetStatusOrder.map((value) => (
                     <option key={value} value={value}>
-                      {assetStatusLabels[value]}
+                      {tx(assetStatusLabels[value])}
                     </option>
                   ))}
                 </Select>
               </div>
               <div>
-                <Label htmlFor="asset-new-location" value="Location" />
+                <Label htmlFor="asset-new-location" value={tx("Location")} />
                 <TextInput
                   id="asset-new-location"
                   value={form.location}
@@ -218,7 +219,7 @@ const AssetFormModal: React.FC<AssetFormModalProps> = ({
                 />
               </div>
               <div>
-                <Label htmlFor="asset-new-assigned" value="Assigned to" />
+                <Label htmlFor="asset-new-assigned" value={tx("Assigned to")} />
                 <TextInput
                   id="asset-new-assigned"
                   value={form.assignedTo}
@@ -229,7 +230,7 @@ const AssetFormModal: React.FC<AssetFormModalProps> = ({
             </>
           )}
           <div>
-            <Label htmlFor="asset-date" value="Purchase date" />
+            <Label htmlFor="asset-date" value={tx("Purchase date")} />
             <TextInput
               id="asset-date"
               type="date"
@@ -238,7 +239,7 @@ const AssetFormModal: React.FC<AssetFormModalProps> = ({
             />
           </div>
           <div>
-            <Label htmlFor="asset-price" value="Purchase price (KM)" />
+            <Label htmlFor="asset-price" value={tx("Purchase price (KM)")} />
             <TextInput
               id="asset-price"
               type="number"
@@ -249,7 +250,7 @@ const AssetFormModal: React.FC<AssetFormModalProps> = ({
             />
           </div>
           <div className="sm:col-span-2">
-            <Label htmlFor="asset-note" value="Note" />
+            <Label htmlFor="asset-note" value={tx("Note")} />
             <Textarea
               id="asset-note"
               rows={2}
@@ -264,7 +265,7 @@ const AssetFormModal: React.FC<AssetFormModalProps> = ({
           <>
             <div className="flex flex-col gap-2">
               <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
-                Status, location, assignment
+                {tx("Status, location, assignment")}
               </h4>
               <AssetStatusForm
                 asset={current}
@@ -277,7 +278,7 @@ const AssetFormModal: React.FC<AssetFormModalProps> = ({
             </div>
             <div>
               <h4 className="mb-1 text-sm font-semibold text-gray-900 dark:text-white">
-                History
+                {tx("History")}
               </h4>
               <MovementList movements={movements} />
             </div>
@@ -286,19 +287,19 @@ const AssetFormModal: React.FC<AssetFormModalProps> = ({
       </Modal.Body>
       <Modal.Footer className="flex flex-wrap gap-2">
         <Button type="submit" form="asset-form" disabled={saving}>
-          {current ? 'Save details' : 'Create'}
+          {current ? tx("Save details") : tx("Create")}
         </Button>
         {current && (
           <Button color="light" onClick={() => onPrintLabel(current)}>
-            Label
+            {tx("Label")}
           </Button>
         )}
         <Button color="gray" onClick={onClose}>
-          Close
+          {tx("Close")}
         </Button>
         {current && currentUser?.role === 'admin' && (
           <Button color="failure" className="ml-auto" onClick={remove}>
-            Delete
+            {tx("Delete")}
           </Button>
         )}
       </Modal.Footer>

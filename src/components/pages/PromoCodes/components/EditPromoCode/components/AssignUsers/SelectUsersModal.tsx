@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 import { modalRoot } from '@/shared/helpers/modalRoot'
 
 import { Loader } from '@/components/common'
@@ -103,7 +104,7 @@ const SelectUsersModal: React.FC<SelectUsersModalType> = ({
     const responseData = await addUsersToPromoCode(data)
     setLoading(false)
     if (responseData) {
-      toast('Users added to promo code', {
+      toast(tx("Users added to promo code"), {
         hideProgressBar: true,
         autoClose: 2000,
         type: 'success',
@@ -146,11 +147,11 @@ const SelectUsersModal: React.FC<SelectUsersModalType> = ({
 
   return (
     <Modal root={modalRoot()} show={isOpen} onClose={onClose}>
-      <Modal.Header>Assign users to promo code:</Modal.Header>
+      <Modal.Header>{tx("Assign users to promo code:")}</Modal.Header>
       <Modal.Body className="flex flex-col gap-6">
         {/* SELECTED USERS */}
         <div className="mb-2 flex items-center gap-2">
-          <Label className="text-base" htmlFor="users" value="Select Users: " />
+          <Label className="text-base" htmlFor="users" value={tx("Select Users: ")} />
           {/* {allUsers.length > 0 && (
             <div className="text-sm font-medium text-gray-900 dark:text-gray-300 flex flex-wrap gap-1">
               (
@@ -168,7 +169,7 @@ const SelectUsersModal: React.FC<SelectUsersModalType> = ({
           <Dropdown
             className="h-auto max-h-[400px] overflow-y-auto"
             dismissOnClick={false}
-            label="Users"
+            label={tx("Users")}
           >
             {allUsers.map((user) => {
               const checked = initialUsers?.some(
@@ -194,7 +195,7 @@ const SelectUsersModal: React.FC<SelectUsersModalType> = ({
 
         {/* ALL */}
         <div className="flex items-center gap-4 text-gray-900 dark:text-gray-300">
-          <p className="m-0">Apply to all users:</p>
+          <p className="m-0">{tx("Apply to all users:")}</p>
           <ToggleSwitch
             className=""
             color="blue"
@@ -207,7 +208,7 @@ const SelectUsersModal: React.FC<SelectUsersModalType> = ({
       </Modal.Body>
       <Modal.Footer>
         <Button isProcessing={loading} disabled={loading} onClick={assignUser}>
-          Assign
+          {tx("Assign")}
         </Button>
         <Button
           isProcessing={loading}
@@ -215,7 +216,7 @@ const SelectUsersModal: React.FC<SelectUsersModalType> = ({
           color="gray"
           onClick={onClose}
         >
-          Cancel
+          {tx("Cancel")}
         </Button>
       </Modal.Footer>
     </Modal>

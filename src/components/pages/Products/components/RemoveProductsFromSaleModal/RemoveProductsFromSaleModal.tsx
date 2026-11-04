@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 import { modalRoot } from '@/shared/helpers/modalRoot'
 
 import { DeleteProductsOnSaleFormData, PaginationData } from '@/shared/types'
@@ -62,7 +63,7 @@ const RemoveProductsFromSaleModal = () => {
 
   const onRemove = async () => {
     if (selectedIds.length === 0) {
-      toast('Please select at least one sale to remove the product from', {
+      toast(tx("Please select at least one sale to remove the product from"), {
         hideProgressBar: true,
         autoClose: 2000,
         type: 'warning',
@@ -78,7 +79,7 @@ const RemoveProductsFromSaleModal = () => {
 
     const response = await SalesAPI.deleteProductOnSale(body)
     if (response) {
-      toast(`Product removed from ${selectedIds.length} sale(s)`, {
+      toast(tx("Product removed from {selectedIds} sale(s)", { selectedIds: selectedIds.length }), {
         hideProgressBar: true,
         autoClose: 2000,
         type: 'success',
@@ -87,7 +88,7 @@ const RemoveProductsFromSaleModal = () => {
       await refetchProducts()
       closeModal()
     } else {
-      toast('Failed to remove product from sales', {
+      toast(tx("Failed to remove product from sales"), {
         hideProgressBar: true,
         autoClose: 2000,
         type: 'error',
@@ -122,10 +123,10 @@ const RemoveProductsFromSaleModal = () => {
       <Modal.Header className="border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center gap-3">
           <span className="font-semibold text-gray-900 dark:text-white">
-            Remove Product from Sales
+            {tx("Remove Product from Sales")}
           </span>
           <span className="text-sm text-gray-500 dark:text-gray-400">
-            {activeProduct?.name || 'Unknown Product'}
+            {activeProduct?.name || tx("Unknown Product")}
           </span>
         </div>
       </Modal.Header>
@@ -134,14 +135,14 @@ const RemoveProductsFromSaleModal = () => {
         {!activeProduct ? (
           <div className="text-center py-8">
             <p className="text-gray-500 dark:text-gray-400">
-              No product selected.
+              {tx("No product selected.")}
             </p>
           </div>
         ) : activeProduct.productOnSale &&
           activeProduct.productOnSale.length === 0 ? (
           <div className="text-center py-8">
             <p className="text-gray-500 dark:text-gray-400">
-              This product is not currently on any sales.
+              {tx("This product is not currently on any sales.")}
             </p>
           </div>
         ) : (
@@ -239,7 +240,7 @@ const RemoveProductsFromSaleModal = () => {
             onClick={closeModal}
             className="w-full sm:w-auto order-2"
           >
-            Cancel
+            {tx("Cancel")}
           </Button>
         </div>
       </Modal.Footer>

@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { ManufacturerFormBody } from '@/shared/types'
 import { useManufactureStore } from '@/store/store'
@@ -110,7 +111,7 @@ const AddNewManufacturer: React.FC<AddNewManufacturerType> = ({
       >
         <div className="w-full">
           <div className="mb-2 block">
-            <Label htmlFor="manufacturerName" value="Manufacturer Name" />
+            <Label htmlFor="manufacturerName" value={tx("Manufacturer Name")} />
           </div>
           <TextInput
             name="name"
@@ -123,7 +124,7 @@ const AddNewManufacturer: React.FC<AddNewManufacturerType> = ({
         </div>
 
         <Button className="mt-6" type="submit" color="purple">
-          Save
+          {tx("Save")}
         </Button>
       </form>
     </div>

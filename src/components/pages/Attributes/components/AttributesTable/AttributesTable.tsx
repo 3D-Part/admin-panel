@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { Pagination, Table } from 'flowbite-react'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -84,13 +85,13 @@ export const AttributesTable: React.FC<AttributesTableType> = ({
                 onClick={() => openEditModal(attribute)}
                 className="font-medium table-action-link cursor-pointer hover:underline"
               >
-                Edit
+                {tx("Edit")}
               </span>
               <span
                 onClick={() => onWarningModalOpen(attribute)}
                 className="font-medium table-action-danger cursor-pointer hover:underline"
               >
-                Remove
+                {tx("Remove")}
               </span>
             </div>
           ) : null
@@ -111,9 +112,9 @@ export const AttributesTable: React.FC<AttributesTableType> = ({
         <div className="table-body-container ">
           <Table className="w-full">
             <Table.Head className="table-header">
-              <Table.HeadCell className="table-cell">Name</Table.HeadCell>
+              <Table.HeadCell className="table-cell">{tx("Name")}</Table.HeadCell>
               <Table.HeadCell className="table-cell">
-                <span className="sr-only">Actions</span>
+                <span className="sr-only">{tx("Actions")}</span>
               </Table.HeadCell>
             </Table.Head>
 

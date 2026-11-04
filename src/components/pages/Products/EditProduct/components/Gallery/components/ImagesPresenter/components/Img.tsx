@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 import { WarningModal } from '@/components/common'
 import { ProductsAPI } from '@/services'
 import { useProductsStore } from '@/store/store'
@@ -37,7 +38,7 @@ const Img: React.FC<ImgType> = ({ src, id, isMain }) => {
       setLoader(false)
       setIsModalOpen(false)
 
-      toast('Image is removed!', {
+      toast(tx("Image is removed!"), {
         hideProgressBar: true,
         autoClose: 2000,
         type: 'success',
@@ -61,7 +62,7 @@ const Img: React.FC<ImgType> = ({ src, id, isMain }) => {
       setLoader(false)
       setIsFavoriteModal(false)
 
-      toast('Image is set as main!', {
+      toast(tx("Image is set as main!"), {
         hideProgressBar: true,
         autoClose: 2000,
         type: 'success',
@@ -101,7 +102,7 @@ const Img: React.FC<ImgType> = ({ src, id, isMain }) => {
 
       {loader && (
         <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center gap-4 rounded-lg bg-black/[.92]">
-          <Spinner aria-label="Loading Categories" size="lg" />
+          <Spinner aria-label={tx("Loading Categories")} size="lg" />
         </div>
       )}
 

@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 import { modalRoot } from '@/shared/helpers/modalRoot'
 
 import { WarningModal } from '@/components/common'
@@ -67,7 +68,7 @@ const OrderContactForm: React.FC<ModalType> = ({
     setIsWarningModalOpen(false)
 
     if (response !== null) {
-      toast(`Message is sent!`, {
+      toast(tx("Message is sent!"), {
         hideProgressBar: true,
         autoClose: 2000,
         type: 'success',
@@ -81,7 +82,7 @@ const OrderContactForm: React.FC<ModalType> = ({
         <Modal.Header className="border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center gap-3">
             <span className="font-semibold text-gray-900 dark:text-white">
-              Send Message
+              {tx("Send Message")}
             </span>
             {initialValue && (
               <span className="text-sm text-gray-500 dark:text-gray-400">
@@ -96,19 +97,19 @@ const OrderContactForm: React.FC<ModalType> = ({
             {/* Message Content */}
             <div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Message Content
+                {tx("Message Content")}
               </h3>
               <div>
                 <Label
                   htmlFor="declineMessage"
-                  value="Your message"
+                  value={tx("Your message")}
                   className="text-sm font-medium text-gray-700 dark:text-gray-300"
                 />
                 <Textarea
                   onChange={handleInputChange}
                   id="declineMessage"
                   name="description"
-                  placeholder="Write your message here..."
+                  placeholder={tx("Write your message here...")}
                   rows={4}
                   className="mt-1"
                 />
@@ -125,7 +126,7 @@ const OrderContactForm: React.FC<ModalType> = ({
               onClick={saveFunction}
               className="w-full sm:w-auto order-2 sm:order-1"
             >
-              Send Message
+              {tx("Send Message")}
             </Button>
             <Button
               disabled={loading}
@@ -133,7 +134,7 @@ const OrderContactForm: React.FC<ModalType> = ({
               onClick={onClose}
               className="w-full sm:w-auto order-1 sm:order-2"
             >
-              Cancel
+              {tx("Cancel")}
             </Button>
           </div>
         </Modal.Footer>
@@ -144,7 +145,7 @@ const OrderContactForm: React.FC<ModalType> = ({
           isOpen={isWarningModalOpen}
           onSave={sendEmail}
           onClose={() => setIsWarningModalOpen(false)}
-          message={`Do you want to send message to ${initialValue?.email}`}
+          message={tx("Do you want to send message to {email}", { email: initialValue?.email })}
           isLoading={loading}
           buttonColor="blue"
         />

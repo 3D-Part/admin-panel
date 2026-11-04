@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import React, { useEffect, useState } from 'react'
 import { Checkbox, Label, TextInput } from 'flowbite-react'
@@ -25,7 +26,7 @@ const PromoCategories: React.FC<{
         Valid for categories ({value.length === 0 ? 'all' : value.length})
       </p>
       <TextInput
-        placeholder="Filter categories"
+        placeholder={tx("Filter categories")}
         value={filter}
         onChange={(e) => setFilter(e.target.value)}
       />
@@ -51,8 +52,7 @@ const PromoCategories: React.FC<{
         ))}
       </div>
       <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-        Leave everything unticked for the whole shop. A category includes its
-        subcategories.
+        {tx("Leave everything unticked for the whole shop. A category includes its subcategories.")}
       </p>
     </div>
   )

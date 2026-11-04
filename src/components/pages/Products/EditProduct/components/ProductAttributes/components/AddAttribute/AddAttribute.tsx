@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { Loader } from '@/components/common'
 import { useAttributesStore, useProductsStore } from '@/store/store'
@@ -70,14 +71,14 @@ const AddAttribute = () => {
   if (!productCategorySlug) {
     return (
       <div className="mt-4 text-gray-900 dark:text-white text-xl">
-        No category selected for this product
+        {tx("No category selected for this product")}
       </div>
     )
   }
   if (!categoryAttributes.length)
     return (
       <div className="mt-4 text-gray-900 dark:text-white text-xl">
-        There are no attributes available for this category
+        {tx("There are no attributes available for this category")}
       </div>
     )
 
@@ -86,7 +87,7 @@ const AddAttribute = () => {
       <div className="w-full flex justify-start items-end gap-4">
         <div className="min-w-[200px]" id="select">
           <div className="mb-2 block">
-            <Label htmlFor="attribute" value="Attribute" />
+            <Label htmlFor="attribute" value={tx("Attribute")} />
           </div>
           <Select
             onChange={handleInputChange}
@@ -95,7 +96,7 @@ const AddAttribute = () => {
             // required
             // defaultValue={activeProduct.attributeId}
           >
-            <option value={''}>None</option>
+            <option value={''}>{tx("None")}</option>
             {categoryAttributes.map((attribute) => {
               return (
                 <option value={attribute.id} key={attribute.id}>
@@ -106,7 +107,7 @@ const AddAttribute = () => {
           </Select>
         </div>
 
-        <Button onClick={addAttribute}>Add Attribute</Button>
+        <Button onClick={addAttribute}>{tx("Add Attribute")}</Button>
       </div>
 
       {selectedAttribute.id && (

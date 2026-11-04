@@ -1,3 +1,4 @@
+import { tx } from '@/shared/i18n'
 import React from 'react'
 
 const SuccessState = () => {
@@ -20,15 +21,14 @@ const SuccessState = () => {
           </svg>
         </div>
         <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-3">
-          Verification Successful!
+          {tx("Verification Successful!")}
         </h2>
         <p className="text-gray-600 dark:text-white/60 mb-6 leading-relaxed">
-          Your account has been verified successfully. You can now access all
-          features.
+          {tx("Your account has been verified successfully. You can now access all features.")}
         </p>
         <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
           <p className="text-sm text-green-700 font-medium">
-            Redirecting to login page in a few seconds...
+            {tx("Redirecting to login page in a few seconds...")}
           </p>
         </div>
       </div>

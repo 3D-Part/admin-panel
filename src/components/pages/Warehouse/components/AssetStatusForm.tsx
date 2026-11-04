@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { Button, Label, Select, TextInput } from 'flowbite-react'
 import React, { useEffect, useState } from 'react'
@@ -51,7 +52,7 @@ const AssetStatusForm: React.FC<AssetStatusFormProps> = ({
 
     if (result) {
       setNote('')
-      toast('Status saved', { type: 'success', autoClose: 2000 })
+      toast(tx("Status saved"), { type: 'success', autoClose: 2000 })
       onChanged(result.asset)
     }
   }
@@ -59,7 +60,7 @@ const AssetStatusForm: React.FC<AssetStatusFormProps> = ({
   return (
     <form onSubmit={submit} className="grid gap-3 sm:grid-cols-2">
       <div>
-        <Label htmlFor="asset-status" value="Status" />
+        <Label htmlFor="asset-status" value={tx("Status")} />
         <Select
           id="asset-status"
           value={status}
@@ -67,44 +68,44 @@ const AssetStatusForm: React.FC<AssetStatusFormProps> = ({
         >
           {assetStatusOrder.map((value) => (
             <option key={value} value={value}>
-              {assetStatusLabels[value]}
+              {tx(assetStatusLabels[value])}
             </option>
           ))}
         </Select>
       </div>
       <div>
-        <Label htmlFor="asset-location" value="Location" />
+        <Label htmlFor="asset-location" value={tx("Location")} />
         <TextInput
           id="asset-location"
           value={location}
           maxLength={100}
-          placeholder="e.g. Warehouse, Workshop, Field"
+          placeholder={tx("e.g. Warehouse, Workshop, Field")}
           onChange={(e) => setLocation(e.target.value)}
         />
       </div>
       <div>
-        <Label htmlFor="asset-assigned" value="Assigned to" />
+        <Label htmlFor="asset-assigned" value={tx("Assigned to")} />
         <TextInput
           id="asset-assigned"
           value={assignedTo}
           maxLength={100}
-          placeholder="person's name"
+          placeholder={tx("person's name")}
           onChange={(e) => setAssignedTo(e.target.value)}
         />
       </div>
       <div>
-        <Label htmlFor="asset-status-note" value="Note" />
+        <Label htmlFor="asset-status-note" value={tx("Note")} />
         <TextInput
           id="asset-status-note"
           value={note}
           maxLength={500}
-          placeholder="e.g. sent for nozzle repair"
+          placeholder={tx("e.g. sent for nozzle repair")}
           onChange={(e) => setNote(e.target.value)}
         />
       </div>
       <div className="sm:col-span-2">
         <Button type="submit" disabled={saving || unchanged}>
-          Save change
+          {tx("Save change")}
         </Button>
       </div>
     </form>

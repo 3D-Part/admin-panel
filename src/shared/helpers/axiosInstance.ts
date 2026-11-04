@@ -1,3 +1,4 @@
+import { tx } from '@/shared/i18n'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { ErrorCodeEnum, URLPartsEnum } from '../enums'
@@ -89,7 +90,7 @@ axiosInstance.interceptors.response.use(
         originalRequest.url &&
         originalRequest.url.includes('get-new-access-token')
       ) {
-        const message = 'Your session has expired, you will have to login again'
+        const message = tx('Your session has expired, you will have to login again')
 
         toast(message, {
           hideProgressBar: true,
@@ -156,7 +157,7 @@ axiosInstance.interceptors.response.use(
           processQueue(refreshError, null)
 
           const message =
-            'Your session has expired, you will have to login again'
+            tx('Your session has expired, you will have to login again')
           toast(message, {
             hideProgressBar: true,
             autoClose: 2000,

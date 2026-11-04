@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { Search } from '@/components/common'
 import { PaginationData } from '@/shared/types'
@@ -57,12 +58,12 @@ const ProductsSearch = () => {
       <Dropdown dismissOnClick label={searchBy.toUpperCase()} size="sm">
         <Dropdown.Item onClick={() => setSearchBy('name')}>
           <span className="font-medium text-cyan-600 cursor-pointer hover:underline dark:text-cyan-500">
-            <p>NAME</p>
+            <p>{tx("NAME")}</p>
           </span>
         </Dropdown.Item>
         <Dropdown.Item onClick={() => setSearchBy('sku')}>
           <span className="font-medium text-cyan-600 cursor-pointer hover:underline dark:text-cyan-500">
-            <p>SKU</p>
+            <p>{tx("SKU")}</p>
           </span>
         </Dropdown.Item>
       </Dropdown>
@@ -72,7 +73,7 @@ const ProductsSearch = () => {
           defaultValue={(productFilters as { key?: string })?.key || ''}
         />
       </div>
-      {loader && <Spinner aria-label="Loading..." size="sm" />}
+      {loader && <Spinner aria-label={tx("Loading...")} size="sm" />}
     </div>
   )
 }

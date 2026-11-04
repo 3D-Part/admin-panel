@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import React from 'react'
 import { ToggleSwitch } from 'flowbite-react'
@@ -18,7 +19,7 @@ export const OrdersHeader = () => {
       </div>
       <ToggleSwitch
         checked={disputedOnly}
-        label="Disputed only"
+        label={tx("Disputed only")}
         onChange={(value) => {
           changeDisputedOnly(value)
           changeCurrentPage(1)

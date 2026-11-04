@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import React, { useEffect, useRef, useState, SyntheticEvent } from 'react'
 import { Button, Label, Radio, TextInput } from 'flowbite-react'
@@ -277,13 +278,13 @@ const GeneralSettings = () => {
     })
 
     if (success) {
-      toast('Settings updated successfully!', {
+      toast(tx("Settings updated successfully!"), {
         hideProgressBar: true,
         autoClose: 2000,
         type: 'success',
       })
     } else {
-      toast('Failed to update settings', {
+      toast(tx("Failed to update settings"), {
         hideProgressBar: true,
         autoClose: 2000,
         type: 'error',
@@ -297,7 +298,7 @@ const GeneralSettings = () => {
     return (
       <div className="flex items-center justify-center p-8">
         <div className="text-gray-500 dark:text-gray-400">
-          Loading settings...
+          {tx("Loading settings...")}
         </div>
       </div>
     )
@@ -308,10 +309,10 @@ const GeneralSettings = () => {
       {/* Header */}
       <div className="flex-shrink-0 mb-6">
         <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-          {TABS[tab].title}
+          {tx(TABS[tab].title)}
         </h2>
         <p className="text-gray-500 dark:text-gray-400 mt-2 max-w-3xl">
-          {TABS[tab].help}
+          {tx(TABS[tab].help)}
         </p>
       </div>
 
@@ -330,10 +331,10 @@ const GeneralSettings = () => {
                   <Label
                     className="text-base"
                     htmlFor="bannerText"
-                    value="Banner Text"
+                    value={tx("Banner Text")}
                   />
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    Text to display at the top of your storefront
+                    {tx("Text to display at the top of your storefront")}
                   </p>
                 </div>
                 <TextInput
@@ -342,7 +343,7 @@ const GeneralSettings = () => {
                   id="bannerText"
                   type="text"
                   value={formData.banner.text}
-                  placeholder="BLACK FRIDAY: 20% popusta na sve proizvode!"
+                  placeholder={tx("BLACK FRIDAY: 20% popusta na sve proizvode!")}
                 />
               </div>
             </div>
@@ -369,12 +370,10 @@ const GeneralSettings = () => {
             </div>
 
             <h4 className="mt-6 mb-1 font-semibold text-gray-900 dark:text-white">
-              Reached by spending
+              {tx("Reached by spending")}
             </h4>
             <p className="mb-3 text-sm text-gray-500 dark:text-gray-400">
-              A customer who spends this much gets the tier by themselves. Leave
-              a field empty and that tier is only given by hand. New, offered,
-              cancelled and returned orders do not count.
+              {tx("A customer who spends this much gets the tier by themselves. Leave a field empty and that tier is only given by hand. New, offered, cancelled and returned orders do not count.")}
             </p>
             <div className="grid gap-4 sm:grid-cols-3">
               {(['bronze', 'silver', 'gold'] as const).map((tier) => (
@@ -393,11 +392,11 @@ const GeneralSettings = () => {
             </div>
             <fieldset className="mt-4 space-y-2">
               <legend className="mb-1 text-sm font-medium text-gray-900 dark:text-white">
-                Spending that counts
+                {tx("Spending that counts")}
               </legend>
               {([
-                ['all', 'Everything the customer ever spent'],
-                ['12m', 'Only the last 12 months'],
+                ['all', tx("Everything the customer ever spent")],
+                ['12m', tx("Only the last 12 months")],
               ] as const).map(([period, label]) => (
                 <div key={period} className="flex items-center gap-2">
                   <Radio
@@ -454,10 +453,10 @@ const GeneralSettings = () => {
                   <Label
                     className="text-base"
                     htmlFor="deliveryCost"
-                    value="Delivery Cost"
+                    value={tx("Delivery Cost")}
                   />
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    Standard delivery charge
+                    {tx("Standard delivery charge")}
                   </p>
                 </div>
                 <TextInput
@@ -478,10 +477,10 @@ const GeneralSettings = () => {
                   <Label
                     className="text-base"
                     htmlFor="freeDeliveryLimit"
-                    value="Free Delivery Threshold"
+                    value={tx("Free Delivery Threshold")}
                   />
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    Minimum order value for free delivery
+                    {tx("Minimum order value for free delivery")}
                   </p>
                 </div>
                 <TextInput
@@ -508,10 +507,10 @@ const GeneralSettings = () => {
                   <Label
                     className="text-base"
                     htmlFor="companyEmail"
-                    value="Email(s)"
+                    value={tx("Email(s)")}
                   />
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    Company contact emails
+                    {tx("Company contact emails")}
                   </p>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -524,7 +523,7 @@ const GeneralSettings = () => {
                         id={`companyEmail-${index}`}
                         type="email"
                         value={email}
-                        placeholder="contact@company.com"
+                        placeholder={tx("contact@company.com")}
                         className="flex-1"
                       />
                       {formData.company.emails.length > 1 && (
@@ -548,7 +547,7 @@ const GeneralSettings = () => {
                   className="mt-2"
                 >
                   <HiPlus className="h-4 w-4 mr-1" />
-                  Add Email
+                  {tx("Add Email")}
                 </Button>
               </div>
 
@@ -558,10 +557,10 @@ const GeneralSettings = () => {
                   <Label
                     className="text-base"
                     htmlFor="companyPhone"
-                    value="Phone Number"
+                    value={tx("Phone Number")}
                   />
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    Company contact phone
+                    {tx("Company contact phone")}
                   </p>
                 </div>
                 <TextInput
@@ -570,7 +569,7 @@ const GeneralSettings = () => {
                   id="companyPhone"
                   type="tel"
                   value={formData.company.phone}
-                  placeholder="+387 XX XXX XXX"
+                  placeholder={tx("+387 XX XXX XXX")}
                 />
               </div>
 
@@ -580,10 +579,10 @@ const GeneralSettings = () => {
                   <Label
                     className="text-base"
                     htmlFor="companyBankAccount"
-                    value="Bank account"
+                    value={tx("Bank account")}
                   />
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    Printed and emailed on proformas
+                    {tx("Printed and emailed on proformas")}
                   </p>
                 </div>
                 <TextInput
@@ -601,10 +600,10 @@ const GeneralSettings = () => {
                   <Label
                     className="text-base"
                     htmlFor="companyTown"
-                    value="Town/City"
+                    value={tx("Town/City")}
                   />
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    Company location
+                    {tx("Company location")}
                   </p>
                 </div>
                 <TextInput
@@ -613,7 +612,7 @@ const GeneralSettings = () => {
                   id="companyTown"
                   type="text"
                   value={formData.company.town}
-                  placeholder="Banja Luka"
+                  placeholder={tx("Banja Luka")}
                 />
               </div>
 
@@ -623,10 +622,10 @@ const GeneralSettings = () => {
                   <Label
                     className="text-base"
                     htmlFor="companyAddress"
-                    value="Address"
+                    value={tx("Address")}
                   />
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    Company street address
+                    {tx("Company street address")}
                   </p>
                 </div>
                 <TextInput
@@ -635,7 +634,7 @@ const GeneralSettings = () => {
                   id="companyAddress"
                   type="text"
                   value={formData.company.address}
-                  placeholder="Street Name 123"
+                  placeholder={tx("Street Name 123")}
                 />
               </div>
             </div>
@@ -651,10 +650,10 @@ const GeneralSettings = () => {
                   <Label
                     className="text-base"
                     htmlFor="socialMediaFacebook"
-                    value="Facebook"
+                    value={tx("Facebook")}
                   />
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    Facebook page URL
+                    {tx("Facebook page URL")}
                   </p>
                 </div>
                 <TextInput
@@ -663,7 +662,7 @@ const GeneralSettings = () => {
                   id="socialMediaFacebook"
                   type="url"
                   value={formData.socialMedia.facebook}
-                  placeholder="https://facebook.com/yourpage"
+                  placeholder={tx("https://facebook.com/yourpage")}
                 />
               </div>
 
@@ -673,10 +672,10 @@ const GeneralSettings = () => {
                   <Label
                     className="text-base"
                     htmlFor="socialMediaInstagram"
-                    value="Instagram"
+                    value={tx("Instagram")}
                   />
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    Instagram profile URL
+                    {tx("Instagram profile URL")}
                   </p>
                 </div>
                 <TextInput
@@ -685,7 +684,7 @@ const GeneralSettings = () => {
                   id="socialMediaInstagram"
                   type="url"
                   value={formData.socialMedia.instagram}
-                  placeholder="https://instagram.com/yourprofile"
+                  placeholder={tx("https://instagram.com/yourprofile")}
                 />
               </div>
 
@@ -695,10 +694,10 @@ const GeneralSettings = () => {
                   <Label
                     className="text-base"
                     htmlFor="socialMediaOlx"
-                    value="OLX"
+                    value={tx("OLX")}
                   />
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    OLX store URL
+                    {tx("OLX store URL")}
                   </p>
                 </div>
                 <TextInput
@@ -707,7 +706,7 @@ const GeneralSettings = () => {
                   id="socialMediaOlx"
                   type="url"
                   value={formData.socialMedia.olx}
-                  placeholder="https://olx.ba/korisnik/yourstore"
+                  placeholder={tx("https://olx.ba/korisnik/yourstore")}
                 />
               </div>
             </div>
@@ -726,7 +725,7 @@ const GeneralSettings = () => {
               size="md"
               color="purple"
             >
-              Save Settings
+              {tx("Save Settings")}
             </Button>
           </div>
         </div>

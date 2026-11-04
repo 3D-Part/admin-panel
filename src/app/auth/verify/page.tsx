@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import React, { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -22,7 +23,7 @@ const VerifyPage = () => {
   useEffect(() => {
     const token = searchParams.get('token')
     if (!token) {
-      setError('No verification token provided')
+      setError(tx("No verification token provided"))
     }
   }, [searchParams])
 
@@ -33,7 +34,7 @@ const VerifyPage = () => {
     try {
       const token = searchParams.get('token')
       if (!token) {
-        setError('No verification token provided')
+        setError(tx("No verification token provided"))
         setIsLoading(false)
         return
       }
@@ -50,11 +51,11 @@ const VerifyPage = () => {
           router.push(URLPartsEnum.Login)
         }, 2000)
       } else {
-        setError('Account activation failed. Please try again.')
+        setError(tx("Account activation failed. Please try again."))
         setIsLoading(false)
       }
     } catch (error: any) {
-      setError('Verification failed. Please try again.')
+      setError(tx("Verification failed. Please try again."))
       setIsLoading(false)
     }
   }

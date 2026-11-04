@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import React from 'react'
 import { Button, Select, TextInput } from 'flowbite-react'
@@ -30,7 +31,7 @@ const BillingOptions: React.FC<{
       {value.map((option) => (
         <div key={option.id} className="flex flex-wrap items-center gap-2">
           <TextInput
-            aria-label="Name"
+            aria-label={tx("Name")}
             className="flex-1 min-w-[10rem]"
             value={option.label}
             onChange={(e) => change(option.id, { label: e.target.value })}
@@ -42,14 +43,14 @@ const BillingOptions: React.FC<{
           >
             {Object.keys(BILLING_COLORS).map((color) => (
               <option key={color} value={color}>
-                {COLOR_NAMES[color]}
+                {tx(COLOR_NAMES[color])}
               </option>
             ))}
           </Select>
           <span
             className={`rounded-lg px-3 py-1 text-xs font-medium ${BILLING_COLORS[option.color]}`}
           >
-            {option.label || 'Preview'}
+            {option.label || tx("Preview")}
           </span>
           <Button
             size="xs"
@@ -71,7 +72,7 @@ const BillingOptions: React.FC<{
           ])
         }
       >
-        Add status
+        {tx("Add status")}
       </Button>
     </div>
   )

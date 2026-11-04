@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import React, { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
@@ -65,7 +66,7 @@ const AuthCheck: React.FC<AuthCheckProps> = ({ children }) => {
           <div className="w-40 h-40 mx-auto mb-6 animate-pulse">
             <Image
               src="/assets/img/logo.png"
-              alt="3D Part Logo"
+              alt={tx("3D Part Logo")}
               width={160}
               height={160}
               className="w-full h-full object-contain"

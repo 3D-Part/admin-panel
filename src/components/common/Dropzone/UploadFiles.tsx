@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
@@ -71,10 +72,10 @@ const UploadFiles: React.FC<UploadFilesType> = ({ setActiveFormData }) => {
             <HiCloudUpload className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" />
             <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
               {isDragActive ? (
-                <span>Drop the files here ...</span>
+                <span>{tx("Drop the files here ...")}</span>
               ) : (
                 <span>
-                  Drag and drop some files here, or click to select files
+                  {tx("Drag and drop some files here, or click to select files")}
                 </span>
               )}
             </p>
@@ -90,7 +91,7 @@ const UploadFiles: React.FC<UploadFilesType> = ({ setActiveFormData }) => {
       <div className="w-full flex flex-wrap gap-4 mb-4">
         {files.length > 0 && (
           <h3 className="text-lg leading-none tracking-tight text-gray-800 dark:text-white">
-            Accepted Files:
+            {tx("Accepted Files:")}
           </h3>
         )}
 

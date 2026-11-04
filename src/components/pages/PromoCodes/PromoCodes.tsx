@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import React, { useEffect, useRef, useState } from 'react'
 import { PaginationData, PromoCode } from '@/shared/types'
@@ -71,7 +72,7 @@ export const PromoCodes = () => {
     )
 
     if (response) {
-      const toastMessage = `promo code ${activePromoCodeRef.current.code} is removed`
+      const toastMessage = tx("promo code {code} is removed", { code: activePromoCodeRef.current.code })
       toast(toastMessage, {
         hideProgressBar: true,
         autoClose: 2000,
@@ -95,7 +96,7 @@ export const PromoCodes = () => {
         onSave={onWarningModalConfirm}
         isOpen={isWarningModalOpen}
         onClose={onWarningModalClose}
-        message={`Are you sure you want to delete ${activePromoCodeRef.current?.code}?`}
+        message={tx("Are you sure you want to delete {code}?", { code: activePromoCodeRef.current?.code })}
       />
     </div>
   )

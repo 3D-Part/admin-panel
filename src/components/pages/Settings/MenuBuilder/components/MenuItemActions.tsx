@@ -1,3 +1,4 @@
+import { tx } from '@/shared/i18n'
 import React, { useState } from 'react'
 import { Button } from 'flowbite-react'
 import {
@@ -56,7 +57,7 @@ const MenuItemActions: React.FC<MenuItemActionsProps> = ({
           color="gray"
           onClick={toggleMobileActions}
           className="!p-2 !h-8 !w-8 flex-shrink-0 md:hidden"
-          title="Show actions"
+          title={tx("Show actions")}
         >
           <HiDotsVertical className="h-4 w-4" />
         </Button>
@@ -81,7 +82,7 @@ const MenuItemActions: React.FC<MenuItemActionsProps> = ({
               if (isTablet) setShowMobileActions(false)
             }}
             className="!p-1.5 !h-8 !w-8"
-            title="Edit"
+            title={tx("Edit")}
           >
             <HiPencil className="h-3.5 w-3.5" />
           </Button>
@@ -94,7 +95,7 @@ const MenuItemActions: React.FC<MenuItemActionsProps> = ({
               if (isTablet) setShowMobileActions(false)
             }}
             className="!p-1.5 !h-8 !w-8"
-            title="Delete"
+            title={tx("Delete")}
           >
             <HiTrash className="h-3.5 w-3.5" />
           </Button>
@@ -110,7 +111,7 @@ const MenuItemActions: React.FC<MenuItemActionsProps> = ({
             }}
             disabled={!canMoveUp}
             className="!p-1.5 !h-8 !w-8"
-            title="Move Up"
+            title={tx("Move Up")}
           >
             <HiChevronUp className="h-3.5 w-3.5" />
           </Button>
@@ -123,7 +124,7 @@ const MenuItemActions: React.FC<MenuItemActionsProps> = ({
             }}
             disabled={!canMoveDown}
             className="!p-1.5 !h-8 !w-8"
-            title="Move Down"
+            title={tx("Move Down")}
           >
             <HiChevronDown className="h-3.5 w-3.5" />
           </Button>
@@ -136,7 +137,7 @@ const MenuItemActions: React.FC<MenuItemActionsProps> = ({
             }}
             disabled={!canIndentLeft}
             className="!p-1.5 !h-8 !w-8"
-            title="Indent Left (Move Up Level)"
+            title={tx("Indent Left (Move Up Level)")}
           >
             <HiChevronLeft className="h-3.5 w-3.5" />
           </Button>
@@ -149,7 +150,7 @@ const MenuItemActions: React.FC<MenuItemActionsProps> = ({
             }}
             disabled={!canIndentRight}
             className="!p-1.5 !h-8 !w-8"
-            title="Indent Right (Make Child)"
+            title={tx("Indent Right (Make Child)")}
           >
             <HiChevronRight className="h-3.5 w-3.5" />
           </Button>
@@ -163,7 +164,7 @@ const MenuItemActions: React.FC<MenuItemActionsProps> = ({
             color="gray"
             onClick={toggleMobileActions}
             className="!p-1.5 !h-8 !w-8 ml-2 md:hidden"
-            title="Close actions"
+            title={tx("Close actions")}
           >
             <HiX className="h-3.5 w-3.5" />
           </Button>

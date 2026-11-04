@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import React, { useCallback, useEffect, useState } from 'react'
 import {
@@ -57,7 +58,7 @@ const EmailsTable = () => {
         subtitle="Order Email"
         items={[
           {
-            label: 'Email',
+            label: tx("Email"),
             value: email,
           },
         ]}
@@ -76,7 +77,7 @@ const EmailsTable = () => {
       <div className="table-container relative">
         <Table className="w-full">
           <Table.Head className="table-header">
-            <Table.HeadCell className="table-cell">Email</Table.HeadCell>
+            <Table.HeadCell className="table-cell">{tx("Email")}</Table.HeadCell>
           </Table.Head>
         </Table>
 

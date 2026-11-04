@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 import { modalRoot } from '@/shared/helpers/modalRoot'
 
 import React, { useCallback, useEffect, useState } from 'react'
@@ -73,21 +74,21 @@ const printProforma = (proforma: Proforma, seller: Record<string, string>) => {
     <h1>Predračun ${escapeHtml(proforma.number)}</h1>
     <p>Datum: ${new Date(proforma.createdAt).toLocaleDateString('bs-BA')}
     ${proforma.validUntil ? `<br/>Važi do: ${new Date(proforma.validUntil).toLocaleDateString('bs-BA')}` : ''}</p>
-    <p><strong>Izdao:</strong> 3D Part${[seller.address, seller.town, seller.phone && `Tel: ${seller.phone}`, seller.bankAccount && `Žiro račun: ${seller.bankAccount}`]
+    <p><strong>{tx("Izdao:")}</strong> 3D Part${[seller.address, seller.town, seller.phone && `Tel: ${seller.phone}`, seller.bankAccount && `Žiro račun: ${seller.bankAccount}`]
       .filter(Boolean)
       .map((line) => `<br/>${escapeHtml(line)}`)
       .join('')}</p>
-    <p><strong>Kupac:</strong><br/>${[customer.companyName, customer.jib && `JIB: ${customer.jib}`, customer.companyPdv && `PDV: ${customer.companyPdv}`, customer.fullName, customer.street, [customer.postCode, customer.city].filter(Boolean).join(' '), customer.email, customer.phone]
+    <p><strong>{tx("Kupac:")}</strong><br/>${[customer.companyName, customer.jib && `JIB: ${customer.jib}`, customer.companyPdv && `PDV: ${customer.companyPdv}`, customer.fullName, customer.street, [customer.postCode, customer.city].filter(Boolean).join(' '), customer.email, customer.phone]
       .filter(Boolean)
       .map(escapeHtml)
       .join('<br/>')}</p>
-    <table><thead><tr><th>Artikal</th><th class="n">Količina</th><th class="n">Cijena (KM)</th><th class="n">Ukupno (KM)</th></tr></thead>
+    <table><thead><tr><th>{tx("Artikal")}</th><th class="n">{tx("Količina")}</th><th class="n">Cijena (KM)</th><th class="n">Ukupno (KM)</th></tr></thead>
     <tbody>${rows}</tbody></table>
     <div class="totals">
-      <div><span>Artikli</span><span>${Number(proforma.price).toFixed(2)} KM</span></div>
-      <div><span>Popust</span><span>${Number(proforma.discount)}%</span></div>
-      <div><span>Dostava</span><span>${Number(proforma.shippingPrice).toFixed(2)} KM</span></div>
-      <div class="grand"><span>Za platiti</span><span>${Number(proforma.total).toFixed(2)} KM</span></div>
+      <div><span>{tx("Artikli")}</span><span>${Number(proforma.price).toFixed(2)} KM</span></div>
+      <div><span>{tx("Popust")}</span><span>${Number(proforma.discount)}%</span></div>
+      <div><span>{tx("Dostava")}</span><span>${Number(proforma.shippingPrice).toFixed(2)} KM</span></div>
+      <div class="grand"><span>{tx("Za platiti")}</span><span>${Number(proforma.total).toFixed(2)} KM</span></div>
     </div>
     ${proforma.note ? `<p>${escapeHtml(proforma.note)}</p>` : ''}
     <script>window.onload=function(){window.print()}</script>
@@ -142,7 +143,7 @@ const ProformaModal: React.FC<{
 
   const save = async () => {
     if (items.length === 0) {
-      toast('Add at least one item', { type: 'error', autoClose: 2000 })
+      toast(tx("Add at least one item"), { type: 'error', autoClose: 2000 })
       return
     }
     const body: ProformaBody = {
@@ -174,14 +175,14 @@ const ProformaModal: React.FC<{
   return (
     <Modal root={modalRoot()} show size="4xl" onClose={onClose}>
       <Modal.Header>
-        {proforma ? `Proforma ${proforma.number}` : 'New proforma'}
+        {proforma ? tx("Proforma {number}", { number: proforma.number }) : tx("New proforma")}
       </Modal.Header>
       {/* long forms scroll inside the window, so search results stay reachable */}
       <Modal.Body className="space-y-6 max-h-[70vh] overflow-y-auto">
         <div className="grid gap-3 sm:grid-cols-3">
           {CUSTOMER_FIELDS.map((field) => (
             <div key={field.name}>
-              <Label htmlFor={`proforma-${field.name}`} value={field.label} />
+              <Label htmlFor={`proforma-${field.name}`} value={tx(field.label)} />
               <TextInput
                 id={`proforma-${field.name}`}
                 value={customer[field.name] ?? ''}
@@ -195,7 +196,7 @@ const ProformaModal: React.FC<{
 
         <div className="space-y-2">
           <TextInput
-            placeholder="Add a product: name, code or SKU"
+            placeholder={tx("Add a product: name, code or SKU")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -244,7 +245,7 @@ const ProformaModal: React.FC<{
               ])
             }
           >
-            Add a custom line
+            {tx("Add a custom line")}
           </Button>
         </div>
 
@@ -252,14 +253,14 @@ const ProformaModal: React.FC<{
           {items.map((item, index) => (
             <div key={index} className="flex flex-wrap items-center gap-2">
               <TextInput
-                aria-label="Name"
+                aria-label={tx("Name")}
                 className="flex-1 min-w-[200px]"
                 value={item.name}
-                placeholder="Name"
+                placeholder={tx("Name")}
                 onChange={(e) => setItem(index, { name: e.target.value })}
               />
               <TextInput
-                aria-label="Quantity"
+                aria-label={tx("Quantity")}
                 className="w-20"
                 type="number"
                 min={1}
@@ -269,7 +270,7 @@ const ProformaModal: React.FC<{
                 }
               />
               <TextInput
-                aria-label="Price"
+                aria-label={tx("Price")}
                 className="w-28"
                 type="number"
                 min={0}
@@ -278,7 +279,7 @@ const ProformaModal: React.FC<{
                 onChange={(e) => setItem(index, { price: Number(e.target.value) })}
               />
               <Button
-                aria-label="Remove"
+                aria-label={tx("Remove")}
                 size="xs"
                 color="failure"
                 onClick={() =>
@@ -293,7 +294,7 @@ const ProformaModal: React.FC<{
 
         <div className="grid gap-3 sm:grid-cols-3">
           <div>
-            <Label htmlFor="proforma-discount" value="Discount (%)" />
+            <Label htmlFor="proforma-discount" value={tx("Discount (%)")} />
             <TextInput
               id="proforma-discount"
               type="number"
@@ -304,7 +305,7 @@ const ProformaModal: React.FC<{
             />
           </div>
           <div>
-            <Label htmlFor="proforma-shipping" value="Shipping (KM)" />
+            <Label htmlFor="proforma-shipping" value={tx("Shipping (KM)")} />
             <TextInput
               id="proforma-shipping"
               type="number"
@@ -315,7 +316,7 @@ const ProformaModal: React.FC<{
             />
           </div>
           <div>
-            <Label htmlFor="proforma-valid" value="Valid until" />
+            <Label htmlFor="proforma-valid" value={tx("Valid until")} />
             <TextInput
               id="proforma-valid"
               type="date"
@@ -325,7 +326,7 @@ const ProformaModal: React.FC<{
           </div>
         </div>
         <div>
-          <Label htmlFor="proforma-note" value="Note, printed on the proforma" />
+          <Label htmlFor="proforma-note" value={tx("Note, printed on the proforma")} />
           <Textarea
             id="proforma-note"
             rows={2}
@@ -339,10 +340,10 @@ const ProformaModal: React.FC<{
       </Modal.Body>
       <Modal.Footer>
         <Button disabled={saving} onClick={save}>
-          Save
+          {tx("Save")}
         </Button>
         <Button color="gray" onClick={onClose}>
-          Close
+          {tx("Close")}
         </Button>
       </Modal.Footer>
     </Modal>
@@ -395,21 +396,21 @@ const Proformas = () => {
   const send = async (proforma: Proforma) => {
     const email = proforma.customer?.email?.trim()
     if (!email) {
-      toast('Add the customer email first', { type: 'error', autoClose: 3000 })
+      toast(tx("Add the customer email first"), { type: 'error', autoClose: 3000 })
       return
     }
-    if (!window.confirm(`Send ${proforma.number} to ${email}?`)) return
+    if (!window.confirm(tx("Send {number} to {email}?", { number: proforma.number, email }))) return
     const sent = await BackofficeAPI.sendProforma(proforma.id)
     if (sent) {
-      toast(`Sent to ${email}`, { type: 'success', autoClose: 2000 })
+      toast(tx("Sent to {email}", { email }), { type: 'success', autoClose: 2000 })
       load()
     } else {
-      toast('Could not send the email', { type: 'error', autoClose: 3000 })
+      toast(tx("Could not send the email"), { type: 'error', autoClose: 3000 })
     }
   }
 
   const remove = async (proforma: Proforma) => {
-    if (!window.confirm(`Delete ${proforma.number}?`)) return
+    if (!window.confirm(tx("Delete {number}?", { number: proforma.number }))) return
     await BackofficeAPI.deleteProforma(proforma.id)
     load()
   }
@@ -418,10 +419,10 @@ const Proformas = () => {
     <div className="w-full h-full overflow-y-auto p-4 space-y-4">
       <div className="flex flex-wrap items-center gap-4">
         <h2 className="mr-auto text-3xl font-bold text-gray-900 dark:text-white">
-          Proformas
+          {tx("Proformas")}
         </h2>
         <TextInput
-          placeholder="Number, company, name"
+          placeholder={tx("Number, company, name")}
           value={search}
           onChange={(e) => {
             setPage(1)
@@ -429,20 +430,20 @@ const Proformas = () => {
           }}
         />
         <Button color="purple" onClick={() => setEditing('new')}>
-          Add new <HiPlus className="ml-2" />
+          {tx("Add new")}{' '}<HiPlus className="ml-2" />
         </Button>
       </div>
 
       <div className="overflow-x-auto">
         <Table hoverable>
           <Table.Head>
-            <Table.HeadCell>Number</Table.HeadCell>
-            <Table.HeadCell>Customer</Table.HeadCell>
-            <Table.HeadCell>Date</Table.HeadCell>
-            <Table.HeadCell>Total</Table.HeadCell>
-            <Table.HeadCell>Sent</Table.HeadCell>
+            <Table.HeadCell>{tx("Number")}</Table.HeadCell>
+            <Table.HeadCell>{tx("Customer")}</Table.HeadCell>
+            <Table.HeadCell>{tx("Date")}</Table.HeadCell>
+            <Table.HeadCell>{tx("Total")}</Table.HeadCell>
+            <Table.HeadCell>{tx("Sent")}</Table.HeadCell>
             <Table.HeadCell>
-              <span className="sr-only">Actions</span>
+              <span className="sr-only">{tx("Actions")}</span>
             </Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y divide-gray-100 dark:divide-gray-800">
@@ -464,21 +465,21 @@ const Proformas = () => {
                 <Table.Cell>
                   {proforma.sentAt
                     ? new Date(proforma.sentAt).toLocaleDateString('en-GB')
-                    : 'Not sent'}
+                    : tx("Not sent")}
                 </Table.Cell>
                 <Table.Cell>
                   <div className="flex justify-end gap-2">
                     <Button size="xs" color="purple" onClick={() => send(proforma)}>
-                      {proforma.sentAt ? 'Send again' : 'Send'}
+                      {proforma.sentAt ? tx("Send again") : tx("Send")}
                     </Button>
                     <Button size="xs" color="light" onClick={() => printProforma(proforma, seller)}>
-                      Print
+                      {tx("Print")}
                     </Button>
                     <Button size="xs" color="gray" onClick={() => setEditing(proforma)}>
-                      Edit
+                      {tx("Edit")}
                     </Button>
                     <Button size="xs" color="failure" onClick={() => remove(proforma)}>
-                      Delete
+                      {tx("Delete")}
                     </Button>
                   </div>
                 </Table.Cell>
@@ -488,7 +489,7 @@ const Proformas = () => {
         </Table>
         {rows.length === 0 && (
           <p className="p-4 text-sm text-gray-500 dark:text-gray-400">
-            No proformas yet.
+            {tx("No proformas yet.")}
           </p>
         )}
       </div>

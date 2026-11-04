@@ -1,3 +1,4 @@
+import { tx } from '@/shared/i18n'
 import React from 'react'
 
 interface ErrorStateProps {
@@ -30,7 +31,7 @@ const ErrorState: React.FC<ErrorStateProps> = ({
           </svg>
         </div>
         <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-3">
-          Verification Failed
+          {tx("Verification Failed")}
         </h2>
         <p className="text-red-600 dark:text-red-400 mb-6">{error}</p>
         <div className="space-y-4">
@@ -51,7 +52,7 @@ const ErrorState: React.FC<ErrorStateProps> = ({
                 d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
               />
             </svg>
-            Try Again
+            {tx("Try Again")}
           </button>
           <button
             onClick={onGoLogin}
@@ -70,7 +71,7 @@ const ErrorState: React.FC<ErrorStateProps> = ({
                 d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
               />
             </svg>
-            Go to Login page
+            {tx("Go to Login page")}
           </button>
         </div>
       </div>

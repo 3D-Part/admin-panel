@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { Button, TextInput } from 'flowbite-react'
 import React, { useEffect, useState } from 'react'
@@ -37,7 +38,7 @@ const UnknownCode: React.FC<UnknownCodeProps> = ({ code, onAssigned }) => {
   const assign = async (product: WarehouseProduct) => {
     const updated = await WarehouseAPI.assignEan(product.id, code)
     if (updated) {
-      toast(`Barcode ${code} assigned to product ${product.code}`, {
+      toast(tx("Barcode {code} assigned to product {code2}", { code, code2: product.code }), {
         type: 'success',
         autoClose: 2500,
       })
@@ -48,21 +49,21 @@ const UnknownCode: React.FC<UnknownCodeProps> = ({ code, onAssigned }) => {
   return (
     <div className="flex flex-col gap-3 p-4 border border-yellow-300 dark:border-yellow-700 rounded-lg bg-yellow-50 dark:bg-yellow-900/20">
       <p className="text-sm text-gray-900 dark:text-white">
-        Nothing found for <span className="font-mono font-semibold">{code}</span>.
+        {tx("Nothing found for")}{' '}<span className="font-mono font-semibold">{code}</span>.
       </p>
 
       {isInternal ? (
         <p className="text-sm text-gray-600 dark:text-gray-300">
-          This looks like our code, but no such product or item exists. It may have been deleted.
+          {tx("This looks like our code, but no such product or item exists. It may have been deleted.")}
         </p>
       ) : (
         <>
           <p className="text-sm text-gray-600 dark:text-gray-300">
-            If this is a manufacturer barcode, find the product it belongs to and the next scan will find it right away.
+            {tx("If this is a manufacturer barcode, find the product it belongs to and the next scan will find it right away.")}
           </p>
           <TextInput
             value={search}
-            placeholder="product name, code or SKU"
+            placeholder={tx("product name, code or SKU")}
             onChange={(e) => setSearch(e.target.value)}
           />
           {results.length > 0 && (
@@ -82,7 +83,7 @@ const UnknownCode: React.FC<UnknownCodeProps> = ({ code, onAssigned }) => {
                     </span>
                   )}
                   <Button size="xs" onClick={() => assign(product)}>
-                    Assign
+                    {tx("Assign")}
                   </Button>
                 </li>
               ))}

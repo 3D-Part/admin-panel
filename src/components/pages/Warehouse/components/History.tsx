@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { Button, Select } from 'flowbite-react'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -42,10 +43,10 @@ const History: React.FC = () => {
         value={type}
         onChange={(e) => setType(e.target.value)}
       >
-        <option value="">All changes</option>
+        <option value="">{tx("All changes")}</option>
         {(Object.keys(movementLabels) as MovementType[]).map((value) => (
           <option key={value} value={value}>
-            {movementLabels[value]}
+            {tx(movementLabels[value])}
           </option>
         ))}
       </Select>

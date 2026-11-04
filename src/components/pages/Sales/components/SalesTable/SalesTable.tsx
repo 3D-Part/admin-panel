@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { Pagination, Table } from 'flowbite-react'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -93,7 +94,7 @@ export const SalesTable: React.FC<SalesTableType> = ({
         onClick={hasWritePermission ? () => handleEditSale(sale) : undefined}
         items={[
           {
-            label: 'Start Date',
+            label: tx("Start Date"),
             value: (
               <span className="text-gray-700 dark:text-gray-300">
                 {startTime}
@@ -101,7 +102,7 @@ export const SalesTable: React.FC<SalesTableType> = ({
             ),
           },
           {
-            label: 'End Date',
+            label: tx("End Date"),
             value: (
               <span className="text-gray-700 dark:text-gray-300">
                 {endTime}
@@ -119,13 +120,13 @@ export const SalesTable: React.FC<SalesTableType> = ({
                 onClick={() => handleEditSale(sale)}
                 className="font-medium table-action-link cursor-pointer hover:underline"
               >
-                Edit
+                {tx("Edit")}
               </span>
               <span
                 onClick={() => onWarningModalOpen(sale)}
                 className="font-medium table-action-danger cursor-pointer hover:underline"
               >
-                Remove
+                {tx("Remove")}
               </span>
             </div>
           ) : null
@@ -146,11 +147,11 @@ export const SalesTable: React.FC<SalesTableType> = ({
         <div className="table-body-container ">
           <Table className="w-full">
             <Table.Head className="table-header">
-              <Table.HeadCell className="table-cell">Name</Table.HeadCell>
-              <Table.HeadCell className="table-cell">Start Date</Table.HeadCell>
-              <Table.HeadCell className="table-cell">End Date</Table.HeadCell>
+              <Table.HeadCell className="table-cell">{tx("Name")}</Table.HeadCell>
+              <Table.HeadCell className="table-cell">{tx("Start Date")}</Table.HeadCell>
+              <Table.HeadCell className="table-cell">{tx("End Date")}</Table.HeadCell>
               <Table.HeadCell className="table-cell">
-                <span className="sr-only">Actions</span>
+                <span className="sr-only">{tx("Actions")}</span>
               </Table.HeadCell>
             </Table.Head>
 

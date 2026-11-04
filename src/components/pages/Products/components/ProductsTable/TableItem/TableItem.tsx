@@ -1,3 +1,4 @@
+import { tx } from '@/shared/i18n'
 import { URLPartsEnum } from '@/shared/enums'
 
 import { PaginationData, ProductData, ProductFormBody } from '@/shared/types'
@@ -61,7 +62,7 @@ export const TableItem: React.FC<TableItemType> = ({
   ) => {
     setValue(value)
     if (await saveField({ [field]: value })) {
-      toast('Saved', { type: 'success', autoClose: 1500 })
+      toast(tx("Saved"), { type: 'success', autoClose: 1500 })
     } else {
       setValue(previous)
     }
@@ -163,12 +164,12 @@ export const TableItem: React.FC<TableItemType> = ({
             <ToggleSwitch
               disabled={!hasWritePermission}
               checked={published}
-              label={published ? 'Published' : 'Hidden'}
+              label={published ? tx("Published") : tx("Hidden")}
               onChange={togglePublished}
             />
             {product.productOnSale.length > 0 && (
               <Badge color="failure" className="w-fit">
-                On sale
+                {tx("On sale")}
               </Badge>
             )}
           </div>
@@ -181,7 +182,7 @@ export const TableItem: React.FC<TableItemType> = ({
               onClick={hasWritePermission ? editProduct : undefined}
             >
               <Avatar
-                alt="product"
+                alt={tx("product")}
                 placeholderInitials="3D"
                 img={activeImageId}
                 size="md"
@@ -190,7 +191,7 @@ export const TableItem: React.FC<TableItemType> = ({
               />
             </button>
             <InlineText
-              label={`Name of ${name}`}
+              label={tx("Name of {name}", { name })}
               value={name}
               editable={hasWritePermission}
               onSave={(value) => saveField({ name: value })}
@@ -250,7 +251,7 @@ export const TableItem: React.FC<TableItemType> = ({
             </span>
           )}
           <InlineText
-            label={`SKU of ${name}`}
+            label={tx("SKU of {name}", { name })}
             value={sku}
             className="w-24"
             editable={hasWritePermission}
@@ -259,7 +260,7 @@ export const TableItem: React.FC<TableItemType> = ({
         </Table.Cell>
         <Table.Cell className="table-cell w-1/12">
           <InlineNumber
-            label={`Price of ${name}`}
+            label={tx("Price of {name}", { name })}
             value={price}
             editable={hasWritePermission}
             onSave={(value) => saveField({ price: value })}
@@ -267,9 +268,9 @@ export const TableItem: React.FC<TableItemType> = ({
         </Table.Cell>
         <Table.Cell className="table-cell w-1/12">
           <InlineNumber
-            label={`Purchase price of ${name}`}
+            label={tx("Purchase price of {name}", { name })}
             value={purchasePrice}
-            placeholder="Add"
+            placeholder={tx("Add")}
             editable={hasWritePermission}
             onSave={async (value) =>
               Boolean(await BackofficeAPI.setProductCost(product.id, value))
@@ -278,7 +279,7 @@ export const TableItem: React.FC<TableItemType> = ({
         </Table.Cell>
         <Table.Cell className="table-cell w-1/12">
           <InlineNumber
-            label={`Quantity of ${name}`}
+            label={tx("Quantity of {name}", { name })}
             value={quantity}
             whole
             editable={hasWritePermission}
@@ -301,7 +302,7 @@ export const TableItem: React.FC<TableItemType> = ({
                   className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
                 >
                   <span className="font-medium table-action-link cursor-pointer">
-                    Edit
+                    {tx("Edit")}
                   </span>
                 </Dropdown.Item>
                 <Dropdown.Item
@@ -309,7 +310,7 @@ export const TableItem: React.FC<TableItemType> = ({
                   className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
                 >
                   <span className="font-medium table-action-link cursor-pointer">
-                    Duplicate
+                    {tx("Duplicate")}
                   </span>
                 </Dropdown.Item>
                 <Dropdown.Item
@@ -317,7 +318,7 @@ export const TableItem: React.FC<TableItemType> = ({
                   className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
                 >
                   <span className="font-medium table-action-link cursor-pointer">
-                    Add on sale
+                    {tx("Add on sale")}
                   </span>
                 </Dropdown.Item>
                 {product.productOnSale.length > 0 && (
@@ -326,7 +327,7 @@ export const TableItem: React.FC<TableItemType> = ({
                     className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
                   >
                     <span className="font-medium table-action-link cursor-pointer">
-                      Remove from sale
+                      {tx("Remove from sale")}
                     </span>
                   </Dropdown.Item>
                 )}
@@ -335,7 +336,7 @@ export const TableItem: React.FC<TableItemType> = ({
                   className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
                 >
                   <span className="font-medium table-action-danger cursor-pointer">
-                    Remove
+                    {tx("Remove")}
                   </span>
                 </Dropdown.Item>
               </Dropdown>

@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { Sidebar } from 'flowbite-react'
 import {
@@ -56,7 +57,7 @@ const SideBar = () => {
   const getFilteredMenuItems = () => {
     const allMenuItems = [
       {
-        name: 'Guide',
+        name: tx("Guide"),
         href: URLPartsEnum.Guide,
         icon: HiQuestionMarkCircle,
         open: false,
@@ -64,256 +65,256 @@ const SideBar = () => {
         requiredPermissions: [] as PermissionEnum[],
       },
       {
-        name: 'Products',
+        name: tx("Products"),
         href: '/products',
         icon: HiShoppingBag,
         open: true,
         requiredPermissions: PERMISSION_GROUPS.PRODUCTS,
         children: [
           {
-            name: 'All products',
+            name: tx("All products"),
             href: URLPartsEnum.Products,
             requiredPermissions: [PermissionEnum.PRODUCT_READ],
           },
           {
-            name: 'Out of stock',
+            name: tx("Out of stock"),
             href: URLPartsEnum.OutOfStockProducts,
             requiredPermissions: [PermissionEnum.PRODUCT_READ],
           },
           {
-            name: 'Add new product',
+            name: tx("Add new product"),
             href: URLPartsEnum.AddNewProduct,
             requiredPermissions: [PermissionEnum.PRODUCT_WRITE],
           },
         ],
       },
       {
-        name: 'Categories',
+        name: tx("Categories"),
         href: URLPartsEnum.Categories,
         icon: HiFolderOpen,
         open: false,
         requiredPermissions: PERMISSION_GROUPS.CATEGORIES,
         children: [
           {
-            name: 'All categories',
+            name: tx("All categories"),
             href: URLPartsEnum.Categories,
             requiredPermissions: [PermissionEnum.CATEGORY_READ],
           },
           {
-            name: 'Add new category',
+            name: tx("Add new category"),
             href: URLPartsEnum.AddNewCategory,
             requiredPermissions: [PermissionEnum.CATEGORY_WRITE],
           },
         ],
       },
       {
-        name: 'Manufacturers',
+        name: tx("Manufacturers"),
         href: URLPartsEnum.Manufacturers,
         icon: HiLibrary,
         open: false,
         requiredPermissions: PERMISSION_GROUPS.MANUFACTURERS,
         children: [
           {
-            name: 'All manufacturers',
+            name: tx("All manufacturers"),
             href: URLPartsEnum.Manufacturers,
             requiredPermissions: [PermissionEnum.MANUFACTURER_READ],
           },
           {
-            name: 'Add new manufacturer',
+            name: tx("Add new manufacturer"),
             href: URLPartsEnum.AddNewManufacturer,
             requiredPermissions: [PermissionEnum.MANUFACTURER_WRITE],
           },
         ],
       },
       {
-        name: 'Attributes',
+        name: tx("Attributes"),
         href: URLPartsEnum.Attributes,
         icon: HiLightBulb,
         open: false,
         requiredPermissions: PERMISSION_GROUPS.ATTRIBUTES,
         children: [
           {
-            name: 'All attributes',
+            name: tx("All attributes"),
             href: URLPartsEnum.Attributes,
             requiredPermissions: [PermissionEnum.ATTRIBUTES_READ],
           },
           {
-            name: 'Add new attribute',
+            name: tx("Add new attribute"),
             href: URLPartsEnum.AddNewAttribute,
             requiredPermissions: [PermissionEnum.ATTRIBUTES_WRITE],
           },
         ],
       },
       {
-        name: 'Orders',
+        name: tx("Orders"),
         href: URLPartsEnum.Orders,
         icon: HiDocumentText,
         open: false,
         requiredPermissions: PERMISSION_GROUPS.ORDERS,
         children: [
           {
-            name: 'All orders',
+            name: tx("All orders"),
             href: URLPartsEnum.Orders,
             requiredPermissions: [PermissionEnum.ORDERS_READ],
           },
           {
-            name: 'Offers',
+            name: tx("Offers"),
             href: `${URLPartsEnum.Orders}?view=offers`,
             requiredPermissions: [PermissionEnum.ORDERS_READ],
           },
           {
-            name: 'Proformas',
+            name: tx("Proformas"),
             href: URLPartsEnum.Proformas,
             requiredPermissions: [PermissionEnum.PROFORMA_READ],
           },
           {
-            name: 'New proforma',
+            name: tx("New proforma"),
             href: `${URLPartsEnum.Proformas}?new=1`,
             requiredPermissions: [PermissionEnum.PROFORMA_WRITE],
           },
           {
-            name: 'Order Emails',
+            name: tx("Order Emails"),
             href: URLPartsEnum.OrderEmails,
             requiredPermissions: [PermissionEnum.ORDERS_READ],
           },
         ],
       },
       {
-        name: 'Analytics',
+        name: tx("Analytics"),
         href: URLPartsEnum.Analytics,
         icon: FaChartLine,
         open: false,
         requiredPermissions: [PermissionEnum.ANALYTICS_READ],
         children: [
           {
-            name: 'Overview',
+            name: tx("Overview"),
             href: `${URLPartsEnum.Analytics}?tab=overview`,
             requiredPermissions: [PermissionEnum.ANALYTICS_READ],
           },
           {
-            name: 'Filaments',
+            name: tx("Filaments"),
             href: `${URLPartsEnum.Analytics}?tab=filaments`,
             requiredPermissions: [PermissionEnum.ANALYTICS_READ],
           },
           {
-            name: 'Top products',
+            name: tx("Top products"),
             href: `${URLPartsEnum.Analytics}?tab=top-products`,
             requiredPermissions: [PermissionEnum.ANALYTICS_READ],
           },
           {
-            name: 'By category',
+            name: tx("By category"),
             href: `${URLPartsEnum.Analytics}?tab=by-category`,
             requiredPermissions: [PermissionEnum.ANALYTICS_READ],
           },
           {
-            name: 'By manufacturer',
+            name: tx("By manufacturer"),
             href: `${URLPartsEnum.Analytics}?tab=by-manufacturer`,
             requiredPermissions: [PermissionEnum.ANALYTICS_READ],
           },
           {
-            name: 'Top customers',
+            name: tx("Top customers"),
             href: `${URLPartsEnum.Analytics}?tab=top-customers`,
             requiredPermissions: [PermissionEnum.ANALYTICS_READ],
           },
         ],
       },
       {
-        name: 'Actions needed',
+        name: tx("Actions needed"),
         href: URLPartsEnum.ActionsNeeded,
         icon: FaExclamationTriangle,
         open: false,
         requiredPermissions: [PermissionEnum.PRODUCT_READ],
         children: [
           {
-            name: 'Actions needed',
+            name: tx("Actions needed"),
             href: `${URLPartsEnum.ActionsNeeded}?tab=actions`,
             requiredPermissions: [PermissionEnum.PRODUCT_READ],
           },
           {
-            name: 'Stock alerts',
+            name: tx("Stock alerts"),
             href: `${URLPartsEnum.ActionsNeeded}?tab=stock`,
             requiredPermissions: [PermissionEnum.PRODUCT_READ],
           },
         ],
       },
       {
-        name: 'Warehouse',
+        name: tx("Warehouse"),
         href: URLPartsEnum.Warehouse,
         icon: FaWarehouse,
         open: false,
         requiredPermissions: PERMISSION_GROUPS.WAREHOUSE,
         children: [
           {
-            name: 'Scanner',
+            name: tx("Scanner"),
             href: `${URLPartsEnum.Warehouse}?tab=scanner`,
             requiredPermissions: [PermissionEnum.WAREHOUSE_READ],
           },
           {
-            name: 'Inventory',
+            name: tx("Inventory"),
             href: `${URLPartsEnum.Warehouse}?tab=inventory`,
             requiredPermissions: [PermissionEnum.WAREHOUSE_READ],
           },
           {
-            name: 'Labels',
+            name: tx("Labels"),
             href: `${URLPartsEnum.Warehouse}?tab=labels`,
             requiredPermissions: [PermissionEnum.WAREHOUSE_READ],
           },
           {
-            name: 'History',
+            name: tx("History"),
             href: `${URLPartsEnum.Warehouse}?tab=history`,
             requiredPermissions: [PermissionEnum.WAREHOUSE_READ],
           },
         ],
       },
       {
-        name: 'Promo Codes',
+        name: tx("Promo Codes"),
         href: URLPartsEnum.PromoCodes,
         icon: IoMdPricetags,
         open: false,
         requiredPermissions: PERMISSION_GROUPS.PROMO_CODES,
         children: [
           {
-            name: 'All promo code',
+            name: tx("All promo code"),
             href: URLPartsEnum.PromoCodes,
             requiredPermissions: [PermissionEnum.PROMO_CODE_READ],
           },
           {
-            name: 'Add new promo code',
+            name: tx("Add new promo code"),
             href: URLPartsEnum.AddNewPromoCode,
             requiredPermissions: [PermissionEnum.PROMO_CODE_WRITE],
           },
         ],
       },
       {
-        name: 'Sales',
+        name: tx("Sales"),
         href: URLPartsEnum.Sales,
         icon: FaShopify,
         open: false,
         requiredPermissions: PERMISSION_GROUPS.SALES,
       },
       {
-        name: 'Users',
+        name: tx("Users"),
         href: URLPartsEnum.Users,
         icon: FaUsers,
         open: false,
         requiredPermissions: PERMISSION_GROUPS.USERS,
       },
       {
-        name: 'Employees',
+        name: tx("Employees"),
         href: URLPartsEnum.Employees,
         icon: FaUsersCog,
         open: false,
         requiredPermissions: PERMISSION_GROUPS.EMPLOYEES,
       },
       {
-        name: 'Subscribers',
+        name: tx("Subscribers"),
         href: URLPartsEnum.Subscribers,
         icon: MdUnsubscribe,
         open: false,
         requiredPermissions: PERMISSION_GROUPS.SUBSCRIBERS,
       },
       {
-        name: 'Settings',
+        name: tx("Settings"),
         href: URLPartsEnum.Settings,
         icon: IoMdSettings,
         open: true,
@@ -335,7 +336,7 @@ const SideBar = () => {
             requiredPermissions: [PermissionEnum.ADMIN_ONLY],
           })),
           {
-            name: 'Menu',
+            name: tx("Menu"),
             href: URLPartsEnum.SettingsMenu,
             requiredPermissions: [PermissionEnum.ADMIN_ONLY],
           },
@@ -447,7 +448,7 @@ const SideBar = () => {
         className={`${
           isMobileMenuOpen ? '' : '-translate-x-full'
         } !rounded-none fixed top-0 left-0 z-40 w-64 h-screen pt-16 transition-transform sidebar-custom-bg border-r-0.5 border-gray-200 md:translate-x-0`}
-        aria-label="Default sidebar example"
+        aria-label={tx("Default sidebar example")}
       >
         <Sidebar.Items>
           <Sidebar.ItemGroup>

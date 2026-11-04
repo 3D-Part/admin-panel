@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import React, { useEffect, useState, useCallback, useRef } from 'react'
 import { Button } from 'flowbite-react'
@@ -144,7 +145,7 @@ const MenuBuilder: React.FC = () => {
 
           // Validate the imported data structure
           if (!Array.isArray(importedData)) {
-            alert('Invalid file format: Expected an array of menu items')
+            alert(tx("Invalid file format: Expected an array of menu items"))
             return
           }
 
@@ -152,7 +153,7 @@ const MenuBuilder: React.FC = () => {
           const processImportedItem = (item: any): MenuItemNode => ({
             id: generateId(), // Generate new ID for each item
             type: item.type || 'link',
-            label: item.label || 'Imported Item',
+            label: item.label || tx("Imported Item"),
             url: item.url || '',
             categorySlug: item.categorySlug || '',
             manufacturerId: item.manufacturerId || '',
@@ -170,11 +171,11 @@ const MenuBuilder: React.FC = () => {
           }
 
           alert(
-            `Successfully imported ${processedMenuItems.length} menu items!`
+            tx("Successfully imported {processedMenuItems} menu items!", { processedMenuItems: processedMenuItems.length })
           )
         } catch (error) {
           console.error('Error importing menu:', error)
-          alert('Error importing menu: Invalid JSON format')
+          alert(tx("Error importing menu: Invalid JSON format"))
         }
       }
 
@@ -234,13 +235,13 @@ const MenuBuilder: React.FC = () => {
       const success = await MenuAPI.saveMenu(menuData)
 
       if (success) {
-        toast('Menu structure saved successfully!', {
+        toast(tx("Menu structure saved successfully!"), {
           hideProgressBar: true,
           autoClose: 2000,
           type: 'success',
         })
       } else {
-        toast('Failed to save menu structure', {
+        toast(tx("Failed to save menu structure"), {
           hideProgressBar: true,
           autoClose: 2000,
           type: 'error',
@@ -248,7 +249,7 @@ const MenuBuilder: React.FC = () => {
       }
     } catch (error) {
       console.error('Error saving menu:', error)
-      toast('Error saving menu structure', {
+      toast(tx("Error saving menu structure"), {
         hideProgressBar: true,
         autoClose: 2000,
         type: 'error',
@@ -263,10 +264,10 @@ const MenuBuilder: React.FC = () => {
       <div className="w-full flex justify-between items-center flex-wrap gap-4 mb-6">
         <div className="hidden md:flex flex-col flex-1 min-w-0">
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Menu Builder
+            {tx("Menu Builder")}
           </h1>
           <p className="text-gray-600 dark:text-gray-400 mt-1">
-            Create and manage your website navigation menu structure
+            {tx("Create and manage your website navigation menu structure")}
           </p>
         </div>
         <div className="flex items-center w-full md:w-auto justify-between gap-3 shrink-0">
@@ -277,7 +278,7 @@ const MenuBuilder: React.FC = () => {
             size="sm"
           >
             <HiDownload className="mr-2" />
-            Export
+            {tx("Export")}
           </Button>
 
           <Button
@@ -287,12 +288,12 @@ const MenuBuilder: React.FC = () => {
             size="sm"
           >
             <HiUpload className="mr-2" />
-            Import
+            {tx("Import")}
           </Button>
 
           <Button onClick={() => setIsModalOpen(true)} color="blue" size="sm">
             <HiPlus className="mr-2" />
-            Add Menu Item
+            {tx("Add Menu Item")}
           </Button>
 
           <div className="h-4 mx-4" />
@@ -308,7 +309,7 @@ const MenuBuilder: React.FC = () => {
             ) : (
               <HiSave className="mr-2" />
             )}
-            {isSaving ? 'Saving...' : 'Save Menu'}
+            {isSaving ? tx("Saving...") : tx("Save Menu")}
           </Button>
         </div>
       </div>
@@ -320,24 +321,24 @@ const MenuBuilder: React.FC = () => {
               📋
             </div>
             <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-              No menu items yet
+              {tx("No menu items yet")}
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
-              Start building your menu by adding your first menu item
+              {tx("Start building your menu by adding your first menu item")}
             </p>
             <Button onClick={() => setIsModalOpen(true)} size="lg">
               <HiPlus className="mr-2" />
-              Add First Menu Item
+              {tx("Add First Menu Item")}
             </Button>
           </div>
         ) : (
           <div className="space-y-4">
             <div className="mb-4">
               <h3 className="text-lg font-medium text-gray-900 dark:text-white">
-                Menu Structure
+                {tx("Menu Structure")}
               </h3>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Use the controls to reorder and organize your menu items
+                {tx("Use the controls to reorder and organize your menu items")}
               </p>
             </div>
 

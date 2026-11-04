@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { Pagination, Table } from 'flowbite-react'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -149,17 +150,17 @@ export const OrdersTable = () => {
         onClick={hasReadPermission ? () => handleOrderClick(order) : undefined}
         items={[
           {
-            label: 'City',
+            label: tx("City"),
             value: city || (
               <span className="text-gray-400 dark:text-gray-500">—</span>
             ),
           },
           {
-            label: 'Date',
+            label: tx("Date"),
             value: formattedDate,
           },
           {
-            label: 'Price',
+            label: tx("Price"),
             value: (
               <span className="font-semibold text-green-600 dark:text-green-400">
                 {price} KM
@@ -167,7 +168,7 @@ export const OrdersTable = () => {
             ),
           },
           {
-            label: 'Status',
+            label: tx("Status"),
             value: (
               <div
                 onClick={(e) => {
@@ -190,7 +191,7 @@ export const OrdersTable = () => {
             ),
           },
           {
-            label: 'Invoice',
+            label: tx("Invoice"),
             value: (
               <div onClick={(e) => e.stopPropagation()}>
                 <BillingSelect
@@ -213,7 +214,7 @@ export const OrdersTable = () => {
                 onClick={() => handleMessageClick(order)}
               >
                 <BiMessageDetail className="text-lg" />
-                <span>Send Message</span>
+                <span>{tx("Send Message")}</span>
               </button>
             </div>
           ) : null
@@ -236,14 +237,14 @@ export const OrdersTable = () => {
           <div className="table-body-container ">
             <Table className="w-full">
               <Table.Head className="table-header">
-                <Table.HeadCell className="table-cell">Customer</Table.HeadCell>
-                <Table.HeadCell className="table-cell">City</Table.HeadCell>
-                <Table.HeadCell className="table-cell">Date</Table.HeadCell>
-                <Table.HeadCell className="table-cell">Total</Table.HeadCell>
-                <Table.HeadCell className="table-cell">Status</Table.HeadCell>
-                <Table.HeadCell className="table-cell">Invoice</Table.HeadCell>
+                <Table.HeadCell className="table-cell">{tx("Customer")}</Table.HeadCell>
+                <Table.HeadCell className="table-cell">{tx("City")}</Table.HeadCell>
+                <Table.HeadCell className="table-cell">{tx("Date")}</Table.HeadCell>
+                <Table.HeadCell className="table-cell">{tx("Total")}</Table.HeadCell>
+                <Table.HeadCell className="table-cell">{tx("Status")}</Table.HeadCell>
+                <Table.HeadCell className="table-cell">{tx("Invoice")}</Table.HeadCell>
                 <Table.HeadCell className="table-cell">
-                  <span className="sr-only">Actions</span>
+                  <span className="sr-only">{tx("Actions")}</span>
                 </Table.HeadCell>
               </Table.Head>
 

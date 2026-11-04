@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 import { BackofficeAPI } from '@/services'
 
 import { Pagination, Table } from 'flowbite-react'
@@ -186,7 +187,7 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
               className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
             >
               <span className="font-medium table-action-link cursor-pointer">
-                Edit
+                {tx("Edit")}
               </span>
             </Dropdown.Item>
             <Dropdown.Item
@@ -194,7 +195,7 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
               className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
             >
               <span className="font-medium table-action-link cursor-pointer">
-                Duplicate
+                {tx("Duplicate")}
               </span>
             </Dropdown.Item>
             <Dropdown.Item
@@ -207,8 +208,8 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
             >
               <span className="font-medium table-action-link cursor-pointer">
                 {product.productOnSale.length > 0
-                  ? 'Remove from sale'
-                  : 'Add on sale'}
+                  ? tx("Remove from sale")
+                  : tx("Add on sale")}
               </span>
             </Dropdown.Item>
             <Dropdown.Item
@@ -216,7 +217,7 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
               className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
             >
               <span className="font-medium table-action-danger cursor-pointer">
-                Remove
+                {tx("Remove")}
               </span>
             </Dropdown.Item>
           </Dropdown>
@@ -249,7 +250,7 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
         onClick={hasWritePermission ? editProduct : undefined}
         items={[
           {
-            label: 'Category',
+            label: tx("Category"),
             value: category ? (
               <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400">
                 {category.name}
@@ -259,7 +260,7 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
             ),
           },
           {
-            label: 'Manufacturer',
+            label: tx("Manufacturer"),
             value: manufacturer ? (
               <span className="text-gray-700 dark:text-gray-300">
                 {manufacturer.name}
@@ -269,7 +270,7 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
             ),
           },
           {
-            label: 'Price',
+            label: tx("Price"),
             value: (
               <span className="font-semibold text-green-600 dark:text-green-400">
                 {price} KM
@@ -277,7 +278,7 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
             ),
           },
           {
-            label: 'Quantity',
+            label: tx("Quantity"),
             value: (
               <span
                 className={`font-medium ${
@@ -309,29 +310,29 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
           <Table className="w-full">
             <Table.Head className="table-header">
               <Table.HeadCell className="table-cell w-44">
-                Status
+                {tx("Status")}
               </Table.HeadCell>
-              <Table.HeadCell className="table-cell w-1/4">Name</Table.HeadCell>
+              <Table.HeadCell className="table-cell w-1/4">{tx("Name")}</Table.HeadCell>
               <Table.HeadCell className="table-cell w-1/6">
-                Category
-              </Table.HeadCell>
-              <Table.HeadCell className="table-cell w-1/6">
-                Manufacturer
+                {tx("Category")}
               </Table.HeadCell>
               <Table.HeadCell className="table-cell w-1/6">
-                Internal code / SKU
+                {tx("Manufacturer")}
+              </Table.HeadCell>
+              <Table.HeadCell className="table-cell w-1/6">
+                {tx("Internal code / SKU")}
               </Table.HeadCell>
               <Table.HeadCell className="table-cell w-1/12">
-                Price
+                {tx("Price")}
               </Table.HeadCell>
               <Table.HeadCell className="table-cell w-1/12">
-                Purchase
+                {tx("Purchase")}
               </Table.HeadCell>
               <Table.HeadCell className="table-cell w-1/12">
-                Quantity
+                {tx("Quantity")}
               </Table.HeadCell>
               <Table.HeadCell className="table-cell w-1/12">
-                <span className="sr-only">Actions</span>
+                <span className="sr-only">{tx("Actions")}</span>
               </Table.HeadCell>
             </Table.Head>
             <Table.Body className="divide-y divide-gray-100 dark:divide-gray-800">

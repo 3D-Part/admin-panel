@@ -1,3 +1,4 @@
+import { tx } from '@/shared/i18n'
 import { CategoryData } from '@/shared/types'
 import { Table } from 'flowbite-react'
 import React from 'react'
@@ -46,13 +47,13 @@ export const TableItem: React.FC<TableItemType> = ({
                 onClick={() => openEditModal(category)}
                 className="font-medium table-action-link cursor-pointer hover:underline"
               >
-                <p>Edit</p>
+                <p>{tx("Edit")}</p>
               </span>
               <span
                 onClick={() => onWarningModalOpen(category)}
                 className="font-medium table-action-danger cursor-pointer hover:underline"
               >
-                <p>Remove</p>
+                <p>{tx("Remove")}</p>
               </span>
             </div>
           )}

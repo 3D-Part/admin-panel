@@ -1,3 +1,4 @@
+import { tx } from '@/shared/i18n'
 import { OrderStatusEnum } from '../enums'
 
 /**
@@ -21,6 +22,6 @@ const orderStatusLabels: Record<string, string> = {
 }
 
 const getOrderStatusLabel = (status: string): string =>
-  orderStatusLabels[status] ?? status
+  tx(orderStatusLabels[status] ?? status)
 
 export default getOrderStatusLabel

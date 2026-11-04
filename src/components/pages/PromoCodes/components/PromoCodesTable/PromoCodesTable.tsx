@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { Pagination, Table } from 'flowbite-react'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -97,7 +98,7 @@ export const PromoCodesTable: React.FC<PromoCodesTableType> = ({
         }
         items={[
           {
-            label: 'Start Date',
+            label: tx("Start Date"),
             value: (
               <span className="text-gray-700 dark:text-gray-300">
                 {startTime}
@@ -105,7 +106,7 @@ export const PromoCodesTable: React.FC<PromoCodesTableType> = ({
             ),
           },
           {
-            label: 'End Date',
+            label: tx("End Date"),
             value: (
               <span className="text-gray-700 dark:text-gray-300">
                 {endTime}
@@ -113,7 +114,7 @@ export const PromoCodesTable: React.FC<PromoCodesTableType> = ({
             ),
           },
           {
-            label: 'Discount',
+            label: tx("Discount"),
             value: (
               <span className="font-semibold text-green-600 dark:text-green-400">
                 {discountPercentage}%
@@ -131,13 +132,13 @@ export const PromoCodesTable: React.FC<PromoCodesTableType> = ({
                 onClick={() => handleEditPromoCode(promocode)}
                 className="font-medium table-action-link cursor-pointer hover:underline"
               >
-                Edit
+                {tx("Edit")}
               </span>
               <span
                 onClick={() => onWarningModalOpen(promocode)}
                 className="font-medium table-action-danger cursor-pointer hover:underline"
               >
-                Remove
+                {tx("Remove")}
               </span>
             </div>
           ) : null
@@ -158,12 +159,12 @@ export const PromoCodesTable: React.FC<PromoCodesTableType> = ({
         <div className="table-body-container ">
           <Table className="w-full">
             <Table.Head className="table-header">
-              <Table.HeadCell className="table-cell">Code</Table.HeadCell>
-              <Table.HeadCell className="table-cell">Discount</Table.HeadCell>
-              <Table.HeadCell className="table-cell">Start Date</Table.HeadCell>
-              <Table.HeadCell className="table-cell">End Date</Table.HeadCell>
+              <Table.HeadCell className="table-cell">{tx("Code")}</Table.HeadCell>
+              <Table.HeadCell className="table-cell">{tx("Discount")}</Table.HeadCell>
+              <Table.HeadCell className="table-cell">{tx("Start Date")}</Table.HeadCell>
+              <Table.HeadCell className="table-cell">{tx("End Date")}</Table.HeadCell>
               <Table.HeadCell className="table-cell">
-                <span className="sr-only">Actions</span>
+                <span className="sr-only">{tx("Actions")}</span>
               </Table.HeadCell>
             </Table.Head>
 

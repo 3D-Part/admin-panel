@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { AttributeFormBody, AttributeType } from '@/shared/types'
 import { useAttributesStore } from '@/store/store'
@@ -94,7 +95,7 @@ const AddNewAttribute: React.FC<AddNewAttributeType> = ({ initialValue }) => {
       >
         <div className="w-full">
           <div className="mb-2 block">
-            <Label htmlFor="attributeName" value="Attribute Name" />
+            <Label htmlFor="attributeName" value={tx("Attribute Name")} />
           </div>
           <TextInput
             name="name"
@@ -108,7 +109,7 @@ const AddNewAttribute: React.FC<AddNewAttributeType> = ({ initialValue }) => {
 
         <div className="w-full">
           <div className="mb-2 block">
-            <Label htmlFor="attributeType" value="Attribute Type" />
+            <Label htmlFor="attributeType" value={tx("Attribute Type")} />
           </div>
           <Select
             name="type"
@@ -118,17 +119,17 @@ const AddNewAttribute: React.FC<AddNewAttributeType> = ({ initialValue }) => {
             defaultValue={initialValue?.type ? initialValue.type : ''}
           >
             <option value="" disabled>
-              Select a type
+              {tx("Select a type")}
             </option>
-            <option value="input">Input</option>
-            <option value="select">Select</option>
-            <option value="range">Range</option>
-            <option value="bool">Boolean</option>
+            <option value="input">{tx("Input")}</option>
+            <option value="select">{tx("Select")}</option>
+            <option value="range">{tx("Range")}</option>
+            <option value="bool">{tx("Boolean")}</option>
           </Select>
         </div>
 
         <Button className="mt-6" type="submit" color="purple">
-          Save
+          {tx("Save")}
         </Button>
       </form>
     </div>

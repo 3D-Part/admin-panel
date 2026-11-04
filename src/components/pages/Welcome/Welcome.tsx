@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import React from 'react'
 import { useCurrentUserStore } from '@/store/store'
@@ -25,7 +26,7 @@ export const Welcome = () => {
         currentUser.role
       )
     ) {
-      features.push('Products Management')
+      features.push(tx("Products Management"))
     }
     if (
       hasAnyPermission(
@@ -34,7 +35,7 @@ export const Welcome = () => {
         currentUser.role
       )
     ) {
-      features.push('Categories Management')
+      features.push(tx("Categories Management"))
     }
     if (
       hasAnyPermission(
@@ -43,7 +44,7 @@ export const Welcome = () => {
         currentUser.role
       )
     ) {
-      features.push('Manufacturers Management')
+      features.push(tx("Manufacturers Management"))
     }
     if (
       hasAnyPermission(
@@ -52,7 +53,7 @@ export const Welcome = () => {
         currentUser.role
       )
     ) {
-      features.push('Attributes Management')
+      features.push(tx("Attributes Management"))
     }
     if (
       hasAnyPermission(
@@ -61,7 +62,7 @@ export const Welcome = () => {
         currentUser.role
       )
     ) {
-      features.push('Orders Management')
+      features.push(tx("Orders Management"))
     }
     if (
       hasAnyPermission(
@@ -70,7 +71,7 @@ export const Welcome = () => {
         currentUser.role
       )
     ) {
-      features.push('Promo Codes Management')
+      features.push(tx("Promo Codes Management"))
     }
     if (
       hasAnyPermission(
@@ -79,7 +80,7 @@ export const Welcome = () => {
         currentUser.role
       )
     ) {
-      features.push('Sales Management')
+      features.push(tx("Sales Management"))
     }
     if (
       hasAnyPermission(
@@ -88,7 +89,7 @@ export const Welcome = () => {
         currentUser.role
       )
     ) {
-      features.push('Users Management')
+      features.push(tx("Users Management"))
     }
     if (
       hasAnyPermission(
@@ -97,7 +98,7 @@ export const Welcome = () => {
         currentUser.role
       )
     ) {
-      features.push('Employees Management')
+      features.push(tx("Employees Management"))
     }
     if (
       hasAnyPermission(
@@ -106,7 +107,7 @@ export const Welcome = () => {
         currentUser.role
       )
     ) {
-      features.push('Subscribers Management')
+      features.push(tx("Subscribers Management"))
     }
 
     return features
@@ -121,10 +122,10 @@ export const Welcome = () => {
           {/* Welcome Header */}
           <div className="mb-8">
             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-4">
-              Welcome to 3D Part
+              {tx("Welcome to 3D Part")}
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-300">
-              Admin Panel Dashboard
+              {tx("Admin Panel Dashboard")}
             </p>
           </div>
 
@@ -151,7 +152,7 @@ export const Welcome = () => {
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 mb-8">
             <div className="text-6xl mb-4">🎉</div>
             <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
-              Welcome back!
+              {tx("Welcome back!")}
             </h3>
             <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
               You&apos;re now logged into the 3D Part Admin Panel. Use the
@@ -164,12 +165,11 @@ export const Welcome = () => {
                 <div className="flex items-center justify-center gap-2 mb-2">
                   <span className="text-2xl">👑</span>
                   <span className="font-semibold text-purple-800 dark:text-purple-200">
-                    Administrator Access
+                    {tx("Administrator Access")}
                   </span>
                 </div>
                 <p className="text-purple-700 dark:text-purple-300 text-sm">
-                  As an administrator, you have full access to all features and
-                  can manage all aspects of the system.
+                  {tx("As an administrator, you have full access to all features and can manage all aspects of the system.")}
                 </p>
               </div>
             )}
@@ -178,7 +178,7 @@ export const Welcome = () => {
             {availableFeatures.length > 0 && (
               <div className="mt-6">
                 <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-                  Your Available Features:
+                  {tx("Your Available Features:")}
                 </h4>
                 <div className="flex flex-wrap justify-center gap-2">
                   {availableFeatures.map((feature, index) => (
@@ -199,30 +199,30 @@ export const Welcome = () => {
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
               <div className="text-3xl mb-2">📊</div>
               <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                System Status
+                {tx("System Status")}
               </h4>
               <p className="text-green-600 dark:text-green-400 font-medium">
-                All Systems Operational
+                {tx("All Systems Operational")}
               </p>
             </div>
 
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
               <div className="text-3xl mb-2">🔒</div>
               <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                Security
+                {tx("Security")}
               </h4>
               <p className="text-green-600 dark:text-green-400 font-medium">
-                Authentication Active
+                {tx("Authentication Active")}
               </p>
             </div>
 
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
               <div className="text-3xl mb-2">⚡</div>
               <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                Performance
+                {tx("Performance")}
               </h4>
               <p className="text-green-600 dark:text-green-400 font-medium">
-                Optimal Performance
+                {tx("Optimal Performance")}
               </p>
             </div>
           </div>

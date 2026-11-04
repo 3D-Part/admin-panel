@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import React, { useEffect, useRef, useState } from 'react'
 import { AttributesHeader } from './components/AttributesHeader/AttributesHeader'
@@ -85,7 +86,7 @@ export const Attributes = () => {
     )
 
     if (response) {
-      const toastMessage = `attribute ${activeAttributeRef.current.name} is removed`
+      const toastMessage = tx("attribute {name} is removed", { name: activeAttributeRef.current.name })
       toast(toastMessage, {
         hideProgressBar: true,
         autoClose: 2000,
@@ -103,7 +104,7 @@ export const Attributes = () => {
     } else {
       const res = await editAttribute(activeAttributeRef.current?.id, attribute)
       if (res) {
-        const toastMessage = `attribute ${activeAttributeRef.current.name} is changed!`
+        const toastMessage = tx("attribute {name} is changed!", { name: activeAttributeRef.current.name })
         toast(toastMessage, {
           hideProgressBar: true,
           autoClose: 2000,
@@ -145,7 +146,7 @@ export const Attributes = () => {
         onSave={onWarningModalConfirm}
         isOpen={isWarningModalOpen}
         onClose={onWarningModalClose}
-        message={`Are you sure you want to delete ${activeAttributeRef.current?.name}?`}
+        message={tx("Are you sure you want to delete {name}?", { name: activeAttributeRef.current?.name })}
       />
     </div>
   )

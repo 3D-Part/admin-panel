@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import React, { useEffect, useRef, useState } from 'react'
 import { PaginationData, PromoCode, Sale } from '@/shared/types'
@@ -67,7 +68,7 @@ export const Sales = () => {
     const response = await SalesAPI.removeSale(activeSaleRef.current?.id)
 
     if (response) {
-      const toastMessage = `sale ${activeSaleRef.current.name} is removed`
+      const toastMessage = tx("sale {name} is removed", { name: activeSaleRef.current.name })
       toast(toastMessage, {
         hideProgressBar: true,
         autoClose: 2000,
@@ -91,7 +92,7 @@ export const Sales = () => {
         onSave={onWarningModalConfirm}
         isOpen={isWarningModalOpen}
         onClose={onWarningModalClose}
-        message={`Are you sure you want to delete ${activeSaleRef.current?.name}?`}
+        message={tx("Are you sure you want to delete {name}?", { name: activeSaleRef.current?.name })}
       />
 
       <AddNewSaleModal />

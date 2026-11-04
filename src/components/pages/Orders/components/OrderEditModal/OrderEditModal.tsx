@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 import { modalRoot } from '@/shared/helpers/modalRoot'
 
 import { ORDER_STATUS_EMAILS, ORDER_STATUS_FLOW, OrderStatusEnum } from '@/shared/enums'
@@ -104,7 +105,7 @@ const OrderEditModal: React.FC<ModalType> = ({
     setIsModalOpen(false)
 
     if (response) {
-      toast(`Order status is changed!`, {
+      toast(tx("Order status is changed!"), {
         hideProgressBar: true,
         autoClose: 2000,
         type: 'success',
@@ -118,7 +119,7 @@ const OrderEditModal: React.FC<ModalType> = ({
         <Modal.Header className="border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center gap-3">
             <span className="font-semibold text-gray-900 dark:text-white">
-              Update Order Status
+              {tx("Update Order Status")}
             </span>
             {initialValue && (
               <span className="text-sm text-gray-500 dark:text-gray-400">
@@ -133,17 +134,17 @@ const OrderEditModal: React.FC<ModalType> = ({
             {/* Status Selection */}
             <div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Order Status
+                {tx("Order Status")}
               </h3>
               <div className="space-y-4">
                 <div>
                   <Label
                     htmlFor="orderStatus"
-                    value="Select new status"
+                    value={tx("Select new status")}
                     className="text-sm font-medium text-gray-700 dark:text-gray-300"
                   />
                   <Dropdown
-                    label={activeStatus ? getOrderStatusLabel(activeStatus) : 'Select status'}
+                    label={activeStatus ? getOrderStatusLabel(activeStatus) : tx("Select status")}
                     className="mt-1 !bg-gray-700"
                   >
                     {orderStatus.map((status) => {
@@ -165,14 +166,12 @@ const OrderEditModal: React.FC<ModalType> = ({
                     })}
                   </Dropdown>
                   <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                    You can move an order to any status, also back. Stock follows
-                    by itself: New, Offer, Returned and Cancelled hold no stock,
-                    every other status does.
+                    {tx("You can move an order to any status, also back. Stock follows by itself: New, Offer, Returned and Cancelled hold no stock, every other status does.")}
                   </p>
                   {activeStatus !== initialValue?.status &&
                     ORDER_STATUS_EMAILS[activeStatus as OrderStatusEnum] && (
                       <p className="mt-1 text-sm font-medium text-amber-600 dark:text-amber-400">
-                        {ORDER_STATUS_EMAILS[activeStatus as OrderStatusEnum]}
+                        {tx(ORDER_STATUS_EMAILS[activeStatus as OrderStatusEnum] ?? "")}
                       </p>
                     )}
                 </div>
@@ -183,19 +182,19 @@ const OrderEditModal: React.FC<ModalType> = ({
             {activeStatus === OrderStatusEnum.Declined && (
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                  Decline Message
+                  {tx("Decline Message")}
                 </h3>
                 <div>
                   <Label
                     htmlFor="declineMessage"
-                    value="Reason for declining"
+                    value={tx("Reason for declining")}
                     className="text-sm font-medium text-gray-700 dark:text-gray-300"
                   />
                   <Textarea
                     onChange={handleInputChange}
                     id="declineMessage"
                     name="description"
-                    placeholder="Please provide a reason for declining this order..."
+                    placeholder={tx("Please provide a reason for declining this order...")}
                     rows={3}
                     className="mt-1"
                   />
@@ -205,12 +204,12 @@ const OrderEditModal: React.FC<ModalType> = ({
             {/* Internal note */}
             <div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Note
+                {tx("Note")}
               </h3>
               <div>
                 <Label
                   htmlFor="internalNote"
-                  value="Internal note, the customer does not see it"
+                  value={tx("Internal note, the customer does not see it")}
                   className="text-sm font-medium text-gray-700 dark:text-gray-300"
                 />
                 <Textarea
@@ -218,7 +217,7 @@ const OrderEditModal: React.FC<ModalType> = ({
                   name="internalNote"
                   value={internalNote}
                   onChange={(e) => setInternalNote(e.target.value)}
-                  placeholder="e.g. the customer wants the invoice on the company"
+                  placeholder={tx("e.g. the customer wants the invoice on the company")}
                   rows={3}
                   className="mt-1"
                 />
@@ -235,7 +234,7 @@ const OrderEditModal: React.FC<ModalType> = ({
               onClick={saveFunction}
               className="w-full sm:w-auto order-2 sm:order-1"
             >
-              Update Status
+              {tx("Update Status")}
             </Button>
             <Button
               disabled={loading}
@@ -243,7 +242,7 @@ const OrderEditModal: React.FC<ModalType> = ({
               onClick={onClose}
               className="w-full sm:w-auto order-1 sm:order-2"
             >
-              Cancel
+              {tx("Cancel")}
             </Button>
           </div>
         </Modal.Footer>

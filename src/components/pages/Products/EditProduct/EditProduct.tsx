@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import React, { useEffect } from 'react'
 import { useProductsStore, useUISliceStore } from '@/store/store'
@@ -34,10 +35,10 @@ export const EditProduct = () => {
         </h2>
         <div className="flex items-center gap-4">
           <Button color="purple" onClick={addProductOnSale}>
-            Add on sale <HiPlus className="ml-2" />
+            {tx("Add on sale")}{' '}<HiPlus className="ml-2" />
           </Button>
           <Button href={URLPartsEnum.AddNewProduct}>
-            Add new <HiPlus className="ml-2" />
+            {tx("Add new")}{' '}<HiPlus className="ml-2" />
           </Button>
         </div>
       </div>

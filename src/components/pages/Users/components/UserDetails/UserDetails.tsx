@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 import { modalRoot } from '@/shared/helpers/modalRoot'
 import { CustomerProfileForm } from '@/components/common/CustomerFlag/CustomerFlag'
 
@@ -88,8 +89,8 @@ const UserDetails: React.FC<UserDetailsType> = ({
     setIsSendingReset(false)
     toast(
       sent
-        ? `Email sent to ${user.email}. The customer picks the new password.`
-        : 'The email could not be sent',
+        ? tx("Email sent to {email}. The customer picks the new password.", { email: user.email })
+        : tx("The email could not be sent"),
       { type: sent ? 'success' : 'error', autoClose: 3000 }
     )
   }
@@ -127,7 +128,7 @@ const UserDetails: React.FC<UserDetailsType> = ({
     } as any)
     setIsUpdating(false)
     if (result) {
-      toast('Tier updated', { hideProgressBar: true, autoClose: 2000, type: 'success' })
+      toast(tx("Tier updated"), { hideProgressBar: true, autoClose: 2000, type: 'success' })
       if (onUserUpdated) onUserUpdated(result)
     } else {
       setTier(previous)
@@ -147,7 +148,7 @@ const UserDetails: React.FC<UserDetailsType> = ({
       discountValue < 0 ||
       discountValue > 40
     ) {
-      toast('Discount must be a whole number between 0 and 40', {
+      toast(tx("Discount must be a whole number between 0 and 40"), {
         hideProgressBar: true,
         autoClose: 2000,
         type: 'error',
@@ -162,7 +163,7 @@ const UserDetails: React.FC<UserDetailsType> = ({
     setIsUpdating(false)
 
     if (result) {
-      toast('Discount updated successfully!', {
+      toast(tx("Discount updated successfully!"), {
         hideProgressBar: true,
         autoClose: 2000,
         type: 'success',
@@ -171,7 +172,7 @@ const UserDetails: React.FC<UserDetailsType> = ({
         onUserUpdated(result)
       }
     } else {
-      toast('Failed to update discount', {
+      toast(tx("Failed to update discount"), {
         hideProgressBar: true,
         autoClose: 2000,
         type: 'error',
@@ -189,7 +190,7 @@ const UserDetails: React.FC<UserDetailsType> = ({
         size="4xl"
       >
         <Modal.Header>
-          User ID: <span className="text-gray-400">#{id}</span>
+          {tx("User ID:")}{' '}<span className="text-gray-400">#{id}</span>
         </Modal.Header>
         <Modal.Body>
           <div className="flex flex-wrap gap-4">
@@ -220,7 +221,7 @@ const UserDetails: React.FC<UserDetailsType> = ({
             </div>
 
             <div className="w-full mt-4 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
-              <Label htmlFor="customer-tier" value="Discount tier" />
+              <Label htmlFor="customer-tier" value={tx("Discount tier")} />
               <div className="flex gap-3 items-center mt-1">
                 <Select
                   id="customer-tier"
@@ -228,14 +229,13 @@ const UserDetails: React.FC<UserDetailsType> = ({
                   onChange={(e) => handleTierChange(e.target.value)}
                   disabled={isUpdating}
                 >
-                  <option value="">No tier</option>
-                  <option value="BRONZE">Bronze</option>
-                  <option value="SILVER">Silver</option>
-                  <option value="GOLD">Gold</option>
+                  <option value="">{tx("No tier")}</option>
+                  <option value="BRONZE">{tx("Bronze")}</option>
+                  <option value="SILVER">{tx("Silver")}</option>
+                  <option value="GOLD">{tx("Gold")}</option>
                 </Select>
                 <span className="text-sm text-gray-500 dark:text-gray-400">
-                  Set by hand. Percentages and thresholds are in Settings →
-                  Discount tiers
+                  {tx("Set by hand. Percentages and thresholds are in Settings → Discount tiers")}
                 </span>
               </div>
               {tierInfo && (
@@ -255,7 +255,7 @@ const UserDetails: React.FC<UserDetailsType> = ({
             <div className="w-full mt-4 p-4 rounded-lg bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800">
               <Label
                 htmlFor="discount"
-                value="User Discount (%)"
+                value={tx("User Discount (%)")}
                 className="text-sm font-semibold text-purple-700 dark:text-purple-300 mb-2 block"
               />
               <div className="flex gap-3 items-center">
@@ -278,25 +278,25 @@ const UserDetails: React.FC<UserDetailsType> = ({
                   isProcessing={isUpdating}
                   disabled={isUpdating}
                 >
-                  Save Discount
+                  {tx("Save Discount")}
                 </Button>
               </div>
               <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                This discount will be applied to all orders for this user.
+                {tx("This discount will be applied to all orders for this user.")}
               </p>
             </div>
           </div>
 
           {orders.length > 0 && (
             <div className="mt-8 text-gray-900 dark:text-white">
-              <h3 className="font-semibold text-xl mb-4">Orders:</h3>
+              <h3 className="font-semibold text-xl mb-4">{tx("Orders:")}</h3>
               <Table>
                 <Table.Head>
-                  <Table.HeadCell>Order Number</Table.HeadCell>
-                  <Table.HeadCell>Price</Table.HeadCell>
-                  <Table.HeadCell>Products number</Table.HeadCell>
-                  <Table.HeadCell>Status</Table.HeadCell>
-                  <Table.HeadCell>Total</Table.HeadCell>
+                  <Table.HeadCell>{tx("Order Number")}</Table.HeadCell>
+                  <Table.HeadCell>{tx("Price")}</Table.HeadCell>
+                  <Table.HeadCell>{tx("Products number")}</Table.HeadCell>
+                  <Table.HeadCell>{tx("Status")}</Table.HeadCell>
+                  <Table.HeadCell>{tx("Total")}</Table.HeadCell>
                 </Table.Head>
 
                 <Table.Body className="divide-y">
@@ -321,9 +321,9 @@ const UserDetails: React.FC<UserDetailsType> = ({
             isProcessing={isSendingReset}
             onClick={sendPasswordReset}
           >
-            Send password reset email
+            {tx("Send password reset email")}
           </Button>
-          <Button onClick={onClose}>Close</Button>
+          <Button onClick={onClose}>{tx("Close")}</Button>
         </Modal.Footer>
       </Modal>
 

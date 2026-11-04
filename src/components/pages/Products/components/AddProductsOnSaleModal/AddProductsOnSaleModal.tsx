@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 import { modalRoot } from '@/shared/helpers/modalRoot'
 
 import {
@@ -165,7 +166,7 @@ const AddProductsOnSaleModal = () => {
 
     const response = await SalesAPI.deleteProductOnSale(body)
     if (response) {
-      toast('Product is remove from sale', {
+      toast(tx("Product is remove from sale"), {
         hideProgressBar: true,
         autoClose: 2000,
         type: 'warning',
@@ -213,8 +214,8 @@ const AddProductsOnSaleModal = () => {
             <div>
               <span className="font-semibold text-gray-900 dark:text-white text-lg">
                 {productOnSelectedSale
-                  ? 'Update Sale Price'
-                  : 'Add Product to Sale'}
+                  ? tx("Update Sale Price")
+                  : tx("Add Product to Sale")}
               </span>
               <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
                 {activeProduct.name}
@@ -242,13 +243,13 @@ const AddProductsOnSaleModal = () => {
                   d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
                 />
               </svg>
-              Product Information
+              {tx("Product Information")}
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <Label
                   htmlFor="productName"
-                  value="Product Name"
+                  value={tx("Product Name")}
                   className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block"
                 />
                 <TextInput
@@ -261,7 +262,7 @@ const AddProductsOnSaleModal = () => {
               <div>
                 <Label
                   htmlFor="currentPrice"
-                  value="Current Price"
+                  value={tx("Current Price")}
                   className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block"
                 />
                 <div className="relative">
@@ -294,13 +295,13 @@ const AddProductsOnSaleModal = () => {
                   d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                 />
               </svg>
-              Sale Selection
+              {tx("Sale Selection")}
             </h3>
             <div className="space-y-4">
               <div>
                 <Label
                   htmlFor="saleId"
-                  value="Select Sale"
+                  value={tx("Select Sale")}
                   className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block"
                 />
                 <Select
@@ -310,7 +311,7 @@ const AddProductsOnSaleModal = () => {
                   required
                   className="w-full"
                 >
-                  <option value={''}>Choose a sale...</option>
+                  <option value={''}>{tx("Choose a sale...")}</option>
                   {allSales.map((sale) => {
                     return (
                       <option value={sale.id} key={sale.id}>
@@ -336,7 +337,7 @@ const AddProductsOnSaleModal = () => {
                         />
                       </svg>
                       <span className="text-sm text-blue-700 dark:text-blue-300">
-                        This product is already in the selected sale
+                        {tx("This product is already in the selected sale")}
                       </span>
                     </div>
                   </div>
@@ -361,13 +362,13 @@ const AddProductsOnSaleModal = () => {
                   d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
                 />
               </svg>
-              Sale Pricing
+              {tx("Sale Pricing")}
             </h3>
             <div className="space-y-4">
               <div>
                 <Label
                   htmlFor="discountedPrice"
-                  value="Discounted Price"
+                  value={tx("Discounted Price")}
                   className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block"
                 />
                 <div className="relative">
@@ -381,7 +382,7 @@ const AddProductsOnSaleModal = () => {
                     min="0"
                     value={discountedPrice}
                     className="w-full"
-                    placeholder="Enter discounted price..."
+                    placeholder={tx("Enter discounted price...")}
                   />
                 </div>
               </div>
@@ -400,7 +401,7 @@ const AddProductsOnSaleModal = () => {
             size="sm"
             color="purple"
           >
-            {productOnSelectedSale ? 'Update Price' : 'Add to Sale'}
+            {productOnSelectedSale ? tx("Update Price") : tx("Add to Sale")}
           </Button>
           {productOnSelectedSale && (
             <Button
@@ -411,7 +412,7 @@ const AddProductsOnSaleModal = () => {
               className="flex-1 sm:w-auto order-2 h-10 touch-manipulation"
               size="sm"
             >
-              Remove from Sale
+              {tx("Remove from Sale")}
             </Button>
           )}
           <Button
@@ -421,7 +422,7 @@ const AddProductsOnSaleModal = () => {
             className="flex-1 sm:w-auto order-3 h-10 touch-manipulation sm:flex-none"
             size="sm"
           >
-            Cancel
+            {tx("Cancel")}
           </Button>
         </div>
       </Modal.Footer>

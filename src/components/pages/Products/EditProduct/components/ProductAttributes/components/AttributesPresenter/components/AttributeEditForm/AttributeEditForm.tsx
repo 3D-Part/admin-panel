@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { ProductAttributeAPI, ProductsAPI } from '@/services'
 import { EditProductAttributeBody } from '@/shared/types'
@@ -46,7 +47,7 @@ const AttributeEditForm: React.FC<AttributeEditFormType> = ({
     // TODO Check res
     const res = await ProductAttributeAPI.removeProductAttribute(attributeId)
     if (res) {
-      const toastMessage = `product attribute is removed`
+      const toastMessage = tx("product attribute is removed")
       toast(toastMessage, {
         hideProgressBar: true,
         autoClose: 2000,
@@ -75,7 +76,7 @@ const AttributeEditForm: React.FC<AttributeEditFormType> = ({
     )
 
     if (res) {
-      const toastMessage = `product attribute is changed to ${attributeValue.current}`
+      const toastMessage = tx("product attribute is changed to {current}", { current: attributeValue.current })
       toast(toastMessage, {
         hideProgressBar: true,
         autoClose: 2000,
@@ -116,7 +117,7 @@ const AttributeEditForm: React.FC<AttributeEditFormType> = ({
               <HiXCircle className="h-5 w-5" />
             </Button>
             {loader && (
-              <Spinner aria-label="Success spinner example" color="success" />
+              <Spinner aria-label={tx("Success spinner example")} color="success" />
             )}
           </div>
         </div>

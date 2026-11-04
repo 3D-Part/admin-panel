@@ -1,3 +1,4 @@
+import { tx } from '@/shared/i18n'
 import React, { useState } from 'react'
 
 interface PasswordFormProps {
@@ -21,14 +22,14 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ onSubmit, isLoading }) => {
 
     // Validate password
     if (!password) {
-      setErrors((prev) => ({ ...prev, password: 'Password is required' }))
+      setErrors((prev) => ({ ...prev, password: tx("Password is required") }))
       return
     }
 
     if (password.length < 8) {
       setErrors((prev) => ({
         ...prev,
-        password: 'Password must be at least 8 characters',
+        password: tx("Password must be at least 8 characters"),
       }))
       return
     }
@@ -37,7 +38,7 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ onSubmit, isLoading }) => {
     if (!confirmPassword) {
       setErrors((prev) => ({
         ...prev,
-        confirmPassword: 'Please confirm your password',
+        confirmPassword: tx("Please confirm your password"),
       }))
       return
     }
@@ -45,7 +46,7 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ onSubmit, isLoading }) => {
     if (password !== confirmPassword) {
       setErrors((prev) => ({
         ...prev,
-        confirmPassword: 'Passwords do not match',
+        confirmPassword: tx("Passwords do not match"),
       }))
       return
     }
@@ -73,10 +74,10 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ onSubmit, isLoading }) => {
           </svg>
         </div>
         <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-3">
-          Create Your Password
+          {tx("Create Your Password")}
         </h2>
         <p className="text-gray-600 dark:text-white/60 mb-6 leading-relaxed">
-          Please create a password to complete your account verification.
+          {tx("Please create a password to complete your account verification.")}
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -85,7 +86,7 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ onSubmit, isLoading }) => {
               htmlFor="password"
               className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 text-left"
             >
-              Password
+              {tx("Password")}
             </label>
             <input
               type="password"
@@ -97,7 +98,7 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ onSubmit, isLoading }) => {
                   ? 'border-red-500 focus:ring-red-500'
                   : 'border-gray-300 dark:border-gray-600'
               }`}
-              placeholder="Enter your password (min 8 characters)"
+              placeholder={tx("Enter your password (min 8 characters)")}
               disabled={isLoading}
             />
             {errors.password && (
@@ -112,7 +113,7 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ onSubmit, isLoading }) => {
               htmlFor="confirmPassword"
               className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 text-left"
             >
-              Confirm Password
+              {tx("Confirm Password")}
             </label>
             <input
               type="password"
@@ -124,7 +125,7 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ onSubmit, isLoading }) => {
                   ? 'border-red-500 focus:ring-red-500'
                   : 'border-gray-300 dark:border-gray-600'
               }`}
-              placeholder="Confirm your password"
+              placeholder={tx("Confirm your password")}
               disabled={isLoading}
             />
             {errors.confirmPassword && (
@@ -142,10 +143,10 @@ const PasswordForm: React.FC<PasswordFormProps> = ({ onSubmit, isLoading }) => {
             {isLoading ? (
               <div className="flex items-center justify-center">
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                Verifying...
+                {tx("Verifying...")}
               </div>
             ) : (
-              'Complete Verification'
+              tx("Complete Verification")
             )}
           </button>
         </form>

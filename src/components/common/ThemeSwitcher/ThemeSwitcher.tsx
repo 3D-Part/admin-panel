@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import React, { useEffect, useState, useRef } from 'react'
 import { Button } from 'flowbite-react'
@@ -77,7 +78,7 @@ const ThemeSwitcher = () => {
         <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50">
           <div className="py-2">
             <div className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-700">
-              Theme
+              {tx("Theme")}
             </div>
             <button
               onClick={() => handleThemeChange('light')}
@@ -88,7 +89,7 @@ const ThemeSwitcher = () => {
               }`}
             >
               <HiSun className="h-4 w-4" />
-              Light
+              {tx("Light")}
             </button>
             <button
               onClick={() => handleThemeChange('dark')}
@@ -99,7 +100,7 @@ const ThemeSwitcher = () => {
               }`}
             >
               <HiMoon className="h-4 w-4" />
-              Dark
+              {tx("Dark")}
             </button>
             <button
               onClick={() => handleThemeChange('system')}
@@ -110,7 +111,7 @@ const ThemeSwitcher = () => {
               }`}
             >
               <HiComputerDesktop className="h-4 w-4" />
-              System
+              {tx("System")}
             </button>
           </div>
         </div>

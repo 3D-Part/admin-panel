@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import React, { useEffect, useRef, useState } from 'react'
 import { ManufacturesHeader } from './components/ManufacturesHeader/ManufacturesHeader'
@@ -85,7 +86,7 @@ export const Manufactures = () => {
     )
 
     if (response) {
-      const toastMessage = `manufacturer ${activeManufacturerRef.current.name} is removed`
+      const toastMessage = tx("manufacturer {name} is removed", { name: activeManufacturerRef.current.name })
       toast(toastMessage, {
         hideProgressBar: true,
         autoClose: 2000,
@@ -106,7 +107,7 @@ export const Manufactures = () => {
         manufacturer
       )
       if (res) {
-        const toastMessage = `manufacturer ${activeManufacturerRef.current.name} is changed!`
+        const toastMessage = tx("manufacturer {name} is changed!", { name: activeManufacturerRef.current.name })
         toast(toastMessage, {
           hideProgressBar: true,
           autoClose: 2000,
@@ -147,7 +148,7 @@ export const Manufactures = () => {
         onSave={onWarningModalConfirm}
         isOpen={isWarningModalOpen}
         onClose={onWarningModalClose}
-        message={`Are you sure you want to delete ${activeManufacturerRef.current?.name}?`}
+        message={tx("Are you sure you want to delete {name}?", { name: activeManufacturerRef.current?.name })}
       />
     </div>
   )

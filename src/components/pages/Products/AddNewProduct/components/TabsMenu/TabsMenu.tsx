@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { useState } from 'react'
 import { HiAdjustments, HiUserCircle } from 'react-icons/hi'
@@ -12,21 +13,21 @@ export const TabsMenu = () => {
   const tabs = [
     {
       id: 0,
-      title: 'General Info',
+      title: tx("General Info"),
       icon: HiUserCircle,
       content: <GeneralInfo />,
       disabled: false,
     },
     {
       id: 1,
-      title: 'Gallery',
+      title: tx("Gallery"),
       icon: HiAdjustments,
-      content: 'Gallery',
+      content: tx("Gallery"),
       disabled: true,
     },
     {
       id: 2,
-      title: 'Attributes',
+      title: tx("Attributes"),
       icon: MdDashboard,
       content: <ProductAttributes />,
       disabled: true,

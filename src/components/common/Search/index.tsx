@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { SyntheticEvent, useEffect, useState, useRef } from 'react'
 import { IoCloseCircleOutline } from 'react-icons/io5'
@@ -47,7 +48,7 @@ const Search: React.FC<SearchProps> = ({
   return (
     <form onSubmit={onSubmit} className="flex items-center gap-2">
       <label htmlFor="simple-search" className="sr-only">
-        Search
+        {tx("Search")}
       </label>
       <div className="relative w-full">
         <div className="absolute inset-y-0 left-0 flex items-center pl-2 pointer-events-none">
@@ -72,7 +73,7 @@ const Search: React.FC<SearchProps> = ({
           type="text"
           id="simple-search"
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-8 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="Search"
+          placeholder={tx("Search")}
           value={query}
           // required
         />
@@ -82,7 +83,7 @@ const Search: React.FC<SearchProps> = ({
           onClick={reset}
           className="text-cyan-700 text-xs cursor-pointer whitespace-nowrap"
         >
-          reset
+          {tx("reset")}
         </div>
       )}
     </form>

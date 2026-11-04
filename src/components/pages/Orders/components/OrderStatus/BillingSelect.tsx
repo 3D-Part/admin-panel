@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
@@ -23,7 +24,7 @@ const BillingSelect: React.FC<{
     const saved = await OrdersAPI.orderSetBilling(order.id, next || null)
     if (!saved) {
       setValue(previous)
-      toast('The invoice status was not saved', { type: 'error', autoClose: 2000 })
+      toast(tx("The invoice status was not saved"), { type: 'error', autoClose: 2000 })
     }
   }
 
@@ -46,7 +47,7 @@ const BillingSelect: React.FC<{
       <option value="">—</option>
       {options.map((option) => (
         <option key={option.id} value={option.id}>
-          {option.label}
+          {tx(option.label)}
         </option>
       ))}
       {missing && <option value={value}>{value}</option>}

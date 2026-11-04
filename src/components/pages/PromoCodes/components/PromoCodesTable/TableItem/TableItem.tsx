@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 import { URLPartsEnum } from '@/shared/enums'
 import dateTimeFormat from '@/shared/helpers/dateTimeFormat'
 import { PromoCode } from '@/shared/types'
@@ -76,13 +77,13 @@ export const TableItem: React.FC<TableItemType> = ({
                 onClick={editPromoCode}
                 className="font-medium table-action-link cursor-pointer hover:underline"
               >
-                <p>Edit</p>
+                <p>{tx("Edit")}</p>
               </span>
               <span
                 onClick={() => onWarningModalOpen(promocode)}
                 className="font-medium table-action-danger cursor-pointer hover:underline"
               >
-                <p>Remove</p>
+                <p>{tx("Remove")}</p>
               </span>
             </div>
           )}

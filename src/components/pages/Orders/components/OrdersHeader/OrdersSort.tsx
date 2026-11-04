@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import React, { useRef } from 'react'
 import { Dropdown } from 'flowbite-react'
@@ -50,7 +51,7 @@ const OrdersSort = () => {
           <div className="flex items-center gap-2">
             <HiSortDescending className="w-4 h-4" />
             <span className="hidden sm:inline text-sm">
-              {currentSort?.label || 'Sort'}
+              {tx(currentSort?.label || tx("Sort"))}
             </span>
           </div>
         }
@@ -73,7 +74,7 @@ const OrdersSort = () => {
                   : ''
               }`}
             >
-              {option.label}
+              {tx(option.label)}
             </span>
           </Dropdown.Item>
         ))}

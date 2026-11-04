@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { Button, Checkbox, Label, Select, TextInput } from 'flowbite-react'
 import React, { useEffect, useMemo, useState } from 'react'
@@ -150,7 +151,7 @@ const Labels: React.FC<LabelsProps> = ({ items, setItems }) => {
         <div className="flex flex-col gap-3">
           <TextInput
             value={search}
-            placeholder="Add: name, code or SKU of a product or item"
+            placeholder={tx("Add: name, code or SKU of a product or item")}
             onChange={(e) => setSearch(e.target.value)}
           />
           {hits.length > 0 && (
@@ -166,7 +167,7 @@ const Labels: React.FC<LabelsProps> = ({ items, setItems }) => {
                     <span className="flex-1 text-gray-900 dark:text-white">
                       {item.name}
                     </span>
-                    <span className="text-xs text-gray-500">{kind}</span>
+                    <span className="text-xs text-gray-500">{tx(kind)}</span>
                   </button>
                 </li>
               ))}
@@ -178,7 +179,7 @@ const Labels: React.FC<LabelsProps> = ({ items, setItems }) => {
           </h3>
           {items.length === 0 ? (
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              Add products with the search above, or send them from Scanner and Inventory with the Label button.
+              {tx("Add products with the search above, or send them from Scanner and Inventory with the Label button.")}
             </p>
           ) : (
             <ul className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -193,13 +194,13 @@ const Labels: React.FC<LabelsProps> = ({ items, setItems }) => {
                     min={1}
                     sizing="sm"
                     className="w-20"
-                    aria-label="Quantity"
+                    aria-label={tx("Quantity")}
                     value={item.copies}
                     onChange={(e) => setCopies(item.key, Number(e.target.value))}
                   />
                   <button
                     type="button"
-                    aria-label="Remove"
+                    aria-label={tx("Remove")}
                     className="text-gray-500 hover:text-red-600"
                     onClick={() => setItems(items.filter((i) => i.key !== item.key))}
                   >
@@ -213,7 +214,7 @@ const Labels: React.FC<LabelsProps> = ({ items, setItems }) => {
 
         <div className="flex flex-col gap-3">
           <div>
-            <Label htmlFor="label-format" value="Format" />
+            <Label htmlFor="label-format" value={tx("Format")} />
             <Select
               id="label-format"
               value={formatId}
@@ -228,7 +229,7 @@ const Labels: React.FC<LabelsProps> = ({ items, setItems }) => {
             >
               {LABEL_FORMATS.map((f) => (
                 <option key={f.id} value={f.id}>
-                  {f.name}
+                  {tx(f.name)}
                 </option>
               ))}
             </Select>
@@ -237,7 +238,7 @@ const Labels: React.FC<LabelsProps> = ({ items, setItems }) => {
             <div className="w-56">
               <Label
                 htmlFor="label-skip"
-                value="Skip first (already used)"
+                value={tx("Skip first (already used)")}
               />
               <TextInput
                 id="label-skip"
@@ -260,7 +261,7 @@ const Labels: React.FC<LabelsProps> = ({ items, setItems }) => {
                 checked={showName}
                 onChange={(e) => setShowName(e.target.checked)}
               />
-              <Label htmlFor="label-name" value="Name" />
+              <Label htmlFor="label-name" value={tx("Name")} />
             </div>
             <div className="flex items-center gap-2">
               <Checkbox
@@ -268,7 +269,7 @@ const Labels: React.FC<LabelsProps> = ({ items, setItems }) => {
                 checked={showPrice}
                 onChange={(e) => setShowPrice(e.target.checked)}
               />
-              <Label htmlFor="label-price" value="Price" />
+              <Label htmlFor="label-price" value={tx("Price")} />
             </div>
           </div>
           <Button
@@ -277,10 +278,10 @@ const Labels: React.FC<LabelsProps> = ({ items, setItems }) => {
             className="self-start"
           >
             <HiPrinter className="w-5 h-5 mr-2" />
-            Print
+            {tx("Print")}
           </Button>
           <p className="text-xs text-gray-500 dark:text-gray-400">
-            In the print dialog: margins <b>None</b>, scale{' '}
+            {tx("In the print dialog: margins")}{' '}<b>{tx("None")}</b>, scale{' '}
             <b>100%</b>
             {!isSheet && ', paper the same size as the label'}.
           </p>
@@ -290,7 +291,7 @@ const Labels: React.FC<LabelsProps> = ({ items, setItems }) => {
       {printedCount > 0 && (
         <div className="flex flex-col gap-2">
           <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
-            Preview
+            {tx("Preview")}
           </h3>
           <div className="flex flex-wrap gap-2 p-3 bg-gray-100 dark:bg-gray-900 rounded overflow-x-auto">
             {cells

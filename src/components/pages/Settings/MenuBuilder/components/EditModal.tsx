@@ -1,3 +1,4 @@
+import { tx } from '@/shared/i18n'
 import { modalRoot } from '@/shared/helpers/modalRoot'
 import React, { useState, useRef, useEffect } from 'react'
 import { Button, Modal, Select, TextInput } from 'flowbite-react'
@@ -71,7 +72,7 @@ const EditModal: React.FC<EditModalProps> = ({
       const manufacturerIdValue = manufacturerRef.current?.value
 
       if (!categorySlug) {
-        alert('Please select a category')
+        alert(tx("Please select a category"))
         return
       }
 
@@ -107,12 +108,12 @@ const EditModal: React.FC<EditModalProps> = ({
 
   return (
     <Modal root={modalRoot()} show={isOpen} onClose={onClose} size="md">
-      <Modal.Header>{item ? 'Edit Menu Item' : 'Add Menu Item'}</Modal.Header>
+      <Modal.Header>{item ? tx("Edit Menu Item") : tx("Add Menu Item")}</Modal.Header>
       <form onSubmit={handleSubmit}>
         <Modal.Body className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Type
+              {tx("Type")}
             </label>
             <Select
               value={type}
@@ -121,20 +122,20 @@ const EditModal: React.FC<EditModalProps> = ({
               <option value="category-manufacturer">
                 Category & Manufacturer
               </option>
-              <option value="link">Custom Link</option>
-              <option value="text">Text Only</option>
+              <option value="link">{tx("Custom Link")}</option>
+              <option value="text">{tx("Text Only")}</option>
             </Select>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Label
+              {tx("Label")}
             </label>
             <TextInput
               ref={labelRef}
               type="text"
               defaultValue={item?.label || ''}
-              placeholder="Enter label"
+              placeholder={tx("Enter label")}
               required
             />
           </div>
@@ -142,13 +143,13 @@ const EditModal: React.FC<EditModalProps> = ({
           {type === 'link' && (
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                URL
+                {tx("URL")}
               </label>
               <TextInput
                 ref={urlRef}
                 type="text"
                 defaultValue={item?.url || ''}
-                placeholder="Enter URL"
+                placeholder={tx("Enter URL")}
                 required
               />
             </div>
@@ -158,13 +159,13 @@ const EditModal: React.FC<EditModalProps> = ({
             <>
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Category
+                  {tx("Category")}
                 </label>
                 <Select
                   ref={categoryRef}
                   defaultValue={item?.categorySlug || ''}
                 >
-                  <option value="">Select Category</option>
+                  <option value="">{tx("Select Category")}</option>
                   {allCategories.map((category) => (
                     <option key={category.slug} value={category.slug}>
                       {category.name}
@@ -207,10 +208,10 @@ const EditModal: React.FC<EditModalProps> = ({
         </Modal.Body>
         <Modal.Footer className="flex justify-end gap-3">
           <Button color="gray" onClick={onClose}>
-            Cancel
+            {tx("Cancel")}
           </Button>
           <Button type="submit" color="purple">
-            {item ? 'Update' : 'Create'}
+            {item ? tx("Update") : tx("Create")}
           </Button>
         </Modal.Footer>
       </form>

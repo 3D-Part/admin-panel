@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { User } from '@/shared/types'
 import { Button, Table } from 'flowbite-react'
@@ -95,7 +96,7 @@ export const TableItem: React.FC<TableItemType> = ({ employee }) => {
                 onClick={handleDeleteClick}
                 className="font-medium table-action-danger cursor-pointer hover:underline"
               >
-                Remove
+                {tx("Remove")}
               </span>
               {/* </Button> */}
             </div>
@@ -108,7 +109,7 @@ export const TableItem: React.FC<TableItemType> = ({ employee }) => {
         onSave={handleDeleteConfirm}
         onClose={handleDeleteCancel}
         isLoading={isDeleting}
-        message={`Are you sure you want to delete employee "${fullName}"?`}
+        message={tx("Are you sure you want to delete employee \"{fullName}\"?", { fullName })}
         buttonColor="failure"
       />
     </>

@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { ProductAttributeAPI, ProductsAPI } from '@/services'
 import { AttributeData, CreateProductAttributeBody } from '@/shared/types'
@@ -46,7 +47,7 @@ const AddAttributeForm: React.FC<AddAttributeFormType> = ({
     setLoader(true)
     const data = await ProductAttributeAPI.addProductAttribute(_body)
     if (data) {
-      const toastMessage = `product attribute is created`
+      const toastMessage = tx("product attribute is created")
       toast(toastMessage, {
         hideProgressBar: true,
         autoClose: 2000,
@@ -90,7 +91,7 @@ const AddAttributeForm: React.FC<AddAttributeFormType> = ({
               <HiXCircle className="h-5 w-5" />
             </Button>
             {loader && (
-              <Spinner aria-label="Success spinner example" color="success" />
+              <Spinner aria-label={tx("Success spinner example")} color="success" />
             )}
           </div>
         </div>

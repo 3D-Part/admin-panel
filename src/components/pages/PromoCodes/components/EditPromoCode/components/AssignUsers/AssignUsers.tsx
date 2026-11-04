@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { Button } from 'flowbite-react'
 import React, { useState } from 'react'
@@ -18,7 +19,7 @@ const AssignUsers = () => {
   return (
     <div>
       <Button onClick={openSelectModal} color="purple" className="mt-6">
-        Assign Users
+        {tx("Assign Users")}
       </Button>
       <SelectUsersModal isOpen={isMOdalOpen} onClose={onClose} />
     </div>

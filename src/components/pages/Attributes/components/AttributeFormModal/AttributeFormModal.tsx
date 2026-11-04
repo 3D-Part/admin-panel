@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 import { modalRoot } from '@/shared/helpers/modalRoot'
 
 import { Loader } from '@/components/common'
@@ -74,7 +75,7 @@ const AttributeFormModal: React.FC<ModalType> = ({
         <Modal.Header className="border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center gap-3">
             <span className="font-semibold text-gray-900 dark:text-white">
-              {initialValue ? 'Edit Attribute' : 'Add New Attribute'}
+              {initialValue ? tx("Edit Attribute") : tx("Add New Attribute")}
             </span>
             {initialValue && (
               <span className="text-sm text-gray-500 dark:text-gray-400">
@@ -90,13 +91,13 @@ const AttributeFormModal: React.FC<ModalType> = ({
               {/* Attribute Information */}
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                  Attribute Information
+                  {tx("Attribute Information")}
                 </h3>
                 <div className="space-y-4">
                   <div>
                     <Label
                       htmlFor="attributeName"
-                      value="Attribute Name"
+                      value={tx("Attribute Name")}
                       className="text-sm font-medium text-gray-700 dark:text-gray-300"
                     />
                     <TextInput
@@ -107,14 +108,14 @@ const AttributeFormModal: React.FC<ModalType> = ({
                       type="text"
                       value={attributeData.name || ''}
                       className="mt-1"
-                      placeholder="Enter attribute name..."
+                      placeholder={tx("Enter attribute name...")}
                     />
                   </div>
 
                   <div>
                     <Label
                       htmlFor="attributeType"
-                      value="Attribute Type"
+                      value={tx("Attribute Type")}
                       className="text-sm font-medium text-gray-700 dark:text-gray-300"
                     />
                     <Select
@@ -125,10 +126,10 @@ const AttributeFormModal: React.FC<ModalType> = ({
                       value={attributeData.type || 'input'}
                       className="mt-1"
                     >
-                      <option value="input">Input</option>
-                      <option value="select">Select</option>
-                      <option value="range">Range</option>
-                      <option value="bool">Boolean</option>
+                      <option value="input">{tx("Input")}</option>
+                      <option value="select">{tx("Select")}</option>
+                      <option value="range">{tx("Range")}</option>
+                      <option value="bool">{tx("Boolean")}</option>
                     </Select>
                   </div>
                 </div>
@@ -148,14 +149,14 @@ const AttributeFormModal: React.FC<ModalType> = ({
               className="w-full sm:w-auto order-2 sm:order-1"
               disabled={!attributeData.name}
             >
-              {initialValue ? 'Update Attribute' : 'Create Attribute'}
+              {initialValue ? tx("Update Attribute") : tx("Create Attribute")}
             </Button>
             <Button
               color="gray"
               onClick={onClose}
               className="w-full sm:w-auto order-1 sm:order-2"
             >
-              Cancel
+              {tx("Cancel")}
             </Button>
           </div>
         </Modal.Footer>

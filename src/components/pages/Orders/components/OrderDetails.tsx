@@ -1,3 +1,4 @@
+import { tx } from '@/shared/i18n'
 import { modalRoot } from '@/shared/helpers/modalRoot'
 import dateTimeFormat from '@/shared/helpers/dateTimeFormat'
 import { Order, OrderProduct } from '@/shared/types'
@@ -74,19 +75,19 @@ const ProductCard: React.FC<ProductCardType> = ({ product }) => {
 
       <div className="grid grid-cols-3 gap-3 text-xs">
         <div>
-          <p className="text-gray-500 dark:text-gray-400">Price</p>
+          <p className="text-gray-500 dark:text-gray-400">{tx("Price")}</p>
           <p className="font-medium text-gray-900 dark:text-white">
             {price} KM
           </p>
         </div>
         <div>
-          <p className="text-gray-500 dark:text-gray-400">Qty</p>
+          <p className="text-gray-500 dark:text-gray-400">{tx("Qty")}</p>
           <p className="font-medium text-gray-900 dark:text-white">
             {quantity}
           </p>
         </div>
         <div>
-          <p className="text-gray-500 dark:text-gray-400">Total</p>
+          <p className="text-gray-500 dark:text-gray-400">{tx("Total")}</p>
           <p className="font-medium text-green-600 dark:text-green-400">
             {total} KM
           </p>
@@ -133,7 +134,7 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
   const changeDisputed = async (disputed: boolean) => {
     const updated = await OrdersAPI.orderSetDisputed(currentOrder.id, disputed)
     if (!updated) {
-      toast('Could not save', { type: 'error', autoClose: 2000 })
+      toast(tx("Could not save"), { type: 'error', autoClose: 2000 })
       return
     }
     setCurrentOrder({ ...currentOrder, disputed })
@@ -204,7 +205,7 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
       <Modal.Body className="space-y-6">
         {hasBackorder && (
           <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4 text-sm text-amber-900 dark:text-amber-100">
-            <p className="font-semibold">Backorder</p>
+            <p className="font-semibold">{tx("Backorder")}</p>
             <p>
               Some products were not in stock when this order was placed. The
               customer was told delivery will take longer. Procure the missing
@@ -217,7 +218,7 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
           <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
             <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-4 flex items-center gap-2">
               <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-              Customer Information
+              {tx("Customer Information")}
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <OrderDetail
@@ -247,7 +248,7 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
             {(user.state || user.city || user.street || user.postCode) && (
               <div className="mt-4">
                 <h4 className="text-md font-medium text-blue-800 dark:text-blue-200 mb-3">
-                  Registered Address
+                  {tx("Registered Address")}
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {user.state && (
@@ -288,7 +289,7 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
         <div>
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
             <span className="w-2 h-2 bg-gray-500 rounded-full"></span>
-            Contact Information
+            {tx("Contact Information")}
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <OrderDetail name="Full Name" value={fullName} />
@@ -301,7 +302,7 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
         {/* Shipping Information */}
         <div>
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            Shipping Address
+            {tx("Shipping Address")}
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <OrderDetail name="City" value={city} />
@@ -314,7 +315,7 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
         {(companyName || companyPdv || jib) && (
           <div>
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Company Information
+              {tx("Company Information")}
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {companyName && (
@@ -331,7 +332,7 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
         {/* Order Summary */}
         <div>
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            Order Summary
+            {tx("Order Summary")}
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <OrderDetail name="Subtotal" value={`${price} KM`} />
@@ -357,7 +358,7 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
         {description && (
           <div>
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Notes
+              {tx("Notes")}
             </h3>
             <div className="p-3 rounded-lg bg-gray-50 dark:bg-gray-800">
               <p className="text-sm text-gray-900 dark:text-white">
@@ -370,7 +371,7 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
         <ToggleSwitch
           checked={Boolean(currentOrder.disputed)}
           disabled={!hasWritePermission}
-          label="Disputed order (only this one, not the customer's other orders)"
+          label={tx("Disputed order (only this one, not the customer's other orders)")}
           onChange={changeDisputed}
         />
 
@@ -395,17 +396,17 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
           onClick={() => setIsEditing(true)}
           className="w-full sm:w-auto"
         >
-          Edit order
+          {tx("Edit order")}
         </Button>
         <Button
           color="light"
           onClick={createProforma}
           className="w-full sm:w-auto"
         >
-          Create proforma
+          {tx("Create proforma")}
         </Button>
         <Button onClick={onClose} className="w-full sm:w-auto">
-          Close
+          {tx("Close")}
         </Button>
       </Modal.Footer>
       {isEditing && (

@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import React, { useEffect, useState } from 'react'
 import { Button, TextInput } from 'flowbite-react'
@@ -18,7 +19,7 @@ const SaleProductRow: React.FC<{
   const add = async () => {
     const value = Number(price.replace(',', '.'))
     if (!Number.isFinite(value) || value <= 0) {
-      toast('Enter the sale price', { type: 'error', autoClose: 2000 })
+      toast(tx("Enter the sale price"), { type: 'error', autoClose: 2000 })
       return
     }
     setSaving(true)
@@ -41,12 +42,12 @@ const SaleProductRow: React.FC<{
         className="w-28"
         sizing="sm"
         inputMode="decimal"
-        placeholder="Sale price"
+        placeholder={tx("Sale price")}
         value={price}
         onChange={(e) => setPrice(e.target.value)}
       />
       <Button size="xs" color="purple" disabled={saving} onClick={add}>
-        Add
+        {tx("Add")}
       </Button>
     </div>
   )
@@ -81,7 +82,7 @@ const SaleProductSearch = () => {
       { saleId: activeSale.id, productId: product.id, discountedPrice: price },
     ])
     if (!saved) {
-      toast(`${product.name} could not be added. Is it already on a sale?`, {
+      toast(tx("{name} could not be added. Is it already on a sale?", { name: product.name }), {
         type: 'error',
         autoClose: 3000,
       })
@@ -109,20 +110,19 @@ const SaleProductSearch = () => {
   return (
     <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4 sm:p-6">
       <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-1">
-        Add products
+        {tx("Add products")}
       </h3>
       <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
-        Search by name or code, enter the sale price and click Add. It is saved
-        right away.
+        {tx("Search by name or code, enter the sale price and click Add. It is saved right away.")}
       </p>
       <TextInput
-        placeholder="Name or code"
+        placeholder={tx("Name or code")}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
       {searched && rows.length === 0 && (
         <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-          No product found
+          {tx("No product found")}
         </p>
       )}
       {rows.length > 0 && (

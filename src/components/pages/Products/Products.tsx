@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import React, { useEffect, useState } from 'react'
 import { WarningModal } from '@/components/common'
@@ -43,7 +44,7 @@ export const Products = () => {
     const response = await ProductsAPI.removeProducts(activeProduct.id)
 
     if (response) {
-      const toastMessage = `product ${activeProduct.name} is removed`
+      const toastMessage = tx("product {name} is removed", { name: activeProduct.name })
       toast(toastMessage, {
         hideProgressBar: true,
         autoClose: 2000,
@@ -72,7 +73,7 @@ export const Products = () => {
         onSave={onWarningModalConfirm}
         isOpen={isWarningModalOpen}
         onClose={onWarningModalClose}
-        message={`Are you sure you want to delete ${activeProduct.name}?`}
+        message={tx("Are you sure you want to delete {name}?", { name: activeProduct.name })}
       />
     </div>
   )

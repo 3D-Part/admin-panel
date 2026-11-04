@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { useProductsStore } from '@/store/store'
 import React from 'react'
@@ -15,7 +16,7 @@ const AttributesPresenter = () => {
   return (
     <div>
       <h2 className="text-gray-900 dark:text-white text-3xl font-bold mb-6">
-        Product attributes:
+        {tx("Product attributes:")}
       </h2>
       <div className="flex flex-wrap gap-5 justify-start">
         {productAttributes &&

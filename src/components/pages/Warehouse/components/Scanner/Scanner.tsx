@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { Button, Spinner, TextInput } from 'flowbite-react'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
@@ -115,12 +116,12 @@ const Scanner: React.FC<ScannerProps> = ({ onPrintProduct, onPrintAsset }) => {
           sizing="lg"
           value={value}
           autoComplete="off"
-          placeholder="Scan or type a code, EAN or SKU"
+          placeholder={tx("Scan or type a code, EAN or SKU")}
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={onInputKeyDown}
         />
         <Button type="submit" size="lg" disabled={loading}>
-          {loading ? <Spinner size="sm" /> : 'Search'}
+          {loading ? <Spinner size="sm" /> : tx("Search")}
         </Button>
         <Button
           type="button"
@@ -129,12 +130,12 @@ const Scanner: React.FC<ScannerProps> = ({ onPrintProduct, onPrintAsset }) => {
           onClick={() => setCameraOpen((open) => !open)}
         >
           <HiCamera className="w-5 h-5 mr-2" />
-          Camera
+          {tx("Camera")}
         </Button>
       </form>
 
       <p className="text-xs text-gray-500 dark:text-gray-400">
-        USB scanners work right away, just scan. On a phone use the Camera button.
+        {tx("USB scanners work right away, just scan. On a phone use the Camera button.")}
       </p>
 
       {cameraOpen && (

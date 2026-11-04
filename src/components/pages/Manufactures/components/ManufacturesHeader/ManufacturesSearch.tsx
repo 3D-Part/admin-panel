@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import { Search } from '@/components/common'
 import { PaginationData } from '@/shared/types'
@@ -53,7 +54,7 @@ const ManufacturesSearch = () => {
   return (
     <div className="flex gap-8 items-center flex-1">
       <Search getData={fetchCategoriesData} />
-      {loader && <Spinner aria-label="Loading..." size="lg" />}
+      {loader && <Spinner aria-label={tx("Loading...")} size="lg" />}
     </div>
   )
 }

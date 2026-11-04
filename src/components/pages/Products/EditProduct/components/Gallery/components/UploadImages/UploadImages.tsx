@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import React, { SyntheticEvent, useRef, useState } from 'react'
 import { ProductsAPI, StoreManagerAPI } from '@/services'
@@ -49,7 +50,7 @@ const UploadImages = () => {
         if (_productData) {
           changeActiveProduct(_productData)
         }
-        toast('Image is uploaded!', {
+        toast(tx("Image is uploaded!"), {
           hideProgressBar: true,
           autoClose: 2000,
           type: 'success',
@@ -73,7 +74,7 @@ const UploadImages = () => {
   return (
     <div className="relative flex flex-wrap gap-4 w-full mt-4">
       <h2 className="text-2xl font-extrabold leading-none tracking-tight text-gray-800 md:text-2xl dark:text-white">
-        Upload Files
+        {tx("Upload Files")}
       </h2>
       <form onSubmit={onSubmit} className="w-full">
         <UploadFiles setActiveFormData={setActiveFormData} />
@@ -83,7 +84,7 @@ const UploadImages = () => {
           type="submit"
           isProcessing={loader}
         >
-          Upload
+          {tx("Upload")}
         </Button>
       </form>
     </div>

@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 import { modalRoot } from '@/shared/helpers/modalRoot'
 import { datetimeLocalToIso } from '@/shared/helpers/isoToDatetimeLocal'
 
@@ -61,7 +62,7 @@ const AddNewSaleModal = () => {
     })
 
     if (response) {
-      toast('Sale is created', {
+      toast(tx("Sale is created"), {
         hideProgressBar: true,
         autoClose: 2000,
         type: 'success',
@@ -95,7 +96,7 @@ const AddNewSaleModal = () => {
       <Modal.Header className="border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center gap-3">
           <span className="font-semibold text-gray-900 dark:text-white">
-            Add New Sale
+            {tx("Add New Sale")}
           </span>
         </div>
       </Modal.Header>
@@ -105,14 +106,14 @@ const AddNewSaleModal = () => {
           {/* Sale Information */}
           <div>
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Sale Information
+              {tx("Sale Information")}
             </h3>
             <div className="space-y-4">
               {/* Name */}
               <div>
                 <Label
                   htmlFor="name"
-                  value="Sale Name"
+                  value={tx("Sale Name")}
                   className="text-sm font-medium text-gray-700 dark:text-gray-300"
                 />
                 <TextInput
@@ -123,7 +124,7 @@ const AddNewSaleModal = () => {
                   type="text"
                   defaultValue=""
                   className="mt-1"
-                  placeholder="Enter sale name..."
+                  placeholder={tx("Enter sale name...")}
                 />
               </div>
             </div>
@@ -132,14 +133,14 @@ const AddNewSaleModal = () => {
           {/* Sale Period */}
           <div>
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Sale Period
+              {tx("Sale Period")}
             </h3>
             <div className="space-y-4">
               {/* START DATE */}
               <div>
                 <Label
                   htmlFor="startsAt"
-                  value="Start Date & Time"
+                  value={tx("Start Date & Time")}
                   className="text-sm font-medium text-gray-700 dark:text-gray-300"
                 />
                 <TextInput
@@ -157,7 +158,7 @@ const AddNewSaleModal = () => {
               <div>
                 <Label
                   htmlFor="endsAt"
-                  value="End Date & Time"
+                  value={tx("End Date & Time")}
                   className="text-sm font-medium text-gray-700 dark:text-gray-300"
                 />
                 <TextInput
@@ -183,7 +184,7 @@ const AddNewSaleModal = () => {
             onClick={onSave}
             className="w-full sm:w-auto order-2 sm:order-1"
           >
-            Create Sale
+            {tx("Create Sale")}
           </Button>
           <Button
             disabled={loading}
@@ -191,7 +192,7 @@ const AddNewSaleModal = () => {
             onClick={closeModal}
             className="w-full sm:w-auto order-1 sm:order-2"
           >
-            Cancel
+            {tx("Cancel")}
           </Button>
         </div>
       </Modal.Footer>

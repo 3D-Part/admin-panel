@@ -1,3 +1,4 @@
+import { tx } from '@/shared/i18n'
 import Image from 'next/image'
 import React from 'react'
 import { HiXCircle } from 'react-icons/hi'
@@ -23,7 +24,7 @@ const ImagePreview: React.FC<ImagePreviewType> = ({
         width={100}
         height={100}
         src={src}
-        alt="img"
+        alt={tx("img")}
         className="object-cover rounded-lg relative w-full h-full"
         onLoad={() => URL.revokeObjectURL(src)}
       />

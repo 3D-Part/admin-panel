@@ -1,4 +1,5 @@
 'use client'
+import { tx } from '@/shared/i18n'
 
 import React, { useState } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
@@ -49,7 +50,7 @@ const Warehouse = () => {
         tabs={[
           {
             id: 'scanner',
-            title: 'Scanner',
+            title: tx("Scanner"),
             icon: HiQrcode,
             content: (
               <>
@@ -68,13 +69,12 @@ const Warehouse = () => {
           },
           {
             id: 'inventory',
-            title: 'Inventory',
+            title: tx("Inventory"),
             icon: HiCube,
             content: (
               <>
               <TabHelp>
-                Things the shop owns and does not sell, such as printers and
-                tools. Products for sale are not here, they are in Products.
+                {tx("Things the shop owns and does not sell, such as printers and tools. Products for sale are not here, they are in Products.")}
               </TabHelp>
               <Assets
                 onPrintLabels={(assets) => addLabels(assets.map(assetLabel))}
@@ -84,13 +84,12 @@ const Warehouse = () => {
           },
           {
             id: 'labels',
-            title: 'Labels',
+            title: tx("Labels"),
             icon: HiTag,
             content: (
               <>
                 <TabHelp>
-                  Print barcode stickers. Add items from Scanner or Inventory,
-                  choose the sticker size and print.
+                  {tx("Print barcode stickers. Add items from Scanner or Inventory, choose the sticker size and print.")}
                 </TabHelp>
                 <Labels items={labelItems} setItems={setLabelItems} />
               </>
@@ -98,13 +97,12 @@ const Warehouse = () => {
           },
           {
             id: 'history',
-            title: 'History',
+            title: tx("History"),
             icon: HiClipboardList,
             content: (
               <>
                 <TabHelp>
-                  Every stock change, who made it and why. Nothing to do here,
-                  look here when a number does not add up.
+                  {tx("Every stock change, who made it and why. Nothing to do here, look here when a number does not add up.")}
                 </TabHelp>
                 <History />
               </>

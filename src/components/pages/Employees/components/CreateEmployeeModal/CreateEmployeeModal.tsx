@@ -1,3 +1,4 @@
+import { tx } from '@/shared/i18n'
 import { modalRoot } from '@/shared/helpers/modalRoot'
 import React, { useState, useCallback, useRef } from 'react'
 import { Modal, Button, Label, Spinner } from 'flowbite-react'
@@ -121,7 +122,7 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
       const success = await UsersAPI.createEmployee(employeeData)
 
       if (success) {
-        toast('Employee created successfully!', {
+        toast(tx("Employee created successfully!"), {
           type: 'success',
           position: 'top-right',
           autoClose: 3000,
@@ -129,22 +130,22 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
         onSuccess()
         handleClose()
       } else {
-        toast('Failed to create employee. Please try again.', {
+        toast(tx("Failed to create employee. Please try again."), {
           type: 'error',
           position: 'top-right',
           autoClose: 5000,
         })
         setErrors({
-          permissions: 'Failed to create employee. Please try again.',
+          permissions: tx("Failed to create employee. Please try again."),
         })
       }
     } catch (error) {
-      toast('An error occurred. Please try again.', {
+      toast(tx("An error occurred. Please try again."), {
         type: 'error',
         position: 'top-right',
         autoClose: 5000,
       })
-      setErrors({ permissions: 'An error occurred. Please try again.' })
+      setErrors({ permissions: tx("An error occurred. Please try again.") })
     } finally {
       setIsLoading(false)
     }
@@ -162,69 +163,69 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
 
   const permissionGroups = [
     {
-      title: 'Products',
+      title: tx("Products"),
       permissions: [PermissionEnum.PRODUCT_READ, PermissionEnum.PRODUCT_WRITE],
     },
     {
-      title: 'Categories',
+      title: tx("Categories"),
       permissions: [
         PermissionEnum.CATEGORY_READ,
         PermissionEnum.CATEGORY_WRITE,
       ],
     },
     {
-      title: 'Manufacturers',
+      title: tx("Manufacturers"),
       permissions: [
         PermissionEnum.MANUFACTURER_READ,
         PermissionEnum.MANUFACTURER_WRITE,
       ],
     },
     {
-      title: 'Attributes',
+      title: tx("Attributes"),
       permissions: [
         PermissionEnum.ATTRIBUTES_READ,
         PermissionEnum.ATTRIBUTES_WRITE,
       ],
     },
     {
-      title: 'Orders',
+      title: tx("Orders"),
       permissions: [PermissionEnum.ORDERS_READ, PermissionEnum.ORDERS_WRITE],
     },
     {
-      title: 'Proformas',
+      title: tx("Proformas"),
       permissions: [
         PermissionEnum.PROFORMA_READ,
         PermissionEnum.PROFORMA_WRITE,
       ],
     },
     {
-      title: 'Analytics',
+      title: tx("Analytics"),
       permissions: [PermissionEnum.ANALYTICS_READ],
     },
     {
-      title: 'Warehouse',
+      title: tx("Warehouse"),
       permissions: [
         PermissionEnum.WAREHOUSE_READ,
         PermissionEnum.WAREHOUSE_WRITE,
       ],
     },
     {
-      title: 'Promo Codes',
+      title: tx("Promo Codes"),
       permissions: [
         PermissionEnum.PROMO_CODE_READ,
         PermissionEnum.PROMO_CODE_WRITE,
       ],
     },
     {
-      title: 'Sales',
+      title: tx("Sales"),
       permissions: [PermissionEnum.SALE_READ, PermissionEnum.SALE_WRITE],
     },
     {
-      title: 'Users',
+      title: tx("Users"),
       permissions: [PermissionEnum.USER_READ],
     },
     {
-      title: 'Employees',
+      title: tx("Employees"),
       permissions: [
         PermissionEnum.EMPLOYEE_READ,
         PermissionEnum.EMPLOYEE_WRITE,
@@ -235,7 +236,7 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
   return (
     <Modal root={modalRoot()} show={isOpen} onClose={handleClose} size="4xl">
       <Modal.Header className="dark:bg-gray-800 dark:text-white">
-        Create New Employee
+        {tx("Create New Employee")}
       </Modal.Header>
       <Modal.Body className="dark:bg-gray-800">
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -244,7 +245,7 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
             <div>
               <Label
                 htmlFor="email"
-                value="Email"
+                value={tx("Email")}
                 className="dark:text-gray-300"
               />
               <input
@@ -252,7 +253,7 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
                 id="email"
                 name="email"
                 type="email"
-                placeholder="johndoe@gmail.com"
+                placeholder={tx("johndoe@gmail.com")}
                 disabled={isLoading}
                 className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 ${
                   errors.email
@@ -269,7 +270,7 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
             <div>
               <Label
                 htmlFor="fullName"
-                value="Full Name"
+                value={tx("Full Name")}
                 className="dark:text-gray-300"
               />
               <input
@@ -277,7 +278,7 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
                 id="fullName"
                 name="fullName"
                 type="text"
-                placeholder="John Doe"
+                placeholder={tx("John Doe")}
                 disabled={isLoading}
                 className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 ${
                   errors.fullName
@@ -295,9 +296,9 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
 
           {/* Permissions */}
           <div>
-            <Label value="Permissions" className="dark:text-gray-300" />
+            <Label value={tx("Permissions")} className="dark:text-gray-300" />
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-              Select the permissions this employee should have:
+              {tx("Select the permissions this employee should have:")}
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-y-auto">
@@ -350,7 +351,7 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
               disabled={isLoading}
               className="dark:bg-gray-600 dark:hover:bg-gray-700 dark:text-white"
             >
-              Cancel
+              {tx("Cancel")}
             </Button>
             <Button
               type="submit"
@@ -361,10 +362,10 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
               {isLoading ? (
                 <>
                   <Spinner size="sm" className="mr-2" />
-                  Creating...
+                  {tx("Creating...")}
                 </>
               ) : (
-                'Create Employee'
+                tx("Create Employee")
               )}
             </Button>
           </div>

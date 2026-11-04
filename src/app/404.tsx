@@ -1,3 +1,4 @@
+import { tx } from '@/shared/i18n'
 import React from 'react'
 
 const Custom404 = () => {
@@ -15,7 +16,7 @@ const Custom404 = () => {
         </h1>
         <div style={{ display: 'inline-block' }}>
           <h2 style={{ fontSize: '14px', fontWeight: 400, lineHeight: '28px' }}>
-            This page could not be found
+            {tx("This page could not be found")}
           </h2>
         </div>
       </div>
