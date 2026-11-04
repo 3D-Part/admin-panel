@@ -1,4 +1,4 @@
-import { tx } from '@/shared/i18n'
+import { tx, useLanguageStore } from '@/shared/i18n'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { ErrorCodeEnum, URLPartsEnum } from '../enums'
@@ -44,6 +44,8 @@ axiosInstance.interceptors.request.use(
       if (token) {
         config.headers['Authorization'] = `Bearer ${token}`
       }
+      // the API answers errors in this language; S3 uploads must not get it
+      config.headers['X-Localization'] = useLanguageStore.getState().language
     }
 
     return config
