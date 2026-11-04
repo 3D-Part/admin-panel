@@ -29,6 +29,7 @@ const FIRST_TAB: Record<string, string> = {
   [URLPartsEnum.SettingsGeneral]: 'banner',
   [URLPartsEnum.Warehouse]: 'scanner',
   [URLPartsEnum.ActionsNeeded]: 'actions',
+  [URLPartsEnum.Analytics]: 'overview',
 }
 
 const OPEN_GROUPS_KEY = 'sidebarOpenGroups'
@@ -186,37 +187,32 @@ const SideBar = () => {
         children: [
           {
             name: 'Overview',
-            href: URLPartsEnum.Analytics,
-            requiredPermissions: [PermissionEnum.ANALYTICS_READ],
-          },
-          {
-            name: 'Revenue by day',
-            href: `${URLPartsEnum.Analytics}#revenue-by-day`,
+            href: `${URLPartsEnum.Analytics}?tab=overview`,
             requiredPermissions: [PermissionEnum.ANALYTICS_READ],
           },
           {
             name: 'Filaments',
-            href: `${URLPartsEnum.Analytics}#filaments`,
+            href: `${URLPartsEnum.Analytics}?tab=filaments`,
             requiredPermissions: [PermissionEnum.ANALYTICS_READ],
           },
           {
             name: 'Top products',
-            href: `${URLPartsEnum.Analytics}#top-products`,
+            href: `${URLPartsEnum.Analytics}?tab=top-products`,
             requiredPermissions: [PermissionEnum.ANALYTICS_READ],
           },
           {
             name: 'By category',
-            href: `${URLPartsEnum.Analytics}#by-category`,
+            href: `${URLPartsEnum.Analytics}?tab=by-category`,
             requiredPermissions: [PermissionEnum.ANALYTICS_READ],
           },
           {
             name: 'By manufacturer',
-            href: `${URLPartsEnum.Analytics}#by-manufacturer`,
+            href: `${URLPartsEnum.Analytics}?tab=by-manufacturer`,
             requiredPermissions: [PermissionEnum.ANALYTICS_READ],
           },
           {
             name: 'Top customers',
-            href: `${URLPartsEnum.Analytics}#top-customers`,
+            href: `${URLPartsEnum.Analytics}?tab=top-customers`,
             requiredPermissions: [PermissionEnum.ANALYTICS_READ],
           },
         ],

@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useState } from 'react'
 import { Alert, Button, Label, Select, Table, TextInput } from 'flowbite-react'
+import { useSearchParams } from 'next/navigation'
 import { BackofficeAPI, CategoriesAPI, ManufacturesAPI } from '@/services'
 import { Analytics as AnalyticsData, AnalyticsRow } from '@/services/backoffice'
 import { Loader } from '@/components/common'
@@ -10,6 +11,16 @@ const money = (value: number) => `${value.toFixed(2)} KM`
 const isoDay = (date: Date) => date.toISOString().slice(0, 10)
 
 type Option = { id: string; name: string }
+
+// every section is its own page, picked from the sidebar
+const TABS: Record<string, string> = {
+  overview: 'Overview',
+  filaments: 'Filaments',
+  'top-products': 'Top products',
+  'by-category': 'By category',
+  'by-manufacturer': 'By manufacturer',
+  'top-customers': 'Top customers',
+}
 
 const Tile: React.FC<{ label: string; value: string; hint?: string }> = ({
   label,
@@ -72,6 +83,8 @@ const RowsTable: React.FC<{
 )
 
 const Analytics = () => {
+  const requestedTab = useSearchParams().get('tab') ?? ''
+  const tab = TABS[requestedTab] ? requestedTab : 'overview'
   const today = new Date()
   const [from, setFrom] = useState(
     isoDay(new Date(today.getTime() - 30 * 86400000))
@@ -135,7 +148,7 @@ const Analytics = () => {
     <div className="w-full h-full overflow-y-auto p-4 space-y-6">
       <div className="flex flex-wrap items-end gap-4">
         <h2 className="mr-auto text-3xl font-bold text-gray-900 dark:text-white">
-          Analytics
+          {TABS[tab]}
         </h2>
         <div>
           <Label htmlFor="analytics-from" value="From" />
@@ -223,6 +236,8 @@ const Analytics = () => {
             </Alert>
           )}
 
+          {tab === 'overview' && (
+          <>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <Tile label="Orders" value={String(data.totals.orders)} />
             <Tile label="Items sold" value={String(data.totals.itemsSold)} />
@@ -264,6 +279,10 @@ const Analytics = () => {
             </div>
           </section>
 
+          </>
+          )}
+
+          {tab === 'filaments' && (
           <section id="filaments">
             <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
               Filaments
@@ -279,34 +298,43 @@ const Analytics = () => {
             </p>
             <RowsTable rows={data.filaments.rows} />
           </section>
+          )}
 
+          {tab === 'top-products' && (
           <section id="top-products">
             <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">
               Top products
             </h3>
             <RowsTable rows={data.topProducts} />
           </section>
+          )}
 
+          {tab === 'by-category' && (
           <section id="by-category">
             <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">
               By category
             </h3>
             <RowsTable rows={data.byCategory} label="Category" />
           </section>
+          )}
 
+          {tab === 'by-manufacturer' && (
           <section id="by-manufacturer">
             <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">
               By manufacturer
             </h3>
             <RowsTable rows={data.byManufacturer} label="Manufacturer" />
           </section>
+          )}
 
+          {tab === 'top-customers' && (
           <section id="top-customers">
             <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">
               Top customers
             </h3>
             <RowsTable rows={data.topCustomers} label="Customer" />
           </section>
+          )}
 
           <div className="flex flex-wrap gap-2">
             <Button color="gray" size="sm" onClick={load}>
