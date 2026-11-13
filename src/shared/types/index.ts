@@ -319,6 +319,7 @@ export interface Order {
   internalNote?: string | null
   disputed?: boolean
   billingStatus?: string | null
+  billingSteps?: Record<string, string>
   statusChangedAt?: string | null
   hasBackorder?: boolean
 }

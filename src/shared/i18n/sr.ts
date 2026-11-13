@@ -1,6 +1,17 @@
 // Serbian for every English text of the admin, keyed by the English text.
 // A text that is missing here stays in English.
 const sr: Record<string, string> = {
+  "The customer gets an email that the order is accepted.": "Kupac dobija mejl da je narudžba prihvaćena.",
+  "The customer gets the points for this order.": "Kupac dobija poene za ovu narudžbu.",
+  "not yet": "još nije",
+  "Color": "Boja",
+  "Move up": "Pomjeri gore",
+  "Move down": "Pomjeri dole",
+  "Red": "Crvena",
+  "Purple": "Ljubičasta",
+  "Teal": "Tirkizna",
+  "White": "Bijela",
+  "The checkboxes in the Invoice column of Orders. Each ticked step fills its circle in the Status column with its color. The first four are the main statuses: the order status always follows the rightmost ticked one, with its emails, points and stock. A Cancelled, New, Offer or Returned order paints all circles in its own color.": "Kvačice u koloni Račun kod narudžbi. Svaki štiklirani korak popuni svoj kružić u koloni Status svojom bojom. Prva četiri su glavni statusi: status narudžbe uvijek prati najdesniji štiklirani, zajedno s mejlovima, poenima i stanjem. Otkazana, nova, vraćena narudžba ili ponuda oboji sve kružiće svojom bojom.",
   "Name (Code)  ": "Naziv (šifra)  ",
   "Select Users: ": "Izaberi kupce: ",
   "Switch to {dark} mode": "Promijeni temu",

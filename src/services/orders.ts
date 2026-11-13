@@ -125,6 +125,23 @@ const orderSetBilling = async (
   }
 }
 
+const orderSetBillingStep = async (
+  id: string,
+  step: string,
+  done: boolean
+): Promise<{ billingSteps?: Record<string, string>; status?: string } | null> => {
+  try {
+    const data: any = await API.patch(
+      `${API_BASE_URL}/order/${id}/billing-steps`,
+      { step, done }
+    )
+    return data ?? {}
+  } catch (error) {
+    console.error('Error saving invoice step:', error)
+    return null
+  }
+}
+
 const orderSetDisputed = async (
   id: string,
   disputed: boolean
@@ -176,6 +193,7 @@ const OrdersAPI = {
   orderUpdateNote,
   orderSetDisputed,
   orderSetBilling,
+  orderSetBillingStep,
   orderStatusHistory,
   orderContactMessage,
 }

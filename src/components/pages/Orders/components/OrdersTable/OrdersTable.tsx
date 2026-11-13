@@ -13,7 +13,7 @@ import {
 import { PaginationData, Order } from '@/shared/types'
 import OrderStatus from '../OrderStatus/OrderStatus'
 import OrderSteps from '../OrderStatus/OrderSteps'
-import BillingSelect from '../OrderStatus/BillingSelect'
+import BillingSteps from '../OrderStatus/BillingSteps'
 import { BillingOption, readBillingOptions } from '@/shared/helpers/billingOptions'
 import { BiMessageDetail } from 'react-icons/bi'
 import OrderDetails from '../OrderDetails'
@@ -184,8 +184,8 @@ export const OrdersTable = () => {
                 }
               >
                 <div className="flex items-center justify-end gap-2">
-                  <OrderSteps status={status} />
-                  <OrderStatus status={status} />
+                  <OrderSteps order={order} options={billingOptions} />
+                  <OrderStatus status={status} order={order} options={billingOptions} />
                 </div>
               </div>
             ),
@@ -194,7 +194,7 @@ export const OrdersTable = () => {
             label: tx("Invoice"),
             value: (
               <div onClick={(e) => e.stopPropagation()}>
-                <BillingSelect
+                <BillingSteps
                   order={order}
                   options={billingOptions}
                   disabled={!hasWritePermission}

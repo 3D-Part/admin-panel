@@ -34,7 +34,7 @@ const TABS: Record<string, { title: string; help: string }> = {
   },
   'invoice-statuses': {
     title: 'Invoice statuses',
-    help: 'The choices in the Invoice column of Orders: where the paperwork of an order stands. Customers never see them.',
+    help: 'The checkboxes in the Invoice column of Orders. Each ticked step fills its circle in the Status column with its color. The first four are the main statuses: the order status always follows the rightmost ticked one, with its emails, points and stock. A Cancelled, New, Offer or Returned order paints all circles in its own color.',
   },
   delivery: {
     title: 'Delivery',

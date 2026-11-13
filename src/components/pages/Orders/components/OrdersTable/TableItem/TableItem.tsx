@@ -4,7 +4,7 @@ import { Badge, Table } from 'flowbite-react'
 import React, { useState } from 'react'
 import OrderStatus from '../../OrderStatus/OrderStatus'
 import OrderSteps from '../../OrderStatus/OrderSteps'
-import BillingSelect from '../../OrderStatus/BillingSelect'
+import BillingSteps from '../../OrderStatus/BillingSteps'
 import { BillingOption } from '@/shared/helpers/billingOptions'
 import { BiMessageDetail, BiNote } from 'react-icons/bi'
 import OrderContactForm from '../../OrderContactForm'
@@ -112,12 +112,12 @@ export const TableItem: React.FC<TableItemType> = ({ order, billingOptions }) =>
           className={hasWritePermission ? 'cursor-pointer' : ''}
         >
           <div className="flex items-center gap-3">
-            <OrderSteps status={status} />
-            <OrderStatus status={status} />
+            <OrderSteps order={order} options={billingOptions} />
+            <OrderStatus status={status} order={order} options={billingOptions} />
           </div>
         </Table.Cell>
         <Table.Cell>
-          <BillingSelect
+          <BillingSteps
             order={order}
             options={billingOptions}
             disabled={!hasWritePermission}
