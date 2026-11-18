@@ -3,7 +3,13 @@ import { tx } from '@/shared/i18n'
 
 import React from 'react'
 import { Order } from '@/shared/types'
-import { BillingOption, billingDot } from '@/shared/helpers/billingOptions'
+import {
+  BillingOption,
+  StepLists,
+  billingDot,
+  listFor,
+  otherList,
+} from '@/shared/helpers/billingOptions'
 import getOrderStatusLabel from '@/shared/helpers/getOrderStatusLabel'
 import {
   STATUS_DOT,
@@ -14,19 +20,20 @@ import {
 } from './billingStepsStore'
 
 /**
- * The circles in the Status column: one per step from Settings, in that
- * order. A step ticked in the Invoice dropdown fills its circle with its
- * color. An order outside the four main statuses (e.g. Cancelled) paints
- * every circle in the color of its status.
+ * The circles in the Status column: one per step of the order's list (orders
+ * or offers) from Settings, in that order. A step ticked in the Invoice
+ * dropdown fills its circle with its color. A status no step is tied to
+ * (e.g. Cancelled) paints every circle in the color of that status.
  */
-const OrderSteps: React.FC<{ order: Order; options: BillingOption[] }> = ({
+const OrderSteps: React.FC<{ order: Order; lists: StepLists }> = ({
   order,
-  options,
+  lists,
 }) => {
   const { steps, status } = useBillingSteps(order)
-  const shown = visibleSteps(options, steps)
+  const options = listFor(lists, status)
+  const shown = visibleSteps(options, steps, otherList(lists, status))
 
-  if (!followsSteps(status)) {
+  if (!followsSteps(status, options, steps)) {
     const fill = STATUS_DOT[status] ?? 'bg-gray-500 border-gray-500'
     return (
       <div

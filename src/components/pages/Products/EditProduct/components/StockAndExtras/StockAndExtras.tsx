@@ -1,8 +1,9 @@
 'use client'
 import { tx } from '@/shared/i18n'
+import SwitchCard from '@/components/common/SwitchCard/SwitchCard'
 
 import React, { useEffect, useState } from 'react'
-import { Button, Checkbox, Label, TextInput, ToggleSwitch } from 'flowbite-react'
+import { Button, Checkbox, Label, TextInput } from 'flowbite-react'
 import { toast } from 'react-toastify'
 import { BackofficeAPI, ProductsAPI, StoreManagerAPI } from '@/services'
 import {
@@ -148,11 +149,35 @@ const StockAndExtras = () => {
         </div>
       </div>
 
-      <ToggleSwitch
+      <SwitchCard
+        title={tx('Made to order')}
+        description={tx(
+          'For products the shop orders from the supplier only when a customer buys them. Matters only when the stock is 0.'
+        )}
         checked={isBackorder}
-        label={tx("Made to order: the shop shows it as available by order only")}
         onChange={setIsBackorder}
-      />
+      >
+        <div className="flex flex-wrap items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+          <span>{tx('At 0 pieces the shop shows:')}</span>
+          <span
+            className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium ${
+              isBackorder
+                ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300'
+                : 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300'
+            }`}
+          >
+            <span
+              className={`h-2 w-2 rounded-full ${isBackorder ? 'bg-amber-500' : 'bg-red-500'}`}
+            />
+            {isBackorder ? 'Po narudžbi' : 'Nema na stanju'}
+          </span>
+          <span className="text-xs text-gray-500 dark:text-gray-400">
+            {isBackorder
+              ? tx('ordered from the supplier, longer delivery')
+              : tx('can still be ordered, sent when the goods arrive')}
+          </span>
+        </div>
+      </SwitchCard>
 
       <div>
         <p className="mb-2 text-sm font-medium text-gray-900 dark:text-white">

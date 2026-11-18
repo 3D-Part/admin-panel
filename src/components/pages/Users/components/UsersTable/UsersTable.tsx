@@ -4,7 +4,10 @@ import { tx } from '@/shared/i18n'
 import { Pagination, Table } from 'flowbite-react'
 import React, { useCallback, useEffect, useState } from 'react'
 import { TableItem } from './TableItem/TableItem'
-import { useCustomerProfiles } from '@/components/common/CustomerFlag/CustomerFlag'
+import {
+  CustomerFlagBadge,
+  useCustomerProfiles,
+} from '@/components/common/CustomerFlag/CustomerFlag'
 import { useUsersSliceStore } from '@/store/store'
 import {
   Loader,
@@ -80,7 +83,12 @@ export const UsersTable = () => {
     return (
       <MobileCardBuilder
         key={user.id}
-        title={fullName}
+        title={
+          <span className="inline-flex items-center gap-2">
+            <CustomerFlagBadge profile={profiles[user.email?.toLowerCase()]} />
+            {fullName}
+          </span>
+        }
         subtitle={email}
         onClick={() => handleUserClick(user)}
         items={[

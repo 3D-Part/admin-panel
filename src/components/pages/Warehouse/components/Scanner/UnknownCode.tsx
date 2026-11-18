@@ -1,8 +1,10 @@
 'use client'
 import { tx } from '@/shared/i18n'
+import { useProductSearch } from '@/shared/hooks/useProductSearch'
+import SearchListFooter from '@/components/common/SearchListFooter/SearchListFooter'
 
 import { Button, TextInput } from 'flowbite-react'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { toast } from 'react-toastify'
 import WarehouseAPI from '@/services/warehouse'
 import { WarehouseProduct } from '@/shared/types/warehouse'
@@ -21,19 +23,8 @@ const INTERNAL_CODE = /^(P|INV)\d{6,}$/i
  */
 const UnknownCode: React.FC<UnknownCodeProps> = ({ code, onAssigned }) => {
   const [search, setSearch] = useState('')
-  const [results, setResults] = useState<WarehouseProduct[]>([])
+  const found = useProductSearch(search)
   const isInternal = INTERNAL_CODE.test(code)
-
-  useEffect(() => {
-    if (search.trim().length < 2) {
-      setResults([])
-      return
-    }
-    const timeout = setTimeout(async () => {
-      setResults(await WarehouseAPI.searchProducts(search, 10))
-    }, 300)
-    return () => clearTimeout(timeout)
-  }, [search])
 
   const assign = async (product: WarehouseProduct) => {
     const updated = await WarehouseAPI.assignEan(product.id, code)
@@ -66,9 +57,13 @@ const UnknownCode: React.FC<UnknownCodeProps> = ({ code, onAssigned }) => {
             placeholder={tx("product name, code or SKU")}
             onChange={(e) => setSearch(e.target.value)}
           />
-          {results.length > 0 && (
-            <ul className="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800 rounded">
-              {results.map((product) => (
+          {found.rows.length > 0 && (
+            <div className="bg-white dark:bg-gray-800 rounded">
+            <ul
+              className="max-h-72 overflow-y-auto divide-y divide-gray-200 dark:divide-gray-700"
+              onScroll={found.onScroll}
+            >
+              {found.rows.map((product) => (
                 <li
                   key={product.id}
                   className="flex items-center gap-3 px-3 py-2 text-sm"
@@ -88,6 +83,14 @@ const UnknownCode: React.FC<UnknownCodeProps> = ({ code, onAssigned }) => {
                 </li>
               ))}
             </ul>
+            <SearchListFooter
+              shown={found.rows.length}
+              count={found.count}
+              loading={found.loading}
+              hasMore={found.hasMore}
+              onMore={found.loadMore}
+            />
+            </div>
           )}
         </>
       )}

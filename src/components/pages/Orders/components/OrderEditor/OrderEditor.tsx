@@ -1,12 +1,14 @@
 'use client'
 import { tx } from '@/shared/i18n'
+import { useProductSearch } from '@/shared/hooks/useProductSearch'
+import SearchListFooter from '@/components/common/SearchListFooter/SearchListFooter'
 import { modalRoot } from '@/shared/helpers/modalRoot'
 
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Alert, Button, Label, Modal, TextInput } from 'flowbite-react'
 import { HiTrash } from 'react-icons/hi'
 import { toast } from 'react-toastify'
-import { BackofficeAPI, WarehouseAPI } from '@/services'
+import { BackofficeAPI } from '@/services'
 import { Order } from '@/shared/types'
 import { WarehouseProduct } from '@/shared/types/warehouse'
 import { OrderStatusEnum } from '@/shared/enums'
@@ -16,6 +18,7 @@ type Line = { productId: string; name: string; quantity: number; price: number }
 const CONTACT_FIELDS = [
   { name: 'fullName', label: 'Full name' },
   { name: 'companyName', label: 'Company' },
+  // no longer asked on the site; kept for older orders that have one
   { name: 'companyPdv', label: 'VAT number' },
   { name: 'jib', label: 'JIB' },
   { name: 'email', label: 'Email' },
@@ -49,19 +52,8 @@ const OrderEditor: React.FC<{
     String(Number(order.shippingPrice) || 0)
   )
   const [search, setSearch] = useState('')
-  const [results, setResults] = useState<WarehouseProduct[]>([])
+  const found = useProductSearch(search)
   const [saving, setSaving] = useState(false)
-
-  useEffect(() => {
-    if (search.trim().length < 2) {
-      setResults([])
-      return
-    }
-    const timeout = setTimeout(async () => {
-      setResults(await WarehouseAPI.searchProducts(search, 8))
-    }, 300)
-    return () => clearTimeout(timeout)
-  }, [search])
 
   const setLine = (index: number, changes: Partial<Line>) =>
     setLines((current) =>
@@ -147,9 +139,18 @@ const OrderEditor: React.FC<{
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          {results.length > 0 && (
-            <ul className="divide-y divide-gray-200 dark:divide-gray-700 rounded border border-gray-200 dark:border-gray-700">
-              {results.map((product) => (
+          {found.searched && found.rows.length === 0 && (
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              {tx("No product found")}
+            </p>
+          )}
+          {found.rows.length > 0 && (
+            <div className="rounded border border-gray-200 dark:border-gray-700">
+            <ul
+              className="max-h-72 overflow-y-auto divide-y divide-gray-200 dark:divide-gray-700"
+              onScroll={found.onScroll}
+            >
+              {found.rows.map((product) => (
                 <li key={product.id}>
                   <button
                     type="button"
@@ -165,6 +166,14 @@ const OrderEditor: React.FC<{
                 </li>
               ))}
             </ul>
+            <SearchListFooter
+              shown={found.rows.length}
+              count={found.count}
+              loading={found.loading}
+              hasMore={found.hasMore}
+              onMore={found.loadMore}
+            />
+            </div>
           )}
         </div>
 
@@ -235,7 +244,7 @@ const OrderEditor: React.FC<{
         </div>
 
         <div className="grid gap-3 sm:grid-cols-3">
-          {CONTACT_FIELDS.map(({ name, label }) => (
+          {CONTACT_FIELDS.filter(({ name }) => name !== 'companyPdv' || !!order.companyPdv).map(({ name, label }) => (
             <div key={name}>
               <Label htmlFor={`edit-${name}`} value={tx(label)} />
               <TextInput

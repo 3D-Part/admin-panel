@@ -86,17 +86,8 @@ const GeneralInfo = () => {
     setIsPublished(!isPublished)
   }
 
-  const changeIsMostSold = () => {
-    setIsMostSold(!isMostSold)
-  }
 
-  const changeIsRecommended = () => {
-    setIsRecommended(!isRecommended)
-  }
 
-  const changeIsShoppingCartRecommended = () => {
-    setIsShoppingCartRecommended(!isShoppingCartRecommended)
-  }
 
   const onSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -347,26 +338,9 @@ const GeneralInfo = () => {
           onChange={changeIsPublished}
         />
 
-        {/* IS MOST SOLD */}
-        <ToggleSwitch
-          checked={isMostSold}
-          label={tx("Most sold")}
-          onChange={changeIsMostSold}
-        />
-
-        {/* IS RECOMMENDED / IS SUPER OFFER */}
-        <ToggleSwitch
-          checked={isRecommended}
-          label={tx("Super offer")}
-          onChange={changeIsRecommended}
-        />
-
-        {/* IS SHOPPING CART RECOMMENDED */}
-        <ToggleSwitch
-          checked={isShoppingCartRecommended}
-          label={tx("Shopping cart recommended")}
-          onChange={changeIsShoppingCartRecommended}
-        />
+        <p className="text-xs text-gray-500 dark:text-gray-400">
+          {tx("Super offer, most sold and shopping cart recommended are set on the Product groups page.")}
+        </p>
       </div>
 
       <Button className="mt-6" type="submit" color="purple">

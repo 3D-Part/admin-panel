@@ -6,8 +6,16 @@ import { Badge } from 'flowbite-react'
 import getOrderStatusStyle from '@/shared/helpers/getOrderStatusStyle'
 import getOrderStatusLabel from '@/shared/helpers/getOrderStatusLabel'
 import { Order } from '@/shared/types'
-import { BILLING_COLORS, BillingOption } from '@/shared/helpers/billingOptions'
+import {
+  BILLING_COLORS,
+  StepLists,
+  listFor,
+  statusOf,
+} from '@/shared/helpers/billingOptions'
+import { OrderStatusEnum } from '@/shared/enums'
 import { followsSteps, lastTicked, useBillingSteps } from './billingStepsStore'
+
+const QUIET_STATUSES: string[] = [OrderStatusEnum.Pending, OrderStatusEnum.Accepted]
 
 const StatusBadge: React.FC<{ status: string }> = ({ status }) => (
   <Badge
@@ -22,12 +30,17 @@ const StatusBadge: React.FC<{ status: string }> = ({ status }) => (
  * step's color; for the four main statuses that is the order status itself.
  * Any other status (e.g. Cancelled) shows as it is.
  */
-const StepBadge: React.FC<{ order: Order; options: BillingOption[] }> = ({
+const StepBadge: React.FC<{ order: Order; lists: StepLists }> = ({
   order,
-  options,
+  lists,
 }) => {
   const { steps, status } = useBillingSteps(order)
-  const step = followsSteps(status) ? lastTicked(options, steps) : undefined
+  const options = listFor(lists, status)
+  const step = followsSteps(status, options, steps) ? lastTicked(options, steps) : undefined
+
+  // New and Accepted show no badge, the circles say enough
+  const shownStatus = step ? statusOf(step) : status
+  if (shownStatus && QUIET_STATUSES.includes(shownStatus)) return null
 
   if (!step) return <StatusBadge status={status} />
 
@@ -45,12 +58,12 @@ const StepBadge: React.FC<{ order: Order; options: BillingOption[] }> = ({
 type OrderStatusType = {
   status: string
   order?: Order
-  options?: BillingOption[]
+  lists?: StepLists
 }
 
-const OrderStatus: React.FC<OrderStatusType> = ({ status, order, options }) =>
-  order && options ? (
-    <StepBadge order={order} options={options} />
+const OrderStatus: React.FC<OrderStatusType> = ({ status, order, lists }) =>
+  order && lists ? (
+    <StepBadge order={order} lists={lists} />
   ) : (
     <StatusBadge status={status} />
   )

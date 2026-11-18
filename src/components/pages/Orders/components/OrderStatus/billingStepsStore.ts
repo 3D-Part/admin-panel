@@ -4,8 +4,8 @@ import { toast } from 'react-toastify'
 import { tx } from '@/shared/i18n'
 import { OrdersAPI } from '@/services'
 import { Order } from '@/shared/types'
-import { BillingOption } from '@/shared/helpers/billingOptions'
-import { ORDER_STEPS, OrderStatusEnum } from '@/shared/enums'
+import { BillingOption, statusOf } from '@/shared/helpers/billingOptions'
+import { OrderStatusEnum } from '@/shared/enums'
 
 // Steps and status per order as the server last returned them after a tick.
 // The Status circles, the status badge and the Invoice dropdown of the same
@@ -50,7 +50,7 @@ export const useBillingSteps = (order: Order) => {
   )
 
   const toggle = useCallback(
-    async (step: string) => {
+    async (step: string, message?: string) => {
       const previous = read(order)
       if (previous.busy) return
       const done = !previous.steps[step]
@@ -60,7 +60,7 @@ export const useBillingSteps = (order: Order) => {
       set(order, { ...previous, steps, busy: true })
 
       // the server moves the status along with the main steps
-      const saved = await OrdersAPI.orderSetBillingStep(order.id, step, done)
+      const saved = await OrdersAPI.orderSetBillingStep(order.id, step, done, message)
       if (saved?.billingSteps) {
         set(order, {
           steps: saved.billingSteps,
@@ -87,21 +87,32 @@ export const formatStepDate = (iso: string) => {
   return Number.isNaN(date.getTime()) ? '' : date.toLocaleDateString('de-DE')
 }
 
-// Steps removed from Settings still show on the orders that have them
+// Steps removed from Settings still show on the orders that have them; steps
+// of the other list (e.g. the offer steps of an accepted offer) do not
 export const visibleSteps = (
   options: BillingOption[],
-  steps: Record<string, string>
+  steps: Record<string, string>,
+  hidden: BillingOption[] = []
 ): BillingOption[] => [
   ...options,
   ...Object.keys(steps)
-    .filter((id) => !options.some((option) => option.id === id))
-    .map((id) => ({ id, label: id, color: 'gray' })),
+    .filter(
+      (id) =>
+        !options.some((option) => option.id === id) &&
+        !hidden.some((option) => option.id === id)
+    )
+    .map((id) => ({ id, label: id, color: 'gray', status: null })),
 ]
 
-// The four main statuses follow the ticked steps. Any other status (Cancelled,
-// New, Offer, Returned…) paints every circle in its own color instead.
-export const followsSteps = (status: string) =>
-  (ORDER_STEPS as string[]).includes(status)
+// The circles follow the ticked steps when the step tied to the status is
+// ticked. Otherwise (no step is tied to it, or an older order that never had
+// it ticked, e.g. cancelled before Cancelled was a step) every circle takes
+// the color of the status.
+export const followsSteps = (
+  status: string,
+  options: BillingOption[],
+  steps: Record<string, string>
+) => options.some((option) => statusOf(option) === status && steps[option.id])
 
 export const STATUS_DOT: Record<string, string> = {
   [OrderStatusEnum.Pending]: 'bg-indigo-500 border-indigo-500',
@@ -120,4 +131,4 @@ export const lastTicked = (
   options: BillingOption[],
   steps: Record<string, string>
 ): BillingOption | undefined =>
-  [...visibleSteps(options, steps)].reverse().find((option) => steps[option.id])
+  [...options].reverse().find((option) => steps[option.id])

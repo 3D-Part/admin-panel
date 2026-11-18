@@ -5,6 +5,7 @@ import { Modal, Button, Label, Spinner } from 'flowbite-react'
 import { PermissionEnum, CreateEmployeeData } from '@/shared/types'
 import UsersAPI from '@/services/users'
 import { toast } from 'react-toastify'
+import PermissionPicker from '../PermissionPicker'
 
 interface CreateEmployeeModalProps {
   isOpen: boolean
@@ -31,51 +32,6 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
   const emailInputRef = useRef<HTMLInputElement>(null)
   const fullNameInputRef = useRef<HTMLInputElement>(null)
 
-  const handlePermissionToggle = useCallback(
-    (permission: PermissionEnum) => {
-      setSelectedPermissions((prev) => {
-        if (prev.includes(permission)) {
-          // If removing a permission, also remove its dependent permission
-          let newPermissions = prev.filter((p) => p !== permission)
-
-          // If removing a WRITE permission, also remove the corresponding READ permission
-          if (permission.endsWith('_WRITE')) {
-            const correspondingRead = permission.replace(
-              '_WRITE',
-              '_READ'
-            ) as PermissionEnum
-            newPermissions = newPermissions.filter(
-              (p) => p !== correspondingRead
-            )
-          }
-
-          return newPermissions
-        } else {
-          // If adding a permission, also add its dependent permission
-          let newPermissions = [...prev, permission]
-
-          // If adding a WRITE permission, also add the corresponding READ permission
-          if (permission.endsWith('_WRITE')) {
-            const correspondingRead = permission.replace(
-              '_WRITE',
-              '_READ'
-            ) as PermissionEnum
-            if (!newPermissions.includes(correspondingRead)) {
-              newPermissions.push(correspondingRead)
-            }
-          }
-
-          return newPermissions
-        }
-      })
-
-      // Clear permission error immediately
-      if (errors.permissions) {
-        setErrors((prev) => ({ ...prev, permissions: undefined }))
-      }
-    },
-    [errors.permissions]
-  )
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -161,77 +117,6 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
     onClose()
   }, [onClose])
 
-  const permissionGroups = [
-    {
-      title: tx("Products"),
-      permissions: [PermissionEnum.PRODUCT_READ, PermissionEnum.PRODUCT_WRITE],
-    },
-    {
-      title: tx("Categories"),
-      permissions: [
-        PermissionEnum.CATEGORY_READ,
-        PermissionEnum.CATEGORY_WRITE,
-      ],
-    },
-    {
-      title: tx("Manufacturers"),
-      permissions: [
-        PermissionEnum.MANUFACTURER_READ,
-        PermissionEnum.MANUFACTURER_WRITE,
-      ],
-    },
-    {
-      title: tx("Attributes"),
-      permissions: [
-        PermissionEnum.ATTRIBUTES_READ,
-        PermissionEnum.ATTRIBUTES_WRITE,
-      ],
-    },
-    {
-      title: tx("Orders"),
-      permissions: [PermissionEnum.ORDERS_READ, PermissionEnum.ORDERS_WRITE],
-    },
-    {
-      title: tx("Proformas"),
-      permissions: [
-        PermissionEnum.PROFORMA_READ,
-        PermissionEnum.PROFORMA_WRITE,
-      ],
-    },
-    {
-      title: tx("Analytics"),
-      permissions: [PermissionEnum.ANALYTICS_READ],
-    },
-    {
-      title: tx("Warehouse"),
-      permissions: [
-        PermissionEnum.WAREHOUSE_READ,
-        PermissionEnum.WAREHOUSE_WRITE,
-      ],
-    },
-    {
-      title: tx("Promo Codes"),
-      permissions: [
-        PermissionEnum.PROMO_CODE_READ,
-        PermissionEnum.PROMO_CODE_WRITE,
-      ],
-    },
-    {
-      title: tx("Sales"),
-      permissions: [PermissionEnum.SALE_READ, PermissionEnum.SALE_WRITE],
-    },
-    {
-      title: tx("Users"),
-      permissions: [PermissionEnum.USER_READ],
-    },
-    {
-      title: tx("Employees"),
-      permissions: [
-        PermissionEnum.EMPLOYEE_READ,
-        PermissionEnum.EMPLOYEE_WRITE,
-      ],
-    },
-  ]
 
   return (
     <Modal root={modalRoot()} show={isOpen} onClose={handleClose} size="4xl">
@@ -298,43 +183,19 @@ const CreateEmployeeModal: React.FC<CreateEmployeeModalProps> = ({
           <div>
             <Label value={tx("Permissions")} className="dark:text-gray-300" />
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-              {tx("Select the permissions this employee should have:")}
+              {tx("Pick for each section what this employee can do:")}
             </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 overflow-y-auto">
-              {permissionGroups.map((group) => (
-                <div
-                  key={group.title}
-                  className="border rounded-lg p-4 dark:border-gray-600 dark:bg-gray-700"
-                >
-                  <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-3">
-                    {group.title}
-                  </h4>
-                  <div className="space-y-2">
-                    {group.permissions.map((permission) => (
-                      <label
-                        key={permission}
-                        className="flex items-center space-x-2 cursor-pointer"
-                      >
-                        <input
-                          type="checkbox"
-                          checked={selectedPermissions.includes(permission)}
-                          onChange={() => handlePermissionToggle(permission)}
-                          disabled={isLoading}
-                          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:checked:bg-blue-600"
-                        />
-                        <span className="text-sm text-gray-700 dark:text-gray-300">
-                          {permission
-                            .replace('_', ' ')
-                            .toLowerCase()
-                            .replace(/\b\w/g, (l) => l.toUpperCase())}
-                        </span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
+            <PermissionPicker
+              value={selectedPermissions}
+              disabled={isLoading}
+              onChange={(next) => {
+                setSelectedPermissions(next)
+                if (errors.permissions) {
+                  setErrors((prev) => ({ ...prev, permissions: undefined }))
+                }
+              }}
+            />
 
             {errors.permissions && (
               <p className="text-red-500 dark:text-red-400 text-sm mt-2">

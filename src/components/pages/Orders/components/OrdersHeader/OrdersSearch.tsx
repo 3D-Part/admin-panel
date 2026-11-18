@@ -65,8 +65,10 @@ const OrdersSearch = () => {
   )
 
   return (
-    <div className="flex gap-2 items-center w-full md:w-auto">
-      <Dropdown dismissOnClick label={searchFieldLabels[searchBy]} size="sm">
+    <div className="flex gap-2 items-center w-full md:w-auto min-w-0">
+      <Dropdown
+        dismissOnClick
+        label={<span className="whitespace-nowrap">{searchFieldLabels[searchBy]}</span>} size="sm">
         {searchFields.map((field) => (
           <Dropdown.Item key={field} onClick={() => setSearchBy(field)}>
             <span className="font-medium text-cyan-600 cursor-pointer hover:underline dark:text-cyan-500">
@@ -75,7 +77,7 @@ const OrdersSearch = () => {
           </Dropdown.Item>
         ))}
       </Dropdown>
-      <div className="flex-1 md:flex-none min-w-0">
+      <div className="flex-1 min-w-0 md:max-w-xs">
         <Search getData={fetchOrdersData} />
       </div>
       {loader && <Spinner aria-label={tx("Loading...")} size="sm" />}

@@ -1,5 +1,7 @@
 'use client'
 import { tx } from '@/shared/i18n'
+import { useProductSearch } from '@/shared/hooks/useProductSearch'
+import SearchListFooter from '@/components/common/SearchListFooter/SearchListFooter'
 
 import { Button, Checkbox, Label, Select, TextInput } from 'flowbite-react'
 import React, { useEffect, useMemo, useState } from 'react'
@@ -66,7 +68,8 @@ const Labels: React.FC<LabelsProps> = ({ items, setItems }) => {
   const [showName, setShowName] = useState(true)
   const [showPrice, setShowPrice] = useState(false)
   const [search, setSearch] = useState('')
-  const [hits, setHits] = useState<SearchHit[]>([])
+  const found = useProductSearch(search)
+  const [assetHits, setAssetHits] = useState<SearchHit[]>([])
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -84,26 +87,29 @@ const Labels: React.FC<LabelsProps> = ({ items, setItems }) => {
   const format = LABEL_FORMATS.find((f) => f.id === formatId)!
   const isSheet = format.columns * format.rows > 1
 
+  // company items are few, so every match comes in one request (the API
+  // allows up to 200); products load more while the list scrolls
   useEffect(() => {
     if (search.trim().length < 2) {
-      setHits([])
+      setAssetHits([])
       return
     }
     const timeout = setTimeout(async () => {
-      const [products, assets] = await Promise.all([
-        WarehouseAPI.searchProducts(search, 15),
-        WarehouseAPI.getAssets({ search, limit: 15 }),
-      ])
-      setHits([
-        ...products.map((p) => ({ item: productLabel(p), kind: 'Product' as const })),
-        ...(assets?.rows ?? []).map((a) => ({
+      const assets = await WarehouseAPI.getAssets({ search, limit: 200 })
+      setAssetHits(
+        (assets?.rows ?? []).map((a) => ({
           item: assetLabel(a),
           kind: 'Inventory' as const,
-        })),
-      ])
+        }))
+      )
     }, 300)
     return () => clearTimeout(timeout)
   }, [search])
+
+  const hits: SearchHit[] = [
+    ...assetHits,
+    ...found.rows.map((p) => ({ item: productLabel(p), kind: 'Product' as const })),
+  ]
 
   const add = (item: LabelItem) => {
     const existing = items.find((i) => i.key === item.key)
@@ -155,7 +161,11 @@ const Labels: React.FC<LabelsProps> = ({ items, setItems }) => {
             onChange={(e) => setSearch(e.target.value)}
           />
           {hits.length > 0 && (
-            <ul className="max-h-64 overflow-y-auto divide-y divide-gray-200 dark:divide-gray-700 border border-gray-200 dark:border-gray-700 rounded">
+            <div className="border border-gray-200 dark:border-gray-700 rounded">
+            <ul
+              className="max-h-64 overflow-y-auto divide-y divide-gray-200 dark:divide-gray-700"
+              onScroll={found.onScroll}
+            >
               {hits.map(({ item, kind }) => (
                 <li key={item.key}>
                   <button
@@ -172,6 +182,14 @@ const Labels: React.FC<LabelsProps> = ({ items, setItems }) => {
                 </li>
               ))}
             </ul>
+            <SearchListFooter
+              shown={found.rows.length}
+              count={found.count}
+              loading={found.loading}
+              hasMore={found.hasMore}
+              onMore={found.loadMore}
+            />
+            </div>
           )}
 
           <h3 className="text-sm font-semibold text-gray-900 dark:text-white">

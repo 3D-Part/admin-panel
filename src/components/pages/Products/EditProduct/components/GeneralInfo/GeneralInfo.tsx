@@ -14,6 +14,7 @@ import {
   Textarea,
   ToggleSwitch,
 } from 'flowbite-react'
+import { ProductsAPI } from '@/services'
 import React, {
   SyntheticEvent,
   useCallback,
@@ -79,31 +80,42 @@ const GeneralInfo = () => {
   //   setIsShoppingCartRecommended(false)
   // }
 
-  const changeIsPublished = () => {
-    setIsPublished(!isPublished)
-  }
 
-  const changeIsMostSold = () => {
-    setIsMostSold(!isMostSold)
-  }
-  const changeIsRecommended = () => {
-    setIsRecommended(!isRecommended)
-  }
 
-  const changeIsShoppingCartRecommended = () => {
-    setIsShoppingCartRecommended(!isShoppingCartRecommended)
+
+  // saved right away, like on the product groups page, so it does not wait
+  // for the form and cannot overwrite other changes
+  const [savingPublished, setSavingPublished] = useState(false)
+  const togglePublished = async () => {
+    const next = !isPublished
+    setSavingPublished(true)
+    const ok = await ProductsAPI.setProductGroup('published', [activeProduct.id], next)
+    setSavingPublished(false)
+    if (!ok) {
+      toast(tx('The group was not saved'), { type: 'error', autoClose: 3000 })
+      return
+    }
+    setIsPublished(next)
+    toast(next ? tx('Published on the site') : tx('Hidden from the site'), {
+      type: 'success',
+      autoClose: 2000,
+    })
   }
 
   const onSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!productDataRef.current.name) return
 
-    productDataRef.current.isPublished = isPublished
-    productDataRef.current.isMostSold = isMostSold
-    productDataRef.current.isRecommended = isRecommended
-    productDataRef.current.isShoppingCartRecommended = isShoppingCartRecommended
-
-    const request = await editProduct(activeProduct.id, productDataRef.current)
+    // the groups (published, super offer...) are set on the product groups
+    // page, so saving this form never overwrites them
+    const {
+      isPublished: _published,
+      isMostSold: _mostSold,
+      isRecommended: _recommended,
+      isShoppingCartRecommended: _cartRecommended,
+      ...payload
+    } = productDataRef.current as any
+    const request = await editProduct(activeProduct.id, payload)
 
     if (request) {
       toast(`${productDataRef.current.name} is changed!`, {
@@ -369,35 +381,39 @@ const GeneralInfo = () => {
         label={tx("Search Keywords")}
         placeholder={tx("Add search keyword...")}
       />
-      {/* TOGGLE SWITCHES */}
-      <div className="w-full space-y-4">
-        {/* IS PUBLISHED */}
-        <ToggleSwitch
-          checked={isPublished}
-          label={tx("Published")}
-          onChange={changeIsPublished}
-        />
+      <ToggleSwitch
+        checked={isPublished}
+        disabled={savingPublished}
+        label={tx("Published")}
+        onChange={togglePublished}
+      />
 
-        {/* IS MOST SOLD */}
-        <ToggleSwitch
-          checked={isMostSold}
-          label={tx("Most sold")}
-          onChange={changeIsMostSold}
-        />
-
-        {/* IS RECOMMENDED / IS SUPER OFFER */}
-        <ToggleSwitch
-          checked={isRecommended}
-          label={tx("Super offer")}
-          onChange={changeIsRecommended}
-        />
-
-        {/* IS SHOPPING CART RECOMMENDED */}
-        <ToggleSwitch
-          checked={isShoppingCartRecommended}
-          label={tx("Shopping cart recommended")}
-          onChange={changeIsShoppingCartRecommended}
-        />
+      {/* PRODUCT GROUPS: managed on their own page, like a sale */}
+      <div className="w-full rounded-lg border border-gray-200 p-3 dark:border-gray-700">
+        <p className="mb-2 text-sm font-medium text-gray-900 dark:text-white">{tx("Product groups")}</p>
+        <div className="flex flex-wrap gap-2">
+          {[
+            { id: 'published', label: 'Published', on: isPublished },
+            { id: 'super-offer', label: 'Super offer', on: isRecommended },
+            { id: 'most-sold', label: 'Most sold', on: isMostSold },
+            { id: 'cart-recommended', label: 'Shopping cart recommended', on: isShoppingCartRecommended },
+          ].map((group) => (
+            <a
+              key={group.id}
+              href={`/products/groups?group=${group.id}`}
+              className={`rounded-full px-3 py-1 text-xs font-medium hover:underline ${
+                group.on
+                  ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-200'
+                  : 'bg-gray-100 text-gray-500 line-through dark:bg-gray-700 dark:text-gray-400'
+              }`}
+            >
+              {tx(group.label)}
+            </a>
+          ))}
+        </div>
+        <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+          {tx("A product is put into a group or taken out on the Product groups page.")}
+        </p>
       </div>
       <Button className="mt-6" type="submit" color="purple">
         {tx("Save changes")}

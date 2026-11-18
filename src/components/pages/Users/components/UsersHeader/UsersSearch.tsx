@@ -54,7 +54,9 @@ const UsersSearch = () => {
 
   return (
     <div className="flex gap-2 items-center w-full md:w-auto">
-      <Dropdown dismissOnClick label={searchFieldLabels[searchBy]} size="sm">
+      <Dropdown
+        dismissOnClick
+        label={<span className="whitespace-nowrap">{searchFieldLabels[searchBy]}</span>} size="sm">
         <Dropdown.Item onClick={() => setSearchBy('email')}>
           <span className="font-medium text-cyan-600 cursor-pointer hover:underline dark:text-cyan-500">
             <p>{tx("EMAIL")}</p>

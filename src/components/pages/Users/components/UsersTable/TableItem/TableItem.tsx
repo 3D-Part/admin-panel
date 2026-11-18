@@ -24,11 +24,13 @@ export const TableItem: React.FC<TableItemType> = ({ user, profile }) => {
       <Table.Row className="table-row">
         <Table.Cell
           onClick={() => setIsUserDetailsOpen(true)}
-          className="cursor-pointer whitespace-nowrap font-medium table-cell w-1/6"
+          className="cursor-pointer font-medium table-cell w-1/6"
         >
-          <div className="flex justify-start items-center gap-6">
-            {fullName}
-            <CustomerFlagBadge profile={profile} />
+          <div className="flex justify-start items-center gap-2">
+            <span className="w-4 shrink-0">
+              <CustomerFlagBadge profile={profile} />
+            </span>
+            <span>{fullName}</span>
           </div>
         </Table.Cell>
         <Table.Cell className="whitespace-nowrap font-medium table-cell w-2/5">

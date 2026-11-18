@@ -10,6 +10,7 @@ export enum URLPartsEnum {
   Products = '/products',
   AddNewProduct = '/products/add-new',
   OutOfStockProducts = '/products/out-of-stock',
+  ProductGroups = '/products/groups',
   EditProduct = '/products/edit',
 
   Manufacturers = '/manufacturers',
@@ -89,11 +90,4 @@ export const ORDER_STATUS_FLOW: OrderStatusEnum[] = [
   OrderStatusEnum.Returned,
   OrderStatusEnum.Declined,
 ]
-
-/** The customer gets an email when an order moves to one of these for the first time. */
-export const ORDER_STATUS_EMAILS: Partial<Record<OrderStatusEnum, string>> = {
-  [OrderStatusEnum.Accepted]: 'A new order: the customer gets an email that it is accepted.',
-  [OrderStatusEnum.Shipping]: 'The customer gets an email that the order is on its way, once per order.',
-  [OrderStatusEnum.Declined]: 'The customer gets an email with the reason you write below.',
-}
 

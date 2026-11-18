@@ -1,4 +1,5 @@
 import { API } from '@/shared/helpers'
+import { WarehouseProduct } from '@/shared/types/warehouse'
 import {
   ProductsData,
   ProductFormBody,
@@ -135,8 +136,58 @@ const removeProductImage = async (id: string): Promise<boolean> => {
   }
 }
 
+/**
+ * One page of the product search the admin pickers share: every word in any
+ * order, best match first, letters with or without marks.
+ */
+const searchProducts = async (
+  search: string,
+  offset = 0,
+  limit = 20,
+  // only the products of a product group (member) or outside it
+  group?: { id: ProductGroupId; member: boolean }
+): Promise<{ rows: WarehouseProduct[]; count: number } | null> => {
+  try {
+    return await API.get<{ rows: WarehouseProduct[]; count: number }>(
+      `${API_BASE_URL}/backoffice/products/search`,
+      { search, offset, limit, ...(group ? { group: group.id, member: String(group.member) } : {}) }
+    )
+  } catch (error) {
+    console.error('Error searching products:', error)
+    return null
+  }
+}
+
+export type ProductGroupId = 'published' | 'most-sold' | 'super-offer' | 'cart-recommended'
+
+const getProductGroupCounts = async (): Promise<Record<ProductGroupId, number> | null> => {
+  try {
+    return await API.get<Record<ProductGroupId, number>>(`${API_BASE_URL}/backoffice/product-groups`)
+  } catch (error) {
+    console.error('Error loading product groups:', error)
+    return null
+  }
+}
+
+const setProductGroup = async (
+  group: ProductGroupId,
+  productIds: string[],
+  member: boolean
+): Promise<boolean> => {
+  try {
+    await API.put(`${API_BASE_URL}/backoffice/product-groups/${group}`, { productIds, member })
+    return true
+  } catch (error) {
+    console.error('Error saving product group:', error)
+    return false
+  }
+}
+
 const ProductsAPI = {
+  getProductGroupCounts,
+  setProductGroup,
   getProducts,
+  searchProducts,
   getOneProduct,
   addNewProduct,
   editProducts,

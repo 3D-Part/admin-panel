@@ -3,13 +3,34 @@ import { API } from '@/shared/helpers'
 const API_BASE_URL = process.env.API_KEY
 const BASE = `${API_BASE_URL}/backoffice`
 
-export type DisputedFlag =
-  | 'NO_PICKUP'
-  | 'LATE_PAY'
-  | 'COMPLAINTS'
-  | 'ABUSIVE'
-  | 'OTHER'
-export type CustomerFlag = DisputedFlag | 'BLUE' | 'GREEN'
+export type TrafficProduct = { productId: string; name: string; sku: string; views: number; adds: number }
+export type SiteTraffic = {
+  totals: { pages: number; views: number; adds: number }
+  // title: the product's name on a product page
+  pages: { path: string; count: number; title: string | null }[]
+  viewed: TrafficProduct[]
+  added: TrafficProduct[]
+}
+
+export type ZohoStatus = {
+  connected: boolean
+  listKey?: string
+  listName?: string
+  error?: string
+  lists: { listKey: string; listName: string; contacts: number }[]
+}
+export type ZohoCampaign = {
+  id: string
+  subject: string
+  campaignKey: string | null
+  status: 'draft' | 'created' | 'sent' | 'failed'
+  error: string | null
+  createdAt: string
+  sentAt: string | null
+}
+
+// the id of one of the customer statuses of the settings
+export type CustomerFlag = string
 export type CustomerProfile = { flag: CustomerFlag | null; note: string | null }
 
 export type AnalyticsRow = {
@@ -24,18 +45,50 @@ export type AnalyticsRow = {
   hasCost: boolean
 }
 
+// what we paid the couriers, typed in by hand
+export type ShippingPaid = {
+  id: string
+  paidOn: string
+  amount: number
+  ordersCount: number
+  note: string | null
+}
+
+// an order counted in the period, with the lines that match the filters
+export type AnalyticsOrder = {
+  id: string
+  orderNumber: string
+  status: string
+  createdAt: string
+  name: string
+  email: string
+  quantity: number
+  revenue: number
+  shippingCharged: number
+  total: number
+}
+
 export type Analytics = {
   totals: {
     orders: number
     itemsSold: number
     revenue: number
     shippingCharged: number
+    // orders where the customer paid shipping
+    shippingChargedOrders: number
     shippingCost: number
+    // orders we paid shipping for (typed in, or all of them when estimated)
+    shippingCostOrders: number
+    // no entry in the period: the cost is the estimate from the settings
+    shippingEstimated: boolean
     goodsCost: number
     missingCostItems: number
     profit: number
   }
+  shippingPaid: ShippingPaid[]
   days: { date: string; orders: number; revenue: number }[]
+  // every product sold in the period, best revenue first
+  soldProducts: AnalyticsRow[]
   topProducts: AnalyticsRow[]
   byCategory: AnalyticsRow[]
   byManufacturer: AnalyticsRow[]
@@ -65,9 +118,51 @@ export type CustomerTier = {
   spendTier: string | null
   spend: number
   period: 'all' | '12m'
+  name: string | null
+  discount: number
+  color: string | null
+  next: { name: string; discount: number; threshold: number; remaining: number } | null
 }
 
 export type ExportKind = 'orders' | 'products' | 'customers'
+
+export type AssistantUsageRow = {
+  provider: string
+  model: string
+  answers: number
+  cachedAnswers: number
+  calls: number
+  inputTokens: number
+  cacheReadTokens: number
+  cacheWriteTokens: number
+  outputTokens: number
+  errors: number
+  estimatedCostUsd: number | null
+}
+
+export type AssistantUsage = {
+  rows: AssistantUsageRow[]
+  prices: Record<string, { input: number; cacheRead: number; cacheWrite: number; output: number }>
+}
+
+export type ManualAction = {
+  id: string
+  title: string
+  details: string | null
+  done: boolean
+  createdAt: string
+  // a worker's task, or an entry of the "to order" list
+  kind: 'task' | 'order'
+  // set when the task is "order this product"
+  productId: string | null
+  product: {
+    code: string
+    name: string
+    sku: string
+    quantity: number
+    note: string | null
+  } | null
+}
 
 export type ActionNeeded = {
   type: 'MISSING_PURCHASE_PRICE' | 'SOLD_BELOW_COST'
@@ -94,41 +189,6 @@ export type StockAlert = {
   level: 'warning' | 'critical'
 }
 
-export type ProformaItem = {
-  productId?: string
-  name: string
-  sku?: string
-  quantity: number
-  price: number
-  total?: number
-}
-
-export type Proforma = {
-  id: string
-  number: string
-  orderId: string | null
-  customer: Record<string, string>
-  items: ProformaItem[]
-  price: string
-  discount: string
-  shippingPrice: string
-  total: string
-  note: string | null
-  validUntil: string | null
-  sentAt: string | null
-  createdAt: string
-}
-
-export type ProformaBody = {
-  orderId?: string | null
-  customer: Record<string, string>
-  items: ProformaItem[]
-  discount?: number
-  shippingPrice?: number
-  note?: string | null
-  validUntil?: string | null
-}
-
 export type EditOrderBody = {
   products: { productId: string; quantity: number; price?: number }[]
   discount?: number
@@ -147,9 +207,37 @@ const attempt = async <T>(request: () => Promise<T>): Promise<T | null> => {
   }
 }
 
+/** Like attempt, but keeps the API's message so the admin sees why it failed. */
+const attemptWithError = async <T,>(
+  request: () => Promise<T>
+): Promise<{ data: T | null; error: string | null }> => {
+  try {
+    return { data: await request(), error: null }
+  } catch (error: any) {
+    const message =
+      error?.response?.data?.errors?.[0]?.message ?? error?.response?.data?.message ?? null
+    return { data: null, error: message }
+  }
+}
+
 const BackofficeAPI = {
   getAnalytics: (filters: AnalyticsFilters) =>
     attempt(() => API.get<Analytics>(`${BASE}/analytics`, filters)),
+  addShippingPaid: (body: Omit<ShippingPaid, 'id'>) =>
+    attempt(() => API.post<unknown, unknown>(`${BASE}/shipping-paid`, body)),
+  deleteShippingPaid: (id: string) =>
+    attempt(() => API.remove<unknown>(`${BASE}/shipping-paid/${id}`)),
+  // the orders behind the analytics figures, a page at a time
+  getAnalyticsOrders: (
+    filters: AnalyticsFilters,
+    page: { offset: number; limit: number; sort?: 'revenue'; shippingOnly?: boolean }
+  ) =>
+    attempt(() =>
+      API.get<{ count: number; rows: AnalyticsOrder[] }>(`${BASE}/analytics/orders`, {
+        ...filters,
+        ...page,
+      })
+    ),
   getCustomerTier: (userId: string) =>
     attempt(() => API.get<CustomerTier>(`${BASE}/customers/${userId}/tier`)),
   // the file is built by the API, the browser only saves it
@@ -168,6 +256,49 @@ const BackofficeAPI = {
   },
   getActionsNeeded: () =>
     attempt(() => API.get<ActionNeeded[]>(`${BASE}/actions-needed`)),
+  // counters for the sidebar; `since` is when each section was last looked at
+  getNews: (since: Record<string, string>) =>
+    attempt(() =>
+      API.get<Record<'orders' | 'offers' | 'users' | 'subscribers' | 'actions' | 'stock' | 'tasks', number>>(
+        `${BASE}/news`,
+        since
+      )
+    ),
+  // most visited pages, most viewed and most added products of a period
+  getTraffic: (from?: string, to?: string) =>
+    attempt(() =>
+      API.get<SiteTraffic>(`${BASE}/analytics/traffic`, {
+        ...(from ? { from } : {}),
+        ...(to ? { to } : {}),
+      })
+    ),
+  // what the chat assistant used, per provider and model, last 30 days by default
+  getAssistantUsage: (from?: string, to?: string) =>
+    attempt(() =>
+      API.get<AssistantUsage>(`${BASE}/assistant-usage`, {
+        ...(from ? { from } : {}),
+        ...(to ? { to } : {}),
+      })
+    ),
+  getManualActions: () =>
+    attempt(() => API.get<ManualAction[]>(`${BASE}/manual-actions`)),
+  saveManualAction: (
+    body: {
+      title: string
+      details?: string
+      done?: boolean
+      productId?: string
+      kind?: 'task' | 'order'
+    },
+    id?: string
+  ) =>
+    attempt(() =>
+      id
+        ? API.put<unknown, unknown>(`${BASE}/manual-actions/${id}`, body)
+        : API.post<unknown, unknown>(`${BASE}/manual-actions`, body)
+    ),
+  deleteManualAction: (id: string) =>
+    attempt(() => API.remove<unknown>(`${BASE}/manual-actions/${id}`)),
   getStockAlerts: () =>
     attempt(() => API.get<StockAlert[]>(`${BASE}/stock-alerts`)),
   getProductCosts: (ids: string[]) =>
@@ -202,6 +333,44 @@ const BackofficeAPI = {
     attempt(() => API.get<any[]>(`${BASE}/orders/${orderId}/packing`)),
   editOrder: (orderId: string, body: EditOrderBody) =>
     attempt(() => API.put<EditOrderBody, any>(`${BASE}/orders/${orderId}`, body)),
+  // Zoho Campaigns: connect with the Self Client's code (secrets go to the API only)
+  connectZoho: (body: { clientId: string; clientSecret: string; code: string }) =>
+    attemptWithError(() => API.post<typeof body, ZohoStatus>(`${BASE}/zoho/connect`, body)),
+  getZohoStatus: () => attemptWithError(() => API.get<ZohoStatus>(`${BASE}/zoho/status`)),
+  syncZohoSubscribers: () =>
+    attemptWithError(() =>
+      API.post<unknown, { total: number; added: number; failed: number }>(`${BASE}/zoho/sync-subscribers`, {})
+    ),
+  getZohoCampaigns: () => attemptWithError(() => API.get<ZohoCampaign[]>(`${BASE}/zoho/campaigns`)),
+  createZohoCampaign: (body: { subject: string; html: string; send: boolean }) =>
+    attemptWithError(() =>
+      API.post<typeof body, { id: string; campaignKey: string; status: string }>(`${BASE}/zoho/campaigns`, body)
+    ),
+  sendZohoCampaign: (id: string) =>
+    attemptWithError(() => API.post<unknown, { id: string; status: string }>(`${BASE}/zoho/campaigns/${id}/send`, {})),
+  // the newsletter mailbox: log in and find the drafts folder
+  testNewsletterMailbox: () =>
+    attemptWithError(() =>
+      API.post<unknown, { ok: true; user: string; draftsFolder: string }>(`${BASE}/newsletter/mailbox-test`, {})
+    ),
+  // the newsletter into the mailbox as drafts, one per group of recipients
+  createNewsletterDrafts: (body: {
+    subject: string
+    html: string
+    text?: string
+    recipients: string[]
+    perDraft: number
+  }) =>
+    attemptWithError(() =>
+      API.post<typeof body, { drafts: number; recipients: number; draftsFolder: string }>(
+        `${BASE}/newsletter/drafts`,
+        body
+      )
+    ),
+  getOrderFlagUsage: () =>
+    attempt(() => API.get<Record<string, number>>(`${BASE}/order-flags/usage`)),
+  getCustomerFlagUsage: () =>
+    attempt(() => API.get<Record<string, number>>(`${BASE}/customer-flags/usage`)),
   getCustomerProfiles: (emails: string[]) =>
     attempt(() =>
       API.get<Record<string, CustomerProfile>>(`${BASE}/customers`, {
@@ -215,26 +384,6 @@ const BackofficeAPI = {
     flag: CustomerFlag | null
     note: string | null
   }) => attempt(() => API.put<unknown, unknown>(`${BASE}/customers`, body)),
-  getProformas: (limit: number, offset: number, search: string) =>
-    attempt(() =>
-      API.get<{ count: number; rows: Proforma[] }>(`${BASE}/proformas`, {
-        limit,
-        offset,
-        ...(search ? { search } : {}),
-      })
-    ),
-  createProforma: (body: ProformaBody) =>
-    attempt(() => API.post<ProformaBody, Proforma>(`${BASE}/proformas`, body)),
-  createProformaFromOrder: (orderId: string) =>
-    attempt(() =>
-      API.post<unknown, Proforma>(`${BASE}/proformas/from-order/${orderId}`, {})
-    ),
-  updateProforma: (id: string, body: ProformaBody) =>
-    attempt(() => API.put<ProformaBody, Proforma>(`${BASE}/proformas/${id}`, body)),
-  sendProforma: (id: string) =>
-    attempt(() => API.post<unknown, Proforma>(`${BASE}/proformas/${id}/send`, {})),
-  deleteProforma: (id: string) =>
-    attempt(() => API.remove<unknown>(`${BASE}/proformas/${id}`)),
 }
 
 export default BackofficeAPI

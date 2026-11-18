@@ -1,4 +1,21 @@
-export type BillingOption = { id: string; label: string; color: string }
+export type BillingOption = {
+  id: string
+  label: string
+  color: string
+  // the order status this step moves the order to; null: none
+  status?: string | null
+}
+
+// The four main statuses, tied to themselves even when saved without `status`
+const MAIN_IDS = ['ACCEPTED', 'PREPARING', 'SHIPPING', 'FINISHED']
+
+/** The order status a step is tied to, or null. */
+export const statusOf = (option: BillingOption): string | null =>
+  option.status !== undefined
+    ? option.status || null
+    : MAIN_IDS.includes(option.id)
+    ? option.id
+    : null
 
 // Badge look: pale background, dark text
 export const BILLING_COLORS: Record<string, string> = {
@@ -38,10 +55,17 @@ export const billingDot = (color?: string) =>
 // The four main order statuses. Their ids are also used by the migration that
 // ticked existing orders from their status.
 export const DEFAULT_BILLING_OPTIONS: BillingOption[] = [
-  { id: 'ACCEPTED', label: 'Accepted', color: 'yellow' },
-  { id: 'PREPARING', label: 'In preparation', color: 'white' },
-  { id: 'SHIPPING', label: 'In delivery', color: 'blue' },
-  { id: 'FINISHED', label: 'Receipt issued', color: 'green' },
+  { id: 'ACCEPTED', label: 'Accepted', color: 'yellow', status: 'ACCEPTED' },
+  { id: 'PREPARING', label: 'In preparation', color: 'white', status: 'PREPARING' },
+  { id: 'SHIPPING', label: 'In delivery', color: 'blue', status: 'SHIPPING' },
+  { id: 'FINISHED', label: 'Receipt issued', color: 'green', status: 'FINISHED' },
+]
+
+// Same ids as the API defaults and the migration
+export const DEFAULT_OFFER_OPTIONS: BillingOption[] = [
+  { id: 'OFFER_SENT', label: 'Proforma sent', color: 'brown', status: 'PROFORMA_SENT' },
+  { id: 'OFFER_PAID', label: 'Paid', color: 'lightGreen', status: null },
+  { id: 'OFFER_ACCEPTED', label: 'Accepted, becomes an order', color: 'green', status: 'ACCEPTED' },
 ]
 
 export const readBillingOptions = (settings: unknown): BillingOption[] => {
@@ -49,3 +73,25 @@ export const readBillingOptions = (settings: unknown): BillingOption[] => {
     ?.billingOptions
   return saved?.length ? saved : DEFAULT_BILLING_OPTIONS
 }
+
+export const readOfferOptions = (settings: unknown): BillingOption[] => {
+  const saved = (settings as { offerOptions?: BillingOption[] } | undefined)
+    ?.offerOptions
+  return saved?.length ? saved : DEFAULT_OFFER_OPTIONS
+}
+
+/** The step lists of orders and of offers, as set in Settings. */
+export type StepLists = { orders: BillingOption[]; offers: BillingOption[] }
+
+export const readStepLists = (settings: unknown): StepLists => ({
+  orders: readBillingOptions(settings),
+  offers: readOfferOptions(settings),
+})
+
+/** An offer uses the offer steps, every other order the order steps. */
+export const listFor = (lists: StepLists, status: string) =>
+  status === 'PROFORMA_SENT' ? lists.offers : lists.orders
+
+/** The other list, whose steps an order of this status does not show. */
+export const otherList = (lists: StepLists, status: string) =>
+  status === 'PROFORMA_SENT' ? lists.orders : lists.offers

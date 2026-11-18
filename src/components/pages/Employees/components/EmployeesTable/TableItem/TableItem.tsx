@@ -26,11 +26,16 @@ export const TableItem: React.FC<TableItemType> = ({ employee }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
 
-  const hasWritePermission = hasPermission(
-    currentUser?.permissions,
-    PermissionEnum.EMPLOYEE_WRITE,
-    currentUser?.role
-  )
+  // owner accounts have full access and are not edited from this list
+  const isOwner = employee.role === 'admin'
+  const hasWritePermission =
+    !isOwner &&
+    hasPermission(
+      currentUser?.permissions,
+      PermissionEnum.EMPLOYEE_WRITE,
+      currentUser?.role
+    )
+  const sections = isOwner ? 0 : employee.permissions?.length ?? 0
 
   const handleRowClick = (e: React.MouseEvent) => {
     // Prevent row click when clicking on action buttons
@@ -75,8 +80,17 @@ export const TableItem: React.FC<TableItemType> = ({ employee }) => {
         onClick={handleRowClick}
       >
         <Table.Cell className="whitespace-nowrap font-medium table-cell">
-          <div className="flex justify-start items-center gap-6">
+          <div className="flex justify-start items-center gap-3">
             {fullName}
+            {isOwner ? (
+              <span className="rounded-full bg-purple-100 px-2 py-0.5 text-xs font-semibold text-purple-800 dark:bg-purple-900/40 dark:text-purple-200">
+                {tx("Full access")}
+              </span>
+            ) : sections === 0 ? (
+              <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+                {tx("No access")}
+              </span>
+            ) : null}
           </div>
         </Table.Cell>
         <Table.Cell className="whitespace-nowrap font-medium table-cell">

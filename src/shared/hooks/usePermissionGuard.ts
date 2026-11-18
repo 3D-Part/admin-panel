@@ -15,6 +15,7 @@ const ROUTE_PERMISSIONS: Record<string, PermissionEnum[]> = {
   [URLPartsEnum.Products]: [PermissionEnum.PRODUCT_READ],
   [URLPartsEnum.AddNewProduct]: [PermissionEnum.PRODUCT_WRITE],
   [URLPartsEnum.OutOfStockProducts]: [PermissionEnum.PRODUCT_READ],
+  [URLPartsEnum.ProductGroups]: [PermissionEnum.PRODUCT_READ],
   [URLPartsEnum.EditProduct]: [PermissionEnum.PRODUCT_WRITE],
   [URLPartsEnum.Categories]: [PermissionEnum.CATEGORY_READ],
   [URLPartsEnum.AddNewCategory]: [PermissionEnum.CATEGORY_WRITE],
@@ -37,10 +38,12 @@ const ROUTE_PERMISSIONS: Record<string, PermissionEnum[]> = {
   [URLPartsEnum.Employees]: [PermissionEnum.EMPLOYEE_READ],
   [URLPartsEnum.Warehouse]: [PermissionEnum.WAREHOUSE_READ],
   [URLPartsEnum.Analytics]: [PermissionEnum.ANALYTICS_READ],
-  [URLPartsEnum.ActionsNeeded]: [PermissionEnum.PRODUCT_READ],
+  [URLPartsEnum.ActionsNeeded]: [PermissionEnum.ACTIONS_READ],
   [URLPartsEnum.Proformas]: [PermissionEnum.PROFORMA_READ],
-  [URLPartsEnum.Subscribers]: [], // No specific permission required
-  [URLPartsEnum.SettingsMenu]: [PermissionEnum.ADMIN_ONLY], // Admin only access
+  [URLPartsEnum.Subscribers]: [PermissionEnum.SUBSCRIBER_READ],
+  [URLPartsEnum.Settings]: [PermissionEnum.SETTINGS_WRITE],
+  [URLPartsEnum.SettingsGeneral]: [PermissionEnum.SETTINGS_WRITE],
+  [URLPartsEnum.SettingsMenu]: [PermissionEnum.SETTINGS_WRITE],
 }
 
 // Routes that don't require permission checking

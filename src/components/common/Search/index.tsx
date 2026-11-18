@@ -46,7 +46,7 @@ const Search: React.FC<SearchProps> = ({
   }
 
   return (
-    <form onSubmit={onSubmit} className="flex items-center gap-2">
+    <form onSubmit={onSubmit} className="flex w-full min-w-0 items-center">
       <label htmlFor="simple-search" className="sr-only">
         {tx("Search")}
       </label>
@@ -72,20 +72,22 @@ const Search: React.FC<SearchProps> = ({
           onChange={handleInputChange}
           type="text"
           id="simple-search"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-8 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full min-w-0 pl-8 p-2 pr-8 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder={tx("Search")}
           value={query}
           // required
         />
+        {query && (
+          <button
+            type="button"
+            onClick={reset}
+            aria-label={tx("reset")}
+            className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+          >
+            <IoCloseCircleOutline className="h-5 w-5" />
+          </button>
+        )}
       </div>
-      {query && (
-        <div
-          onClick={reset}
-          className="text-cyan-700 text-xs cursor-pointer whitespace-nowrap"
-        >
-          {tx("reset")}
-        </div>
-      )}
     </form>
   )
 }

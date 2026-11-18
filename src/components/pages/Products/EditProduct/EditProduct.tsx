@@ -3,14 +3,17 @@ import { tx } from '@/shared/i18n'
 
 import React, { useEffect } from 'react'
 import { useProductsStore, useUISliceStore } from '@/store/store'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { ProductsAPI } from '@/services'
 import { URLPartsEnum } from '@/shared/enums'
 import { Button } from 'flowbite-react'
 import { HiPlus } from 'react-icons/hi'
 import { TabsMenu } from './components/TabsMenu/TabsMenu'
 
 export const EditProduct = () => {
-  const { activeProduct } = useProductsStore()
+  const { activeProduct, changeActiveProduct } = useProductsStore()
+  // /products/edit?id=… opens a product straight from a link (e.g. the product groups)
+  const idFromLink = useSearchParams().get('id')
 
   const { changeIsAddProductsOnSaleModalOpen } = useUISliceStore()
 
@@ -21,10 +24,17 @@ export const EditProduct = () => {
   const router = useRouter()
 
   useEffect(() => {
+    if (idFromLink && activeProduct.id !== idFromLink) {
+      ProductsAPI.getOneProduct(idFromLink).then((product) => {
+        if (product) changeActiveProduct(product as any)
+        else router.push(URLPartsEnum.Products)
+      })
+      return
+    }
     if (activeProduct.id) return
 
     router.push(URLPartsEnum.Products)
-  }, [activeProduct, router])
+  }, [activeProduct, router, idFromLink, changeActiveProduct])
 
   return (
     <div className="w-full h-full flex flex-col">

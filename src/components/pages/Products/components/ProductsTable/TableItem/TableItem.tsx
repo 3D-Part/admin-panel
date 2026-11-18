@@ -285,6 +285,18 @@ export const TableItem: React.FC<TableItemType> = ({
             editable={hasWritePermission}
             onSave={(value) => saveField({ quantity: value })}
           />
+          {!(Number(quantity) > 0) && (
+            // what the shop shows at 0: made to order can still be ordered
+            <span
+              className={`mt-1 block whitespace-nowrap text-xs font-medium ${
+                (product as any).isBackorder
+                  ? 'text-amber-600 dark:text-amber-400'
+                  : 'text-red-600 dark:text-red-400'
+              }`}
+            >
+              {(product as any).isBackorder ? tx('Made to order') : tx('Sold out')}
+            </span>
+          )}
         </Table.Cell>
         <Table.Cell className="table-cell w-1/12">
           {hasWritePermission && (

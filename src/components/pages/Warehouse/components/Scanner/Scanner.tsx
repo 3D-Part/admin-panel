@@ -64,8 +64,10 @@ const Scanner: React.FC<ScannerProps> = ({ onPrintProduct, onPrintAsset }) => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.ctrlKey || e.metaKey || e.altKey) return
       if (isTypingTarget(document.activeElement)) return
-      if (e.key.length !== 1) return
-      const char = usCharForKey(e.code, e.shiftKey) ?? e.key
+      // numpad digits come as End, ArrowDown… when NumLock is off
+      const char =
+        usCharForKey(e.code, e.shiftKey) ?? (e.key.length === 1 ? e.key : null)
+      if (!char) return
       e.preventDefault()
       inputRef.current?.focus()
       setValue((current) => current + char)
@@ -79,21 +81,26 @@ const Scanner: React.FC<ScannerProps> = ({ onPrintProduct, onPrintAsset }) => {
   }, [focusInput])
 
   const onInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    // scanners end a code with Enter, some are set to Tab
+    if (e.key === 'Enter' || (e.key === 'Tab' && e.currentTarget.value)) {
       e.preventDefault()
-      lookup(value)
+      lookup(e.currentTarget.value)
       return
     }
-    if (e.ctrlKey || e.metaKey || e.altKey || e.key.length !== 1) return
+    if (e.ctrlKey || e.metaKey || e.altKey) return
 
     const char = usCharForKey(e.code, e.shiftKey)
-    if (char && char !== e.key) {
-      e.preventDefault()
-      const input = e.currentTarget
-      const start = input.selectionStart ?? value.length
-      const end = input.selectionEnd ?? value.length
-      setValue(value.slice(0, start) + char + value.slice(end))
-    }
+    if (!char || char === e.key) return
+    // a scanner types faster than React redraws, so the field itself is the
+    // source of truth here and not the value from the last render
+    e.preventDefault()
+    const input = e.currentTarget
+    const start = input.selectionStart ?? input.value.length
+    const end = input.selectionEnd ?? input.value.length
+    const next = input.value.slice(0, start) + char + input.value.slice(end)
+    input.value = next
+    input.setSelectionRange(start + 1, start + 1)
+    setValue(next)
   }
 
   const isProduct = (item: WarehouseProduct | Asset): item is WarehouseProduct =>

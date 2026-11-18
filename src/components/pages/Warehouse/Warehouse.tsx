@@ -4,12 +4,14 @@ import { tx } from '@/shared/i18n'
 import React, { useState } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { HiClipboardList, HiCube, HiQrcode, HiTag } from 'react-icons/hi'
+import { Button } from 'flowbite-react'
 import Tabs from '@/components/common/Tabs/Tabs'
 import { Asset, LabelItem, WarehouseProduct } from '@/shared/types/warehouse'
 import Scanner from './components/Scanner/Scanner'
 import Assets from './components/Assets/Assets'
 import Labels, { assetLabel, productLabel } from './components/Labels/Labels'
 import History from './components/History'
+import ProductInventory from './components/Inventory/ProductInventory'
 
 const TABS = ['scanner', 'inventory', 'labels', 'history'] as const
 type TabId = (typeof TABS)[number]
@@ -28,6 +30,9 @@ const Warehouse = () => {
 
   // shared so Scanner and Inventory can send items to the label list
   const [labelItems, setLabelItems] = useState<LabelItem[]>([])
+  const [inventoryView, setInventoryView] = useState<'products' | 'assets'>(
+    'products'
+  )
 
   const goTo = (tab: TabId) => router.replace(`${pathname}?tab=${tab}`)
 
@@ -73,12 +78,38 @@ const Warehouse = () => {
             icon: HiCube,
             content: (
               <>
-              <TabHelp>
-                {tx("Things the shop owns and does not sell, such as printers and tools. Products for sale are not here, they are in Products.")}
-              </TabHelp>
-              <Assets
-                onPrintLabels={(assets) => addLabels(assets.map(assetLabel))}
-              />
+                <div className="mb-4 flex flex-wrap items-center gap-3">
+                  <Button.Group>
+                    <Button
+                      size="sm"
+                      color={inventoryView === 'products' ? 'purple' : 'gray'}
+                      onClick={() => setInventoryView('products')}
+                    >
+                      {tx('Products')}
+                    </Button>
+                    <Button
+                      size="sm"
+                      color={inventoryView === 'assets' ? 'purple' : 'gray'}
+                      onClick={() => setInventoryView('assets')}
+                    >
+                      {tx('Company items')}
+                    </Button>
+                  </Button.Group>
+                  <span className="text-sm text-gray-500 dark:text-gray-400">
+                    {inventoryView === 'products'
+                      ? tx('Every product with the barcode of its code. Tick products and click Labels to print stickers.')
+                      : tx('Things the shop owns and does not sell, such as printers and tools.')}
+                  </span>
+                </div>
+                {inventoryView === 'products' ? (
+                  <ProductInventory
+                    onPrintLabels={(products) => addLabels(products.map(productLabel))}
+                  />
+                ) : (
+                  <Assets
+                    onPrintLabels={(assets) => addLabels(assets.map(assetLabel))}
+                  />
+                )}
               </>
             ),
           },

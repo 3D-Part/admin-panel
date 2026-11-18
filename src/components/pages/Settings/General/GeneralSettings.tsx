@@ -2,16 +2,34 @@
 import { tx } from '@/shared/i18n'
 
 import React, { useEffect, useRef, useState, SyntheticEvent } from 'react'
-import { Button, Label, Radio, TextInput } from 'flowbite-react'
+import { Button, Label, Radio, Select, TextInput } from 'flowbite-react'
 import { useShopSettingsStore } from '@/store/store'
 import { toast } from 'react-toastify'
 import { HiPlus, HiTrash } from 'react-icons/hi'
 import { useSearchParams } from 'next/navigation'
 import PageImages, { PageImage } from './PageImages'
 import BillingOptions from './BillingOptions'
+import BadgeLibrary, { BadgeImage } from './BadgeLibrary'
+import CustomerFlagsSettings, { customerFlagsProblem } from './CustomerFlagsSettings'
+import ZohoCampaignsSettings, {
+  DEFAULT_ZOHO_FORM,
+  ZohoForm,
+  readZohoForm,
+  zohoSettings,
+} from './ZohoCampaignsSettings'
+import NewsletterMailboxSettings, {
+  DEFAULT_MAILBOX_FORM,
+  MailboxForm,
+  mailboxSettings,
+  readMailboxForm,
+} from './NewsletterMailboxSettings'
+import { CustomerFlagType, readCustomerFlags, readOrderFlags } from '@/shared/helpers/customerFlags'
+import AssistantSettings, { AssistantForm, DEFAULT_ASSISTANT_FORM, assistantSettings, readAssistantForm } from './AssistantSettings'
+import { BadgeItem, TIER_COLORS, TierRow, badgeProblem, newTierId, readTierRows, tierSettings } from '@/shared/helpers/tiers'
 import {
   BillingOption,
   readBillingOptions,
+  readOfferOptions,
 } from '@/shared/helpers/billingOptions'
 
 // Each section is its own item in the sidebar, what it does is said up front
@@ -34,7 +52,7 @@ const TABS: Record<string, { title: string; help: string }> = {
   },
   'invoice-statuses': {
     title: 'Invoice statuses',
-    help: 'The checkboxes in the Invoice column of Orders. Each ticked step fills its circle in the Status column with its color. The first four are the main statuses: the order status always follows the rightmost ticked one, with its emails, points and stock. A Cancelled, New, Offer or Returned order paints all circles in its own color.',
+    help: 'The checkboxes in the Invoice column: one list for orders, one for offers. Each ticked step fills its circle in the Status column with its color. A step can change the order status; the status always follows the rightmost ticked step that changes it, with its emails, points and stock. This is the only place statuses come from.',
   },
   delivery: {
     title: 'Delivery',
@@ -48,9 +66,25 @@ const TABS: Record<string, { title: string; help: string }> = {
     title: 'Social media',
     help: 'The links in the footer of the site.',
   },
-  tidio: {
-    title: 'Tidio chat',
-    help: 'Public key from Tidio → Settings → Developer. The chat shows on the site as soon as this is saved, and leaving it empty turns it off.',
+  'customer-flags': {
+    title: 'Customer statuses',
+    help: 'The flags the staff put on a customer: they show next to the customer on every order, offer and in the users. A customer without one is neutral and shows nothing. Every red status means disputed: those customers are listed as disputed and their new orders are marked. Renaming or recoloring a status changes it on every customer who has it.',
+  },
+  'zoho-campaigns': {
+    title: 'Zoho Campaigns',
+    help: 'Newsletters are written on Subscribers → New campaign and sent through Zoho Campaigns to the newsletter list. Connect Zoho once here; new subscribers of the site go onto the list by themselves.',
+  },
+  'newsletter-mail': {
+    title: 'Newsletter mailbox',
+    help: 'The mailbox the newsletter is sent from. On Subscribers → Create drafts the newsletter goes straight into its Drafts folder, one draft per group of recipients in Bcc; you open the drafts in the mail program and send them. The shop never sends the newsletter itself.',
+  },
+  'order-flags': {
+    title: 'Order flags',
+    help: 'The flags the staff put on an order, e.g. urgent or waiting for payment. They show next to the order in the orders and offers lists and are picked in the order details. Renaming or recoloring a flag changes it on every order that has it.',
+  },
+  assistant: {
+    title: 'Chat assistant',
+    help: 'An AI shop assistant on the site, on ChatGPT (OpenAI) or Claude (Anthropic). It answers only about 3D printing and the products of the shop, finds products in the catalogue and sends customers to the support when it cannot help. To save tokens, the fixed instructions are cached by the AI, the same first question is answered from the server\'s memory for two hours, product searches are remembered for ten minutes, and the conversation sent is kept short.',
   },
 }
 
@@ -82,12 +116,18 @@ interface SettingsFormData {
   delivery: DeliverySettings
   company: CompanyDetails
   socialMedia: SocialMediaSettings
-  tiers: { bronze: string; silver: string; gold: string }
-  tierThresholds: { bronze: string; silver: string; gold: string }
+  tierList: TierRow[]
+  badgeLibrary: BadgeItem[]
   tierPeriod: 'all' | '12m'
   tidio: { key: string }
+  assistant: AssistantForm
+  customerFlags: CustomerFlagType[]
+  orderFlags: CustomerFlagType[]
+  newsletterMailbox: MailboxForm
+  zohoCampaigns: ZohoForm
   pageImages: PageImage[]
   billingOptions: BillingOption[]
+  offerOptions: BillingOption[]
 }
 
 const GeneralSettings = () => {
@@ -115,12 +155,18 @@ const GeneralSettings = () => {
       instagram: '',
       olx: '',
     },
-    tiers: { bronze: '', silver: '', gold: '' },
-    tierThresholds: { bronze: '', silver: '', gold: '' },
+    tierList: [],
+    badgeLibrary: [],
     tierPeriod: 'all',
     tidio: { key: '' },
+    assistant: DEFAULT_ASSISTANT_FORM,
+    customerFlags: [],
+    orderFlags: [],
+    newsletterMailbox: DEFAULT_MAILBOX_FORM,
+    zohoCampaigns: DEFAULT_ZOHO_FORM,
     pageImages: [],
     billingOptions: [],
+    offerOptions: [],
   })
   const formRef = useRef<HTMLFormElement>(null)
 
@@ -160,20 +206,18 @@ const GeneralSettings = () => {
             instagram: settings.socialMedia?.instagram || '',
             olx: settings.socialMedia?.olx || '',
           },
-          tiers: {
-            bronze: String(settings.tiers?.bronze ?? ''),
-            silver: String(settings.tiers?.silver ?? ''),
-            gold: String(settings.tiers?.gold ?? ''),
-          },
-          tierThresholds: {
-            bronze: String(settings.tierThresholds?.bronze || ''),
-            silver: String(settings.tierThresholds?.silver || ''),
-            gold: String(settings.tierThresholds?.gold || ''),
-          },
+          tierList: readTierRows(settings),
+          badgeLibrary: Array.isArray(settings.badgeLibrary) ? settings.badgeLibrary : [],
           tierPeriod: settings.tierPeriod === '12m' ? '12m' : 'all',
           tidio: { key: settings.tidio?.key ?? '' },
+          assistant: readAssistantForm(settings.assistant),
+          customerFlags: readCustomerFlags(settings),
+          orderFlags: readOrderFlags(settings),
+          newsletterMailbox: readMailboxForm(settings.newsletterMailbox),
+          zohoCampaigns: readZohoForm(settings.zohoCampaigns),
           pageImages: settings.pageImages ?? [],
           billingOptions: readBillingOptions(settings),
+          offerOptions: readOfferOptions(settings),
         })
       }
 
@@ -182,6 +226,25 @@ const GeneralSettings = () => {
 
     fetchSettings()
   }, [getShopSettings])
+
+  const updateTier = (index: number, patch: Partial<TierRow>) =>
+    setFormData((prev) => ({
+      ...prev,
+      tierList: prev.tierList.map((tier, i) => (i === index ? { ...tier, ...patch } : tier)),
+    }))
+  const addTier = () =>
+    setFormData((prev) => {
+      const name = `${tx("Tier")} ${prev.tierList.length + 1}`
+      return {
+        ...prev,
+        tierList: [
+          ...prev.tierList,
+          { id: newTierId(name, prev.tierList.map((tier) => tier.id)), name, discount: '', threshold: '', color: 'blue', badge: '' },
+        ],
+      }
+    })
+  const removeTier = (index: number) =>
+    setFormData((prev) => ({ ...prev, tierList: prev.tierList.filter((_, i) => i !== index) }))
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -232,6 +295,33 @@ const GeneralSettings = () => {
 
   const onSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    const names = formData.tierList.map((tier) => tier.name.trim().toLowerCase())
+    const badTier = formData.tierList.find(
+      (tier, i) =>
+        !tier.name.trim() ||
+        names.indexOf(tier.name.trim().toLowerCase()) !== i ||
+        !(parseFloat(tier.discount) >= 0 && parseFloat(tier.discount) <= 100)
+    )
+    const badBadge = formData.badgeLibrary.find((badge) => !badge.name.trim() || badgeProblem(badge.svg))
+    if (badBadge) {
+      toast(`${badBadge.name || tx("Badge")}: ${tx(badgeProblem(badBadge.svg) ?? "Every badge needs a name.")}`, { type: 'error', autoClose: 5000 })
+      return
+    }
+    const flagProblem =
+      customerFlagsProblem(formData.customerFlags) ?? customerFlagsProblem(formData.orderFlags, true)
+    if (flagProblem) {
+      toast(tx(flagProblem), { type: 'error', autoClose: 3500 })
+      return
+    }
+    if (badTier) {
+      toast(tx("Every tier needs its own name and a discount between 0 and 100."), {
+        type: 'error',
+        autoClose: 3500,
+      })
+      return
+    }
+
     setLoading(true)
 
     const success = await updateShopSettings({
@@ -258,20 +348,21 @@ const GeneralSettings = () => {
           instagram: formData.socialMedia.instagram,
           olx: formData.socialMedia.olx,
         },
-        tiers: {
-          bronze: parseFloat(formData.tiers.bronze) || 0,
-          silver: parseFloat(formData.tiers.silver) || 0,
-          gold: parseFloat(formData.tiers.gold) || 0,
-        },
-        tierThresholds: {
-          bronze: parseFloat(formData.tierThresholds.bronze) || 0,
-          silver: parseFloat(formData.tierThresholds.silver) || 0,
-          gold: parseFloat(formData.tierThresholds.gold) || 0,
-        },
+        ...tierSettings(formData.tierList),
+        badgeLibrary: formData.badgeLibrary,
         tierPeriod: formData.tierPeriod,
         tidio: { key: formData.tidio.key.trim() },
+        // a key is sent only when a new one is typed; the API keeps the saved one otherwise
+        assistant: assistantSettings(formData.assistant),
+        customerFlags: formData.customerFlags.map((flag) => ({ ...flag, label: flag.label.trim() })),
+        orderFlags: formData.orderFlags.map((flag) => ({ ...flag, label: flag.label.trim() })),
+        newsletterMailbox: mailboxSettings(formData.newsletterMailbox),
+        zohoCampaigns: zohoSettings(formData.zohoCampaigns),
         pageImages: formData.pageImages.filter((image) => image.desktop),
         billingOptions: formData.billingOptions.filter((option) =>
+          option.label.trim()
+        ),
+        offerOptions: formData.offerOptions.filter((option) =>
           option.label.trim()
         ),
       },
@@ -305,7 +396,7 @@ const GeneralSettings = () => {
   }
 
   return (
-    <div className="w-full h-full flex flex-col">
+    <div className="w-full h-full overflow-y-auto">
       {/* Header */}
       <div className="flex-shrink-0 mb-6">
         <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
@@ -319,10 +410,10 @@ const GeneralSettings = () => {
       <form
         ref={formRef}
         onSubmit={onSubmit}
-        className="flex-1 flex flex-col overflow-hidden"
+        className="flex flex-col"
       >
-        {/* Scrollable Content */}
-        <div className="flex-1 overflow-y-auto space-y-6 pb-4">
+        {/* Content */}
+        <div className="space-y-6 pb-4">
           {tab === 'banner' && (
           <div id="banner" className="scroll-mt-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
             <div className="space-y-4">
@@ -352,45 +443,131 @@ const GeneralSettings = () => {
 
           {tab === 'discount-tiers' && (
           <div id="discount-tiers" className="scroll-mt-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
-            <div className="grid gap-4 sm:grid-cols-3">
-              {(['bronze', 'silver', 'gold'] as const).map((tier) => (
-                <div key={tier}>
-                  <Label htmlFor={`tier-${tier}`} value={`${tier[0].toUpperCase()}${tier.slice(1)} (%)`} />
-                  <TextInput
-                    id={`tier-${tier}`}
-                    name={`tiers.${tier}`}
-                    type="number"
-                    min="0"
-                    max="100"
-                    value={formData.tiers[tier]}
-                    onChange={handleInputChange}
-                  />
+            <p className="mb-3 text-sm text-gray-500 dark:text-gray-400">
+              {tx("Add as many tiers as you need. A bigger discount makes a higher tier. A customer who spends the amount in \"From\" gets the tier by themselves; leave it empty and the tier is only given by hand in Users. New, offered, cancelled and returned orders do not count.")}
+            </p>
+            <div className="space-y-3">
+              {formData.tierList.map((tier, index) => (
+                <div key={tier.id} className="rounded-lg border border-gray-200 p-3 dark:border-gray-700">
+                <div className="grid items-end gap-3 sm:grid-cols-[1.4fr_1fr_1fr_1fr_auto]">
+                  <div>
+                    <Label htmlFor={`tier-name-${tier.id}`} value={tx("Name")} />
+                    <TextInput
+                      id={`tier-name-${tier.id}`}
+                      value={tier.name}
+                      maxLength={30}
+                      onChange={(e) => updateTier(index, { name: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor={`tier-discount-${tier.id}`} value={tx("Discount (%)")} />
+                    <TextInput
+                      id={`tier-discount-${tier.id}`}
+                      type="number"
+                      min="0"
+                      max="100"
+                      value={tier.discount}
+                      onChange={(e) => updateTier(index, { discount: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor={`tier-threshold-${tier.id}`} value={tx("From (KM)")} />
+                    <TextInput
+                      id={`tier-threshold-${tier.id}`}
+                      type="number"
+                      min="0"
+                      placeholder={tx("By hand only")}
+                      value={tier.threshold}
+                      onChange={(e) => updateTier(index, { threshold: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor={`tier-color-${tier.id}`} value={tx("Badge colour")} />
+                    <div className="flex items-center gap-2">
+                      <span className={`h-5 w-5 shrink-0 rounded-full ${TIER_COLORS[tier.color].dot}`} />
+                      <Select
+                        id={`tier-color-${tier.id}`}
+                        className="min-w-0 flex-1"
+                        value={tier.color}
+                        onChange={(e) => updateTier(index, { color: e.target.value })}
+                      >
+                        {Object.entries(TIER_COLORS).map(([key, color]) => (
+                          <option key={key} value={key}>
+                            {tx(color.label)}
+                          </option>
+                        ))}
+                      </Select>
+                    </div>
+                  </div>
+                  <Button
+                    color="gray"
+                    size="sm"
+                    aria-label={tx("Remove tier")}
+                    title={tx("Remove tier")}
+                    onClick={() => removeTier(index)}
+                  >
+                    <HiTrash className="h-4 w-4" />
+                  </Button>
+                </div>
+                <div className="mt-3">
+                  <Label value={tx("Badge")} />
+                  <div className="mt-1 flex flex-wrap items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => updateTier(index, { badge: '' })}
+                      className={`rounded-lg border px-3 py-2 text-sm ${
+                        tier.badge === '' ? 'border-purple-500 ring-2 ring-purple-500/40' : 'border-gray-300 dark:border-gray-600'
+                      } text-gray-700 dark:text-gray-300`}
+                    >
+                      <span className={`mr-2 inline-block h-3 w-3 rounded-full align-middle ${TIER_COLORS[tier.color].dot}`} />
+                      {tx("Filament in the tier colour")}
+                    </button>
+                    {formData.badgeLibrary.map((badge) => (
+                      <button
+                        key={badge.id}
+                        type="button"
+                        title={badge.name}
+                        aria-label={badge.name}
+                        onClick={() => updateTier(index, { badge: badge.id })}
+                        className={`rounded-lg border p-1 ${
+                          tier.badge === badge.id ? 'border-purple-500 ring-2 ring-purple-500/40' : 'border-gray-300 dark:border-gray-600'
+                        }`}
+                      >
+                        <BadgeImage svg={badgeProblem(badge.svg) ? '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"/>' : badge.svg} size={40} />
+                      </button>
+                    ))}
+                  </div>
+                </div>
                 </div>
               ))}
+            </div>
+            <Button color="gray" size="sm" className="mt-3" onClick={addTier}>
+              <HiPlus className="mr-1 h-4 w-4" />
+              {tx("Add tier")}
+            </Button>
+            <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+              {tx("Customers who were given a tier you remove lose it. Save the settings to apply the changes.")}
+            </p>
+
+            <div className="mt-6">
+              <BadgeLibrary
+                value={formData.badgeLibrary}
+                onChange={(badgeLibrary) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    badgeLibrary,
+                    // a tier whose badge was removed has none
+                    tierList: prev.tierList.map((tier) =>
+                      tier.badge && !badgeLibrary.some((badge) => badge.id === tier.badge)
+                        ? { ...tier, badge: '' }
+                        : tier
+                    ),
+                  }))
+                }
+              />
             </div>
 
-            <h4 className="mt-6 mb-1 font-semibold text-gray-900 dark:text-white">
-              {tx("Reached by spending")}
-            </h4>
-            <p className="mb-3 text-sm text-gray-500 dark:text-gray-400">
-              {tx("A customer who spends this much gets the tier by themselves. Leave a field empty and that tier is only given by hand. New, offered, cancelled and returned orders do not count.")}
-            </p>
-            <div className="grid gap-4 sm:grid-cols-3">
-              {(['bronze', 'silver', 'gold'] as const).map((tier) => (
-                <div key={tier}>
-                  <Label htmlFor={`tier-threshold-${tier}`} value={`${tier[0].toUpperCase()}${tier.slice(1)} from (KM)`} />
-                  <TextInput
-                    id={`tier-threshold-${tier}`}
-                    name={`tierThresholds.${tier}`}
-                    type="number"
-                    min="0"
-                    value={formData.tierThresholds[tier]}
-                    onChange={handleInputChange}
-                  />
-                </div>
-              ))}
-            </div>
-            <fieldset className="mt-4 space-y-2">
+            <fieldset className="mt-6 space-y-2">
               <legend className="mb-1 text-sm font-medium text-gray-900 dark:text-white">
                 {tx("Spending that counts")}
               </legend>
@@ -424,22 +601,85 @@ const GeneralSettings = () => {
 
           {tab === 'invoice-statuses' && (
             <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
-              <BillingOptions
-                value={formData.billingOptions}
-                onChange={(billingOptions) =>
-                  setFormData({ ...formData, billingOptions })
-                }
-              />
+              <div className="space-y-8">
+                <section className="space-y-3">
+                  <div>
+                    <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+                      {tx('Orders')}
+                    </h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      {tx('Steps of an order, from accepting it to the receipt.')}
+                    </p>
+                  </div>
+                  <BillingOptions
+                    value={formData.billingOptions}
+                    onChange={(billingOptions) =>
+                      setFormData({ ...formData, billingOptions })
+                    }
+                  />
+                </section>
+                <section className="space-y-3 border-t border-gray-200 pt-6 dark:border-gray-700">
+                  <div>
+                    <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+                      {tx('Offers')}
+                    </h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      {tx('Steps of an offer (proforma). A step that changes the status to Accepted turns the offer into an order.')}
+                    </p>
+                  </div>
+                  <BillingOptions
+                    value={formData.offerOptions}
+                    onChange={(offerOptions) =>
+                      setFormData({ ...formData, offerOptions })
+                    }
+                  />
+                </section>
+              </div>
             </div>
           )}
 
-          {tab === 'tidio' && (
-          <div id="tidio" className="scroll-mt-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
-            <TextInput
-              id="tidioKey"
-              name="tidio.key"
-              value={formData.tidio.key}
-              onChange={handleInputChange}
+          {tab === 'customer-flags' && (
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+            <CustomerFlagsSettings
+              value={formData.customerFlags}
+              onChange={(customerFlags) => setFormData((prev) => ({ ...prev, customerFlags }))}
+            />
+          </div>
+          )}
+
+          {tab === 'zoho-campaigns' && (
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+            <ZohoCampaignsSettings
+              value={formData.zohoCampaigns}
+              onChange={(zohoCampaigns) => setFormData((prev) => ({ ...prev, zohoCampaigns }))}
+            />
+          </div>
+          )}
+
+          {tab === 'newsletter-mail' && (
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+            <NewsletterMailboxSettings
+              value={formData.newsletterMailbox}
+              onChange={(newsletterMailbox) => setFormData((prev) => ({ ...prev, newsletterMailbox }))}
+            />
+          </div>
+          )}
+
+          {tab === 'order-flags' && (
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+            <CustomerFlagsSettings
+              kind="order"
+              value={formData.orderFlags}
+              onChange={(orderFlags) => setFormData((prev) => ({ ...prev, orderFlags }))}
+            />
+          </div>
+          )}
+
+          {tab === 'assistant' && (
+          <div id="assistant" className="scroll-mt-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+            <AssistantSettings
+              value={formData.assistant}
+              onChange={(assistant) => setFormData((prev) => ({ ...prev, assistant }))}
             />
           </div>
           )}
@@ -716,7 +956,7 @@ const GeneralSettings = () => {
         </div>
 
         {/* Fixed Save Button */}
-        <div className="flex-shrink-0 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 p-4">
+        <div className="sticky bottom-0 z-10 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 p-4">
           <div className="flex justify-end">
             <Button
               type="submit"

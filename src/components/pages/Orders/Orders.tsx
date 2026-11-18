@@ -1,22 +1,64 @@
 'use client'
 import { tx } from '@/shared/i18n'
 
-import React, { useEffect } from 'react'
-import { useSearchParams } from 'next/navigation'
+import React, { useEffect, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { OrdersAPI } from '@/services'
+import { Order } from '@/shared/types'
+import OrderDetails from './components/OrderDetails'
 import { useOrdersStore } from '@/store/store'
 import { OrdersTable } from './components/OrdersTable/OrdersTable'
 import { OrdersHeader } from './components/OrdersHeader'
 
 const Orders = () => {
-  const offers = useSearchParams().get('view') === 'offers'
-  const { changeOffersOnly, changeCurrentPage, fetchOrders, itemsPerPage } =
+  const params = useSearchParams()
+  const router = useRouter()
+  const offers = params.get('view') === 'offers'
+  // /orders?order=<number> opens that order, e.g. from the analytics tables
+  const orderNumber = params.get('order')
+  const [linked, setLinked] = useState<Order | null>(null)
+
+  useEffect(() => {
+    if (!orderNumber) {
+      setLinked(null)
+      return
+    }
+    let current = true
+    OrdersAPI.getOrders(
+      { field: 'createdAt', order: 'DESC' },
+      { offset: 0, limit: 1 },
+      { filters: { orderNumber: { is: orderNumber } } }
+    ).then((data) => {
+      if (current) setLinked(((data as any)?.rows?.[0] as Order) ?? null)
+    })
+    return () => {
+      current = false
+    }
+  }, [orderNumber])
+  const { changeOffersOnly, changeCurrentPage, changeOrderFilter, orderFilter, fetchOrders, itemsPerPage } =
     useOrdersStore()
+
+  // /orders?customer=<email>&label=<name> narrows the list to one customer
+  const customer = params.get('customer')
+  const label = params.get('label')
 
   useEffect(() => {
     changeOffersOnly(offers)
     changeCurrentPage(1)
+    if (customer) {
+      changeOrderFilter({ filters: { email: { is: customer } } })
+    } else if ((orderFilter as any)?.filters?.email) {
+      // a customer filter left from an earlier visit
+      changeOrderFilter({})
+    }
     fetchOrders({ offset: 0, limit: itemsPerPage })
-  }, [offers, changeOffersOnly, changeCurrentPage, fetchOrders, itemsPerPage])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [offers, customer, changeOffersOnly, changeCurrentPage, changeOrderFilter, fetchOrders, itemsPerPage])
+
+  const clearCustomer = () => {
+    changeOrderFilter({})
+    router.replace(offers ? '/orders?view=offers' : '/orders')
+  }
 
   return (
     <div className="w-full flex flex-col h-full overflow-hidden">
@@ -30,8 +72,28 @@ const Orders = () => {
           </p>
         </div>
       )}
+      {customer && (
+        <div className="mb-3 flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+          <span className="rounded-full bg-purple-100 px-3 py-1 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
+            {label || customer}
+          </span>
+          <button type="button" onClick={clearCustomer} className="text-purple-700 hover:underline dark:text-purple-300">
+            {tx('Clear filter')}
+          </button>
+        </div>
+      )}
       <OrdersHeader />
       <OrdersTable />
+      {linked && (
+        <OrderDetails
+          isOpen
+          order={linked}
+          onClose={() => {
+            setLinked(null)
+            router.replace(offers ? '/orders?view=offers' : '/orders')
+          }}
+        />
+      )}
     </div>
   )
 }

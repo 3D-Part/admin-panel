@@ -10,17 +10,17 @@ const SECTIONS: Record<Language, Section[]> = {
     {
       title: 'Orders',
       lines: [
-        'Click the status to change it. Steps: Accepted → In preparation → In delivery → Receipt issued. The dots show how far the order got.',
-        'You can go back from any status. Stock follows by itself: New, Offer, Returned and Cancelled hold no stock.',
-        'The customer gets an email on Accepted (new orders), the first In delivery, and Cancelled.',
-        'The Invoice column is the paperwork: proforma sent, paid, invoiced. Choose it right in the row.',
+        'The status changes only with the checkboxes in the Invoice column. Each ticked step fills its circle; the status follows the rightmost ticked step that changes it.',
+        'Clearing a checkbox moves the status back. Stock follows by itself: New, Offer, Returned and Cancelled hold no stock.',
+        'The customer gets an email on Accepted (new orders), the first In delivery, and Cancelled (with the reason you write).',
+        'The steps, their colors and which status each one sets are in Settings → Invoice statuses: one list for orders, one for offers.',
         'Disputed: open the order and switch it on. Only that order is marked. Disputed only in the header filters them.',
       ],
     },
     {
       title: 'Offers and proformas',
       lines: [
-        'Set an order to Offer and it moves to Orders → Offers. It holds no stock and is not in analytics until you accept it.',
+        'An offer has its own steps (e.g. proforma sent, paid). The step that sets Accepted turns it into an order. Until then it holds no stock and is not in analytics.',
         'Proformas → Send emails it to the customer. Put your bank account in Settings → Company details first.',
       ],
     },
@@ -68,17 +68,17 @@ const SECTIONS: Record<Language, Section[]> = {
     {
       title: 'Narudžbe',
       lines: [
-        'Klikni na status da ga promijeniš. Koraci: Prihvaćena → U pripremi → U dostavi → Račun izdan. Kružići pokazuju dokle je narudžba stigla.',
-        'Sa svakog statusa možeš se vratiti nazad. Stanje se samo ispravi: Nova, Ponuda, Vraćena i Otkazana ne drže robu sa stanja.',
-        'Kupac dobija mejl na Prihvaćena (kod novih narudžbi), na prvi U dostavi i na Otkazana.',
-        'Kolona Račun je papirologija: predračun poslan, plaćeno, fakturisano. Biraš je odmah u redu narudžbe.',
+        'Status se mijenja samo kvačicama u koloni Račun. Svaki štiklirani korak popuni svoj kružić, a status prati najdesniji štiklirani korak koji ga mijenja.',
+        'Skidanje kvačice vraća status nazad. Stanje se samo ispravi: Nova, Ponuda, Vraćena i Otkazana ne drže robu sa stanja.',
+        'Kupac dobija mejl na Prihvaćena (kod novih narudžbi), na prvi U dostavi i na Otkazana (s razlogom koji upišeš).',
+        'Koraci, njihove boje i koji status postavljaju su u Podešavanja → Statusi računa: jedna lista za narudžbe, jedna za ponude.',
         'Sporna narudžba: otvori narudžbu i uključi Sporna narudžba. Označena je samo ta narudžba. Samo sporne na vrhu prikazuje samo njih.',
       ],
     },
     {
       title: 'Ponude i predračuni',
       lines: [
-        'Stavi narudžbu na Ponuda i ona prelazi u Narudžbe → Ponude. Ne drži robu sa stanja i ne ulazi u analitiku dok je ne prihvatiš.',
+        'Ponuda ima svoje korake (npr. predračun poslan, plaćeno). Korak koji postavlja Prihvaćena pretvara je u narudžbu. Do tada ne drži robu i ne ulazi u analitiku.',
         'Predračuni → Pošalji šalje predračun kupcu na mejl. Prvo upiši žiro račun u Podešavanja → Podaci o firmi.',
       ],
     },

@@ -55,7 +55,9 @@ const ProductsSearch = () => {
 
   return (
     <div className="flex gap-2 items-center w-full md:w-auto">
-      <Dropdown dismissOnClick label={searchBy.toUpperCase()} size="sm">
+      <Dropdown
+        dismissOnClick
+        label={<span className="whitespace-nowrap">{searchBy.toUpperCase()}</span>} size="sm">
         <Dropdown.Item onClick={() => setSearchBy('name')}>
           <span className="font-medium text-cyan-600 cursor-pointer hover:underline dark:text-cyan-500">
             <p>{tx("NAME")}</p>

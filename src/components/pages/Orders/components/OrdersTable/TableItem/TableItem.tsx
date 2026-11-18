@@ -1,12 +1,15 @@
 import { tx } from '@/shared/i18n'
+import { CustomerFlagBadge } from '@/components/common/CustomerFlag/CustomerFlag'
+import { OrderFlagBadge } from '@/components/common/OrderFlag/OrderFlag'
+import { CustomerProfile } from '@/services/backoffice'
 import { Order } from '@/shared/types'
 import { Badge, Table } from 'flowbite-react'
 import React, { useState } from 'react'
-import OrderStatus from '../../OrderStatus/OrderStatus'
 import OrderSteps from '../../OrderStatus/OrderSteps'
 import BillingSteps from '../../OrderStatus/BillingSteps'
-import { BillingOption } from '@/shared/helpers/billingOptions'
+import { StepLists } from '@/shared/helpers/billingOptions'
 import { BiMessageDetail, BiNote } from 'react-icons/bi'
+import SendOfferButton from '../../SendOfferButton'
 import OrderContactForm from '../../OrderContactForm'
 import OrderEditModal from '../../OrderEditModal/OrderEditModal'
 import OrderDetails from '../../OrderDetails'
@@ -16,10 +19,15 @@ import { PermissionEnum } from '@/shared/types'
 
 type TableItemType = {
   order: Order
-  billingOptions: BillingOption[]
+  stepLists: StepLists
+  profile?: CustomerProfile
 }
 
-export const TableItem: React.FC<TableItemType> = ({ order, billingOptions }) => {
+export const TableItem: React.FC<TableItemType> = ({
+  order,
+  stepLists,
+  profile,
+}) => {
   const {
     fullName,
     email,
@@ -68,6 +76,9 @@ export const TableItem: React.FC<TableItemType> = ({ order, billingOptions }) =>
           }
         >
           <div className="flex items-center gap-2">
+            <span className="w-4 shrink-0">
+              <CustomerFlagBadge profile={profile} />
+            </span>
             <div className="flex flex-col">
               {companyName && (
                 <span className="font-bold text-gray-900 dark:text-white">
@@ -81,6 +92,7 @@ export const TableItem: React.FC<TableItemType> = ({ order, billingOptions }) =>
                 {tx("Disputed")}
               </Badge>
             )}
+            <OrderFlagBadge flag={order.flag} />
             {internalNote && (
               <span
                 title={internalNote}
@@ -111,27 +123,30 @@ export const TableItem: React.FC<TableItemType> = ({ order, billingOptions }) =>
           }
           className={hasWritePermission ? 'cursor-pointer' : ''}
         >
-          <div className="flex items-center gap-3">
-            <OrderSteps order={order} options={billingOptions} />
-            <OrderStatus status={status} order={order} options={billingOptions} />
+          <div className="flex flex-col items-start gap-1.5">
+            <OrderSteps order={order} lists={stepLists} />
           </div>
         </Table.Cell>
         <Table.Cell>
           <BillingSteps
             order={order}
-            options={billingOptions}
+            lists={stepLists}
             disabled={!hasWritePermission}
           />
         </Table.Cell>
-        <Table.Cell
-          onClick={
-            hasWritePermission ? () => setIsFormModalOpen(true) : undefined
-          }
-        >
-          <div
-            className={`text-xl ${hasWritePermission ? 'cursor-pointer' : ''}`}
-          >
-            <BiMessageDetail />
+        <Table.Cell className="whitespace-nowrap">
+          <div className="flex items-center gap-2">
+            {hasWritePermission && <SendOfferButton order={order} variant="icon" />}
+            <button
+              type="button"
+              disabled={!hasWritePermission}
+              onClick={() => setIsFormModalOpen(true)}
+              title={tx("Send Message")}
+              aria-label={tx("Send Message")}
+              className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-gray-600 transition-colors hover:bg-purple-50 hover:text-purple-700 disabled:opacity-40 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-purple-300"
+            >
+              <BiMessageDetail className="h-5 w-5" />
+            </button>
           </div>
         </Table.Cell>
       </Table.Row>

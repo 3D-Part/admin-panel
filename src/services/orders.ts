@@ -128,16 +128,28 @@ const orderSetBilling = async (
 const orderSetBillingStep = async (
   id: string,
   step: string,
-  done: boolean
+  done: boolean,
+  // reason for the customer when the step cancels the order
+  message?: string
 ): Promise<{ billingSteps?: Record<string, string>; status?: string } | null> => {
   try {
     const data: any = await API.patch(
       `${API_BASE_URL}/order/${id}/billing-steps`,
-      { step, done }
+      { step, done, ...(message ? { message } : {}) }
     )
     return data ?? {}
   } catch (error) {
     console.error('Error saving invoice step:', error)
+    return null
+  }
+}
+
+// e-mails the offer to the customer (offers only)
+const orderSendOffer = async (id: string): Promise<any | null> => {
+  try {
+    return await API.post(`${API_BASE_URL}/order/${id}/send-offer`, {})
+  } catch (error) {
+    console.error('Error sending the offer:', error)
     return null
   }
 }
@@ -183,7 +195,19 @@ const orderContactMessage = async (
   }
 }
 
+// the staff's flag on an order, or none
+const orderSetFlag = async (id: string, flag: string | null): Promise<boolean> => {
+  try {
+    await API.patch(`${API_BASE_URL}/order/${id}/flag`, { flag })
+    return true
+  } catch (error) {
+    console.error('Error saving the order flag:', error)
+    return false
+  }
+}
+
 const OrdersAPI = {
+  orderSetFlag,
   getOrders,
   orderAccept,
   orderDecline,
@@ -192,6 +216,7 @@ const OrdersAPI = {
   orderSetStatus,
   orderUpdateNote,
   orderSetDisputed,
+  orderSendOffer,
   orderSetBilling,
   orderSetBillingStep,
   orderStatusHistory,

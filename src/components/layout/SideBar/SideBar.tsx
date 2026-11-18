@@ -25,6 +25,7 @@ import {
 } from '@/shared/helpers/permissions'
 import { PermissionEnum } from '@/shared/types'
 import { useEffect, useState } from 'react'
+import { NewsKey, useSidebarNews } from '@/shared/hooks/useSidebarNews'
 
 const FIRST_TAB: Record<string, string> = {
   [URLPartsEnum.SettingsGeneral]: 'banner',
@@ -57,14 +58,6 @@ const SideBar = () => {
   const getFilteredMenuItems = () => {
     const allMenuItems = [
       {
-        name: tx("Guide"),
-        href: URLPartsEnum.Guide,
-        icon: HiQuestionMarkCircle,
-        open: false,
-        // for everyone, whatever else they may see
-        requiredPermissions: [] as PermissionEnum[],
-      },
-      {
         name: tx("Products"),
         href: '/products',
         icon: HiShoppingBag,
@@ -79,6 +72,11 @@ const SideBar = () => {
           {
             name: tx("Out of stock"),
             href: URLPartsEnum.OutOfStockProducts,
+            requiredPermissions: [PermissionEnum.PRODUCT_READ],
+          },
+          {
+            name: tx("Product groups"),
+            href: `${URLPartsEnum.ProductGroups}?group=super-offer`,
             requiredPermissions: [PermissionEnum.PRODUCT_READ],
           },
           {
@@ -154,23 +152,15 @@ const SideBar = () => {
         children: [
           {
             name: tx("All orders"),
+            news: 'orders' as NewsKey,
             href: URLPartsEnum.Orders,
             requiredPermissions: [PermissionEnum.ORDERS_READ],
           },
           {
             name: tx("Offers"),
+            news: 'offers' as NewsKey,
             href: `${URLPartsEnum.Orders}?view=offers`,
             requiredPermissions: [PermissionEnum.ORDERS_READ],
-          },
-          {
-            name: tx("Proformas"),
-            href: URLPartsEnum.Proformas,
-            requiredPermissions: [PermissionEnum.PROFORMA_READ],
-          },
-          {
-            name: tx("New proforma"),
-            href: `${URLPartsEnum.Proformas}?new=1`,
-            requiredPermissions: [PermissionEnum.PROFORMA_WRITE],
           },
           {
             name: tx("Order Emails"),
@@ -185,55 +175,31 @@ const SideBar = () => {
         icon: FaChartLine,
         open: false,
         requiredPermissions: [PermissionEnum.ANALYTICS_READ],
-        children: [
-          {
-            name: tx("Overview"),
-            href: `${URLPartsEnum.Analytics}?tab=overview`,
-            requiredPermissions: [PermissionEnum.ANALYTICS_READ],
-          },
-          {
-            name: tx("Filaments"),
-            href: `${URLPartsEnum.Analytics}?tab=filaments`,
-            requiredPermissions: [PermissionEnum.ANALYTICS_READ],
-          },
-          {
-            name: tx("Top products"),
-            href: `${URLPartsEnum.Analytics}?tab=top-products`,
-            requiredPermissions: [PermissionEnum.ANALYTICS_READ],
-          },
-          {
-            name: tx("By category"),
-            href: `${URLPartsEnum.Analytics}?tab=by-category`,
-            requiredPermissions: [PermissionEnum.ANALYTICS_READ],
-          },
-          {
-            name: tx("By manufacturer"),
-            href: `${URLPartsEnum.Analytics}?tab=by-manufacturer`,
-            requiredPermissions: [PermissionEnum.ANALYTICS_READ],
-          },
-          {
-            name: tx("Top customers"),
-            href: `${URLPartsEnum.Analytics}?tab=top-customers`,
-            requiredPermissions: [PermissionEnum.ANALYTICS_READ],
-          },
-        ],
       },
       {
         name: tx("Actions needed"),
         href: URLPartsEnum.ActionsNeeded,
         icon: FaExclamationTriangle,
         open: false,
-        requiredPermissions: [PermissionEnum.PRODUCT_READ],
+        requiredPermissions: [PermissionEnum.ACTIONS_READ],
         children: [
           {
             name: tx("Actions needed"),
+            news: 'actions' as NewsKey,
             href: `${URLPartsEnum.ActionsNeeded}?tab=actions`,
-            requiredPermissions: [PermissionEnum.PRODUCT_READ],
+            requiredPermissions: [PermissionEnum.ACTIONS_READ],
           },
           {
             name: tx("Stock alerts"),
+            news: 'stock' as NewsKey,
             href: `${URLPartsEnum.ActionsNeeded}?tab=stock`,
-            requiredPermissions: [PermissionEnum.PRODUCT_READ],
+            requiredPermissions: [PermissionEnum.ACTIONS_READ],
+          },
+          {
+            name: tx("Workers tasks"),
+            news: 'tasks' as NewsKey,
+            href: `${URLPartsEnum.ActionsNeeded}?tab=tasks`,
+            requiredPermissions: [PermissionEnum.ACTIONS_READ],
           },
         ],
       },
@@ -294,6 +260,7 @@ const SideBar = () => {
       },
       {
         name: tx("Users"),
+        news: 'users' as NewsKey,
         href: URLPartsEnum.Users,
         icon: FaUsers,
         open: false,
@@ -308,6 +275,7 @@ const SideBar = () => {
       },
       {
         name: tx("Subscribers"),
+        news: 'subscribers' as NewsKey,
         href: URLPartsEnum.Subscribers,
         icon: MdUnsubscribe,
         open: false,
@@ -318,7 +286,7 @@ const SideBar = () => {
         href: URLPartsEnum.Settings,
         icon: IoMdSettings,
         open: true,
-        requiredPermissions: PERMISSION_GROUPS.ADMIN,
+        requiredPermissions: PERMISSION_GROUPS.SETTINGS,
         children: [
           ...[
             ['Top banner', 'banner'],
@@ -326,21 +294,32 @@ const SideBar = () => {
             ['Page images', 'page-images'],
             ['Discount tiers', 'discount-tiers'],
             ['Invoice statuses', 'invoice-statuses'],
+            ['Customer statuses', 'customer-flags'],
+            ['Order flags', 'order-flags'],
+            ['Zoho Campaigns', 'zoho-campaigns'],
             ['Delivery', 'delivery'],
             ['Company details', 'company'],
             ['Social media', 'social-media'],
-            ['Tidio chat', 'tidio'],
+            ['Chat assistant', 'assistant'],
           ].map(([name, tab]) => ({
             name,
             href: `${URLPartsEnum.SettingsGeneral}?tab=${tab}`,
-            requiredPermissions: [PermissionEnum.ADMIN_ONLY],
+            requiredPermissions: [PermissionEnum.SETTINGS_WRITE],
           })),
           {
             name: tx("Menu"),
             href: URLPartsEnum.SettingsMenu,
-            requiredPermissions: [PermissionEnum.ADMIN_ONLY],
+            requiredPermissions: [PermissionEnum.SETTINGS_WRITE],
           },
         ],
+      },
+      {
+        name: tx("Guide"),
+        href: URLPartsEnum.Guide,
+        icon: HiQuestionMarkCircle,
+        open: false,
+        // last, so it stays out of the way; for everyone, whatever else they may see
+        requiredPermissions: [] as PermissionEnum[],
       },
     ]
 
@@ -390,6 +369,25 @@ const SideBar = () => {
   }
 
   const menuItems = getFilteredMenuItems()
+
+  // the section on screen counts as seen
+  const view = searchParams.get('view')
+  const currentNews: NewsKey | null =
+    pathname === URLPartsEnum.Orders
+      ? view === 'offers'
+        ? 'offers'
+        : 'orders'
+      : pathname === URLPartsEnum.Users
+        ? 'users'
+        : pathname === URLPartsEnum.Subscribers
+          ? 'subscribers'
+          : null
+  const news = useSidebarNews(currentNews, !!currentUser)
+  const countOf = (key?: NewsKey) => (key ? news[key] ?? 0 : 0)
+  // new things are red, things waiting for someone are amber
+  const colorOf = (key?: NewsKey) =>
+    key === 'actions' || key === 'stock' || key === 'tasks' ? 'warning' : 'failure'
+  const show = (count: number) => (count > 99 ? '99+' : String(count))
 
   // The group of the current page opens by itself, the rest stay as last left
   const [openGroups, setOpenGroups] = useState<string[]>([])
@@ -465,7 +463,25 @@ const SideBar = () => {
                         : ''
                     }
                     onClick={() => toggleGroup(menuItem.name)}
-                    label={menuItem.name}
+                    title={menuItem.name}
+                    label={
+                      (
+                        <span className="flex items-center gap-2">
+                          {menuItem.name}
+                          {(() => {
+                            const total = menuItem.children.reduce(
+                              (sum, child) => sum + countOf((child as { news?: NewsKey }).news),
+                              0
+                            )
+                            return total > 0 && !openGroups.includes(menuItem.name) ? (
+                              <span className="rounded-full bg-red-600 px-1.5 text-xs font-semibold text-white">
+                                {show(total)}
+                              </span>
+                            ) : null
+                          })()}
+                        </span>
+                      ) as unknown as string
+                    }
                   >
                     {menuItem.children.map((item) => {
                       return (
@@ -480,6 +496,8 @@ const SideBar = () => {
                             })
                           }}
                           active={isActive(item.href)}
+                          label={countOf((item as { news?: NewsKey }).news) > 0 ? show(countOf((item as { news?: NewsKey }).news)) : undefined}
+                          labelColor={colorOf((item as { news?: NewsKey }).news)}
                         >
                           {item.name}
                         </Sidebar.Item>
@@ -498,6 +516,8 @@ const SideBar = () => {
                       if (menuItem.href) router.push(menuItem.href)
                     }}
                     icon={menuItem.icon}
+                    label={countOf((menuItem as { news?: NewsKey }).news) > 0 ? show(countOf((menuItem as { news?: NewsKey }).news)) : undefined}
+                    labelColor={colorOf((menuItem as { news?: NewsKey }).news)}
                   >
                     {menuItem.name}
                   </Sidebar.Item>

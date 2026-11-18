@@ -19,9 +19,9 @@ const getEmployees = async (
   queryParams.append('sort[order]', sortData.order)
   queryParams.append('sort[field]', sortData.field)
 
-  // Add filter for admin role
+  // every account that can open the admin: employees and the owner (admin) accounts
   const filters = {
-    filters: { role: { like: 'employee' } },
+    filters: { role: { in: 'employee,admin' } },
   }
 
   try {

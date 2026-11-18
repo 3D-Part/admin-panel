@@ -2,13 +2,16 @@
 import { tx } from '@/shared/i18n'
 
 import React from 'react'
-import { Button, TextInput } from 'flowbite-react'
+import { Button, Select, TextInput } from 'flowbite-react'
 import { HiArrowDown, HiArrowUp, HiCheck, HiTrash } from 'react-icons/hi'
 import {
   BILLING_DOTS,
   BillingOption,
   billingDot,
+  statusOf,
 } from '@/shared/helpers/billingOptions'
+import { ORDER_STATUS_FLOW } from '@/shared/enums'
+import getOrderStatusLabel from '@/shared/helpers/getOrderStatusLabel'
 
 const COLOR_NAMES: Record<string, string> = {
   brown: 'Brown',
@@ -69,6 +72,20 @@ const BillingOptions: React.FC<{
             placeholder={tx('Name')}
             onChange={(e) => change(option.id, { label: e.target.value })}
           />
+          <Select
+            aria-label={`${tx('Changes the status to')}: ${option.label}`}
+            title={tx('Changes the status to')}
+            className="min-w-[11rem]"
+            value={statusOf(option) ?? ''}
+            onChange={(e) => change(option.id, { status: e.target.value || null })}
+          >
+            <option value="">{tx('Does not change the status')}</option>
+            {ORDER_STATUS_FLOW.map((status) => (
+              <option key={status} value={status}>
+                → {getOrderStatusLabel(status)}
+              </option>
+            ))}
+          </Select>
           <div
             role="radiogroup"
             aria-label={`${tx('Color')}: ${option.label}`}
@@ -127,7 +144,7 @@ const BillingOptions: React.FC<{
         onClick={() =>
           onChange([
             ...value,
-            { id: `custom-${Date.now()}`, label: '', color: 'blue' },
+            { id: `custom-${Date.now()}`, label: '', color: 'blue', status: null },
           ])
         }
       >

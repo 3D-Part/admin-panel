@@ -295,6 +295,8 @@ export interface Order {
   city: string
   code: string | null
   companyName: string
+  // one of the order flags of the settings
+  flag?: string | null
   companyPdv: string
   createdAt: string
   description: string
@@ -532,6 +534,12 @@ export enum PermissionEnum {
   WAREHOUSE_WRITE = 'WAREHOUSE_WRITE',
   PROFORMA_READ = 'PROFORMA_READ',
   PROFORMA_WRITE = 'PROFORMA_WRITE',
+  USER_WRITE = 'USER_WRITE',
+  ACTIONS_READ = 'ACTIONS_READ',
+  ACTIONS_WRITE = 'ACTIONS_WRITE',
+  SUBSCRIBER_READ = 'SUBSCRIBER_READ',
+  SUBSCRIBER_WRITE = 'SUBSCRIBER_WRITE',
+  SETTINGS_WRITE = 'SETTINGS_WRITE',
   ADMIN_ONLY = 'ADMIN_ONLY',
 }
 

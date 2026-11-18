@@ -25,6 +25,8 @@ export interface OrdersSliceInterface {
   // fetchAllOrders: (paginationData?: PaginationData) => Promise<boolean>;
 }
 
+let latestOrdersRequest = 0
+
 export const ordersSlice: StateCreator<OrdersSliceInterface> = (set, get) => ({
   allOrders: [],
   currentPageOrders: [],
@@ -63,6 +65,8 @@ export const ordersSlice: StateCreator<OrdersSliceInterface> = (set, get) => ({
   },
 
   fetchOrders: async (paginationData?: PaginationData) => {
+    // only the newest request may fill the list, a slower older one is dropped
+    const request = ++latestOrdersRequest
     const sort = {
       field: get().sortFiled,
       order: get().sortOrder,
@@ -82,7 +86,7 @@ export const ordersSlice: StateCreator<OrdersSliceInterface> = (set, get) => ({
           ...(get().disputedOnly && { disputed: { is: true } }),
         },
       })
-      if (data) {
+      if (data && request === latestOrdersRequest) {
         set({ currentPageOrders: data.rows })
         set({ totalPages: Math.ceil(data.count / get().itemsPerPage) })
         set({ count: data.count })

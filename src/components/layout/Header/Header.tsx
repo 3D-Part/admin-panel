@@ -32,7 +32,7 @@ const SideBar = () => {
   return (
     <>
       <Navbar
-        className="fixed top-0 z-50 w-full header-custom-bg border-b border-gray-600 shadow-sm rounded-none"
+        className="fixed top-0 z-50 w-full header-custom-bg border-b border-gray-600 shadow-sm rounded-none !px-3 sm:!px-4 [&>div]:flex-nowrap"
         fluid
         rounded
       >
@@ -44,18 +44,18 @@ const SideBar = () => {
               width="138"
               height="44"
               priority
-              className="w-28 h-auto md:w-32"
+              className="w-[4.5rem] h-auto min-[400px]:w-24 sm:w-28 md:w-32"
             />
           </span>
         </Navbar.Brand>
 
-        <div className="flex gap-4 md:order-2 items-center text-white">
+        <div className="flex gap-1 min-[400px]:gap-2 sm:gap-4 md:order-2 items-center text-white">
           <LanguageSwitch />
           <ThemeSwitcher />
           <Dropdown
             inline
             label={
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-base font-bold">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-base font-bold">
                 {(currentUser?.fullName?.charAt(0) || '3D').toUpperCase()}
               </div>
             }

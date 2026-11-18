@@ -12,9 +12,11 @@ import { toast } from 'react-toastify'
 import UsersAPI from '@/services/users'
 import { BackofficeAPI } from '@/services'
 import { CustomerTier } from '@/services/backoffice'
+import { SettingsAPI } from '@/services'
+import { readTierRows, sortTiers } from '@/shared/helpers/tiers'
 
-const tierName = (tier: string | null) =>
-  tier ? `${tier[0]}${tier.slice(1).toLowerCase()}` : 'No tier'
+// the tiers of the shop, set in Settings
+type ShopTier = { id: string; name: string; discount: number }
 
 type UserDetailType = {
   name: string
@@ -118,6 +120,17 @@ const UserDetails: React.FC<UserDetailsType> = ({
   useEffect(() => {
     BackofficeAPI.getCustomerTier(id).then(setTierInfo)
   }, [id, tier])
+
+  // the tiers of the shop, lowest first
+  const [shopTiers, setShopTiers] = useState<ShopTier[]>([])
+  useEffect(() => {
+    SettingsAPI.getShopSettings().then((data) => {
+      const rows = sortTiers(readTierRows((data as any)?.settings))
+      setShopTiers(rows.map((row) => ({ id: row.id, name: row.name, discount: Number(row.discount) || 0 })))
+    })
+  }, [])
+  // a tier the user has that was removed from the settings is shown as none
+  const tierName = (id: string | null) => shopTiers.find((item) => item.id === id)?.name ?? 'No tier'
 
   const handleTierChange = async (value: string) => {
     const previous = tier
@@ -230,9 +243,11 @@ const UserDetails: React.FC<UserDetailsType> = ({
                   disabled={isUpdating}
                 >
                   <option value="">{tx("No tier")}</option>
-                  <option value="BRONZE">{tx("Bronze")}</option>
-                  <option value="SILVER">{tx("Silver")}</option>
-                  <option value="GOLD">{tx("Gold")}</option>
+                  {shopTiers.map((item) => (
+                    <option key={item.id} value={item.id}>
+                      {item.name} ({item.discount}%)
+                    </option>
+                  ))}
                 </Select>
                 <span className="text-sm text-gray-500 dark:text-gray-400">
                   {tx("Set by hand. Percentages and thresholds are in Settings → Discount tiers")}

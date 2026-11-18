@@ -5,18 +5,28 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { HiCheck, HiChevronDown } from 'react-icons/hi'
 import { Order } from '@/shared/types'
-import { BillingOption, billingDot } from '@/shared/helpers/billingOptions'
+import {
+  BillingOption,
+  StepLists,
+  billingDot,
+  listFor,
+  otherList,
+  statusOf,
+} from '@/shared/helpers/billingOptions'
 import { formatStepDate, useBillingSteps, visibleSteps } from './billingStepsStore'
 import { OrderStatusEnum } from '@/shared/enums'
 
-// What ticking a main step also does, shown under its name
-const tickNote = (step: string, status: string): string | null => {
-  if (step === OrderStatusEnum.Accepted && status === OrderStatusEnum.Pending)
+// What ticking a step also does, by the status it is tied to
+const tickNote = (option: BillingOption, status: string): string | null => {
+  const tied = statusOf(option)
+  if (tied === OrderStatusEnum.Accepted && status === OrderStatusEnum.Pending)
     return 'The customer gets an email that the order is accepted.'
-  if (step === OrderStatusEnum.Shipping)
+  if (tied === OrderStatusEnum.Shipping)
     return 'The customer gets an email that the order is on its way, once per order.'
-  if (step === OrderStatusEnum.Finished)
+  if (tied === OrderStatusEnum.Finished)
     return 'The customer gets the points for this order.'
+  if (tied === OrderStatusEnum.Declined)
+    return 'Cancels the order; the reason you write goes to the customer by email.'
   return null
 }
 
@@ -29,16 +39,29 @@ const PANEL_WIDTH = 256
  */
 const BillingSteps: React.FC<{
   order: Order
-  options: BillingOption[]
+  lists: StepLists
   disabled?: boolean
-}> = ({ order, options, disabled }) => {
+}> = ({ order, lists, disabled }) => {
   const { steps, status, busy, toggle } = useBillingSteps(order)
+  // a step tied to Cancelled first asks for the reason
+  const [asking, setAsking] = useState<BillingOption | null>(null)
+  const [reason, setReason] = useState('')
+  const options = listFor(lists, status)
   const [open, setOpen] = useState(false)
   const [position, setPosition] = useState({ top: 0, left: 0 })
   const buttonRef = useRef<HTMLButtonElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
 
-  const shown = visibleSteps(options, steps)
+  const shown = visibleSteps(options, steps, otherList(lists, status))
+
+  const onTick = (option: BillingOption) => {
+    if (!steps[option.id] && statusOf(option) === OrderStatusEnum.Declined) {
+      setReason('')
+      setAsking(option)
+      return
+    }
+    toggle(option.id)
+  }
   const ticked = shown.filter((option) => steps[option.id])
   const text = ticked.length
     ? ticked.map((option) => tx(option.label)).join(', ')
@@ -67,6 +90,7 @@ const BillingSteps: React.FC<{
       setOpen(false)
     }
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false)
+    setAsking(null)
     const onScroll = (e: Event) =>
       !panelRef.current?.contains(e.target as Node) && setOpen(false)
     document.addEventListener('mousedown', close)
@@ -91,7 +115,7 @@ const BillingSteps: React.FC<{
         aria-expanded={open}
         onClick={() => setOpen(!open)}
         title={text}
-        className={`flex w-40 items-center justify-between gap-2 rounded-lg border px-2.5 py-1.5 text-left text-xs font-medium ${
+        className={`flex w-full max-w-[10rem] items-center justify-between gap-2 rounded-lg border px-2.5 py-1.5 text-left text-xs font-medium ${
           ticked.length
             ? 'text-gray-900 dark:text-white'
             : 'text-gray-500 dark:text-gray-400'
@@ -112,7 +136,51 @@ const BillingSteps: React.FC<{
             style={{ top: position.top, left: position.left, width: PANEL_WIDTH }}
             className="fixed z-[60] rounded-xl border border-gray-200 bg-white p-2 shadow-xl dark:border-gray-700 dark:bg-gray-800"
           >
-            {shown.map((option) => {
+            {asking ? (
+              <form
+                className="space-y-2 p-2"
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  if (!reason.trim()) return
+                  toggle(asking.id, reason.trim())
+                  setAsking(null)
+                }}
+              >
+                <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                  {tx(asking.label)}
+                </p>
+                <label
+                  htmlFor="cancel-reason"
+                  className="block text-xs text-gray-600 dark:text-gray-300"
+                >
+                  {tx('Reason for cancelling, the customer gets it by email')}
+                </label>
+                <textarea
+                  id="cancel-reason"
+                  autoFocus
+                  rows={3}
+                  value={reason}
+                  onChange={(e) => setReason(e.target.value)}
+                  className="w-full rounded-lg border border-gray-300 bg-gray-50 p-2 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                />
+                <div className="flex justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setAsking(null)}
+                    className="rounded-lg px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+                  >
+                    {tx('Back')}
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={!reason.trim()}
+                    className="rounded-lg bg-red-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-red-700 disabled:opacity-50"
+                  >
+                    {tx('Cancel the order')}
+                  </button>
+                </div>
+              </form>
+            ) : shown.map((option) => {
               const dot = billingDot(option.color)
               const done = Boolean(steps[option.id])
               return (
@@ -127,7 +195,7 @@ const BillingSteps: React.FC<{
                     className="sr-only peer"
                     checked={done}
                     disabled={busy}
-                    onChange={() => toggle(option.id)}
+                    onChange={() => onTick(option)}
                   />
                   <span
                     aria-hidden
@@ -141,9 +209,9 @@ const BillingSteps: React.FC<{
                   </span>
                   <span className="flex-1 text-sm text-gray-900 dark:text-white">
                     {tx(option.label)}
-                    {!done && tickNote(option.id, status) && (
+                    {!done && tickNote(option, status) && (
                       <span className="block text-xs text-amber-600 dark:text-amber-400">
-                        {tx(tickNote(option.id, status)!)}
+                        {tx(tickNote(option, status)!)}
                       </span>
                     )}
                   </span>

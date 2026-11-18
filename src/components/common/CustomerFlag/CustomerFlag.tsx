@@ -1,79 +1,115 @@
 'use client'
 import { tx } from '@/shared/i18n'
+import InfoTip from '@/components/common/InfoTip/InfoTip'
 
 import React, { useEffect, useState } from 'react'
-import { Badge, Button, Label, Select, Textarea } from 'flowbite-react'
+import { Button, Label, Select, Textarea } from 'flowbite-react'
+import { HiFlag } from 'react-icons/hi'
 import { toast } from 'react-toastify'
 import { BackofficeAPI } from '@/services'
-import { CustomerFlag, CustomerProfile, DisputedFlag } from '@/services/backoffice'
+import { CustomerFlag, CustomerProfile } from '@/services/backoffice'
+import {
+  CUSTOMER_FLAG_COLORS,
+  CustomerFlagType,
+  useCustomerFlagTypes,
+} from '@/shared/helpers/customerFlags'
 
-const DISPUTED_REASONS: Record<DisputedFlag, string> = {
-  NO_PICKUP: 'Did not collect the order',
-  LATE_PAY: 'Late or missing payment',
-  COMPLAINTS: 'Too many complaints',
-  ABUSIVE: 'Abusive behaviour',
-  OTHER: 'Other reason',
+/** What a status is called and which color its flag has; red means disputed. */
+export const flagInfo = (flag: CustomerFlag, types: CustomerFlagType[]) => {
+  const type = types.find((item) => item.id === flag)
+  if (!type) return { label: tx('Removed status ({flag})', { flag }), color: CUSTOMER_FLAG_COLORS.gray.text, disputed: false }
+  const disputed = type.color === 'red'
+  return {
+    label: disputed ? tx('Disputed: {flag}', { flag: type.label }) : type.label,
+    color: (CUSTOMER_FLAG_COLORS[type.color] ?? CUSTOMER_FLAG_COLORS.gray).text,
+    disputed,
+  }
 }
 
-const OTHER_FLAGS = {
-  BLUE: { label: 'Needs attention', color: 'bg-blue-500' },
-  GREEN: { label: 'Good customer', color: 'bg-green-500' },
+// Saving a customer bumps this, so every open list loads the profiles again
+let version = 0
+const listeners = new Set<() => void>()
+const profilesChanged = () => {
+  version++
+  listeners.forEach((listener) => listener())
 }
-
-const isDisputed = (flag: CustomerFlag): flag is DisputedFlag =>
-  flag in DISPUTED_REASONS
 
 export const useCustomerProfiles = (emails: string[]) => {
   const [profiles, setProfiles] = useState<Record<string, CustomerProfile>>({})
-  const key = Array.from(new Set(emails.filter(Boolean))).sort().join(',')
+  const [seen, setSeen] = useState(version)
+  const key = Array.from(new Set(emails.filter(Boolean).map((e) => e.toLowerCase())))
+    .sort()
+    .join(',')
+
+  useEffect(() => {
+    const listener = () => setSeen(version)
+    listeners.add(listener)
+    return () => {
+      listeners.delete(listener)
+    }
+  }, [])
 
   useEffect(() => {
     if (!key) return
     BackofficeAPI.getCustomerProfiles(key.split(',')).then((data) => {
       if (data) setProfiles(data)
     })
-  }, [key])
+  }, [key, seen])
 
   return profiles
 }
 
-export const CustomerFlagBadge: React.FC<{ profile?: CustomerProfile }> = ({
-  profile,
-}) => {
+/**
+ * The customer's flag next to their name: green good, orange on the edge, red
+ * disputed. A neutral customer shows nothing. A dot marks a customer note.
+ * `withLabel` also writes what the flag means.
+ */
+export const CustomerFlagBadge: React.FC<{
+  profile?: CustomerProfile
+  withLabel?: boolean
+}> = ({ profile, withLabel = false }) => {
+  const types = useCustomerFlagTypes()
   if (!profile || (!profile.flag && !profile.note)) return null
 
-  const flag = profile.flag
-  const flagLabel = !flag
-    ? ''
-    : isDisputed(flag)
-    ? tx("Disputed: {flag}", { flag: tx(DISPUTED_REASONS[flag]) })
-    : tx(OTHER_FLAGS[flag].label)
+  const info = profile.flag ? flagInfo(profile.flag, types) : null
 
   return (
     <span
-      title={[flagLabel, profile.note || ''].filter(Boolean).join('\n')}
-      className="flex items-center gap-1 shrink-0"
+      title={[info?.label, profile.note || ''].filter(Boolean).join('\n')}
+      className="inline-flex items-center gap-1 shrink-0"
     >
-      {flag && isDisputed(flag) && <Badge color="failure">{tx("Disputed")}</Badge>}
-      {flag && !isDisputed(flag) && (
-        <span
-          aria-label={flagLabel}
-          className={`w-3 h-3 rounded-full ${OTHER_FLAGS[flag].color}`}
-        />
-      )}
-      {profile.note && (
-        <span
-          aria-label={tx("Customer note")}
-          className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"
-        />
+      <span className="relative inline-flex h-4 w-4 items-center justify-center">
+        {info && <HiFlag aria-label={info.label} className={`h-4 w-4 ${info.color}`} />}
+        {profile.note && (
+          <span
+            aria-label={tx("Customer note")}
+            className={`rounded-full bg-amber-400 ${
+              info ? 'absolute -top-0.5 -right-1 h-2 w-2 ring-2 ring-white dark:ring-gray-800' : 'h-2 w-2'
+            }`}
+          />
+        )}
+      </span>
+      {info && withLabel && (
+        <span className={`text-sm font-medium ${info.color}`}>{info.label}</span>
       )}
     </span>
   )
 }
 
-export const CustomerProfileForm: React.FC<{ email: string }> = ({ email }) => {
+/**
+ * The status and note of a customer, the same on every order of theirs. On an
+ * order (`inOrder`) the box is titled as the customer's, next to the order's
+ * own note, so the two are not mixed up.
+ */
+export const CustomerProfileForm: React.FC<{ email: string; inOrder?: boolean }> = ({
+  email,
+  inOrder = false,
+}) => {
   const profiles = useCustomerProfiles([email])
   const profile = profiles[email?.toLowerCase()]
+  const types = useCustomerFlagTypes()
+  const plain = types.filter((type) => type.color !== 'red')
+  const disputed = types.filter((type) => type.color === 'red')
   const [flag, setFlag] = useState<CustomerFlag | ''>('')
   const [note, setNote] = useState('')
   const [saving, setSaving] = useState(false)
@@ -91,11 +127,26 @@ export const CustomerProfileForm: React.FC<{ email: string }> = ({ email }) => {
       note: note.trim() || null,
     })
     setSaving(false)
-    if (saved) toast(tx("Customer saved"), { type: 'success', autoClose: 2000 })
+    if (saved) {
+      toast(tx("Customer saved"), { type: 'success', autoClose: 2000 })
+      profilesChanged()
+    }
   }
 
   return (
-    <div className="w-full p-4 rounded-lg border border-gray-200 dark:border-gray-700 space-y-3">
+    <div className="relative w-full p-4 rounded-lg border border-gray-200 dark:border-gray-700 space-y-3">
+      {inOrder && (
+        <>
+          <h4 className="pr-8 text-sm font-semibold text-gray-900 dark:text-white">
+            {tx('About the customer')} <span className="font-normal text-gray-500">({email})</span>
+          </h4>
+          <InfoTip
+            text={tx(
+              'Status and note of the customer, not of this order. They show on all orders and offers of this customer. The customer never sees them.'
+            )}
+          />
+        </>
+      )}
       <div>
         <Label htmlFor="customer-flag" value={tx("Customer status (staff only)")} />
         <Select
@@ -103,27 +154,31 @@ export const CustomerProfileForm: React.FC<{ email: string }> = ({ email }) => {
           value={flag}
           onChange={(e) => setFlag(e.target.value as CustomerFlag | '')}
         >
-          <option value="">{tx("No status")}</option>
-          <optgroup label={tx("Disputed customer, reason:")}>
-            {(Object.keys(DISPUTED_REASONS) as DisputedFlag[]).map((value) => (
-              <option key={value} value={value}>
-                {tx(DISPUTED_REASONS[value])}
-              </option>
-            ))}
-          </optgroup>
-          <optgroup label={tx("Other")}>
-            {(Object.keys(OTHER_FLAGS) as (keyof typeof OTHER_FLAGS)[]).map(
-              (value) => (
-                <option key={value} value={value}>
-                  {tx(OTHER_FLAGS[value].label)}
+          <option value="">{tx("Neutral (no flag)")}</option>
+          {plain.map((type) => (
+            <option key={type.id} value={type.id}>
+              {type.label}
+            </option>
+          ))}
+          {disputed.length > 0 && (
+            <optgroup label={tx("Disputed customer, reason:")}>
+              {disputed.map((type) => (
+                <option key={type.id} value={type.id}>
+                  {type.label}
                 </option>
-              )
-            )}
-          </optgroup>
+              ))}
+            </optgroup>
+          )}
+          {flag && !types.some((type) => type.id === flag) && (
+            <option value={flag}>{tx('Removed status ({flag})', { flag })}</option>
+          )}
         </Select>
       </div>
       <div>
-        <Label htmlFor="customer-note" value={tx("Customer note (staff only)")} />
+        <Label
+          htmlFor="customer-note"
+          value={tx(inOrder ? 'Note about the customer' : 'Customer note (staff only)')}
+        />
         <Textarea
           id="customer-note"
           rows={2}
@@ -137,4 +192,68 @@ export const CustomerProfileForm: React.FC<{ email: string }> = ({ email }) => {
       </Button>
     </div>
   )
+}
+
+// Profiles asked for in the same moment go out in one request
+const profileCache = new Map<string, CustomerProfile | null>()
+let cacheVersion = version
+let queued = new Set<string>()
+let pending: Promise<void> | null = null
+
+const loadProfile = (email: string): Promise<void> => {
+  if (cacheVersion !== version) {
+    profileCache.clear()
+    cacheVersion = version
+  }
+  queued.add(email)
+  if (!pending) {
+    pending = Promise.resolve().then(async () => {
+      const batch = Array.from(queued)
+      queued = new Set()
+      pending = null
+      const data = await BackofficeAPI.getCustomerProfiles(batch)
+      batch.forEach((key) => profileCache.set(key, data?.[key] ?? null))
+    })
+  }
+  return pending
+}
+
+/**
+ * The flag of one customer, for lists that do not load the profiles
+ * themselves (analytics, order emails, subscribers).
+ */
+export const CustomerFlagFor: React.FC<{ email?: string | null; withLabel?: boolean }> = ({
+  email,
+  withLabel,
+}) => {
+  const key = (email ?? '').trim().toLowerCase()
+  const [profile, setProfile] = useState<CustomerProfile | null | undefined>(() =>
+    key && cacheVersion === version ? profileCache.get(key) : undefined
+  )
+  const [seen, setSeen] = useState(version)
+
+  useEffect(() => {
+    const listener = () => setSeen(version)
+    listeners.add(listener)
+    return () => {
+      listeners.delete(listener)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!key) return
+    let live = true
+    if (cacheVersion === version && profileCache.has(key)) {
+      setProfile(profileCache.get(key))
+      return
+    }
+    loadProfile(key).then(() => {
+      if (live) setProfile(profileCache.get(key) ?? null)
+    })
+    return () => {
+      live = false
+    }
+  }, [key, seen])
+
+  return profile ? <CustomerFlagBadge profile={profile} withLabel={withLabel} /> : null
 }

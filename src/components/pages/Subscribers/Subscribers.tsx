@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { PaginationData } from '@/shared/types'
 import { SubscribersTable } from './components/SubscribersTable/SubscribersTable'
 import { useSubscribersSliceStore } from '@/store/store'
@@ -13,7 +13,11 @@ export const Subscribers = () => {
     itemsPerPage,
     totalPages,
     changeCurrentPage,
+    count,
   } = useSubscribersSliceStore()
+
+  // e-mails ticked in the table, kept across pages
+  const [selected, setSelected] = useState<string[]>([])
 
   // const fetchSubscriberssData = async () => {
   //   const paginationData: PaginationData = {
@@ -31,8 +35,8 @@ export const Subscribers = () => {
 
   return (
     <div className="w-full flex flex-col h-full overflow-hidden">
-      <SubscribersHeader />
-      <SubscribersTable />
+      <SubscribersHeader selected={selected} total={count} />
+      <SubscribersTable selected={selected} setSelected={setSelected} />
     </div>
   )
 }

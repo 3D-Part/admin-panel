@@ -1,91 +1,97 @@
 'use client'
 import { tx } from '@/shared/i18n'
 
-import React, { useCallback, useEffect, useState } from 'react'
-import { Alert, Button, Label, Select, Table, TextInput } from 'flowbite-react'
-import { useSearchParams } from 'next/navigation'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { Alert, Button, Label, Select, TextInput } from 'flowbite-react'
 import { BackofficeAPI, CategoriesAPI, ManufacturesAPI } from '@/services'
-import { Analytics as AnalyticsData, AnalyticsRow } from '@/services/backoffice'
+import { Analytics as AnalyticsData } from '@/services/backoffice'
+import RevenueChart from './RevenueChart'
+import RowsSection from './RowsSection'
+import ShippingSection from './ShippingSection'
+import DetailModal, { DetailKind } from './DetailModal'
+import TrafficSection from './TrafficSection'
 import { Loader } from '@/components/common'
 
-const money = (value: number) => `${value.toFixed(2)} KM`
+// thousands grouped, two decimals: 278.804,90 KM
+const money = (value: number) =>
+  `${value.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} KM`
 const isoDay = (date: Date) => date.toISOString().slice(0, 10)
 
 type Option = { id: string; name: string }
 
-// every section is its own page, picked from the sidebar
-const TABS: Record<string, string> = {
-  overview: 'Overview',
-  filaments: 'Filaments',
-  'top-products': 'Top products',
-  'by-category': 'By category',
-  'by-manufacturer': 'By manufacturer',
-  'top-customers': 'Top customers',
-}
+// the parts below the chart, in page order
+const SECTIONS = [
+  { id: 'shipping', title: 'Shipping' },
+  { id: 'sold-products', title: 'Sold products' },
+  { id: 'by-category', title: 'By category' },
+  { id: 'by-manufacturer', title: 'By manufacturer' },
+  { id: 'filaments', title: 'Filaments' },
+  { id: 'top-customers', title: 'Top customers' },
+  { id: 'traffic', title: 'Site visits' },
+]
 
-const Tile: React.FC<{ label: string; value: string; hint?: string }> = ({
-  label,
-  value,
-  hint,
-}) => (
-  <div className="p-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+// where a row of a table leads (all in a new tab, the analytics stay as they are)
+const q = (params: Record<string, string>) => new URLSearchParams(params).toString()
+export const productLink = (row: { name: string; sku?: string }) =>
+  `/products?${q({ key: row.sku || row.name, label: row.name })}`
+const categoryLink = (row: { id: string; name: string }) =>
+  row.id === 'none' ? null : `/products?${q({ categoryId: row.id, label: row.name })}`
+const manufacturerLink = (row: { id: string; name: string }) =>
+  row.id === 'none' ? null : `/products?${q({ manufacturerId: row.id, label: row.name })}`
+const customerLink = (row: { name: string; sku?: string }) =>
+  row.sku ? `/orders?${q({ customer: row.sku, label: row.name })}` : null
+
+const Tile: React.FC<{
+  label: string
+  value: string
+  hint?: string
+  // a small link under the figure, e.g. to the form further down
+  action?: { text: string; href: string }
+  // opens the details behind the figure
+  onOpen?: () => void
+}> = ({ label, value, hint, action, onOpen }) => (
+  <div
+    {...(onOpen && {
+      role: 'button',
+      tabIndex: 0,
+      onClick: onOpen,
+      onKeyDown: (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          onOpen()
+        }
+      },
+    })}
+    className={`p-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 ${
+      onOpen
+        ? 'group relative cursor-pointer transition-all duration-200 ease-out hover:-translate-y-1 hover:border-purple-400 hover:shadow-lg active:translate-y-0 active:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 motion-reduce:transition-none motion-reduce:hover:translate-y-0'
+        : ''
+    }`}
+  >
+    {onOpen && (
+      <span
+        aria-hidden
+        className="absolute right-3 top-3 text-purple-500 opacity-0 transition-all duration-200 -translate-x-1 group-hover:translate-x-0 group-hover:opacity-100 motion-reduce:transition-none"
+      >
+        →
+      </span>
+    )}
     <p className="text-xs uppercase text-gray-500 dark:text-gray-400">{label}</p>
-    <p className="mt-1 text-2xl font-bold text-gray-900 dark:text-white">{value}</p>
+    <p className="mt-1 text-2xl font-bold text-gray-900 dark:text-white transition-colors group-hover:text-purple-600 dark:group-hover:text-purple-300">{value}</p>
     {hint && <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{hint}</p>}
-  </div>
-)
-
-const RowsTable: React.FC<{
-  rows: (AnalyticsRow & { orders?: number })[]
-  label?: string
-}> = ({ rows, label = 'Product' }) => (
-  <div className="overflow-x-auto">
-    <Table>
-      <Table.Head>
-        <Table.HeadCell>{label}</Table.HeadCell>
-        <Table.HeadCell>{tx("Sold")}</Table.HeadCell>
-        <Table.HeadCell>{tx("Revenue")}</Table.HeadCell>
-        <Table.HeadCell>{tx("Purchase cost")}</Table.HeadCell>
-        <Table.HeadCell>{tx("Shipping")}</Table.HeadCell>
-        <Table.HeadCell>{tx("Profit")}</Table.HeadCell>
-      </Table.Head>
-      <Table.Body className="divide-y divide-gray-100 dark:divide-gray-800">
-        {rows.map((row) => (
-          <Table.Row key={row.id}>
-            <Table.Cell className="text-gray-900 dark:text-white">
-              {row.name}
-              {row.orders !== undefined && (
-                <span className="block text-xs text-gray-500 dark:text-gray-400">
-                  {row.sku} · {row.orders} orders
-                </span>
-              )}
-            </Table.Cell>
-            <Table.Cell>{row.quantity}</Table.Cell>
-            <Table.Cell>{money(row.revenue)}</Table.Cell>
-            <Table.Cell>{row.hasCost ? money(row.cost) : tx("Not set")}</Table.Cell>
-            <Table.Cell>{money(row.shipping)}</Table.Cell>
-            <Table.Cell
-              className={
-                row.profit !== null && row.profit < 0 ? 'text-red-500' : ''
-              }
-            >
-              {row.profit === null ? '—' : money(row.profit)}
-            </Table.Cell>
-          </Table.Row>
-        ))}
-      </Table.Body>
-    </Table>
-    {rows.length === 0 && (
-      <p className="p-4 text-sm text-gray-500 dark:text-gray-400">
-        {tx("No sales in this period.")}
-      </p>
+    {action && (
+      <a
+        href={action.href}
+        onClick={(e) => e.stopPropagation()}
+        className="mt-2 inline-flex items-center rounded-md border border-gray-200 px-2 py-0.5 text-xs font-medium text-purple-700 hover:bg-gray-100 dark:border-gray-600 dark:text-purple-300 dark:hover:bg-gray-700"
+      >
+        + {action.text}
+      </a>
     )}
   </div>
 )
 
 const Analytics = () => {
-  const requestedTab = useSearchParams().get('tab') ?? ''
-  const tab = TABS[requestedTab] ? requestedTab : 'overview'
   const today = new Date()
   const [from, setFrom] = useState(
     isoDay(new Date(today.getTime() - 30 * 86400000))
@@ -99,6 +105,7 @@ const Analytics = () => {
   const [manufacturers, setManufacturers] = useState<Option[]>([])
   const [data, setData] = useState<AnalyticsData | null>(null)
   const [loading, setLoading] = useState(true)
+  const [detail, setDetail] = useState<DetailKind | null>(null)
 
   useEffect(() => {
     const sort = { field: 'name', order: 'ASC' as const }
@@ -116,6 +123,18 @@ const Analytics = () => {
     const timer = setTimeout(() => setCustomer(customerInput.trim()), 400)
     return () => clearTimeout(timer)
   }, [customerInput])
+
+  // the same period and filters as the figures, for the details behind them
+  const filters = useMemo(
+    () => ({
+      from,
+      to,
+      ...(categoryId && { categoryId }),
+      ...(manufacturerId && { manufacturerId }),
+      ...(customer && { customer }),
+    }),
+    [from, to, categoryId, manufacturerId, customer]
+  )
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -143,15 +162,13 @@ const Analytics = () => {
     setCustomer('')
   }
 
-  const maxRevenue = Math.max(1, ...(data?.days ?? []).map((day) => day.revenue))
-
   return (
     <div className="w-full h-full overflow-y-auto p-4 space-y-6">
       <div className="flex flex-wrap items-end gap-4">
-        <h2 className="mr-auto text-3xl font-bold text-gray-900 dark:text-white">
-          {tx(TABS[tab])}
+        <h2 className="w-full sm:w-auto mr-auto text-3xl font-bold text-gray-900 dark:text-white">
+          {tx('Analytics')}
         </h2>
-        <div>
+        <div className="w-[calc(50%-0.5rem)] sm:w-auto [&_input]:w-full">
           <Label htmlFor="analytics-from" value={tx("From")} />
           <TextInput
             id="analytics-from"
@@ -160,7 +177,7 @@ const Analytics = () => {
             onChange={(e) => setFrom(e.target.value)}
           />
         </div>
-        <div>
+        <div className="w-[calc(50%-0.5rem)] sm:w-auto [&_input]:w-full">
           <Label htmlFor="analytics-to" value={tx("To")} />
           <TextInput
             id="analytics-to"
@@ -169,7 +186,7 @@ const Analytics = () => {
             onChange={(e) => setTo(e.target.value)}
           />
         </div>
-        <div>
+        <div className="w-full sm:w-auto">
           <Label htmlFor="analytics-category" value={tx("Category")} />
           <Select
             id="analytics-category"
@@ -184,7 +201,7 @@ const Analytics = () => {
             ))}
           </Select>
         </div>
-        <div>
+        <div className="w-full sm:w-auto">
           <Label htmlFor="analytics-manufacturer" value={tx("Manufacturer")} />
           <Select
             id="analytics-manufacturer"
@@ -199,7 +216,7 @@ const Analytics = () => {
             ))}
           </Select>
         </div>
-        <div>
+        <div className="w-full sm:w-auto">
           <Label htmlFor="analytics-customer" value={tx("Customer")} />
           <TextInput
             id="analytics-customer"
@@ -235,105 +252,112 @@ const Analytics = () => {
             </Alert>
           )}
 
-          {tab === 'overview' && (
-          <>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <Tile label={tx("Orders")} value={String(data.totals.orders)} />
-            <Tile label={tx("Items sold")} value={String(data.totals.itemsSold)} />
+            <Tile label={tx("Orders")} value={String(data.totals.orders)} onOpen={() => setDetail("orders")} />
+            <Tile label={tx("Items sold")} value={String(data.totals.itemsSold)} onOpen={() => setDetail("items")} />
             <Tile
               label={tx("Revenue")}
               value={money(data.totals.revenue)}
-              hint="Products, after discounts"
+              hint={tx("Products, after discounts")}
+              onOpen={() => setDetail("revenue")}
             />
             <Tile
               label={tx("Profit")}
               value={money(data.totals.profit)}
-              hint="Revenue + shipping charged - shipping cost - purchase cost"
+              hint={tx("Revenue + shipping charged - shipping cost - purchase cost")}
+              onOpen={() => setDetail("profit")}
             />
-            <Tile label={tx("Purchase cost")} value={money(data.totals.goodsCost)} />
+            <Tile label={tx("Purchase cost")} value={money(data.totals.goodsCost)} onOpen={() => setDetail("cost")} />
             <Tile
-              label={tx("Shipping charged")}
+              label={tx("Shipping paid by customers")}
               value={money(data.totals.shippingCharged)}
+              hint={tx("{orders} orders", { orders: data.totals.shippingChargedOrders })}
+              onOpen={() => setDetail("shipping-customers")}
             />
             <Tile
-              label={tx("Shipping cost")}
+              label={tx("Shipping paid by us")}
               value={money(data.totals.shippingCost)}
-              hint="Delivery cost from the settings, per order"
+              hint={`${tx("{orders} orders", { orders: data.totals.shippingCostOrders })}${
+                data.totals.shippingEstimated ? ` · ${tx("estimate")}` : ''
+              }`}
+              action={{ text: tx("Add"), href: "#shipping" }}
+              onOpen={() => document.getElementById("shipping")?.scrollIntoView({ behavior: "smooth" })}
             />
           </div>
 
-          <section id="revenue-by-day">
-            <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">
-              {tx("Revenue by day")}
-            </h3>
-            <div className="flex items-end gap-1 h-40 overflow-x-auto">
-              {data.days.map((day) => (
-                <div
-                  key={day.date}
-                  title={`${day.date}: ${money(day.revenue)}, ${day.orders} orders`}
-                  className="min-w-[8px] flex-1 bg-purple-500 rounded-t"
-                  style={{ height: `${(day.revenue / maxRevenue) * 100}%` }}
-                />
-              ))}
-            </div>
-          </section>
+          <DetailModal kind={detail} data={data} filters={filters} onClose={() => setDetail(null)} />
 
-          </>
-          )}
+          <RevenueChart days={data.days} from={from} to={to} />
 
-          {tab === 'filaments' && (
-          <section id="filaments">
-            <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-white">
-              {tx("Filaments")}
-            </h3>
-            <p className="mb-3 text-sm text-gray-500 dark:text-gray-400">
-              {data.filaments.quantity} pcs sold, revenue{' '}
-              {money(data.filaments.revenue)}, purchase cost{' '}
-              {money(data.filaments.cost)}, profit{' '}
-              {money(data.filaments.profit)}
-              {data.filaments.missingCost > 0 &&
-                ` (${data.filaments.missingCost} products without a purchase price are left out of the profit)`}
-              . Shipping is the share of each line in what delivery earned or lost.
-            </p>
-            <RowsTable rows={data.filaments.rows} />
-          </section>
-          )}
+          <ShippingSection
+            totals={data.totals}
+            entries={data.shippingPaid ?? []}
+            to={to}
+            onChange={load}
+          />
 
-          {tab === 'top-products' && (
-          <section id="top-products">
-            <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">
-              {tx("Top products")}
-            </h3>
-            <RowsTable rows={data.topProducts} />
-          </section>
-          )}
+          {/* jump to a part of the page */}
+          <nav aria-label={tx("Parts of the page")} className="flex flex-wrap gap-2">
+            {SECTIONS.map((section) => (
+              <a
+                key={section.id}
+                href={`#${section.id}`}
+                className="rounded-full border border-gray-200 px-3 py-1 text-sm text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
+              >
+                {tx(section.title)}
+              </a>
+            ))}
+          </nav>
 
-          {tab === 'by-category' && (
-          <section id="by-category">
-            <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">
-              {tx("By category")}
-            </h3>
-            <RowsTable rows={data.byCategory} label={tx("Category")} />
-          </section>
-          )}
+          <RowsSection
+            id="sold-products"
+            linkFor={productLink}
+            title={tx("Sold products")}
+            description={tx("Every product sold in the period.")}
+            rows={data.soldProducts ?? data.topProducts}
+            label={tx("Product")}
+            tools
+          />
+          <RowsSection
+            id="by-category"
+            linkFor={categoryLink}
+            title={tx("By category")}
+            rows={data.byCategory}
+            label={tx("Category")}
+          />
+          <RowsSection
+            id="by-manufacturer"
+            linkFor={manufacturerLink}
+            title={tx("By manufacturer")}
+            rows={data.byManufacturer}
+            label={tx("Manufacturer")}
+          />
+          <RowsSection
+            id="filaments"
+            linkFor={productLink}
+            title={tx("Filaments")}
+            description={tx(
+              "{quantity} pcs sold, revenue {revenue}, purchase cost {cost}, profit {profit}. Shipping is the share of each line in what delivery earned or lost.",
+              {
+                quantity: data.filaments.quantity,
+                revenue: money(data.filaments.revenue),
+                cost: money(data.filaments.cost),
+                profit: money(data.filaments.profit),
+              }
+            )}
+            rows={data.filaments.rows}
+            label={tx("Product")}
+            tools
+          />
+          <RowsSection
+            id="top-customers"
+            linkFor={customerLink}
+            title={tx("Top customers")}
+            rows={data.topCustomers}
+            label={tx("Customer")}
+          />
 
-          {tab === 'by-manufacturer' && (
-          <section id="by-manufacturer">
-            <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">
-              {tx("By manufacturer")}
-            </h3>
-            <RowsTable rows={data.byManufacturer} label={tx("Manufacturer")} />
-          </section>
-          )}
-
-          {tab === 'top-customers' && (
-          <section id="top-customers">
-            <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">
-              {tx("Top customers")}
-            </h3>
-            <RowsTable rows={data.topCustomers} label={tx("Customer")} />
-          </section>
-          )}
+          <TrafficSection from={from} to={to} />
 
           <div className="flex flex-wrap gap-2">
             <Button color="gray" size="sm" onClick={load}>

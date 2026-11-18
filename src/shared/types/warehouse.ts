@@ -29,7 +29,25 @@ export interface WarehouseProduct {
   lowStockWarning: number | null
   lowStockCritical: number | null
   isPublished: boolean
+  isMostSold?: boolean
+  isRecommended?: boolean
+  isShoppingCartRecommended?: boolean
   images?: { imageId: string }[]
+}
+
+export interface InventoryProduct extends WarehouseProduct {
+  isBackorder?: boolean
+  category?: { id: string; name: string } | null
+  manufacturer?: { id: string; name: string } | null
+}
+
+export type InventoryQuery = {
+  search?: string
+  stock?: '' | 'out' | 'critical' | 'warning'
+  published?: '' | 'yes' | 'no'
+  sort?: 'code' | 'name' | 'quantity-asc' | 'quantity-desc'
+  offset?: number
+  limit?: number
 }
 
 export interface Asset {

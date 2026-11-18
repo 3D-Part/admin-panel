@@ -13,10 +13,12 @@ export const OrdersHeader = () => {
     useOrdersStore()
 
   return (
-    <div className="w-full flex justify-between items-center gap-2 md:gap-4 z-20">
-      <div className="flex-1 min-w-0">
+    <div className="w-full flex flex-wrap lg:flex-nowrap justify-between items-center gap-2 md:gap-4 z-20">
+      <div className="w-full lg:w-auto lg:flex-1 min-w-0">
         <OrdersSearch />
       </div>
+      {/* on a phone the controls sit in one row under the search */}
+      <div className="flex w-full lg:w-auto lg:shrink-0 items-center justify-between gap-2 md:gap-4">
       <ToggleSwitch
         checked={disputedOnly}
         label={tx("Disputed only")}
@@ -28,6 +30,7 @@ export const OrdersHeader = () => {
       />
       <OrdersSort />
       <ExportButton kind="orders" />
+      </div>
     </div>
   )
 }

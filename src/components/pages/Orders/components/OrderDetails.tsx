@@ -1,18 +1,23 @@
+import { OrderFlagPicker } from '@/components/common/OrderFlag/OrderFlag'
 import { tx } from '@/shared/i18n'
+import InfoTip from '@/components/common/InfoTip/InfoTip'
 import { modalRoot } from '@/shared/helpers/modalRoot'
 import dateTimeFormat from '@/shared/helpers/dateTimeFormat'
 import { Order, OrderProduct } from '@/shared/types'
-import { Button, Modal, Badge, ToggleSwitch } from 'flowbite-react'
+import { Button, Modal, Badge, Label, Textarea, ToggleSwitch } from 'flowbite-react'
 import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
 import { BackofficeAPI, OrdersAPI } from '@/services'
-import { CustomerProfileForm } from '@/components/common/CustomerFlag/CustomerFlag'
-import { URLPartsEnum } from '@/shared/enums'
+import {
+  CustomerFlagBadge,
+  CustomerProfileForm,
+  useCustomerProfiles,
+} from '@/components/common/CustomerFlag/CustomerFlag'
 import { useCurrentUserStore, useOrdersStore } from '@/store/store'
 import { hasPermission } from '@/shared/helpers/permissions'
 import { PermissionEnum } from '@/shared/types'
 import OrderEditor from './OrderEditor/OrderEditor'
+import SendOfferButton from './SendOfferButton'
 
 type OrderDetailsType = {
   isOpen: boolean
@@ -24,6 +29,67 @@ type OrderDetailType = {
   name: string
   value: string
   className?: string
+}
+
+
+/** A note on this order or offer only; the customer's other orders do not show it. */
+const OrderNoteForm: React.FC<{
+  order: Order
+  disabled?: boolean
+  onSaved: (note: string) => void
+}> = ({ order, disabled, onSaved }) => {
+  const [note, setNote] = useState(order.internalNote ?? '')
+  const [saving, setSaving] = useState(false)
+
+  useEffect(() => {
+    setNote(order.internalNote ?? '')
+  }, [order.id, order.internalNote])
+
+  const save = async () => {
+    setSaving(true)
+    const saved = await OrdersAPI.orderUpdateNote(order.id, note.trim())
+    setSaving(false)
+    if (!saved) {
+      toast(tx("Could not save"), { type: 'error', autoClose: 2000 })
+      return
+    }
+    onSaved(note.trim())
+    toast(tx("Note saved"), { type: 'success', autoClose: 2000 })
+  }
+
+  return (
+    <div className="relative w-full p-4 rounded-lg border border-gray-200 dark:border-gray-700 space-y-3">
+      <InfoTip
+        text={tx(
+          'Only for this order or offer, e.g. what was agreed. Other orders of the customer do not show it. The customer never sees it.'
+        )}
+      />
+      <h4 className="pr-8 text-sm font-semibold text-gray-900 dark:text-white">
+        {tx('This order')} <span className="font-normal text-gray-500">(#{order.orderNumber})</span>
+      </h4>
+      <div>
+        <Label htmlFor="order-note" value={tx("Note on this order (staff only)")} />
+        <Textarea
+          id="order-note"
+          rows={2}
+          maxLength={2000}
+          value={note}
+          disabled={disabled}
+          onChange={(e) => setNote(e.target.value)}
+        />
+      </div>
+      {!disabled && (
+        <Button
+          size="sm"
+          color="purple"
+          disabled={saving || note.trim() === (order.internalNote ?? '')}
+          onClick={save}
+        >
+          {tx("Save note")}
+        </Button>
+      )}
+    </div>
+  )
 }
 
 const OrderDetail: React.FC<OrderDetailType> = ({
@@ -102,7 +168,6 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
   order,
   onClose,
 }) => {
-  const router = useRouter()
   const { fetchOrders, currentPage, itemsPerPage } = useOrdersStore()
   const { currentUser } = useCurrentUserStore()
   const hasWritePermission = hasPermission(
@@ -144,14 +209,6 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
     })
   }
 
-  const createProforma = async () => {
-    const proforma = await BackofficeAPI.createProformaFromOrder(currentOrder.id)
-    if (proforma) {
-      toast(`${proforma.number} created`, { type: 'success', autoClose: 2000 })
-      router.push(URLPartsEnum.Proformas)
-    }
-  }
-
   const {
     createdAt,
     city,
@@ -175,6 +232,7 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
     user,
     hasBackorder,
   } = currentOrder
+  const customerProfiles = useCustomerProfiles([email])
 
   const formattedDate = dateTimeFormat(createdAt)
 
@@ -185,6 +243,7 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
           <span className="font-semibold text-gray-900 dark:text-white">
             Order #{orderNumber}
           </span>
+          <CustomerFlagBadge profile={customerProfiles[email?.toLowerCase()]} withLabel />
           <Badge
             color={
               status === 'pending'
@@ -375,7 +434,35 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
           onChange={changeDisputed}
         />
 
-        {currentOrder.email && <CustomerProfileForm email={currentOrder.email} />}
+        <OrderFlagPicker
+          order={currentOrder}
+          disabled={!hasWritePermission}
+          onSaved={(flag) => {
+            setCurrentOrder({ ...currentOrder, flag })
+            // the list shows the flag on the row
+            fetchOrders({
+              offset: (currentPage - 1) * itemsPerPage,
+              limit: itemsPerPage,
+            })
+          }}
+        />
+
+        <OrderNoteForm
+          order={currentOrder}
+          disabled={!hasWritePermission}
+          onSaved={(internalNote) => {
+            setCurrentOrder({ ...currentOrder, internalNote })
+            // the list shows a note icon on the row
+            fetchOrders({
+              offset: (currentPage - 1) * itemsPerPage,
+              limit: itemsPerPage,
+            })
+          }}
+        />
+
+        {currentOrder.email && (
+          <CustomerProfileForm email={currentOrder.email} inOrder />
+        )}
 
         {/* Products */}
         <div>
@@ -398,13 +485,7 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
         >
           {tx("Edit order")}
         </Button>
-        <Button
-          color="light"
-          onClick={createProforma}
-          className="w-full sm:w-auto"
-        >
-          {tx("Create proforma")}
-        </Button>
+        <SendOfferButton order={currentOrder} onSent={setCurrentOrder} />
         <Button onClick={onClose} className="w-full sm:w-auto">
           {tx("Close")}
         </Button>

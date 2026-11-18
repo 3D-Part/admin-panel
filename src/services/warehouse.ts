@@ -2,6 +2,8 @@ import { API } from '@/shared/helpers'
 import {
   Asset,
   AssetFormBody,
+  InventoryProduct,
+  InventoryQuery,
   ListResponse,
   ProductMovementType,
   ScanResult,
@@ -66,6 +68,20 @@ const assignEan = async (
     )
   } catch (error) {
     console.error('Error assigning barcode:', error)
+    return null
+  }
+}
+
+const getInventory = async (
+  params: InventoryQuery
+): Promise<ListResponse<InventoryProduct> | null> => {
+  try {
+    return await API.get<ListResponse<InventoryProduct>>(
+      `${API_BASE_URL}/warehouse/inventory`,
+      params
+    )
+  } catch (error) {
+    console.error('Error fetching inventory:', error)
     return null
   }
 }
@@ -162,6 +178,7 @@ const WarehouseAPI = {
   moveProductStock,
   assignEan,
   getAssets,
+  getInventory,
   createAsset,
   updateAsset,
   changeAssetStatus,
