@@ -42,7 +42,7 @@ const ZohoSummary: React.FC = () => {
     const { data, error } = await BackofficeAPI.addZohoSubscriber(email.trim())
     setBusy(null)
     if (!data) {
-      toast(error ? tx(error) : tx('The subscriber was not added'), { type: 'error', autoClose: 6000 })
+      if (!error) toast(tx('The subscriber was not added'), { type: 'error', autoClose: 6000 })
       return
     }
     setEmail('')
@@ -64,7 +64,7 @@ const ZohoSummary: React.FC = () => {
     const { data, error } = await BackofficeAPI.syncZoho()
     setBusy(null)
     if (!data) {
-      toast(error ? tx(error) : tx('The sync did not finish'), { type: 'error', autoClose: 7000 })
+      if (!error) toast(tx('The sync did not finish'), { type: 'error', autoClose: 7000 })
       return
     }
     toast(

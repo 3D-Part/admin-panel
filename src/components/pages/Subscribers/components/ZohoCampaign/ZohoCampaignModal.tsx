@@ -65,7 +65,8 @@ export const ZohoCampaignModal: React.FC<{ isOpen: boolean; onClose: () => void 
     setContent((prev) => ({ ...prev, [key]: e.target.value }))
 
   const list = status?.lists.find((item) => item.listKey === status.listKey)
-  const ready = !!(content.subject.trim() && content.headline.trim() && content.body.trim())
+  // the headline is optional: without it the subject is the mail's heading
+  const ready = !!(content.subject.trim() && content.body.trim())
   const connected = !!status?.connected && !!status.listKey
 
   // a test goes only to the test list in Zoho; "send to everyone" asks first
@@ -82,7 +83,7 @@ export const ZohoCampaignModal: React.FC<{ isOpen: boolean; onClose: () => void 
     })
     setBusy(null)
     if (!data) {
-      toast(error ? tx(error) : tx('The test was not sent'), { type: 'error', autoClose: 7000 })
+      if (!error) toast(tx('The test was not sent'), { type: 'error', autoClose: 7000 })
     } else {
       toast(tx('The test is on its way to {email}', { email: testEmail.trim() }), { type: 'success', autoClose: 5000 })
     }
@@ -109,7 +110,7 @@ export const ZohoCampaignModal: React.FC<{ isOpen: boolean; onClose: () => void 
     setBusy(null)
     setConfirmSend(false)
     if (!data) {
-      toast(error ? tx(error) : tx('The campaign was not sent'), { type: 'error', autoClose: 7000 })
+      if (!error) toast(tx('The campaign was not sent'), { type: 'error', autoClose: 7000 })
       load()
       return
     }
@@ -122,8 +123,9 @@ export const ZohoCampaignModal: React.FC<{ isOpen: boolean; onClose: () => void 
     setBusy(id)
     const { data, error } = await BackofficeAPI.sendZohoCampaign(id)
     setBusy(null)
-    if (!data) toast(error ? tx(error) : tx('The campaign was not sent'), { type: 'error', autoClose: 6000 })
-    else toast(tx('The campaign is being sent through Zoho'), { type: 'success', autoClose: 4000 })
+    if (!data) {
+      if (!error) toast(tx('The campaign was not sent'), { type: 'error', autoClose: 6000 })
+    } else toast(tx('The campaign is being sent through Zoho'), { type: 'success', autoClose: 4000 })
     load()
   }
 
@@ -163,7 +165,13 @@ export const ZohoCampaignModal: React.FC<{ isOpen: boolean; onClose: () => void 
             </div>
             <div>
               <Label htmlFor="zc-headline" value={tx('Email Headline')} />
-              <TextInput id="zc-headline" value={content.headline} onChange={set('headline')} className="mt-1" />
+              <TextInput
+                id="zc-headline"
+                value={content.headline}
+                onChange={set('headline')}
+                placeholder={content.subject}
+                className="mt-1"
+              />
             </div>
             <div>
               <Label htmlFor="zc-body" value={tx('Content (text or HTML)')} />

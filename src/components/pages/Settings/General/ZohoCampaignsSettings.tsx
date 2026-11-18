@@ -109,7 +109,7 @@ const ZohoCampaignsSettings: React.FC<{ value: ZohoForm; onChange: (next: ZohoFo
     })
     setBusy(null)
     if (!data) {
-      toast(error ? tx(error) : tx('Zoho was not connected'), { type: 'error', autoClose: 8000 })
+      if (!error) toast(tx('Zoho was not connected'), { type: 'error', autoClose: 8000 })
       return
     }
     setKeys({ clientId: '', clientSecret: '', code: '' })

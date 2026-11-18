@@ -27,7 +27,7 @@ export const buildNewsletterHtml = (content: NewsletterContent) => {
 <div style="max-width:600px;margin:0 auto;background:#ffffff;border-radius:8px;overflow:hidden">
 <div style="background:#1c1c1c;padding:18px;text-align:center;color:#ffffff;font-size:22px;font-weight:bold;letter-spacing:1px">3D<span style="color:#2b7bbf">PART</span></div>
 <div style="padding:28px 24px">
-<h1 style="font-size:24px;margin:0 0 16px;text-align:center">${escapeHtml(content.headline)}</h1>
+<h1 style="font-size:24px;margin:0 0 16px;text-align:center">${escapeHtml(content.headline.trim() || content.subject)}</h1>
 <div style="font-size:15px;line-height:1.6">${body}</div>
 ${button}
 </div>
@@ -47,7 +47,7 @@ export const buildNewsletterText = (content: NewsletterContent) => {
         .trim()
     : content.body
   const link = content.buttonLabel && content.buttonUrl ? `\n\n${content.buttonLabel}: ${content.buttonUrl}` : ''
-  return `${content.headline}\n\n${body}${link}\n\n3DPart`
+  return `${content.headline.trim() || content.subject}\n\n${body}${link}\n\n3DPart`
 }
 
 export const chunkEmails = (emails: string[], size: number) => {
