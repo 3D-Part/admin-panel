@@ -14,7 +14,8 @@ import {
   otherList,
   statusOf,
 } from '@/shared/helpers/billingOptions'
-import { formatStepDate, useBillingSteps, visibleSteps } from './billingStepsStore'
+import { STATUS_DOT, formatStepDate, useBillingSteps, visibleSteps } from './billingStepsStore'
+import getOrderStatusLabel from '@/shared/helpers/getOrderStatusLabel'
 import { OrderStatusEnum } from '@/shared/enums'
 
 // What ticking a step also does, by the status it is tied to
@@ -67,12 +68,15 @@ const BillingSteps: React.FC<{
   const text = ticked.length
     ? ticked.map((option) => tx(option.label)).join(', ')
     : '—'
-  // the button shows the step ticked last, in that step's color
-  const latest = ticked.reduce<BillingOption | undefined>(
-    (best, option) =>
-      !best || (steps[option.id] ?? '') >= (steps[best.id] ?? '') ? option : best,
-    undefined
-  )
+  // the button shows the last ticked step of the list (the last filled
+  // circle), in that step's color; with none ticked, the status as the
+  // circles show it
+  // Cancelled and Returned paint every circle, so they win over older steps
+  const ended =
+    (status === OrderStatusEnum.Declined || status === OrderStatusEnum.Returned) &&
+    !ticked.some((option) => statusOf(option) === status)
+  const latest = ended ? undefined : [...ticked].reverse()[0]
+  const statusFill = !latest ? STATUS_DOT[status] : undefined
 
   // the panel is fixed to the screen, so the table cannot clip it
   useLayoutEffect(() => {
@@ -125,10 +129,14 @@ const BillingSteps: React.FC<{
         className={`flex w-full max-w-[10rem] items-center justify-between gap-2 rounded-lg border px-2.5 py-1.5 text-left text-xs font-medium ${
           latest
             ? `${BILLING_COLORS[latest.color] ?? BILLING_COLORS.gray} border-transparent`
+            : statusFill
+            ? `${statusFill} text-white`
             : 'text-gray-500 dark:text-gray-400 border-gray-200 bg-gray-50 dark:border-gray-600 dark:bg-gray-700'
         } ${disabled ? 'cursor-default' : 'hover:opacity-90'}`}
       >
-        <span className="truncate">{latest ? tx(latest.label) : '—'}</span>
+        <span className="truncate">
+          {latest ? tx(latest.label) : statusFill ? getOrderStatusLabel(status) : '—'}
+        </span>
         {!disabled && <HiChevronDown className="h-4 w-4 shrink-0" />}
       </button>
 
