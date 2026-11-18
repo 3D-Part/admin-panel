@@ -73,7 +73,6 @@ export const zohoSettings = (form: ZohoForm) => ({
   senders: form.senders.map((email) => email.trim()).filter(Boolean),
   verifiedSenders: form.verifiedSenders.filter((email) => form.senders.includes(email)),
   fromName: form.fromName.trim(),
-  topicId: form.topicId.trim(),
   contactLimit: Number(form.contactLimit) || 2000,
   monthlyLimit: Number(form.monthlyLimit) || 6000,
   ...(form.disconnect ? { disconnect: true } : {}),
@@ -339,10 +338,6 @@ const ZohoCampaignsSettings: React.FC<{ value: ZohoForm; onChange: (next: ZohoFo
           <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
             {tx('Goes with every campaign. Not saved in Zoho, whose own sender name field does not take digits.')}
           </p>
-        </div>
-        <div>
-          <Label htmlFor="zh-topic" value={tx('Topic ID (only if Zoho asks for it)')} />
-          <TextInput id="zh-topic" value={value.topicId} onChange={(e) => set({ topicId: e.target.value })} />
         </div>
         <div>
           <Label htmlFor="zh-cl" value={tx('Contact limit of the Zoho plan')} />
