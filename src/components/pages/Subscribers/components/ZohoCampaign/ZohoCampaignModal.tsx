@@ -3,7 +3,7 @@ import { tx } from '@/shared/i18n'
 import { modalRoot } from '@/shared/helpers/modalRoot'
 import { BackofficeAPI } from '@/services'
 import { ZohoCampaign, ZohoStatus } from '@/services/backoffice'
-import { Badge, Button, Label, Modal, Textarea, TextInput } from 'flowbite-react'
+import { Badge, Button, Label, Modal, Select, Textarea, TextInput } from 'flowbite-react'
 import { useEffect, useMemo, useState } from 'react'
 import { toast } from 'react-toastify'
 import { NewsletterContent, buildNewsletterHtml } from '@/shared/helpers/newsletterDrafts'
@@ -36,9 +36,13 @@ export const ZohoCampaignModal: React.FC<{ isOpen: boolean; onClose: () => void 
   const [campaigns, setCampaigns] = useState<ZohoCampaign[]>([])
   const [busy, setBusy] = useState<'create' | 'send' | string | null>(null)
   const [confirmSend, setConfirmSend] = useState(false)
+  const [fromEmail, setFromEmail] = useState('')
 
   const load = () => {
-    BackofficeAPI.getZohoStatus().then(({ data }) => setStatus(data))
+    BackofficeAPI.getZohoStatus().then(({ data }) => {
+      setStatus(data)
+      setFromEmail((current) => current || data?.fromEmail || '')
+    })
     BackofficeAPI.getZohoCampaigns().then(({ data }) => setCampaigns(data ?? []))
   }
 
@@ -59,7 +63,12 @@ export const ZohoCampaignModal: React.FC<{ isOpen: boolean; onClose: () => void 
 
   const create = async (send: boolean) => {
     setBusy(send ? 'send' : 'create')
-    const { data, error } = await BackofficeAPI.createZohoCampaign({ subject: content.subject.trim(), html, send })
+    const { data, error } = await BackofficeAPI.createZohoCampaign({
+      subject: content.subject.trim(),
+      html,
+      send,
+      fromEmail: fromEmail || undefined,
+    })
     setBusy(null)
     setConfirmSend(false)
     if (!data) {
@@ -104,6 +113,16 @@ export const ZohoCampaignModal: React.FC<{ isOpen: boolean; onClose: () => void 
               {tx('Goes to the Zoho list')}: <strong>{list?.listName ?? status?.listName ?? '—'}</strong>
               {list ? ` (${list.contacts})` : ''}
             </p>
+            <div>
+              <Label htmlFor="zc-from" value={tx('From')} />
+              <Select id="zc-from" value={fromEmail} onChange={(e) => setFromEmail(e.target.value)} className="mt-1">
+                {(status?.senders?.length ? status.senders : [fromEmail || 'info@3dpartshop.com']).map((email) => (
+                  <option key={email} value={email}>
+                    {email}
+                  </option>
+                ))}
+              </Select>
+            </div>
             <div>
               <Label htmlFor="zc-subject" value={tx('Email Subject')} />
               <TextInput id="zc-subject" value={content.subject} onChange={set('subject')} className="mt-1" />

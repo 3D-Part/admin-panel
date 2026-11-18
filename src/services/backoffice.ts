@@ -18,6 +18,8 @@ export type ZohoStatus = {
   listName?: string
   error?: string
   lists: { listKey: string; listName: string; contacts: number }[]
+  fromEmail?: string
+  senders?: string[]
 }
 export type ZohoCampaign = {
   id: string
@@ -342,7 +344,7 @@ const BackofficeAPI = {
       API.post<unknown, { total: number; added: number; failed: number }>(`${BASE}/zoho/sync-subscribers`, {})
     ),
   getZohoCampaigns: () => attemptWithError(() => API.get<ZohoCampaign[]>(`${BASE}/zoho/campaigns`)),
-  createZohoCampaign: (body: { subject: string; html: string; send: boolean }) =>
+  createZohoCampaign: (body: { subject: string; html: string; send: boolean; fromEmail?: string }) =>
     attemptWithError(() =>
       API.post<typeof body, { id: string; campaignKey: string; status: string }>(`${BASE}/zoho/campaigns`, body)
     ),

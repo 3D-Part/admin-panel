@@ -1090,6 +1090,11 @@ const sr: Record<string, string> = {
   "Set the sender address in the settings": "Upiši adresu pošiljaoca u podešavanjima",
   "Zoho is not answering": "Zoho ne odgovara",
   "Zoho gave no lasting token. Generate a new code and connect again.": "Zoho nije dao trajni token. Generiši novi kod i poveži ponovo.",
+  "Senders": "Pošiljaoci",
+  "The addresses a campaign may come from; the sender is picked on each campaign. Each one has to be a confirmed sender in Zoho Campaigns (Settings → Sender addresses).": "Adrese s kojih kampanja smije ići; pošiljalac se bira na svakoj kampanji. Svaka mora biti potvrđen pošiljalac u Zoho Campaigns (Settings → Sender addresses).",
+  "default": "podrazumijevano",
+  "Add sender": "Dodaj pošiljaoca",
+  "This sender is not in the senders of the Zoho Campaigns settings": "Ovaj pošiljalac nije među pošiljaocima u Zoho Campaigns podešavanjima",
 }
 
 export default sr

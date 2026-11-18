@@ -11,15 +11,20 @@ export type ZohoForm = {
   listKey: string
   listName: string
   fromEmail: string
+  // every address a campaign may come from (confirmed senders in Zoho)
+  senders: string[]
   fromName: string
   topicId: string
   disconnect: boolean
 }
 
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
 export const DEFAULT_ZOHO_FORM: ZohoForm = {
   listKey: '',
   listName: '',
-  fromEmail: 'aleksa.pejakovic@3dpartshop.com',
+  fromEmail: 'info@3dpartshop.com',
+  senders: ['info@3dpartshop.com'],
   fromName: '3D Part',
   topicId: '',
   disconnect: false,
@@ -30,6 +35,12 @@ export const readZohoForm = (stored: any): ZohoForm => ({
   listKey: stored?.listKey || '',
   listName: stored?.listName || '',
   fromEmail: stored?.fromEmail || DEFAULT_ZOHO_FORM.fromEmail,
+  senders: Array.from(
+    new Set([
+      stored?.fromEmail || DEFAULT_ZOHO_FORM.fromEmail,
+      ...(Array.isArray(stored?.senders) ? stored.senders : []),
+    ])
+  ),
   fromName: stored?.fromName || DEFAULT_ZOHO_FORM.fromName,
   topicId: stored?.topicId || '',
 })
@@ -39,6 +50,7 @@ export const zohoSettings = (form: ZohoForm) => ({
   listKey: form.listKey,
   listName: form.listName,
   fromEmail: form.fromEmail.trim(),
+  senders: form.senders.map((email) => email.trim()).filter(Boolean),
   fromName: form.fromName.trim(),
   topicId: form.topicId.trim(),
   ...(form.disconnect ? { disconnect: true } : {}),
@@ -56,6 +68,17 @@ const ZohoCampaignsSettings: React.FC<{ value: ZohoForm; onChange: (next: ZohoFo
   const [status, setStatus] = useState<ZohoStatus | null>(null)
   const [keys, setKeys] = useState({ clientId: '', clientSecret: '', code: '' })
   const [busy, setBusy] = useState<'connect' | 'sync' | null>(null)
+  const [newSender, setNewSender] = useState('')
+  const addSender = () => {
+    const email = newSender.trim().toLowerCase()
+    if (!EMAIL.test(email) || value.senders.includes(email)) return
+    onChange({ ...value, senders: [...value.senders, email] })
+    setNewSender('')
+  }
+  const removeSender = (email: string) => {
+    const senders = value.senders.filter((item) => item !== email)
+    onChange({ ...value, senders, fromEmail: value.fromEmail === email ? senders[0] ?? '' : value.fromEmail })
+  }
   const set = (patch: Partial<ZohoForm>) => onChange({ ...value, ...patch })
 
   const load = () => BackofficeAPI.getZohoStatus().then(({ data }) => setStatus(data))
@@ -182,10 +205,50 @@ const ZohoCampaignsSettings: React.FC<{ value: ZohoForm; onChange: (next: ZohoFo
               {tx('Send all subscribers to Zoho')}
             </Button>
           </div>
-          <div>
-            <Label htmlFor="zh-from" value={tx('Sender address')} />
-            <TextInput id="zh-from" type="email" value={value.fromEmail} onChange={(e) => set({ fromEmail: e.target.value })} />
-            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{tx('Has to be a confirmed sender in Zoho Campaigns.')}</p>
+          <div className="md:col-span-2 space-y-2">
+            <Label value={tx('Senders')} />
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              {tx('The addresses a campaign may come from; the sender is picked on each campaign. Each one has to be a confirmed sender in Zoho Campaigns (Settings → Sender addresses).')}
+            </p>
+            <div className="space-y-1">
+              {value.senders.map((email) => (
+                <label key={email} className="flex items-center gap-3 text-sm text-gray-800 dark:text-gray-200">
+                  <input
+                    type="radio"
+                    name="zh-default-sender"
+                    checked={value.fromEmail === email}
+                    onChange={() => set({ fromEmail: email })}
+                  />
+                  <span className="flex-1">{email}</span>
+                  {value.fromEmail === email && (
+                    <span className="text-xs text-purple-600 dark:text-purple-300">{tx('default')}</span>
+                  )}
+                  {value.senders.length > 1 && (
+                    <button type="button" className="text-xs text-red-600 hover:underline" onClick={() => removeSender(email)}>
+                      {tx('Remove')}
+                    </button>
+                  )}
+                </label>
+              ))}
+            </div>
+            <div className="flex gap-2">
+              <TextInput
+                type="email"
+                className="flex-1"
+                placeholder="ime@3dpartshop.com"
+                value={newSender}
+                onChange={(e) => setNewSender(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault()
+                    addSender()
+                  }
+                }}
+              />
+              <Button size="sm" color="gray" disabled={!EMAIL.test(newSender.trim())} onClick={addSender}>
+                {tx('Add sender')}
+              </Button>
+            </div>
           </div>
           <div>
             <Label htmlFor="zh-name" value={tx('Sender name')} />
