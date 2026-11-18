@@ -8,12 +8,15 @@ import React, { useState } from 'react'
 import OrderSteps from '../../OrderStatus/OrderSteps'
 import BillingSteps from '../../OrderStatus/BillingSteps'
 import { StepLists } from '@/shared/helpers/billingOptions'
-import { BiMessageDetail, BiNote } from 'react-icons/bi'
+import { BiMessageDetail, BiNote, BiTrash } from 'react-icons/bi'
+import { toast } from 'react-toastify'
+import { WarningModal } from '@/components/common'
+import { OrdersAPI } from '@/services'
 import SendOfferButton from '../../SendOfferButton'
 import OrderContactForm from '../../OrderContactForm'
 import OrderEditModal from '../../OrderEditModal/OrderEditModal'
 import OrderDetails from '../../OrderDetails'
-import { useCurrentUserStore } from '@/store/store'
+import { useCurrentUserStore, useOrdersStore } from '@/store/store'
 import { hasPermission } from '@/shared/helpers/permissions'
 import { PermissionEnum } from '@/shared/types'
 
@@ -44,6 +47,17 @@ export const TableItem: React.FC<TableItemType> = ({
   const [isFormModalOpen, setIsFormModalOpen] = useState(false)
   const [isOrderStatusModalOpen, setIsOrderStatusModalOpen] = useState(false)
   const [isOrderDetailsOpen, setIsOrderDetailsOpen] = useState(false)
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false)
+  const { fetchOrders } = useOrdersStore()
+
+  // the order goes for good; its stock and the customer's points go back first
+  const deleteOrder = async () => {
+    setIsDeleteOpen(false)
+    if (await OrdersAPI.orderDelete(id)) {
+      toast(tx('Order {number} is deleted', { number: order.orderNumber }), { type: 'success', autoClose: 3000 })
+      fetchOrders()
+    }
+  }
 
   const { currentUser } = useCurrentUserStore()
 
@@ -147,9 +161,29 @@ export const TableItem: React.FC<TableItemType> = ({
             >
               <BiMessageDetail className="h-5 w-5" />
             </button>
+            {hasWritePermission && (
+              <button
+                type="button"
+                onClick={() => setIsDeleteOpen(true)}
+                title={tx('Delete order')}
+                aria-label={tx('Delete order')}
+                className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-gray-600 transition-colors hover:bg-red-50 hover:text-red-700 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-red-300"
+              >
+                <BiTrash className="h-5 w-5" />
+              </button>
+            )}
           </div>
         </Table.Cell>
       </Table.Row>
+
+      <WarningModal
+        isOpen={isDeleteOpen}
+        onSave={deleteOrder}
+        onClose={() => setIsDeleteOpen(false)}
+        message={tx('Delete order {number} for good? Its stock and the customer points go back.', {
+          number: order.orderNumber,
+        })}
+      />
 
       <OrderContactForm
         isOpen={isFormModalOpen}

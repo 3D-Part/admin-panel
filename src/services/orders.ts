@@ -206,7 +206,19 @@ const orderSetFlag = async (id: string, flag: string | null): Promise<boolean> =
   }
 }
 
+// deletes the order for good; its stock and points go back first
+const orderDelete = async (id: string): Promise<boolean> => {
+  try {
+    await API.remove(`${API_BASE_URL}/order/${id}`)
+    return true
+  } catch (error) {
+    console.error('Error deleting order:', error)
+    return false
+  }
+}
+
 const OrdersAPI = {
+  orderDelete,
   orderSetFlag,
   getOrders,
   orderAccept,

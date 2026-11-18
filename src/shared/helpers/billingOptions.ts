@@ -89,9 +89,13 @@ export const readStepLists = (settings: unknown): StepLists => ({
 })
 
 /** An offer uses the offer steps, every other order the order steps. */
-export const listFor = (lists: StepLists, status: string) =>
-  status === 'PROFORMA_SENT' ? lists.offers : lists.orders
+// an offer, also a cancelled one, follows the offer steps
+const isOfferNow = (status: string, isOffer?: boolean) =>
+  status === 'PROFORMA_SENT' || (!!isOffer && status === 'DECLINED')
+
+export const listFor = (lists: StepLists, status: string, isOffer?: boolean) =>
+  isOfferNow(status, isOffer) ? lists.offers : lists.orders
 
 /** The other list, whose steps an order of this status does not show. */
-export const otherList = (lists: StepLists, status: string) =>
-  status === 'PROFORMA_SENT' ? lists.orders : lists.offers
+export const otherList = (lists: StepLists, status: string, isOffer?: boolean) =>
+  isOfferNow(status, isOffer) ? lists.orders : lists.offers

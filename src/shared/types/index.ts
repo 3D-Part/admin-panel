@@ -324,6 +324,8 @@ export interface Order {
   billingSteps?: Record<string, string>
   statusChangedAt?: string | null
   hasBackorder?: boolean
+  // the order was an offer: a cancelled offer stays in the offers
+  isOffer?: boolean
 }
 
 export interface OrdersData {

@@ -35,7 +35,7 @@ const StepBadge: React.FC<{ order: Order; lists: StepLists }> = ({
   lists,
 }) => {
   const { steps, status } = useBillingSteps(order)
-  const options = listFor(lists, status)
+  const options = listFor(lists, status, order.isOffer)
   const step = followsSteps(status, options, steps) ? lastTicked(options, steps) : undefined
 
   // New and Accepted show no badge, the circles say enough
