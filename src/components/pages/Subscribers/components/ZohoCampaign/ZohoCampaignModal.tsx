@@ -7,18 +7,21 @@ import { Badge, Button, Label, Modal, Select, Textarea, TextInput } from 'flowbi
 import { useEffect, useMemo, useState } from 'react'
 import { toast } from 'react-toastify'
 import { NewsletterContent, buildNewsletterHtml } from '@/shared/helpers/newsletterDrafts'
+import { useCurrentUserStore } from '@/store/store'
 
 const EMPTY: NewsletterContent = { subject: '', headline: '', body: '', buttonLabel: '', buttonUrl: '' }
 
 const STATUS_COLOR: Record<ZohoCampaign['status'], string> = {
   draft: 'gray',
   created: 'info',
+  sending: 'info',
   sent: 'success',
   failed: 'failure',
 }
 const STATUS_LABEL: Record<ZohoCampaign['status'], string> = {
   draft: 'Draft',
   created: 'In Zoho, not sent',
+  sending: 'Sending',
   sent: 'Sent',
   failed: 'Failed',
 }
@@ -37,6 +40,9 @@ export const ZohoCampaignModal: React.FC<{ isOpen: boolean; onClose: () => void 
   const [busy, setBusy] = useState<'create' | 'send' | string | null>(null)
   const [confirmSend, setConfirmSend] = useState(false)
   const [fromEmail, setFromEmail] = useState('')
+  const { currentUser } = useCurrentUserStore()
+  const [testEmail, setTestEmail] = useState('')
+  const [audience, setAudience] = useState<number | null>(null)
 
   const load = () => {
     BackofficeAPI.getZohoStatus().then(({ data }) => {
@@ -50,6 +56,7 @@ export const ZohoCampaignModal: React.FC<{ isOpen: boolean; onClose: () => void 
     if (!isOpen) return
     setContent(EMPTY)
     setConfirmSend(false)
+    setTestEmail((current) => current || currentUser?.email || '')
     load()
   }, [isOpen])
 
@@ -61,25 +68,52 @@ export const ZohoCampaignModal: React.FC<{ isOpen: boolean; onClose: () => void 
   const ready = !!(content.subject.trim() && content.headline.trim() && content.body.trim())
   const connected = !!status?.connected && !!status.listKey
 
-  const create = async (send: boolean) => {
-    setBusy(send ? 'send' : 'create')
+  // a test goes only to the test list in Zoho; "send to everyone" asks first
+  // with the real number of people on the list
+  const sendTest = async () => {
+    setBusy('test')
     const { data, error } = await BackofficeAPI.createZohoCampaign({
       subject: content.subject.trim(),
       html,
-      send,
+      send: true,
+      test: true,
+      testEmail: testEmail.trim(),
+      fromEmail: fromEmail || undefined,
+    })
+    setBusy(null)
+    if (!data) {
+      toast(error ? tx(error) : tx('The test was not sent'), { type: 'error', autoClose: 7000 })
+    } else {
+      toast(tx('The test is on its way to {email}', { email: testEmail.trim() }), { type: 'success', autoClose: 5000 })
+    }
+    load()
+  }
+
+  const askSend = async () => {
+    setBusy('count')
+    const { data } = await BackofficeAPI.getZohoActiveCount()
+    setBusy(null)
+    setAudience(data?.count ?? null)
+    setConfirmSend(true)
+  }
+
+  const sendAll = async () => {
+    if (busy) return
+    setBusy('send')
+    const { data, error } = await BackofficeAPI.createZohoCampaign({
+      subject: content.subject.trim(),
+      html,
+      send: true,
       fromEmail: fromEmail || undefined,
     })
     setBusy(null)
     setConfirmSend(false)
     if (!data) {
-      toast(error ? tx(error) : tx('The campaign was not created'), { type: 'error', autoClose: 7000 })
+      toast(error ? tx(error) : tx('The campaign was not sent'), { type: 'error', autoClose: 7000 })
       load()
       return
     }
-    toast(
-      send ? tx('The campaign is being sent through Zoho') : tx('The campaign is in Zoho Campaigns, not sent yet'),
-      { type: 'success', autoClose: 4000 }
-    )
+    toast(tx('The campaign is being sent through Zoho'), { type: 'success', autoClose: 4000 })
     setContent(EMPTY)
     load()
   }
@@ -116,7 +150,7 @@ export const ZohoCampaignModal: React.FC<{ isOpen: boolean; onClose: () => void 
             <div>
               <Label htmlFor="zc-from" value={tx('From')} />
               <Select id="zc-from" value={fromEmail} onChange={(e) => setFromEmail(e.target.value)} className="mt-1">
-                {(status?.senders?.length ? status.senders : [fromEmail || 'info@3dpartshop.com']).map((email) => (
+                {(status?.verifiedSenders?.length ? status.verifiedSenders : [fromEmail]).filter(Boolean).map((email) => (
                   <option key={email} value={email}>
                     {email}
                   </option>
@@ -145,8 +179,12 @@ export const ZohoCampaignModal: React.FC<{ isOpen: boolean; onClose: () => void 
                 <TextInput id="zc-url" value={content.buttonUrl} onChange={set('buttonUrl')} className="mt-1" placeholder="https://" />
               </div>
             </div>
+            <div>
+              <Label htmlFor="zc-test" value={tx('Test goes to')} />
+              <TextInput id="zc-test" type="email" value={testEmail} onChange={(e) => setTestEmail(e.target.value)} className="mt-1" />
+            </div>
             <p className="text-xs text-gray-500 dark:text-gray-400">
-              {tx('"Create in Zoho" leaves the campaign in Zoho Campaigns without sending: there you can send yourself a test mail, check it and schedule it. Zoho adds the unsubscribe link itself.')}
+              {tx('"Send a test to me" sends the real mail only to the test list in Zoho, with this address on it. Zoho adds the unsubscribe link itself.')}
             </p>
           </div>
 
@@ -171,7 +209,12 @@ export const ZohoCampaignModal: React.FC<{ isOpen: boolean; onClose: () => void 
                       <div className="min-w-0 flex-1">
                         <p className="truncate font-medium text-gray-900 dark:text-white">{campaign.subject}</p>
                         <p className="text-xs text-gray-500 dark:text-gray-400">
+                          {campaign.isTest ? `${tx('Test')} · ` : ''}
                           {day(campaign.sentAt ?? campaign.createdAt)}
+                          {campaign.recipients !== null && campaign.recipients !== undefined
+                            ? ` · ${tx('{count} recipients', { count: campaign.recipients })}`
+                            : ''}
+                          {campaign.fromEmail ? ` · ${campaign.fromEmail}` : ''}
                           {campaign.error ? ` · ${campaign.error}` : ''}
                         </p>
                       </div>
@@ -190,25 +233,37 @@ export const ZohoCampaignModal: React.FC<{ isOpen: boolean; onClose: () => void 
         </div>
       </Modal.Body>
       <Modal.Footer className="flex flex-wrap gap-2 border-t border-gray-200 dark:border-gray-700">
-        <Button color="gray" isProcessing={busy === 'create'} disabled={!ready || !connected || !!busy} onClick={() => create(false)}>
-          {tx('Create in Zoho (do not send)')}
+        <Button
+          color="gray"
+          isProcessing={busy === 'test'}
+          disabled={!ready || !connected || !!busy || !status?.testListKey || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(testEmail.trim())}
+          title={status?.testListKey ? undefined : tx('Pick the test list in Settings → Zoho Campaigns first')}
+          onClick={sendTest}
+        >
+          {tx('Send a test to me')}
         </Button>
         {confirmSend ? (
           <>
-            <span className="text-sm text-gray-700 dark:text-gray-300">
-              {tx('Send to everyone on the list now?')}
+            <span className="text-sm font-medium text-gray-800 dark:text-gray-200">
+              {audience === null
+                ? tx('Send to everyone on the list now?')
+                : tx('Send to {count} subscribers now?', { count: audience })}
             </span>
-            <Button color="failure" isProcessing={busy === 'send'} disabled={!!busy} onClick={() => create(true)}>
+            <Button color="failure" isProcessing={busy === 'send'} disabled={!!busy} onClick={sendAll}>
               {tx('Yes, send now')}
             </Button>
-            <Button color="gray" onClick={() => setConfirmSend(false)}>{tx('No')}</Button>
+            <Button color="gray" disabled={!!busy} onClick={() => setConfirmSend(false)}>
+              {tx('No')}
+            </Button>
           </>
         ) : (
-          <Button color="purple" disabled={!ready || !connected || !!busy} onClick={() => setConfirmSend(true)}>
-            {tx('Send now')}
+          <Button color="purple" isProcessing={busy === 'count'} disabled={!ready || !connected || !!busy} onClick={askSend}>
+            {tx('Send to everyone')}
           </Button>
         )}
-        <Button color="gray" onClick={onClose}>{tx('Close')}</Button>
+        <Button color="gray" disabled={busy === 'send'} onClick={onClose}>
+          {tx('Close')}
+        </Button>
       </Modal.Footer>
     </Modal>
   )

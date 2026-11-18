@@ -5,6 +5,7 @@ import { PaginationData } from '@/shared/types'
 import { SubscribersTable } from './components/SubscribersTable/SubscribersTable'
 import { useSubscribersSliceStore } from '@/store/store'
 import { SubscribersHeader } from './components/SubscribersHeader/SubscribersHeader'
+import ZohoSummary from './components/ZohoSummary/ZohoSummary'
 
 export const Subscribers = () => {
   const {
@@ -35,6 +36,7 @@ export const Subscribers = () => {
 
   return (
     <div className="w-full flex flex-col h-full overflow-hidden">
+      <ZohoSummary />
       <SubscribersHeader selected={selected} total={count} />
       <SubscribersTable selected={selected} setSelected={setSelected} />
     </div>

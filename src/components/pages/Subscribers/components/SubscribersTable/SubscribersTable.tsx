@@ -3,7 +3,7 @@ import { tx } from '@/shared/i18n'
 
 import React, { useCallback, useEffect, useState } from 'react'
 import { Checkbox, Pagination, Table } from 'flowbite-react'
-import { TableItem } from './TableItem/TableItem'
+import { TableItem, ZohoStatusBadge } from './TableItem/TableItem'
 import { useSubscribersSliceStore } from '@/store/store'
 import {
   Loader,
@@ -77,6 +77,10 @@ export const SubscribersTable = ({ selected, setSelected }: Props) => {
             label: tx("Email"),
             value: email,
           },
+          {
+            label: 'Zoho',
+            value: <ZohoStatusBadge subscriber={subscriber} />,
+          },
         ]}
       />
     )
@@ -98,6 +102,7 @@ export const SubscribersTable = ({ selected, setSelected }: Props) => {
                 <Checkbox checked={allOnPage} onChange={togglePage} aria-label={tx("Select page")} />
               </Table.HeadCell>
               <Table.HeadCell className="table-cell">{tx("Email")}</Table.HeadCell>
+              <Table.HeadCell className="table-cell">Zoho</Table.HeadCell>
             </Table.Head>
 
             <Table.Body className="divide-y divide-gray-100 dark:divide-gray-800">

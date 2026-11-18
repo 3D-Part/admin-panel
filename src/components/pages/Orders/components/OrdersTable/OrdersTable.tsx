@@ -151,101 +151,51 @@ export const OrdersTable = () => {
     const day = date.toLocaleString('en-US', { day: '2-digit' })
     const formattedDate = `${day}.${month}.${year}`
 
+    // on phones one compact row per order; the details open on a tap
     return (
-      <MobileCardBuilder
+      <div
         key={order.id}
-        title={
-          <span className="inline-flex items-center gap-2">
-            {fullName}
+        role={hasReadPermission ? 'button' : undefined}
+        onClick={hasReadPermission ? () => handleOrderClick(order) : undefined}
+        className="flex items-center gap-3 border-b border-gray-100 px-3 py-2.5 last:border-b-0 active:bg-gray-50 dark:border-gray-800 dark:active:bg-gray-800"
+      >
+        <div className="min-w-0 flex-1">
+          <div className="flex min-w-0 items-center gap-1.5">
+            <span className="truncate text-sm font-semibold text-gray-900 dark:text-white">
+              {order.companyName || fullName}
+            </span>
             <CustomerFlagBadge profile={profiles[email?.toLowerCase()]} />
             <OrderFlagBadge flag={order.flag} />
-          </span>
-        }
-        subtitle={email}
-        onClick={hasReadPermission ? () => handleOrderClick(order) : undefined}
-        items={[
-          {
-            label: tx("Order"),
-            value: <span className="font-medium">{order.orderNumber}</span>,
-          },
-          {
-            label: tx("City"),
-            value: city || (
-              <span className="text-gray-400 dark:text-gray-500">—</span>
-            ),
-          },
-          {
-            label: tx("Date"),
-            value: formattedDate,
-          },
-          {
-            label: tx("Price"),
-            value: (
-              <span className="font-semibold text-green-600 dark:text-green-400">
-                {price} KM
-              </span>
-            ),
-          },
-          {
-            label: tx("Status"),
-            value: (
-              <div
-                onClick={(e) => {
-                  e.stopPropagation()
-                  if (hasWritePermission) {
-                    handleStatusClick(order)
-                  }
-                }}
-                className={
-                  hasWritePermission
-                    ? 'cursor-pointer hover:opacity-80 transition-opacity'
-                    : ''
-                }
-              >
-                <div className="flex items-center justify-end gap-2">
-                  <OrderSteps order={order} lists={stepLists} />
-                </div>
-              </div>
-            ),
-          },
-          {
-            label: tx("Invoice"),
-            value: (
-              <div onClick={(e) => e.stopPropagation()}>
-                <BillingSteps
-                  order={order}
-                  lists={stepLists}
-                  disabled={!hasWritePermission}
-                />
-              </div>
-            ),
-          },
-        ]}
-        actions={
-          hasWritePermission ? (
-            <div
-              className="flex flex-wrap justify-end items-center gap-3 "
-              onClick={(e) => e.stopPropagation()}
-            >
-              <SendOfferButton order={order} />
-              <button
-                className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
-                onClick={() => handleMessageClick(order)}
-              >
-                <BiMessageDetail className="text-lg" />
-                <span>{tx("Send Message")}</span>
-              </button>
-            </div>
-          ) : null
-        }
-      />
+          </div>
+          <p className="truncate text-xs text-gray-500 dark:text-gray-400">
+            {order.orderNumber} · {formattedDate}
+            {city ? ` · ${city}` : ''}
+          </p>
+        </div>
+        <div className="flex shrink-0 flex-col items-end gap-1">
+          <span className="text-sm font-semibold text-green-600 dark:text-green-400">{price} KM</span>
+          <div
+            onClick={(e) => {
+              e.stopPropagation()
+              if (hasWritePermission) handleStatusClick(order)
+            }}
+            className={hasWritePermission ? 'cursor-pointer' : ''}
+          >
+            <OrderSteps order={order} lists={stepLists} />
+          </div>
+        </div>
+      </div>
     )
   })
 
   return (
     <>
       <ResponsiveTableWrapper
-        mobileCards={mobileCards}
+        mobileCards={
+        <div className="overflow-hidden rounded-xl border border-gray-100 bg-white dark:border-gray-800 dark:bg-gray-900">
+          {mobileCards}
+        </div>
+      }
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={(page) => changeCurrentPage(page)}

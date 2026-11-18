@@ -242,64 +242,53 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
       router.push(URLPartsEnum.EditProduct)
     }
 
+    // on phones one compact row per product; a tap opens it, the menu stays on the right
     return (
-      <MobileCardBuilder
+      <div
         key={product.id}
-        title={name}
-        subtitle={code ? `${code} · ${sku}` : sku}
+        role={hasWritePermission ? 'button' : undefined}
         onClick={hasWritePermission ? editProduct : undefined}
-        items={[
-          {
-            label: tx("Category"),
-            value: category ? (
-              <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400">
-                {category.name}
+        className="flex items-center gap-3 border-b border-gray-100 px-3 py-2.5 last:border-b-0 active:bg-gray-50 dark:border-gray-800 dark:active:bg-gray-800"
+      >
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm font-semibold text-gray-900 dark:text-white">
+            {name}
+            {!product.isPublished && (
+              <span className="ml-2 rounded bg-gray-200 px-1.5 py-0.5 text-[10px] font-medium text-gray-700 dark:bg-gray-700 dark:text-gray-300">
+                {tx('Not published')}
               </span>
-            ) : (
-              <span className="text-gray-400 dark:text-gray-500">—</span>
-            ),
-          },
-          {
-            label: tx("Manufacturer"),
-            value: manufacturer ? (
-              <span className="text-gray-700 dark:text-gray-300">
-                {manufacturer.name}
-              </span>
-            ) : (
-              <span className="text-gray-400 dark:text-gray-500">—</span>
-            ),
-          },
-          {
-            label: tx("Price"),
-            value: (
-              <span className="font-semibold text-green-600 dark:text-green-400">
-                {price} KM
-              </span>
-            ),
-          },
-          {
-            label: tx("Quantity"),
-            value: (
-              <span
-                className={`font-medium ${
-                  quantity > 0
-                    ? 'text-green-600 dark:text-green-400'
-                    : 'text-red-600 dark:text-red-400'
-                }`}
-              >
-                {quantity}
-              </span>
-            ),
-          },
-        ]}
-        actions={<MobileCardActions product={product} />}
-      />
+            )}
+          </p>
+          <p className="truncate text-xs text-gray-500 dark:text-gray-400">
+            {code ? `${code} · ${sku}` : sku}
+            {category ? ` · ${category.name}` : ''}
+            {manufacturer ? ` · ${manufacturer.name}` : ''}
+          </p>
+        </div>
+        <div className="flex shrink-0 flex-col items-end">
+          <span className="text-sm font-semibold text-green-600 dark:text-green-400">{price} KM</span>
+          <span
+            className={`text-xs font-medium ${
+              quantity > 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
+            }`}
+          >
+            {tx('Stock')}: {quantity}
+          </span>
+        </div>
+        <div className="shrink-0" onClick={(e) => e.stopPropagation()}>
+          <MobileCardActions product={product} />
+        </div>
+      </div>
     )
   })
 
   return (
     <ResponsiveTableWrapper
-      mobileCards={mobileCards}
+      mobileCards={
+        <div className="overflow-hidden rounded-xl border border-gray-100 bg-white dark:border-gray-800 dark:bg-gray-900">
+          {mobileCards}
+        </div>
+      }
       currentPage={currentPage}
       totalPages={totalPages}
       onPageChange={(page) => changeCurrentPage(page)}
