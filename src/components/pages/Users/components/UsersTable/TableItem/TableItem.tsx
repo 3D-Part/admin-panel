@@ -1,4 +1,5 @@
 'use client'
+import { UserAvatar } from '@/components/common/UserAvatar/UserAvatar'
 import { tx } from '@/shared/i18n'
 import { CustomerFlagBadge } from '@/components/common/CustomerFlag/CustomerFlag'
 import { CustomerProfile } from '@/services/backoffice'
@@ -30,6 +31,7 @@ export const TableItem: React.FC<TableItemType> = ({ user, profile }) => {
             <span className="w-4 shrink-0">
               <CustomerFlagBadge profile={profile} />
             </span>
+            <UserAvatar image={user.image} name={fullName} />
             <span>{fullName}</span>
           </div>
         </Table.Cell>

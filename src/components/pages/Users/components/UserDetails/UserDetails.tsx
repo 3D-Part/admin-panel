@@ -6,6 +6,8 @@ import { CustomerProfileForm } from '@/components/common/CustomerFlag/CustomerFl
 import getOrderStatusLabel from '@/shared/helpers/getOrderStatusLabel'
 import OrderDetails from '@/components/pages/Orders/components/OrderDetails'
 import { User, Order } from '@/shared/types'
+import { UserAvatar } from '@/components/common/UserAvatar/UserAvatar'
+import { avatarOf } from '@/shared/helpers/avatars'
 import { Button, Modal, Table, TextInput, Label, Select } from 'flowbite-react'
 import React, { useEffect, useState, useRef } from 'react'
 import { toast } from 'react-toastify'
@@ -206,6 +208,16 @@ const UserDetails: React.FC<UserDetailsType> = ({
           {tx("User ID:")}{' '}<span className="text-gray-400">#{id}</span>
         </Modal.Header>
         <Modal.Body>
+          {/* the avatar the customer picked on the shop's profile page */}
+          <div className="mb-4 flex items-center gap-3">
+            <UserAvatar image={user.image} name={fullName} size={56} />
+            <div className="text-sm">
+              <div className="font-medium text-gray-900 dark:text-white">{tx('Avatar')}</div>
+              <div className="text-gray-500 dark:text-gray-400">
+                {avatarOf(user.image)?.name ?? tx('No avatar picked')}
+              </div>
+            </div>
+          </div>
           <div className="flex flex-wrap gap-4">
             <UserDetail
               className="cursor-pointer"

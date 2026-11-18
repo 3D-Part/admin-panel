@@ -243,6 +243,8 @@ const sr: Record<string, string> = {
   "Date": "Datum",
   "Decline Message": "Poruka o otkazivanju",
   "Delete": "Obriši",
+  "Avatar": "Avatar",
+  "No avatar picked": "Nije izabrao avatar",
   "Recipients": "Primaoci",
   "Everyone on the Zoho list": "Svi na Zoho listi",
   "Only the subscribers ticked in the table": "Samo pretplatnici označeni u tabeli",

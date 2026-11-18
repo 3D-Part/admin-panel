@@ -1,4 +1,5 @@
 'use client'
+import { UserAvatar } from '@/components/common/UserAvatar/UserAvatar'
 import { tx } from '@/shared/i18n'
 
 import { Pagination, Table } from 'flowbite-react'
@@ -86,6 +87,7 @@ export const UsersTable = () => {
         title={
           <span className="inline-flex items-center gap-2">
             <CustomerFlagBadge profile={profiles[user.email?.toLowerCase()]} />
+            <UserAvatar image={user.image} name={fullName} size={24} />
             {fullName}
           </span>
         }
