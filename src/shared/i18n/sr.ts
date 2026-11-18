@@ -1074,14 +1074,14 @@ const sr: Record<string, string> = {
   "Not connected.": "Nije povezano.",
   "Connect again": "Poveži ponovo",
   "Connect": "Poveži",
-  "In api-console.zoho.eu → Self Client: copy the Client ID and Client Secret, generate a code with the scopes ZohoCampaigns.campaign.ALL,ZohoCampaigns.contact.ALL,ZohoCampaigns.reports.READ and connect within 10 minutes. The values are sent only to the server and never shown again.": "U api-console.zoho.eu → Self Client: kopiraj Client ID i Client Secret, generiši kod sa scope-ovima ZohoCampaigns.campaign.ALL,ZohoCampaigns.contact.ALL,ZohoCampaigns.reports.READ i poveži u roku od 10 minuta. Vrijednosti idu samo na server i više se nikad ne prikazuju.",
+  "In api-console.zoho.eu → Self Client: copy the Client ID and Client Secret, generate a code with the scopes ZohoCampaigns.campaign.ALL,ZohoCampaigns.contact.ALL and connect within 10 minutes. The values are sent only to the server and never shown again.": "U api-console.zoho.eu → Self Client: kopiraj Client ID i Client Secret, generiši kod sa scope-ovima ZohoCampaigns.campaign.ALL,ZohoCampaigns.contact.ALL i poveži u roku od 10 minuta. Vrijednosti idu samo na server i više se nikad ne prikazuju.",
   "Newsletter list in Zoho": "Lista za newsletter u Zohu",
   "Send all subscribers to Zoho": "Pošalji sve pretplatnike u Zoho",
   "Sender address": "Adresa pošiljaoca",
   "Has to be a confirmed sender in Zoho Campaigns.": "Mora biti potvrđen pošiljalac u Zoho Campaigns.",
   "Topic ID (only if Zoho asks for it)": "Topic ID (samo ako ga Zoho traži)",
   "Disconnect Zoho": "Odspoji Zoho",
-  "New subscribers of the site go onto the list by themselves. Save the settings after changing the list or the sender.": "Novi pretplatnici sa sajta sami idu na listu. Sačuvaj podešavanja nakon promjene liste ili pošiljaoca.",
+  "New subscribers of the site go onto the list by themselves; with double opt-in on the list, Zoho sends them a confirmation mail. Save the settings after changing the list or the sender.": "Novi pretplatnici sa sajta sami idu na listu; ako je na listi uključen double opt-in, Zoho im šalje mejl za potvrdu. Sačuvaj podešavanja nakon promjene liste ili pošiljaoca.",
   "The Zoho code is wrong or has expired (it lasts 10 minutes). Generate a new one.": "Zoho kod je pogrešan ili je istekao (traje 10 minuta). Generiši novi.",
   "The Zoho Client ID or Client Secret is wrong.": "Zoho Client ID ili Client Secret nije ispravan.",
   "Zoho did not accept the request. Check the Client ID, Client Secret and code.": "Zoho nije prihvatio zahtjev. Provjeri Client ID, Client Secret i kod.",
@@ -1095,6 +1095,10 @@ const sr: Record<string, string> = {
   "default": "podrazumijevano",
   "Add sender": "Dodaj pošiljaoca",
   "This sender is not in the senders of the Zoho Campaigns settings": "Ovaj pošiljalac nije među pošiljaocima u Zoho Campaigns podešavanjima",
+  "Download subscribers (CSV for Zoho import)": "Preuzmi pretplatnike (CSV za Zoho uvoz)",
+  "In Zoho Campaigns: Contacts → Import → this file → list \"3DPart pretplatnici\", and confirm the contacts already agreed to receive mail. That way Zoho sends them no confirmation mail.": "U Zoho Campaigns: Contacts → Import → ovaj fajl → lista \"3DPart pretplatnici\", i potvrdi da su kontakti već pristali na mejlove. Tako im Zoho ne šalje mejl za potvrdu.",
+  "{count} subscribers in the file": "Pretplatnika u fajlu: {count}",
+  "The Zoho connection is incomplete. Connect Zoho Campaigns again in the settings.": "Veza sa Zohom nije potpuna. Ponovo poveži Zoho Campaigns u podešavanjima.",
 }
 
 export default sr

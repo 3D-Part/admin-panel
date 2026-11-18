@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react'
 import { Button, Label, Select, TextInput } from 'flowbite-react'
 import { toast } from 'react-toastify'
 import { BackofficeAPI } from '@/services'
+import SubscribersAPI from '@/services/subscibers'
 import { ZohoStatus } from '@/services/backoffice'
 
 export type ZohoForm = {
@@ -104,19 +105,31 @@ const ZohoCampaignsSettings: React.FC<{ value: ZohoForm; onChange: (next: ZohoFo
     toast(tx('Zoho Campaigns is connected'), { type: 'success', autoClose: 3000 })
   }
 
-  const sync = async () => {
+  // The subscribers as a CSV for Zoho's own import, where they are marked as
+  // already opted in: added one by one through the API, Zoho would send each of
+  // them a confirmation mail, because the list has double opt-in on.
+  const downloadCsv = async () => {
     setBusy('sync')
-    const { data, error } = await BackofficeAPI.syncZohoSubscribers()
-    setBusy(null)
-    if (!data) {
-      toast(error ? tx(error) : tx('The subscribers were not sent'), { type: 'error', autoClose: 6000 })
-      return
+    try {
+      const emails: string[] = []
+      for (let offset = 0; ; offset += 100) {
+        const data = await SubscribersAPI.getSubscribers({ field: 'createdAt', order: 'ASC' }, { offset, limit: 100 })
+        if (!data) throw new Error('fetch failed')
+        emails.push(...data.rows.map((row) => row.email))
+        if (emails.length >= data.count || data.rows.length === 0) break
+      }
+      const unique = Array.from(new Set(emails.map((email) => email.trim().toLowerCase()).filter(Boolean)))
+      const csv = ['Contact Email', ...unique].join('\r\n')
+      const link = document.createElement('a')
+      link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }))
+      link.download = `pretplatnici-za-zoho-${new Date().toISOString().slice(0, 10)}.csv`
+      link.click()
+      URL.revokeObjectURL(link.href)
+      toast(tx('{count} subscribers in the file', { count: unique.length }), { type: 'success', autoClose: 3000 })
+    } catch {
+      toast(tx('Could not load the subscribers'), { type: 'error', autoClose: 4000 })
     }
-    toast(tx('{added} of {total} subscribers sent to Zoho', { added: data.added, total: data.total }), {
-      type: data.failed ? 'warning' : 'success',
-      autoClose: 5000,
-    })
-    load()
+    setBusy(null)
   }
 
   const connected = !!status?.connected && !value.disconnect
@@ -141,7 +154,7 @@ const ZohoCampaignsSettings: React.FC<{ value: ZohoForm; onChange: (next: ZohoFo
       <div className="space-y-3 rounded-lg border border-gray-200 p-4 dark:border-gray-700">
         <p className="font-semibold text-gray-900 dark:text-white">{connected ? tx('Connect again') : tx('Connect')}</p>
         <p className="text-xs text-gray-500 dark:text-gray-400">
-          {tx('In api-console.zoho.eu → Self Client: copy the Client ID and Client Secret, generate a code with the scopes ZohoCampaigns.campaign.ALL,ZohoCampaigns.contact.ALL,ZohoCampaigns.reports.READ and connect within 10 minutes. The values are sent only to the server and never shown again.')}
+          {tx('In api-console.zoho.eu → Self Client: copy the Client ID and Client Secret, generate a code with the scopes ZohoCampaigns.campaign.ALL,ZohoCampaigns.contact.ALL and connect within 10 minutes. The values are sent only to the server and never shown again.')}
         </p>
         <div className="grid gap-3 md:grid-cols-3">
           <div>
@@ -201,9 +214,14 @@ const ZohoCampaignsSettings: React.FC<{ value: ZohoForm; onChange: (next: ZohoFo
             </Select>
           </div>
           <div className="flex items-end">
-            <Button size="sm" color="gray" isProcessing={busy === 'sync'} disabled={!!busy || !value.listKey} onClick={sync}>
-              {tx('Send all subscribers to Zoho')}
-            </Button>
+            <div>
+              <Button size="sm" color="gray" isProcessing={busy === 'sync'} disabled={!!busy} onClick={downloadCsv}>
+                {tx('Download subscribers (CSV for Zoho import)')}
+              </Button>
+              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                {tx('In Zoho Campaigns: Contacts → Import → this file → list "3DPart pretplatnici", and confirm the contacts already agreed to receive mail. That way Zoho sends them no confirmation mail.')}
+              </p>
+            </div>
           </div>
           <div className="md:col-span-2 space-y-2">
             <Label value={tx('Senders')} />
@@ -266,7 +284,7 @@ const ZohoCampaignsSettings: React.FC<{ value: ZohoForm; onChange: (next: ZohoFo
         </div>
       )}
       <p className="text-xs text-gray-500 dark:text-gray-400">
-        {tx('New subscribers of the site go onto the list by themselves. Save the settings after changing the list or the sender.')}
+        {tx('New subscribers of the site go onto the list by themselves; with double opt-in on the list, Zoho sends them a confirmation mail. Save the settings after changing the list or the sender.')}
       </p>
     </div>
   )

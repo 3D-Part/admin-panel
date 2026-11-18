@@ -339,10 +339,6 @@ const BackofficeAPI = {
   connectZoho: (body: { clientId: string; clientSecret: string; code: string }) =>
     attemptWithError(() => API.post<typeof body, ZohoStatus>(`${BASE}/zoho/connect`, body)),
   getZohoStatus: () => attemptWithError(() => API.get<ZohoStatus>(`${BASE}/zoho/status`)),
-  syncZohoSubscribers: () =>
-    attemptWithError(() =>
-      API.post<unknown, { total: number; added: number; failed: number }>(`${BASE}/zoho/sync-subscribers`, {})
-    ),
   getZohoCampaigns: () => attemptWithError(() => API.get<ZohoCampaign[]>(`${BASE}/zoho/campaigns`)),
   createZohoCampaign: (body: { subject: string; html: string; send: boolean; fromEmail?: string }) =>
     attemptWithError(() =>
