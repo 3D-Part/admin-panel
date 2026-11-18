@@ -21,7 +21,7 @@ const SECTIONS: Record<Language, Section[]> = {
       title: 'Offers and proformas',
       lines: [
         'An offer has its own steps (e.g. proforma sent, paid). The step that sets Accepted turns it into an order. Until then it holds no stock and is not in analytics.',
-        'Proformas → Send emails it to the customer. Put your bank account in Settings → Company details first.',
+        'Company orders (bank transfer) arrive straight in Offers. Send the offer with the envelope icon on the row; put your bank account in Settings → Company details first.',
       ],
     },
     {
@@ -51,8 +51,27 @@ const SECTIONS: Record<Language, Section[]> = {
     {
       title: 'Employees and reports',
       lines: [
-        'Employees → edit: tick what the person may see. Analytics, Warehouse and Proformas each have their own box.',
+        'Employees → edit: for each section pick No access, View, or View and edit. Accounts marked Full access are owners and are not edited there.',
         'Export on Orders, Products and Users saves a CSV that opens in Excel. Analytics filters by category, manufacturer and customer.',
+      ],
+    },
+    {
+      title: 'Newsletter (Zoho Campaigns)',
+      lines: [
+        'Once: Settings → Zoho Campaigns → Connect (Client ID, Client Secret and the code from api-console.zoho.eu → Self Client, within 10 minutes). Pick the newsletter list and the test list, mark the senders Zoho shows as Verified, Save.',
+        'Subscribers: the numbers on top show who is in Zoho, waits for confirmation, unsubscribed or has an error, and how much of the Zoho plan is used this month.',
+        'Add subscriber puts one address into the shop and onto the Zoho list. New subscribers from the site go onto the list by themselves.',
+        'Sync with Zoho: puts everyone missing onto the list and brings unsubscribes from Zoho back. Run it after importing or when the Zoho column shows errors.',
+        'New campaign: pick the sender, write the subject and the content (the preview shows the mail). First Send a test to me, check it in your inbox, then Send to everyone; it asks with the real number of people before sending.',
+        'Zoho adds the unsubscribe link to every mail. Who unsubscribes gets no more newsletters and shows as Unsubscribed after the next sync.',
+      ],
+    },
+    {
+      title: 'Groups, flags and the chat',
+      lines: [
+        'Products → Product groups: who is published, in Super offer, Most sold or recommended in the cart. Search on the right, add one or many; take out on the left.',
+        'Settings → Customer statuses and Order flags: name and color of each flag. Red customer statuses mean disputed.',
+        'Settings → Chat assistant: one AI is active at a time (ChatGPT or Claude); the table below shows what it cost.',
       ],
     },
     {
@@ -109,8 +128,27 @@ const SECTIONS: Record<Language, Section[]> = {
     {
       title: 'Zaposleni i izvještaji',
       lines: [
-        'Zaposleni → izmjena: označi šta osoba smije da vidi. Analitika, Magacin i Predračuni imaju svaki svoje polje.',
+        'Zaposleni → izmjena: za svaku sekciju izaberi Bez pristupa, Pregled ili Pregled i uređivanje. Nalozi s oznakom Puni pristup su vlasnički i tu se ne uređuju.',
         'Izvoz na Narudžbama, Artiklima i Kupcima snima CSV koji se otvara u Excelu. Analitika se filtrira po kategoriji, proizvođaču i kupcu.',
+      ],
+    },
+    {
+      title: 'Newsletter (Zoho Campaigns)',
+      lines: [
+        'Jednom: Podešavanja → Zoho Campaigns → Poveži (Client ID, Client Secret i kod iz api-console.zoho.eu → Self Client, u roku od 10 minuta). Izaberi listu za newsletter i test listu, označi pošiljaoce koje Zoho prikazuje kao Verified, pa Sačuvaj.',
+        'Pretplatnici: brojevi na vrhu pokazuju ko je u Zohu, ko čeka potvrdu, ko se odjavio, gdje je greška, i koliko je Zoho paketa potrošeno ovaj mjesec.',
+        'Dodaj pretplatnika upisuje jednu adresu u prodavnicu i na Zoho listu. Novi pretplatnici sa sajta sami idu na listu.',
+        'Sinhronizuj sa Zohom: stavlja na listu sve koji fale i vraća odjave iz Zoha. Pokreni je nakon uvoza ili kad kolona Zoho pokaže greške.',
+        'Nova kampanja: izaberi pošiljaoca, upiši naslov i sadržaj (pregled pokazuje mejl). Prvo Pošalji probu meni, provjeri mejl u svom sandučetu, pa Pošalji svima; prije slanja pita s pravim brojem ljudi.',
+        'Zoho u svaki mejl dodaje link za odjavu. Ko se odjavi više ne dobija newsletter i poslije sljedeće sinhronizacije piše Odjavljen.',
+      ],
+    },
+    {
+      title: 'Grupe, zastavice i chat',
+      lines: [
+        'Artikli → Grupe proizvoda: šta je objavljeno, u Super ponudi, Najprodavanije ili preporučeno u korpi. Desno pretraga i dodavanje jednog ili više, lijevo izbacivanje.',
+        'Podešavanja → Statusi kupaca i Zastavice narudžbi: naziv i boja svake zastavice. Crveni statusi kupaca znače sporan kupac.',
+        'Podešavanja → Chat asistent: aktivan je jedan AI (ChatGPT ili Claude); tabela ispod pokazuje koliko je koštao.',
       ],
     },
     {

@@ -18,13 +18,41 @@ export type ZohoStatus = {
   listName?: string
   error?: string
   lists: { listKey: string; listName: string; contacts: number }[]
+  fromEmail?: string
+  senders?: string[]
+  verifiedSenders?: string[]
+  testListKey?: string
+  testListName?: string
+}
+export type ZohoSyncResult = {
+  total: number
+  inList: number
+  added: number
+  pending: number
+  unsubscribed: number
+  errors: number
+}
+export type ZohoSummary = {
+  total: number
+  inList: number
+  pending: number
+  unsubscribed: number
+  errors: number
+  notSynced: number
+  zohoContacts: number | null
+  contactLimit: number
+  sentThisMonth: number
+  monthlyLimit: number
 }
 export type ZohoCampaign = {
   id: string
   subject: string
   campaignKey: string | null
-  status: 'draft' | 'created' | 'sent' | 'failed'
+  status: 'draft' | 'created' | 'sending' | 'sent' | 'failed'
   error: string | null
+  recipients: number | null
+  isTest: boolean
+  fromEmail: string | null
   createdAt: string
   sentAt: string | null
 }
@@ -337,12 +365,26 @@ const BackofficeAPI = {
   connectZoho: (body: { clientId: string; clientSecret: string; code: string }) =>
     attemptWithError(() => API.post<typeof body, ZohoStatus>(`${BASE}/zoho/connect`, body)),
   getZohoStatus: () => attemptWithError(() => API.get<ZohoStatus>(`${BASE}/zoho/status`)),
-  syncZohoSubscribers: () =>
-    attemptWithError(() =>
-      API.post<unknown, { total: number; added: number; failed: number }>(`${BASE}/zoho/sync-subscribers`, {})
-    ),
   getZohoCampaigns: () => attemptWithError(() => API.get<ZohoCampaign[]>(`${BASE}/zoho/campaigns`)),
-  createZohoCampaign: (body: { subject: string; html: string; send: boolean }) =>
+  checkZoho: () =>
+    attemptWithError(() =>
+      API.get<{ ok: boolean; message: string; lists: ZohoStatus['lists'] }>(`${BASE}/zoho/check`)
+    ),
+  syncZoho: () => attemptWithError(() => API.post<unknown, ZohoSyncResult>(`${BASE}/zoho/sync`, {})),
+  addZohoSubscriber: (email: string) =>
+    attemptWithError(() =>
+      API.post<{ email: string }, { email: string; zohoStatus: string | null }>(`${BASE}/zoho/subscribers`, { email })
+    ),
+  getZohoSummary: () => attemptWithError(() => API.get<ZohoSummary>(`${BASE}/zoho/summary`)),
+  getZohoActiveCount: () => attemptWithError(() => API.get<{ count: number | null }>(`${BASE}/zoho/active-count`)),
+  createZohoCampaign: (body: {
+    subject: string
+    html: string
+    send: boolean
+    fromEmail?: string
+    test?: boolean
+    testEmail?: string
+  }) =>
     attemptWithError(() =>
       API.post<typeof body, { id: string; campaignKey: string; status: string }>(`${BASE}/zoho/campaigns`, body)
     ),

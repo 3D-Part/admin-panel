@@ -395,6 +395,9 @@ export interface Subscriber {
   email: string
   createdAt: string
   updatedAt: string
+  // where the subscriber stands in the Zoho Campaigns newsletter list
+  zohoStatus?: 'in_list' | 'pending' | 'unsubscribed' | 'error' | null
+  zohoError?: string | null
 }
 export interface SubscribersData {
   count: number
