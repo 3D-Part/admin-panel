@@ -88,6 +88,17 @@
     }
   }
 
+  /* phones that keep the table: tighter cells, scrolled sideways */
+  @media (max-width: 767px) {
+    .table-on-phone th,
+    .table-on-phone td {
+      @apply !px-3 !py-2;
+    }
+    .table-on-phone th {
+      @apply whitespace-nowrap;
+    }
+  }
+
   .mobile-card-container {
     @apply space-y-3;
   }

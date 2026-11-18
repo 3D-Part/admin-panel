@@ -77,6 +77,14 @@ const MyTable = () => {
 }
 ```
 
+### Keeping the table on phones
+
+Pass `tableOnPhone` (and no `mobileCards`) to show the same table on phones,
+scrolled sideways, with the mobile pagination under it. Orders, Offers and
+Products use this: the owner works faster with a table than with cards.
+Give the `<Table>` a phone minimum width (e.g. `max-md:min-w-[900px]`) so the
+columns don't squeeze.
+
 ## Mobile Pagination
 
 The ResponsiveTableWrapper now includes built-in mobile pagination support using a custom `MobilePagination` component. This component is specifically designed for mobile screens and prevents overflow issues.

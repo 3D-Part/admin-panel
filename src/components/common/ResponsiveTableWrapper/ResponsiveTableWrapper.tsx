@@ -4,7 +4,9 @@ import { MobilePagination } from '../MobilePagination'
 
 interface ResponsiveTableWrapperProps {
   children: React.ReactNode
-  mobileCards: React.ReactNode
+  mobileCards?: React.ReactNode
+  // phones get the table too (scrolled sideways) instead of the cards
+  tableOnPhone?: boolean
   className?: string
   // Pagination props
   currentPage?: number
@@ -16,12 +18,38 @@ interface ResponsiveTableWrapperProps {
 export const ResponsiveTableWrapper: React.FC<ResponsiveTableWrapperProps> = ({
   children,
   mobileCards,
+  tableOnPhone = false,
   className = '',
   currentPage,
   totalPages,
   onPageChange,
   count,
 }) => {
+  const hasPagination = Boolean(currentPage && totalPages && onPageChange)
+
+  if (tableOnPhone) {
+    return (
+      <div
+        className={`flex flex-col mt-8 flex-1 overflow-hidden h-full ${className}`}
+      >
+        <div className="table-on-phone flex w-full flex-col overflow-hidden flex-1">
+          {children}
+        </div>
+
+        {hasPagination && (
+          <div className="md:hidden">
+            <MobilePagination
+              currentPage={currentPage!}
+              totalPages={totalPages!}
+              onPageChange={onPageChange!}
+              count={count}
+            />
+          </div>
+        )}
+      </div>
+    )
+  }
+
   return (
     <div
       className={`flex flex-col mt-8 flex-1 overflow-hidden h-full ${className}`}
