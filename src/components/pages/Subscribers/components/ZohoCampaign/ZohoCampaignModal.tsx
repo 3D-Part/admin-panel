@@ -3,7 +3,7 @@ import { tx } from '@/shared/i18n'
 import { modalRoot } from '@/shared/helpers/modalRoot'
 import { BackofficeAPI } from '@/services'
 import { ZohoCampaign, ZohoStatus } from '@/services/backoffice'
-import { Badge, Button, Label, Modal, Select, Textarea, TextInput } from 'flowbite-react'
+import { Badge, Button, Label, Modal, Radio, Select, Textarea, TextInput } from 'flowbite-react'
 import { useEffect, useMemo, useState } from 'react'
 import { toast } from 'react-toastify'
 import { NewsletterContent, buildNewsletterHtml } from '@/shared/helpers/newsletterDrafts'
@@ -33,8 +33,15 @@ const day = (value: string | null) => (value ? new Date(value).toLocaleString('d
  * Zoho for the newsletter list, and sent right away or left in Zoho to send
  * a test mail, check it and schedule it there.
  */
-export const ZohoCampaignModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
+export const ZohoCampaignModal: React.FC<{ isOpen: boolean; onClose: () => void; selected?: string[] }> = ({
+  isOpen,
+  onClose,
+  selected = [],
+}) => {
   const [content, setContent] = useState<NewsletterContent>(EMPTY)
+  // who gets it: the whole Zoho list, or only the subscribers ticked in the table
+  const [who, setWho] = useState<'all' | 'selected'>('all')
+  const chosen = who === 'selected' && selected.length > 0
   const [status, setStatus] = useState<ZohoStatus | null>(null)
   const [campaigns, setCampaigns] = useState<ZohoCampaign[]>([])
   const [busy, setBusy] = useState<'create' | 'send' | string | null>(null)
@@ -56,6 +63,7 @@ export const ZohoCampaignModal: React.FC<{ isOpen: boolean; onClose: () => void 
     if (!isOpen) return
     setContent(EMPTY)
     setConfirmSend(false)
+    setWho(selected.length > 0 ? 'selected' : 'all')
     setTestEmail((current) => current || currentUser?.email || '')
     load()
   }, [isOpen])
@@ -91,6 +99,11 @@ export const ZohoCampaignModal: React.FC<{ isOpen: boolean; onClose: () => void 
   }
 
   const askSend = async () => {
+    if (chosen) {
+      setAudience(selected.length)
+      setConfirmSend(true)
+      return
+    }
     setBusy('count')
     const { data } = await BackofficeAPI.getZohoActiveCount()
     setBusy(null)
@@ -106,6 +119,7 @@ export const ZohoCampaignModal: React.FC<{ isOpen: boolean; onClose: () => void 
       html,
       send: true,
       fromEmail: fromEmail || undefined,
+      ...(chosen ? { emails: selected } : {}),
     })
     setBusy(null)
     setConfirmSend(false)
@@ -145,10 +159,23 @@ export const ZohoCampaignModal: React.FC<{ isOpen: boolean; onClose: () => void 
         )}
         <div className="grid gap-6 lg:grid-cols-2">
           <div className="space-y-4">
-            <p className="text-sm text-gray-600 dark:text-gray-300">
-              {tx('Goes to the Zoho list')}: <strong>{list?.listName ?? status?.listName ?? '—'}</strong>
-              {list ? ` (${list.contacts})` : ''}
-            </p>
+            <fieldset className="space-y-2 text-sm text-gray-700 dark:text-gray-200">
+              <legend className="mb-1 font-medium">{tx('Recipients')}</legend>
+              <label className="flex items-center gap-2">
+                <Radio name="zc-who" checked={!chosen} onChange={() => setWho('all')} />
+                {tx('Everyone on the Zoho list')}: <strong>{list?.listName ?? status?.listName ?? '—'}</strong>
+                {list ? ` (${list.contacts})` : ''}
+              </label>
+              <label className={`flex items-center gap-2 ${selected.length ? '' : 'opacity-50'}`}>
+                <Radio
+                  name="zc-who"
+                  checked={chosen}
+                  disabled={selected.length === 0}
+                  onChange={() => setWho('selected')}
+                />
+                {tx('Only the subscribers ticked in the table')} ({selected.length})
+              </label>
+            </fieldset>
             <div>
               <Label htmlFor="zc-from" value={tx('From')} />
               <Select id="zc-from" value={fromEmail} onChange={(e) => setFromEmail(e.target.value)} className="mt-1">
@@ -253,7 +280,9 @@ export const ZohoCampaignModal: React.FC<{ isOpen: boolean; onClose: () => void 
         {confirmSend ? (
           <>
             <span className="text-sm font-medium text-gray-800 dark:text-gray-200">
-              {audience === null
+              {chosen
+                ? tx('Send to the {count} ticked subscribers only?', { count: selected.length })
+                : audience === null
                 ? tx('Send to everyone on the list now?')
                 : tx('Send to {count} subscribers now?', { count: audience })}
             </span>
@@ -266,7 +295,7 @@ export const ZohoCampaignModal: React.FC<{ isOpen: boolean; onClose: () => void 
           </>
         ) : (
           <Button color="purple" isProcessing={busy === 'count'} disabled={!ready || !connected || !!busy} onClick={askSend}>
-            {tx('Send to everyone')}
+            {chosen ? tx('Send to {count} ticked', { count: selected.length }) : tx('Send to everyone')}
           </Button>
         )}
         <Button color="gray" disabled={busy === 'send'} onClick={onClose}>

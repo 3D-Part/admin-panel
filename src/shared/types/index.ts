@@ -410,6 +410,8 @@ export interface SubscribersEmailBody {
   subject: string
   headline: string
   content: string
+  // only these subscribers get it; without it, every subscriber does
+  emails?: string[]
 }
 
 // PROMOCODES

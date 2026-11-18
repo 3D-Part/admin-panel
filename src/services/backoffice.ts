@@ -384,6 +384,8 @@ const BackofficeAPI = {
     fromEmail?: string
     test?: boolean
     testEmail?: string
+    // only these subscribers get it
+    emails?: string[]
   }) =>
     attemptWithError(() =>
       API.post<typeof body, { id: string; campaignKey: string; status: string }>(`${BASE}/zoho/campaigns`, body)

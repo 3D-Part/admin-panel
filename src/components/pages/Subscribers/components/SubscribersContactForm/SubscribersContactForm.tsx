@@ -5,7 +5,7 @@ import { modalRoot } from '@/shared/helpers/modalRoot'
 import { WarningModal } from '@/components/common'
 import SubscribersAPI from '@/services/subscibers'
 import { Order, SubscribersEmailBody } from '@/shared/types'
-import { Button, Label, Modal, TextInput, Textarea } from 'flowbite-react'
+import { Button, Label, Modal, Radio, TextInput, Textarea } from 'flowbite-react'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import { useModalScroll } from '@/shared/hooks/useModalScroll'
@@ -15,14 +15,22 @@ type ModalType = {
   initialValue?: Order
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
   onClose: () => void
+  // the subscribers ticked in the table
+  selected?: string[]
 }
 
 const SubscribersContactForm: React.FC<ModalType> = ({
   isOpen,
   setIsModalOpen,
   onClose,
+  selected = [],
 }) => {
   const [loading, setLoading] = useState(false)
+  const [who, setWho] = useState<'all' | 'selected'>('all')
+  const chosen = who === 'selected' && selected.length > 0
+  useEffect(() => {
+    if (isOpen) setWho(selected.length > 0 ? 'selected' : 'all')
+  }, [isOpen, selected.length])
   const [isWarningModalOpen, setIsWarningModalOpen] = useState(false)
 
   const emailDataRef = useRef<SubscribersEmailBody>({} as SubscribersEmailBody)
@@ -59,7 +67,7 @@ const SubscribersContactForm: React.FC<ModalType> = ({
   const sendEmail = async () => {
     setLoading(true)
 
-    const _body = emailDataRef.current
+    const _body = { ...emailDataRef.current, ...(chosen ? { emails: selected } : {}) }
 
     const response = await sendMailToAllSubscribers(_body)
     setLoading(false)
@@ -87,6 +95,17 @@ const SubscribersContactForm: React.FC<ModalType> = ({
         </Modal.Header>
 
         <Modal.Body className="space-y-6">
+          <fieldset className="space-y-2 text-sm text-gray-700 dark:text-gray-200">
+            <legend className="mb-1 font-medium">{tx('Recipients')}</legend>
+            <label className="flex items-center gap-2">
+              <Radio name="sc-who" checked={!chosen} onChange={() => setWho('all')} />
+              {tx('All subscribers')}
+            </label>
+            <label className={`flex items-center gap-2 ${selected.length ? '' : 'opacity-50'}`}>
+              <Radio name="sc-who" checked={chosen} disabled={selected.length === 0} onChange={() => setWho('selected')} />
+              {tx('Only the subscribers ticked in the table')} ({selected.length})
+            </label>
+          </fieldset>
           <form ref={formRef} className="space-y-6">
             {/* Email Information */}
             <div>
@@ -186,7 +205,11 @@ const SubscribersContactForm: React.FC<ModalType> = ({
           isOpen={isWarningModalOpen}
           onSave={sendEmail}
           onClose={() => setIsWarningModalOpen(false)}
-          message="Do you want to send email to subscribers?"
+          message={
+            chosen
+              ? tx('Send to the {count} ticked subscribers only?', { count: selected.length })
+              : tx('Send to ALL subscribers?')
+          }
           isLoading={loading}
           buttonColor="blue"
         />

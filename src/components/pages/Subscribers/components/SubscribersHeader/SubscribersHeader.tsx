@@ -38,12 +38,13 @@ export const SubscribersHeader = ({ selected, total }: { selected: string[]; tot
       </div>
 
       {/* newsletters go out through Zoho Campaigns */}
-      <ZohoCampaignModal isOpen={isDraftsOpen} onClose={() => setIsDraftsOpen(false)} />
+      <ZohoCampaignModal isOpen={isDraftsOpen} onClose={() => setIsDraftsOpen(false)} selected={selected} />
 
       <SubscribersContactForm
         isOpen={isFormModalOpen}
         onClose={toggleFormModalVisible}
         setIsModalOpen={toggleFormModalVisible}
+        selected={selected}
       />
     </>
   )
