@@ -12,6 +12,7 @@ import {
   useS3ManagerStore,
 } from '@/store/store'
 import { CUSTOM_ICON, PRODUCT_ICONS } from '@/shared/helpers/productIcons'
+import ColorChoice from '@/components/common/ColorChoice/ColorChoice'
 
 const toNumber = (value: string) => (value.trim() === '' ? null : Number(value))
 
@@ -26,6 +27,7 @@ const StockAndExtras = () => {
   const [sortPriority, setSortPriority] = useState(String(product.sortPriority ?? ''))
   const [isBackorder, setIsBackorder] = useState(Boolean(product.isBackorder))
   const [icons, setIcons] = useState<string[]>(product.icons ?? [])
+  const [highlightColor, setHighlightColor] = useState<string | null>(product.highlightColor ?? null)
   const [categoryIds, setCategoryIds] = useState<string[]>([])
   const [categoryFilter, setCategoryFilter] = useState('')
   const [saving, setSaving] = useState(false)
@@ -84,6 +86,7 @@ const StockAndExtras = () => {
       sortPriority: limits[2],
       isBackorder,
       icons,
+      highlightColor,
     }
     const [updated, cost, categories] = await Promise.all([
       ProductsAPI.editProducts(product.id, body as any),
@@ -178,6 +181,24 @@ const StockAndExtras = () => {
           </span>
         </div>
       </SwitchCard>
+
+      <div>
+        <p className="mb-1 text-sm font-medium text-gray-900 dark:text-white">
+          {tx('Highlight frame')}
+        </p>
+        <p className="mb-2 text-xs text-gray-500 dark:text-gray-400">
+          {tx("A thin frame in this color around the product's card in the shop, to make it stand out.")}
+        </p>
+        <div className="flex flex-wrap items-center gap-4">
+          <ColorChoice value={highlightColor} onChange={setHighlightColor} allowNone />
+          {/* how the card's edge looks in the shop */}
+          <div
+            className="h-14 w-11 rounded-lg bg-neutral-800"
+            style={highlightColor ? { boxShadow: `0 0 0 2px ${highlightColor}, 0 0 14px ${highlightColor}66` } : undefined}
+            title={tx('Preview')}
+          />
+        </div>
+      </div>
 
       <div>
         <p className="mb-2 text-sm font-medium text-gray-900 dark:text-white">

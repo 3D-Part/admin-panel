@@ -1223,6 +1223,8 @@ const sr: Record<string, string> = {
   "{count} flags": "{count} zastavice",
   "Flags": "Zastavice",
   "Show all products": "Prikaži sve artikle",
+  "Highlight frame": "Okvir za isticanje",
+  "A thin frame in this color around the product's card in the shop, to make it stand out.": "Tanak okvir u ovoj boji oko kartice artikla na sajtu, da se artikal istakne.",
 }
 
 export default sr
