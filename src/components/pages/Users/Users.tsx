@@ -15,7 +15,7 @@ export const Users = () => {
   }, [changeCurrentPage, currentPage, totalPages])
 
   return (
-    <div className="w-full flex flex-col h-full overflow-hidden">
+    <div className="w-full flex flex-col h-full">
       <UsersHeader />
       <UsersTable />
     </div>

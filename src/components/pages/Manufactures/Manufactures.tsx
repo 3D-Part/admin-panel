@@ -131,7 +131,7 @@ export const Manufactures = () => {
   // }, [fetchAllManufactures])
 
   return (
-    <div className="w-full flex flex-col h-full overflow-hidden">
+    <div className="w-full flex flex-col h-full">
       <ManufacturesHeader />
       <ManufacturesTable
         onWarningModalOpen={onWarningModalOpen}

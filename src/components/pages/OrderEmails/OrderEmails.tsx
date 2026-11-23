@@ -7,7 +7,7 @@ import { OrderEmailsHeader } from './components/OrderEmailsHeader'
 
 const OrderEmails = () => {
   return (
-    <div className="w-full flex flex-col h-full overflow-hidden">
+    <div className="w-full flex flex-col h-full">
       <OrderEmailsHeader />
       <EmailsTable />
     </div>

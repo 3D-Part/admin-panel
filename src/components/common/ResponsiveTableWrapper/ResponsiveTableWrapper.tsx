@@ -15,6 +15,11 @@ interface ResponsiveTableWrapperProps {
   count?: number
 }
 
+// Fills the rest of the page and scrolls its rows inside. On larger screens it
+// keeps room for a few rows and the pagination: when the window is too short
+// (or zoomed in) the page scrolls instead of cutting the table off.
+const box = 'flex flex-col mt-8 flex-1 min-h-0 md:min-h-[24rem] h-full'
+
 export const ResponsiveTableWrapper: React.FC<ResponsiveTableWrapperProps> = ({
   children,
   mobileCards,
@@ -30,9 +35,9 @@ export const ResponsiveTableWrapper: React.FC<ResponsiveTableWrapperProps> = ({
   if (tableOnPhone) {
     return (
       <div
-        className={`flex flex-col mt-8 flex-1 overflow-hidden h-full ${className}`}
+        className={`${box} ${className}`}
       >
-        <div className="table-on-phone flex w-full flex-col overflow-hidden flex-1">
+        <div className="table-on-phone flex w-full flex-col flex-1 min-h-0">
           {children}
         </div>
 
@@ -52,7 +57,7 @@ export const ResponsiveTableWrapper: React.FC<ResponsiveTableWrapperProps> = ({
 
   return (
     <div
-      className={`flex flex-col mt-8 flex-1 overflow-hidden h-full ${className}`}
+      className={`${box} ${className}`}
     >
       {/* Desktop Table */}
       <div className="table-desktop flex-1">{children}</div>

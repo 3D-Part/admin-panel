@@ -11,8 +11,10 @@ const ChildrenWrapper = ({ children }: { children: React.ReactNode }) => {
   const isFullWidthPage = isLoginPage || isVerifyPage
 
   return (
+    // the page scrolls when it does not fit the window (a short window or
+    // zoomed in); "safe" keeps the top of a tall page reachable
     <div
-      className={`ml-0 flex items-center justify-center p-2 mt-16 md:p-6 overflow-hidden ${
+      className={`ml-0 flex [align-items:safe_center] justify-center p-2 mt-16 md:p-6 overflow-x-hidden overflow-y-auto ${
         !isFullWidthPage ? 'md:ml-64' : ''
       } `}
     >

@@ -75,7 +75,7 @@ const Orders = () => {
   }
 
   return (
-    <div className="w-full flex flex-col h-full overflow-hidden">
+    <div className="w-full flex flex-col h-full">
       {offers && (
         <div className="mb-4">
           <div className="flex flex-wrap items-center justify-between gap-3">

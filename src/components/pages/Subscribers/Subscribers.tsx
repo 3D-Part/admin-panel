@@ -35,7 +35,7 @@ export const Subscribers = () => {
   }, [changeCurrentPage, currentPage, totalPages])
 
   return (
-    <div className="w-full flex flex-col h-full overflow-hidden">
+    <div className="w-full flex flex-col h-full">
       <ZohoSummary />
       <SubscribersHeader selected={selected} total={count} />
       <SubscribersTable selected={selected} setSelected={setSelected} />

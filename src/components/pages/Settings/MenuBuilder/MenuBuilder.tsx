@@ -260,7 +260,7 @@ const MenuBuilder: React.FC = () => {
   }, [menuItems])
 
   return (
-    <div className="w-full flex flex-col h-full overflow-hidden">
+    <div className="w-full flex flex-col h-full">
       <div className="w-full flex justify-between items-center flex-wrap gap-4 mb-6">
         <div className="hidden md:flex flex-col flex-1 min-w-0">
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
