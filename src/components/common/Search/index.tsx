@@ -7,12 +7,14 @@ import { IoCloseCircleOutline } from 'react-icons/io5'
 interface SearchProps {
   getData: (value: string) => void
   defaultValue?: string
+  placeholder?: string
   //   setValue: (value: string) => void;
 }
 
 const Search: React.FC<SearchProps> = ({
   getData,
   defaultValue = '',
+  placeholder,
   //   setValue,
 }) => {
   const [query, setQuery] = useState(defaultValue)
@@ -73,7 +75,7 @@ const Search: React.FC<SearchProps> = ({
           type="text"
           id="simple-search"
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full min-w-0 pl-8 p-2 pr-8 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder={tx("Search")}
+          placeholder={placeholder ?? tx("Search")}
           value={query}
           // required
         />

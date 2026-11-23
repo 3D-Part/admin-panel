@@ -1182,6 +1182,13 @@ const sr: Record<string, string> = {
   "The customer e-mail is required for an offer": "Za ponudu je potreban e-mail kupca",
   "Enter the customer or the company name": "Upiši ime kupca ili firme",
   "regular price": "redovna cijena",
+  "ORDER #": "NARUDŽBA #",
+  "COMPANY": "FIRMA",
+  "JIB": "JIB",
+  "CITY": "GRAD",
+  "STATUS": "STATUS",
+  "PRODUCT": "ARTIKAL",
+  "Product name, SKU or code": "Naziv artikla, šifra ili interni kod (P000…)",
 }
 
 export default sr

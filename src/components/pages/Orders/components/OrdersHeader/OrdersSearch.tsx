@@ -14,6 +14,7 @@ type SearchField =
   | 'jib'
   | 'city'
   | 'status'
+  | 'product'
 
 const searchFieldLabels: Record<SearchField, string> = {
   orderNumber: 'ORDER #',
@@ -22,6 +23,8 @@ const searchFieldLabels: Record<SearchField, string> = {
   jib: 'JIB',
   city: 'CITY',
   status: 'STATUS',
+  // the orders that contain a product: its name, SKU or internal code
+  product: 'PRODUCT',
 }
 
 const searchFields = Object.keys(searchFieldLabels) as SearchField[]
@@ -68,17 +71,20 @@ const OrdersSearch = () => {
     <div className="flex gap-2 items-center w-full md:w-auto min-w-0">
       <Dropdown
         dismissOnClick
-        label={<span className="whitespace-nowrap">{searchFieldLabels[searchBy]}</span>} size="sm">
+        label={<span className="whitespace-nowrap">{tx(searchFieldLabels[searchBy])}</span>} size="sm">
         {searchFields.map((field) => (
           <Dropdown.Item key={field} onClick={() => setSearchBy(field)}>
             <span className="font-medium text-cyan-600 cursor-pointer hover:underline dark:text-cyan-500">
-              <p>{searchFieldLabels[field]}</p>
+              <p>{tx(searchFieldLabels[field])}</p>
             </span>
           </Dropdown.Item>
         ))}
       </Dropdown>
       <div className="flex-1 min-w-0 md:max-w-xs">
-        <Search getData={fetchOrdersData} />
+        <Search
+          getData={fetchOrdersData}
+          placeholder={searchBy === 'product' ? tx('Product name, SKU or code') : undefined}
+        />
       </div>
       {loader && <Spinner aria-label={tx("Loading...")} size="sm" />}
     </div>
