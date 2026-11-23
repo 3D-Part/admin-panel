@@ -13,7 +13,19 @@ import { Order } from '@/shared/types'
 import { WarehouseProduct } from '@/shared/types/warehouse'
 import { OrderStatusEnum } from '@/shared/enums'
 
-type Line = { productId: string; name: string; quantity: number; price: number }
+type Line = {
+  productId: string
+  name: string
+  // the product's internal code and SKU, shown next to the name
+  code?: string
+  sku?: string
+  quantity: number
+  price: number
+}
+
+// "P000194 · 230170": the codes the staff search by
+const codes = (product: { code?: string | null; sku?: string | null }) =>
+  [product.code, product.sku].filter(Boolean).join(' · ')
 
 const CONTACT_FIELDS = [
   { name: 'fullName', label: 'Full name' },
@@ -40,6 +52,8 @@ const OrderEditor: React.FC<{
     order.products.map((product) => ({
       productId: product.id,
       name: product.name,
+      code: (product as any).code ?? undefined,
+      sku: product.sku ?? undefined,
       quantity: Number(product.quantity),
       price: Number(product.price),
     }))
@@ -76,6 +90,8 @@ const OrderEditor: React.FC<{
             {
               productId: product.id,
               name: product.name,
+              code: product.code,
+              sku: product.sku,
               quantity: 1,
               price: Number(product.price),
             },
@@ -178,10 +194,15 @@ const OrderEditor: React.FC<{
                     className="w-full px-3 py-2 text-left text-sm text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
                     onClick={() => add(product)}
                   >
+                    {codes(product) && (
+                      <span className="mr-2 font-mono text-xs font-semibold text-gray-700 dark:text-gray-300">
+                        {codes(product)}
+                      </span>
+                    )}
                     {product.name}{' '}
                     <span className="text-gray-500">
                       {Number(product.price).toFixed(2)} KM,{' '}
-                      {product.quantity ?? 0} in stock
+                      {product.quantity ?? 0} {tx("in stock")}
                     </span>
                   </button>
                 </li>
@@ -202,6 +223,11 @@ const OrderEditor: React.FC<{
           {lines.map((line, index) => (
             <div key={line.productId} className="flex flex-wrap items-center gap-2">
               <span className="flex-1 min-w-[200px] text-sm text-gray-900 dark:text-white">
+                {codes(line) && (
+                  <span className="mr-2 font-mono text-xs font-semibold text-gray-600 dark:text-gray-400">
+                    {codes(line)}
+                  </span>
+                )}
                 {line.name}
               </span>
               <TextInput
