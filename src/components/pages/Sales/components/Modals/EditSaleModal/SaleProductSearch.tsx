@@ -1,4 +1,5 @@
 'use client'
+import ProductCodes from '@/components/common/ProductCodes/ProductCodes'
 import { tx } from '@/shared/i18n'
 import { useProductSearch } from '@/shared/hooks/useProductSearch'
 import SearchListFooter from '@/components/common/SearchListFooter/SearchListFooter'
@@ -35,7 +36,7 @@ const SaleProductRow: React.FC<{
           {product.name}
         </p>
         <p className="text-xs text-gray-500 dark:text-gray-400">
-          {product.code} · regular price {Number(product.price).toFixed(2)} KM
+          <ProductCodes code={product.code} sku={product.sku} /> · {tx("regular price")} {Number(product.price).toFixed(2)} KM
         </p>
       </div>
       <TextInput

@@ -1181,6 +1181,7 @@ const sr: Record<string, string> = {
   "Put the bank account in Settings → Company details first: the offer tells the customer where to pay.": "Prvo upiši žiro račun u Podešavanja → Podaci o firmi: ponuda kupcu kaže gdje da plati.",
   "The customer e-mail is required for an offer": "Za ponudu je potreban e-mail kupca",
   "Enter the customer or the company name": "Upiši ime kupca ili firme",
+  "regular price": "redovna cijena",
 }
 
 export default sr

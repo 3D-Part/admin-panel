@@ -1,4 +1,5 @@
 'use client'
+import ProductCodes from '@/components/common/ProductCodes/ProductCodes'
 import { tx } from '@/shared/i18n'
 import { useProductSearch } from '@/shared/hooks/useProductSearch'
 import SearchListFooter from '@/components/common/SearchListFooter/SearchListFooter'
@@ -19,6 +20,7 @@ import { LABEL_FORMATS, LabelFormat } from './labelFormats'
 export const productLabel = (product: WarehouseProduct): LabelItem => ({
   key: product.id,
   code: product.code,
+  sku: product.sku,
   name: product.name,
   price: product.price,
   copies: 1,
@@ -173,7 +175,7 @@ const Labels: React.FC<LabelsProps> = ({ items, setItems }) => {
                     className="w-full flex gap-3 px-3 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-700"
                     onClick={() => add(item)}
                   >
-                    <span className="font-mono text-gray-600 dark:text-gray-300">{item.code}</span>
+                    <ProductCodes code={item.code} sku={item.sku} />
                     <span className="flex-1 text-gray-900 dark:text-white">
                       {item.name}
                     </span>
@@ -203,7 +205,7 @@ const Labels: React.FC<LabelsProps> = ({ items, setItems }) => {
             <ul className="divide-y divide-gray-200 dark:divide-gray-700">
               {items.map((item) => (
                 <li key={item.key} className="flex items-center gap-3 py-2 text-sm">
-                  <span className="font-mono text-gray-600 dark:text-gray-300">{item.code}</span>
+                  <ProductCodes code={item.code} sku={item.sku} />
                   <span className="flex-1 text-gray-900 dark:text-white">
                     {item.name}
                   </span>

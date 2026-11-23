@@ -1,4 +1,5 @@
 'use client'
+import ProductCodes from '@/components/common/ProductCodes/ProductCodes'
 import { tx } from '@/shared/i18n'
 
 import { Button, Spinner, TextInput } from 'flowbite-react'
@@ -180,7 +181,7 @@ const Scanner: React.FC<ScannerProps> = ({ onPrintProduct, onPrintAsset }) => {
                   className="w-full flex gap-3 px-2 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-700"
                   onClick={() => setPicked(item)}
                 >
-                  <span className="font-mono text-gray-600 dark:text-gray-300">{item.code}</span>
+                  <ProductCodes code={item.code} sku={isProduct(item) ? item.sku : undefined} />
                   <span className="flex-1 text-gray-900 dark:text-white">
                     {item.name}
                   </span>

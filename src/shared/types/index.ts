@@ -284,6 +284,8 @@ export interface OrderProduct {
   id: string
   name: string
   sku: string
+  // the product's internal code; only on the packing list, which looks it up
+  code?: string
   quantity: number
   price: string
   total: string

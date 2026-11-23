@@ -3,7 +3,7 @@ import { API } from '@/shared/helpers'
 const API_BASE_URL = process.env.API_KEY
 const BASE = `${API_BASE_URL}/backoffice`
 
-export type TrafficProduct = { productId: string; name: string; sku: string; views: number; adds: number }
+export type TrafficProduct = { productId: string; name: string; sku: string; code?: string; views: number; adds: number }
 export type SiteTraffic = {
   totals: { pages: number; views: number; adds: number }
   // title: the product's name on a product page
@@ -65,6 +65,8 @@ export type AnalyticsRow = {
   id: string
   name: string
   sku?: string
+  // a product's internal code
+  code?: string
   quantity: number
   revenue: number
   cost: number

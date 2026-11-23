@@ -1,4 +1,5 @@
 'use client'
+import { productCodes } from '@/components/common/ProductCodes/ProductCodes'
 import { tx } from '@/shared/i18n'
 
 import React, { useCallback, useEffect, useState } from 'react'
@@ -57,7 +58,7 @@ const Row: React.FC<{
         {product.name}
       </a>
       <p className="text-xs text-gray-500 dark:text-gray-400">
-        {product.sku} · {money(product.price)} · {tx('Stock')}: {product.quantity}
+        <span className="font-mono">{productCodes(product)}</span> · {money(product.price)} · {tx('Stock')}: {product.quantity}
         {!product.isPublished && (
           <span className="ml-2 rounded bg-gray-200 px-1.5 py-0.5 text-[11px] text-gray-700 dark:bg-gray-700 dark:text-gray-300">
             {tx('Not published')}

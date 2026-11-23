@@ -1,4 +1,5 @@
 'use client'
+import ProductCodes from '@/components/common/ProductCodes/ProductCodes'
 import { tx } from '@/shared/i18n'
 import { modalRoot } from '@/shared/helpers/modalRoot'
 
@@ -128,6 +129,7 @@ const RemoveProductsFromSaleModal = () => {
           <span className="text-sm text-gray-500 dark:text-gray-400">
             {activeProduct?.name || tx("Unknown Product")}
           </span>
+          <ProductCodes code={activeProduct?.code} sku={activeProduct?.sku} />
         </div>
       </Modal.Header>
 

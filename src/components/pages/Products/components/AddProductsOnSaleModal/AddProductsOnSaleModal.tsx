@@ -1,4 +1,5 @@
 'use client'
+import ProductCodes from '@/components/common/ProductCodes/ProductCodes'
 import { tx } from '@/shared/i18n'
 import { modalRoot } from '@/shared/helpers/modalRoot'
 
@@ -220,6 +221,7 @@ const AddProductsOnSaleModal = () => {
               <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
                 {activeProduct.name}
               </p>
+              <ProductCodes block code={activeProduct.code} sku={activeProduct.sku} />
             </div>
           </div>
         </div>

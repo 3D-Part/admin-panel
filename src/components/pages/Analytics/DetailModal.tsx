@@ -1,5 +1,6 @@
 'use client'
 import { CustomerFlagFor } from '@/components/common/CustomerFlag/CustomerFlag'
+import { productCodes } from '@/components/common/ProductCodes/ProductCodes'
 import { tx } from '@/shared/i18n'
 
 import React, { useEffect, useState } from 'react'
@@ -238,8 +239,8 @@ const ItemsDetail: React.FC<{ data: AnalyticsData; withCost: boolean }> = ({ dat
               >
                 {row.name}
               </a>
-              {row.sku && (
-                <span className="block text-xs text-gray-500 dark:text-gray-400">{row.sku}</span>
+              {(row.sku || row.code) && (
+                <span className="block font-mono text-xs text-gray-500 dark:text-gray-400">{productCodes(row)}</span>
               )}
             </td>
             <td className={num}>{row.quantity}</td>

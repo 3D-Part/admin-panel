@@ -47,12 +47,14 @@ const OrderEditor: React.FC<{
   onSaved: (order: Order) => void
   // a new offer made by hand: saved as a new order in the offers
   create?: boolean
-}> = ({ order, onClose, onSaved, create = false }) => {
+  // the internal code of each product of the order, by product id
+  codes?: Record<string, string>
+}> = ({ order, onClose, onSaved, create = false, codes: knownCodes = {} }) => {
   const [lines, setLines] = useState<Line[]>(
     order.products.map((product) => ({
       productId: product.id,
       name: product.name,
-      code: (product as any).code ?? undefined,
+      code: product.code || knownCodes[product.id] || undefined,
       sku: product.sku ?? undefined,
       quantity: Number(product.quantity),
       price: Number(product.price),

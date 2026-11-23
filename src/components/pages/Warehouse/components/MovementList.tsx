@@ -1,4 +1,5 @@
 'use client'
+import ProductCodes from '@/components/common/ProductCodes/ProductCodes'
 import { tx } from '@/shared/i18n'
 
 import { Badge } from 'flowbite-react'
@@ -71,7 +72,8 @@ const MovementList: React.FC<MovementListProps> = ({
 
               {showItem && item && (
                 <span className="text-gray-900 dark:text-white">
-                  <span className="font-mono text-gray-600 dark:text-gray-300">{item.code}</span> {item.name}
+                  <ProductCodes code={item.code} sku={(item as { sku?: string }).sku} />{' '}
+                  {item.name}
                 </span>
               )}
 

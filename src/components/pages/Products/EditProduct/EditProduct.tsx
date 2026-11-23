@@ -1,4 +1,5 @@
 'use client'
+import ProductCodes from '@/components/common/ProductCodes/ProductCodes'
 import { tx } from '@/shared/i18n'
 
 import React, { useEffect } from 'react'
@@ -40,9 +41,12 @@ export const EditProduct = () => {
     <div className="w-full h-full flex flex-col">
       {/* Fixed Header */}
       <div className="flex-shrink-0 w-full flex-wrap flex justify-between gap-4 items-center mb-8">
-        <h2 className="text-gray-900 dark:text-white text-4xl font-bold">
-          {activeProduct.name}
-        </h2>
+        <div className="min-w-0">
+          <h2 className="text-gray-900 dark:text-white text-4xl font-bold">
+            {activeProduct.name}
+          </h2>
+          <ProductCodes block className="mt-1 text-sm" code={activeProduct.code} sku={activeProduct.sku} />
+        </div>
         <div className="flex items-center gap-4">
           <Button color="purple" onClick={addProductOnSale}>
             {tx("Add on sale")}{' '}<HiPlus className="ml-2" />

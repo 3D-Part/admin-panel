@@ -108,6 +108,8 @@ export interface ListResponse<T> {
 export interface LabelItem {
   key: string
   code: string
+  // products only
+  sku?: string
   name: string
   price?: string | number
   copies: number

@@ -1,4 +1,5 @@
 'use client'
+import ProductCodes from '@/components/common/ProductCodes/ProductCodes'
 import { tx } from '@/shared/i18n'
 import { useProductSearch } from '@/shared/hooks/useProductSearch'
 import SearchListFooter from '@/components/common/SearchListFooter/SearchListFooter'
@@ -68,7 +69,7 @@ const UnknownCode: React.FC<UnknownCodeProps> = ({ code, onAssigned }) => {
                   key={product.id}
                   className="flex items-center gap-3 px-3 py-2 text-sm"
                 >
-                  <span className="font-mono text-gray-600 dark:text-gray-300">{product.code}</span>
+                  <ProductCodes code={product.code} sku={product.sku} />
                   <span className="flex-1 text-gray-900 dark:text-white">
                     {product.name}
                   </span>

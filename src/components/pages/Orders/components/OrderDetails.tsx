@@ -1,4 +1,5 @@
 import { OrderFlagPicker } from '@/components/common/OrderFlag/OrderFlag'
+import { productCodes } from '@/components/common/ProductCodes/ProductCodes'
 import { tx } from '@/shared/i18n'
 import InfoTip from '@/components/common/InfoTip/InfoTip'
 import { modalRoot } from '@/shared/helpers/modalRoot'
@@ -119,7 +120,7 @@ type ProductCardType = {
 }
 
 const ProductCard: React.FC<ProductCardType> = ({ product }) => {
-  const { name, price, quantity, sku, total, backorderQuantity } = product
+  const { name, price, quantity, sku, code, total, backorderQuantity } = product
 
   return (
     <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-3">
@@ -133,8 +134,8 @@ const ProductCard: React.FC<ProductCardType> = ({ product }) => {
               To procure: {backorderQuantity} pcs
             </Badge>
           )}
-          <Badge color="gray" className="text-xs">
-            {sku}
+          <Badge color="gray" className="text-xs font-mono">
+            {productCodes({ code, sku })}
           </Badge>
         </div>
       </div>
@@ -493,6 +494,7 @@ const OrderDetails: React.FC<OrderDetailsType> = ({
       {isEditing && (
         <OrderEditor
           order={currentOrder}
+          codes={Object.fromEntries((packing ?? []).map((line) => [line.id, line.code ?? '']))}
           onClose={() => setIsEditing(false)}
           onSaved={(saved) => {
             setCurrentOrder({ ...currentOrder, ...saved })

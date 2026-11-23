@@ -1,4 +1,5 @@
 'use client'
+import ProductCodes from '@/components/common/ProductCodes/ProductCodes'
 import { tx } from '@/shared/i18n'
 import { modalRoot } from '@/shared/helpers/modalRoot'
 
@@ -316,9 +317,7 @@ const EditSaleModal = () => {
                         <h4 className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white truncate">
                           {product.product.name}
                         </h4>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 hidden sm:block">
-                          ID: {product.product.id}
-                        </p>
+                        <ProductCodes block code={product.product.code} sku={product.product.sku} />
                       </div>
 
                       {/* Discount Badge */}

@@ -1,4 +1,5 @@
 'use client'
+import ProductCodes from '@/components/common/ProductCodes/ProductCodes'
 import { tx } from '@/shared/i18n'
 
 import React, { useCallback, useEffect, useState } from 'react'
@@ -72,7 +73,7 @@ const ActionRow: React.FC<{ action: ActionNeeded; onSaved: () => void }> = ({
   return (
     <Table.Row>
       <Table.Cell data-label={tx("Product")} className="text-gray-900 dark:text-white">
-        <span className="block font-mono text-xs">{action.code}</span>
+        <ProductCodes block code={action.code} sku={action.sku} />
         <span className="block break-words font-medium">{action.name}</span>
         <span className="mt-1 block text-xs font-normal text-gray-500 dark:text-gray-400">
           {action.reason}
@@ -322,7 +323,7 @@ const OrderPicker: React.FC<{
                 }}
               >
                 <span className="min-w-0 text-gray-900 dark:text-white">
-                  <span className="block font-mono text-xs">{product.code}</span>
+                  <ProductCodes block code={product.code} sku={product.sku} />
                   <span className="break-words">{product.name}</span>
                 </span>
                 <span className="shrink-0 text-xs text-gray-500">{product.quantity} {tx("in stock")}</span>
@@ -414,7 +415,7 @@ const StockTab = () => {
                 <Table.Cell data-label={tx("Product")} className="text-gray-900 dark:text-white">
                   {task.product ? (
                     <>
-                      <span className="block font-mono text-xs">{task.product.code}</span>
+                      <ProductCodes block code={task.product.code} sku={task.product.sku} />
                       {task.product.name}
                     </>
                   ) : (
@@ -462,7 +463,7 @@ const StockTab = () => {
             {ordered.map((alert) => (
               <Table.Row key={alert.id}>
                 <Table.Cell data-label={tx("Product")} className="text-gray-900 dark:text-white">
-                  <span className="block font-mono text-xs">{alert.code}</span>
+                  <ProductCodes block code={alert.code} sku={alert.sku} />
                   {alert.name}
                 </Table.Cell>
                 <Table.Cell data-label={tx("In stock")}>{alert.quantity}</Table.Cell>

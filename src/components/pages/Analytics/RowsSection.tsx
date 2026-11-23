@@ -1,4 +1,5 @@
 'use client'
+import { productCodes } from '@/components/common/ProductCodes/ProductCodes'
 import { tx } from '@/shared/i18n'
 
 import React, { useMemo, useState } from 'react'
@@ -37,7 +38,7 @@ const RowsSection: React.FC<{
     const term = query.trim().toLowerCase()
     const found = term
       ? rows.filter((row) =>
-          `${row.name} ${row.sku ?? ''}`.toLowerCase().includes(term)
+          `${row.name} ${row.sku ?? ''} ${row.code ?? ''}`.toLowerCase().includes(term)
         )
       : rows
     return [...found].sort((a, b) =>
@@ -123,9 +124,9 @@ const RowsSection: React.FC<{
                       ) : (
                         row.name
                       )}
-                      {(row.sku || row.orders !== undefined) && (
+                      {(row.sku || row.code || row.orders !== undefined) && (
                         <span className="block text-xs text-gray-500 dark:text-gray-400">
-                          {[row.sku, row.orders !== undefined && `${row.orders} ${tx('orders')}`]
+                          {[productCodes(row), row.orders !== undefined && `${row.orders} ${tx('orders')}`]
                             .filter(Boolean)
                             .join(' · ')}
                         </span>
