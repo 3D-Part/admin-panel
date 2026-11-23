@@ -1189,6 +1189,10 @@ const sr: Record<string, string> = {
   "STATUS": "STATUS",
   "PRODUCT": "ARTIKAL",
   "Product name, SKU or code": "Naziv artikla, šifra ili interni kod (P000…)",
+  "Order flag": "Zastavica narudžbe",
+  "Order flag, reversed": "Zastavica narudžbe, obrnuto",
+  "Customer status": "Status kupca",
+  "Customer status, reversed": "Status kupca, obrnuto",
 }
 
 export default sr

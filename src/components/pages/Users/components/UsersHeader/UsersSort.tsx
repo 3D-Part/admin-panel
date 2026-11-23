@@ -22,6 +22,9 @@ const sortOptions: SortOption[] = [
   { label: 'Email Z-A', field: 'email', order: 'DESC' },
   { label: 'City A-Z', field: 'city', order: 'ASC' },
   { label: 'City Z-A', field: 'city', order: 'DESC' },
+  // statuses in the order of Settings, the customers without one last
+  { label: 'Customer status', field: 'customerFlag', order: 'ASC' },
+  { label: 'Customer status, reversed', field: 'customerFlag', order: 'DESC' },
 ]
 
 const UsersSort = () => {

@@ -24,6 +24,11 @@ const sortOptions: SortOption[] = [
   { label: 'Total: High to Low', field: 'total', order: 'DESC' },
   { label: 'Status A-Z', field: 'status', order: 'ASC' },
   { label: 'Status Z-A', field: 'status', order: 'DESC' },
+  // flags in the order of Settings, the orders without one last
+  { label: 'Order flag', field: 'flag', order: 'ASC' },
+  { label: 'Order flag, reversed', field: 'flag', order: 'DESC' },
+  { label: 'Customer status', field: 'customerFlag', order: 'ASC' },
+  { label: 'Customer status, reversed', field: 'customerFlag', order: 'DESC' },
 ]
 
 const OrdersSort = () => {
