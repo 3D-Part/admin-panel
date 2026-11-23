@@ -51,19 +51,23 @@ const Orders = () => {
   // /orders?customer=<email>&label=<name> narrows the list to one customer
   const customer = params.get('customer')
   const label = params.get('label')
+  // and by the name too, when many people ordered under that e-mail
+  const nameField = params.get('field')
+  const name = params.get('name')
+  const byName = name && (nameField === 'fullName' || nameField === 'companyName') ? { [nameField]: { is: name } } : null
 
   useEffect(() => {
     changeOffersOnly(offers)
     changeCurrentPage(1)
-    if (customer) {
-      changeOrderFilter({ filters: { email: { is: customer } } })
-    } else if ((orderFilter as any)?.filters?.email) {
+    if (customer || byName) {
+      changeOrderFilter({ filters: { ...(customer ? { email: { is: customer } } : {}), ...(byName ?? {}) } })
+    } else if ((orderFilter as any)?.filters?.email || (orderFilter as any)?.filters?.fullName || (orderFilter as any)?.filters?.companyName) {
       // a customer filter left from an earlier visit
       changeOrderFilter({})
     }
     fetchOrders({ offset: 0, limit: itemsPerPage })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [offers, customer, changeOffersOnly, changeCurrentPage, changeOrderFilter, fetchOrders, itemsPerPage])
+  }, [offers, customer, nameField, name, changeOffersOnly, changeCurrentPage, changeOrderFilter, fetchOrders, itemsPerPage])
 
   const clearCustomer = () => {
     changeOrderFilter({})
@@ -86,11 +90,11 @@ const Orders = () => {
             )}
           </div>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-            {tx("Orders you offered to a customer. They hold no stock and do not count in analytics until you move them to Accepted.")}
+            {tx("Orders you offered to a customer. They hold no stock and do not count in analytics until they are accepted and sent to the customer.")}
           </p>
         </div>
       )}
-      {customer && (
+      {(customer || byName) && (
         <div className="mb-3 flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
           <span className="rounded-full bg-purple-100 px-3 py-1 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
             {label || customer}

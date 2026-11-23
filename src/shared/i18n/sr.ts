@@ -492,7 +492,7 @@ const sr: Record<string, string> = {
   "Order status is changed!": "Status narudžbe je promijenjen!",
   "Orders": "Narudžbe",
   "Orders Management": "Upravljanje narudžbama",
-  "Orders you offered to a customer. They hold no stock and do not count in analytics until you move them to Accepted.": "Narudžbe koje si ponudio kupcu. Ne drže robu sa stanja i ne ulaze u analitiku dok ih ne prebaciš na Prihvaćena.",
+  "Orders you offered to a customer. They hold no stock and do not count in analytics until they are accepted and sent to the customer.": "Narudžbe koje si ponudio kupcu. Ne drže robu sa stanja i ne ulaze u analitiku dok ne budu prihvaćene i poslane kupcu.",
   "Orders:": "Narudžbe:",
   "Other": "Ostalo",
   "Other reason": "Drugi razlog",

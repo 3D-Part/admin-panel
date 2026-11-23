@@ -20,7 +20,7 @@ const SECTIONS: Record<Language, Section[]> = {
     {
       title: 'Offers and proformas',
       lines: [
-        'An offer has its own steps (e.g. proforma sent, paid). The step that sets Accepted turns it into an order. Until then it holds no stock and is not in analytics.',
+        'An offer has its own steps (e.g. proforma sent, paid). The step that sets Accepted turns it into an order. Until then it holds no stock. Analytics count an order as sold once it is sent or ready for pickup.',
         'Company orders (bank transfer) arrive straight in Offers. Send the offer with the envelope icon on the row; put your bank account in Settings → Company details first.',
       ],
     },
@@ -100,7 +100,7 @@ const SECTIONS: Record<Language, Section[]> = {
     {
       title: 'Ponude i predračuni',
       lines: [
-        'Ponuda ima svoje korake (npr. predračun poslan, plaćeno). Korak koji postavlja Prihvaćena pretvara je u narudžbu. Do tada ne drži robu i ne ulazi u analitiku.',
+        'Ponuda ima svoje korake (npr. predračun poslan, plaćeno). Korak koji postavlja Prihvaćena pretvara je u narudžbu. Do tada ne drži robu. Analitika broji narudžbu kao prodanu tek kad je poslana ili spremna za preuzimanje.',
         'Predračuni → Pošalji šalje predračun kupcu na mejl. Prvo upiši žiro račun u Podešavanja → Podaci o firmi.',
       ],
     },

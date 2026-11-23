@@ -121,7 +121,7 @@ export type Analytics = {
   byCategory: AnalyticsRow[]
   byManufacturer: AnalyticsRow[]
   // name is the company or the person, sku holds the email
-  topCustomers: (AnalyticsRow & { orders: number })[]
+  topCustomers: (AnalyticsRow & { orders: number; filter?: { email?: string; field?: string; name?: string } })[]
   filaments: {
     rows: AnalyticsRow[]
     quantity: number

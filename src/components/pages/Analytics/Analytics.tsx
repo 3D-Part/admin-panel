@@ -38,8 +38,21 @@ const categoryLink = (row: { id: string; name: string }) =>
   row.id === 'none' ? null : `/products?${q({ categoryId: row.id, label: row.name })}`
 const manufacturerLink = (row: { id: string; name: string }) =>
   row.id === 'none' ? null : `/products?${q({ manufacturerId: row.id, label: row.name })}`
-const customerLink = (row: { name: string; sku?: string }) =>
-  row.sku ? `/orders?${q({ customer: row.sku, label: row.name })}` : null
+// a customer's orders: by e-mail, or by e-mail and name when many people
+// ordered under the same e-mail (orders typed in by the staff)
+const customerLink = (row: {
+  name: string
+  sku?: string
+  filter?: { email?: string; field?: string; name?: string }
+}) => {
+  const filter = row.filter ?? (row.sku ? { email: row.sku } : null)
+  if (!filter?.email && !filter?.name) return null
+  return `/orders?${q({
+    ...(filter.email ? { customer: filter.email } : {}),
+    ...(filter.name && filter.field ? { field: filter.field, name: filter.name } : {}),
+    label: row.name,
+  })}`
+}
 
 const Tile: React.FC<{
   label: string
