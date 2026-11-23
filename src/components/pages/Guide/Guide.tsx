@@ -58,12 +58,15 @@ const SECTIONS: Record<Language, Section[]> = {
     {
       title: 'Newsletter (Zoho Campaigns)',
       lines: [
-        'Once: Settings → Zoho Campaigns → Connect (Client ID, Client Secret and the code from api-console.zoho.eu → Self Client, within 10 minutes). Pick the newsletter list and the test list, mark the senders Zoho shows as Verified, Save.',
-        'Subscribers: the numbers on top show who is in Zoho, waits for confirmation, unsubscribed or has an error, and how much of the Zoho plan is used this month.',
-        'Add subscriber puts one address into the shop and onto the Zoho list. New subscribers from the site go onto the list by themselves.',
-        'Sync with Zoho: puts everyone missing onto the list and brings unsubscribes from Zoho back. Run it after importing or when the Zoho column shows errors.',
-        'New campaign: pick the sender, write the subject and the content (the preview shows the mail). First Send a test to me, check it in your inbox, then Send to everyone; it asks with the real number of people before sending.',
-        'Zoho adds the unsubscribe link to every mail. Who unsubscribes gets no more newsletters and shows as Unsubscribed after the next sync.',
+        'How it works: the admin keeps the subscribers and writes the mail; Zoho Campaigns sends it, counts opens and adds the unsubscribe link. Only people who subscribed to the newsletter are on the list, not every registered customer.',
+        'Once: Settings → Zoho Campaigns → Connect (Client ID, Client Secret and the code from api-console.zoho.eu → Self Client, within 10 minutes). Pick the newsletter list (3DPart pretplatnici) and the test list (3DPart test), tick the senders Zoho shows as Verified (Zoho → Settings → Email → Senders), Save. Check the connection shows Zoho\'s own answer.',
+        'In Zoho itself only once: the sender address must be Verified and the company address filled in (Settings → General → Organization); without the address Zoho sends nothing.',
+        'Subscribers: the numbers on top show who is in Zoho, waits for confirmation, unsubscribed or has an error, and how much of the Zoho plan is used this month (free plan: 2,000 contacts, 6,000 mails a month).',
+        'Add subscriber puts one address into the shop and onto the Zoho list. New subscribers from the site go onto the list by themselves. Sync with Zoho puts everyone missing onto the list and brings unsubscribes back.',
+        'A campaign, step by step: 1) New campaign. 2) Recipients: Everyone on the Zoho list, or Only the subscribers ticked in the table (tick them first; they get a Zoho list of their own and nobody else is reached). 3) Sender, subject and text; the headline is optional (the subject is used). 4) Send a test to me: it goes only to the test list, marked [PROBA]; check it in your inbox. 5) Send to everyone / Send to N ticked: it asks once more with the number of people.',
+        'The list of campaigns shows each one: Test, In Zoho, not sent (the Send button sends it), Sending, Sent with the number of people, or Failed with Zoho\'s reason.',
+        'Send email (next to New campaign) is not Zoho: it sends a plain mail straight from the shop, to all subscribers or only the ticked ones. Use it rarely; newsletters go through Zoho.',
+        'Zoho adds the unsubscribe link to every mail. Who unsubscribes gets no more newsletters and shows as Unsubscribed after the next sync. If a campaign fails, the red line under it says why (e.g. a sender not verified, the connection gone: Connect again).',
       ],
     },
     {
@@ -135,12 +138,15 @@ const SECTIONS: Record<Language, Section[]> = {
     {
       title: 'Newsletter (Zoho Campaigns)',
       lines: [
-        'Jednom: Podešavanja → Zoho Campaigns → Poveži (Client ID, Client Secret i kod iz api-console.zoho.eu → Self Client, u roku od 10 minuta). Izaberi listu za newsletter i test listu, označi pošiljaoce koje Zoho prikazuje kao Verified, pa Sačuvaj.',
-        'Pretplatnici: brojevi na vrhu pokazuju ko je u Zohu, ko čeka potvrdu, ko se odjavio, gdje je greška, i koliko je Zoho paketa potrošeno ovaj mjesec.',
-        'Dodaj pretplatnika upisuje jednu adresu u prodavnicu i na Zoho listu. Novi pretplatnici sa sajta sami idu na listu.',
-        'Sinhronizuj sa Zohom: stavlja na listu sve koji fale i vraća odjave iz Zoha. Pokreni je nakon uvoza ili kad kolona Zoho pokaže greške.',
-        'Nova kampanja: izaberi pošiljaoca, upiši naslov i sadržaj (pregled pokazuje mejl). Prvo Pošalji probu meni, provjeri mejl u svom sandučetu, pa Pošalji svima; prije slanja pita s pravim brojem ljudi.',
-        'Zoho u svaki mejl dodaje link za odjavu. Ko se odjavi više ne dobija newsletter i poslije sljedeće sinhronizacije piše Odjavljen.',
+        'Kako radi: admin čuva pretplatnike i piše mejl, a Zoho Campaigns ga šalje, broji otvaranja i dodaje link za odjavu. Na listi su samo ljudi koji su se prijavili na newsletter, ne svi registrovani kupci.',
+        'Jednom: Podešavanja → Zoho Campaigns → Poveži (Client ID, Client Secret i kod iz api-console.zoho.eu → Self Client, u roku od 10 minuta). Izaberi listu za newsletter (3DPart pretplatnici) i test listu (3DPart test), označi pošiljaoce koje Zoho prikazuje kao Verified (Zoho → Settings → Email → Senders), pa Sačuvaj. Provjeri vezu pokazuje Zohov odgovor.',
+        'U samom Zohu samo jednom: adresa pošiljaoca mora biti Verified i upisana adresa firme (Settings → General → Organization); bez adrese Zoho ne šalje ništa.',
+        'Pretplatnici: brojevi na vrhu pokazuju ko je u Zohu, ko čeka potvrdu, ko se odjavio, gdje je greška, i koliko je Zoho paketa potrošeno ovaj mjesec (besplatni paket: 2.000 kontakata, 6.000 mejlova mjesečno).',
+        'Dodaj pretplatnika upisuje jednu adresu u prodavnicu i na Zoho listu. Novi pretplatnici sa sajta sami idu na listu. Sinhronizuj sa Zohom stavlja na listu sve koji fale i vraća odjave.',
+        'Kampanja, korak po korak: 1) Nova kampanja. 2) Primaoci: Svi na Zoho listi, ili Samo pretplatnici označeni u tabeli (prvo ih označi; dobiju svoju Zoho listu i niko drugi ne dobija mejl). 3) Pošiljalac, naslov i tekst; glavni naslov u mejlu nije obavezan (uzima se naslov). 4) Pošalji probu meni: ide samo na test listu, s oznakom [PROBA]; provjeri je u svom sandučetu. 5) Pošalji svima / Pošalji označenim (N): još jednom pita s brojem ljudi.',
+        'Lista kampanja pokazuje svaku: Proba, U Zohu, nije poslano (dugme Pošalji je šalje), Šalje se, Poslano s brojem ljudi, ili Nije uspjelo sa Zohovim razlogom.',
+        'Pošalji mejl (pored Nove kampanje) nije Zoho: šalje običan mejl direktno iz prodavnice, svim pretplatnicima ili samo označenim. Koristi ga rijetko; newsletter ide preko Zoha.',
+        'Zoho u svaki mejl dodaje link za odjavu. Ko se odjavi više ne dobija newsletter i poslije sljedeće sinhronizacije piše Odjavljen. Ako kampanja ne uspije, crveni red ispod nje kaže zašto (npr. pošiljalac nije potvrđen, veza prekinuta: ponovo Poveži).',
       ],
     },
     {
