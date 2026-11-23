@@ -8,6 +8,7 @@ import { Button, Label, Spinner, TextInput } from 'flowbite-react'
 import React, { SyntheticEvent, useRef, useState } from 'react'
 import { HiCheckCircle, HiXCircle } from 'react-icons/hi'
 import { toast } from 'react-toastify'
+import { useSingleFlight } from '@/shared/hooks/useEnterSave'
 
 type AttributeEditFormType = {
   name: string
@@ -92,9 +93,12 @@ const AttributeEditForm: React.FC<AttributeEditFormType> = ({
     setLoader(false)
   }
 
+  // Enter in a field submits the form; a second Enter or click while saving does nothing
+  const onSubmitOnce = useSingleFlight(onSubmit)
+
   return (
     <div className="max-w-md">
-      <form onSubmit={onSubmit}>
+      <form onSubmit={onSubmitOnce}>
         <div className="w-full flex flex-col gap-2 justify-start items-start mt-2">
           <div className="mb-2 block">
             <Label className="text-xl" htmlFor="attribute-value" value={name} />

@@ -8,6 +8,7 @@ import { useManufactureStore } from '@/store/store'
 import { Button, Label, Modal, TextInput } from 'flowbite-react'
 import { useEffect, useRef } from 'react'
 import { useModalScroll } from '@/shared/hooks/useModalScroll'
+import { useEnterSave } from '@/shared/hooks/useEnterSave'
 
 type ModalType = {
   isOpen: boolean
@@ -52,6 +53,9 @@ const ManufactureFormModal: React.FC<ModalType> = ({
     resetData()
   }
 
+  // Enter in a one-line field saves, like the button
+  const onEnter = useEnterSave(saveFunction)
+
   useEffect(() => {
     if (!initialValue) return
 
@@ -81,7 +85,7 @@ const ManufactureFormModal: React.FC<ModalType> = ({
 
         <Modal.Body className="space-y-6">
           {currentPageManufactures.length > 0 ? (
-            <form className="space-y-6">
+            <form className="space-y-6" onKeyDown={onEnter}>
               {/* Manufacturer Information */}
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">

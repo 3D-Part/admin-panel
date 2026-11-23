@@ -14,6 +14,7 @@ import SalesAPI from '@/services/sales'
 import SaleProductsList from './SaleProductsList'
 import SaleColorPicker from '../SaleColorPicker'
 import { DEFAULT_SALE_COLOR, refreshSaleTags, saleTiming } from '@/shared/helpers/saleTags'
+import { useEnterSave } from '@/shared/hooks/useEnterSave'
 
 const EditSaleModal = () => {
   const [loading, setLoading] = useState(false)
@@ -99,6 +100,9 @@ const EditSaleModal = () => {
     setLoading(false)
     changeIsSaleEditModalOpen(false)
   }
+
+  // Enter in a one-line field saves, like the button
+  const onEnter = useEnterSave(onSave, loading)
 
   const onRemove = async () => {
     if (!activeSale?.id) return
@@ -215,7 +219,7 @@ const EditSaleModal = () => {
       </Modal.Header>
 
       <Modal.Body className="space-y-6 sm:space-y-8 p-4 sm:p-6 overflow-y-auto max-h-[calc(95vh-140px)]">
-        <form ref={formRef} className="space-y-6 sm:space-y-8">
+        <form ref={formRef} className="space-y-6 sm:space-y-8" onKeyDown={onEnter}>
           {/* Sale Information */}
           <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4 sm:p-6">
             <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6 flex items-center gap-2">

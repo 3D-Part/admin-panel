@@ -14,6 +14,7 @@ import React, {
 import ManufacturerHeader from './components/Header/Header'
 import { toast } from 'react-toastify'
 import { Loader } from '@/components/common'
+import { useSingleFlight } from '@/shared/hooks/useEnterSave'
 
 type AddNewManufacturerType = {
   initialValue?: ManufacturerFormBody
@@ -67,6 +68,9 @@ const AddNewManufacturer: React.FC<AddNewManufacturerType> = ({
     }
   }
 
+  // Enter in a field submits the form; a second Enter or click while saving does nothing
+  const saveFunctionOnce = useSingleFlight(saveFunction)
+
   // const getAllManufactures = useCallback(async () => {
   //   const data = await fetchAllManufactures();
   //   if (data) {
@@ -106,7 +110,7 @@ const AddNewManufacturer: React.FC<AddNewManufacturerType> = ({
 
       <form
         ref={formRef}
-        onSubmit={saveFunction}
+        onSubmit={saveFunctionOnce}
         className="flex flex-col items-start gap-4 w-full max-w-xl  "
       >
         <div className="w-full">

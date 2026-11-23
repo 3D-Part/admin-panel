@@ -8,6 +8,7 @@ import { Button, Label, Spinner, TextInput } from 'flowbite-react'
 import React, { SyntheticEvent, useEffect, useRef, useState } from 'react'
 import { HiCheckCircle, HiXCircle } from 'react-icons/hi'
 import { toast } from 'react-toastify'
+import { useSingleFlight } from '@/shared/hooks/useEnterSave'
 
 type AddAttributeFormType = {
   attribute: AttributeData
@@ -62,9 +63,12 @@ const AddAttributeForm: React.FC<AddAttributeFormType> = ({
     if (data) resetData()
   }
 
+  // Enter in a field submits the form; a second Enter or click while saving does nothing
+  const onSubmitOnce = useSingleFlight(onSubmit)
+
   return (
     <div>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={onSubmitOnce}>
         <div className="w-full flex flex-wrap gap-4 justify-start items-center mt-8">
           <h3 className="text-lg leading-none tracking-tight text-gray-800 dark:text-white">
             Enter value ({attribute.name}):{' '}

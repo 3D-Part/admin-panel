@@ -12,6 +12,7 @@ import PromoCategories from '@/components/pages/PromoCodes/components/PromoCateg
 import PromoCodeHeader from '../AddEditPromoCodeHedaer/Header'
 import isoToDatetimeLocal, { datetimeLocalToIso } from '@/shared/helpers/isoToDatetimeLocal'
 import AssignUsers from './components/AssignUsers/AssignUsers'
+import { useSingleFlight } from '@/shared/hooks/useEnterSave'
 
 const EditPromoCode: React.FC = () => {
   const { editPromoCode, activePromoCode } = usePromoCodesSliceStore()
@@ -73,6 +74,9 @@ const EditPromoCode: React.FC = () => {
     }
   }
 
+  // Enter in a field submits the form; a second Enter or click while saving does nothing
+  const saveFunctionOnce = useSingleFlight(saveFunction)
+
   if (loader) {
     return (
       <div className="flex flex-col  w-full ">
@@ -88,7 +92,7 @@ const EditPromoCode: React.FC = () => {
 
       <form
         ref={formRef}
-        onSubmit={saveFunction}
+        onSubmit={saveFunctionOnce}
         className="flex flex-col items-start gap-4 w-full max-w-xl  "
       >
         {/* CODE NAME */}

@@ -26,6 +26,7 @@ import { toast } from 'react-toastify'
 import { URLPartsEnum } from '@/shared/enums'
 import { useRouter } from 'next/navigation'
 import TextEditor from '@/components/common/TextEditor'
+import { useSingleFlight } from '@/shared/hooks/useEnterSave'
 
 const GeneralInfo = () => {
   const [isPublished, setIsPublished] = useState(true)
@@ -111,6 +112,9 @@ const GeneralInfo = () => {
     }
   }
 
+  // Enter in a field submits the form; a second Enter or click while saving does nothing
+  const onSubmitOnce = useSingleFlight(onSubmit)
+
   // GET MANUFACTURES
   const getAllManufactures = useCallback(async () => {
     setLoader(true)
@@ -160,7 +164,7 @@ const GeneralInfo = () => {
   return (
     <form
       ref={formRef}
-      onSubmit={onSubmit}
+      onSubmit={onSubmitOnce}
       className="flex items-start max-w-2xl flex-col gap-6 pb-8"
     >
       {/* NAME */}

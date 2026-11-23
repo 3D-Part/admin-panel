@@ -46,6 +46,8 @@ const InlineText: React.FC<InlineTextType> = ({
 
   return (
     <input
+      // Enter only ends the editing of this one value
+      data-enter-ignore
       aria-label={label}
       title={text}
       value={text}

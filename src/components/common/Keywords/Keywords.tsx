@@ -50,6 +50,8 @@ const Keywords: React.FC<KeywordsProps> = ({
           onChange={(e) => setInputValue(e.target.value)}
           placeholder={placeholder}
           onKeyPress={handleKeyPress}
+          // Enter adds the keyword here, it does not save the form
+          data-enter-ignore
           className="flex-1"
         />
         <Button

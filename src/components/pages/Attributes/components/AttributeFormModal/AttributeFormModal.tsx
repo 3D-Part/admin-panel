@@ -8,6 +8,7 @@ import { useAttributesStore } from '@/store/store'
 import { Button, Label, Modal, TextInput, Select } from 'flowbite-react'
 import { useEffect, useState } from 'react'
 import { useModalScroll } from '@/shared/hooks/useModalScroll'
+import { useEnterSave } from '@/shared/hooks/useEnterSave'
 
 type ModalType = {
   isOpen: boolean
@@ -55,6 +56,9 @@ const AttributeFormModal: React.FC<ModalType> = ({
     resetData()
   }
 
+  // Enter in a one-line field saves, like the button
+  const onEnter = useEnterSave(saveFunction)
+
   useEffect(() => {
     if (!initialValue) {
       setAttributeData({} as AttributeData)
@@ -87,7 +91,7 @@ const AttributeFormModal: React.FC<ModalType> = ({
 
         <Modal.Body className="space-y-6">
           {allAttributes.length > 0 ? (
-            <form className="space-y-6">
+            <form className="space-y-6" onKeyDown={onEnter}>
               {/* Attribute Information */}
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">

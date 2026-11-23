@@ -149,6 +149,7 @@ const SaleProductsList: React.FC<{
           {tx('Products on sale')} ({rows.length})
         </h3>
         <TextInput
+          data-enter-ignore
           className="w-full sm:w-72"
           sizing="sm"
           placeholder={tx('Search: name, code or SKU')}

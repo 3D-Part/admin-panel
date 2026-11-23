@@ -8,6 +8,7 @@ import { Button, Label, Select, TextInput } from 'flowbite-react'
 import React, { SyntheticEvent, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import AttributeHeader from './components/AttributeHeader/AttributeHeader'
+import { useSingleFlight } from '@/shared/hooks/useEnterSave'
 
 type AddNewAttributeType = {
   initialValue?: AttributeFormBody
@@ -58,6 +59,9 @@ const AddNewAttribute: React.FC<AddNewAttributeType> = ({ initialValue }) => {
     }
   }
 
+  // Enter in a field submits the form; a second Enter or click while saving does nothing
+  const saveFunctionOnce = useSingleFlight(saveFunction)
+
   // const getAllAttributes = useCallback(async () => {
   //   const data = await fetchAllAttributes();
   //   if (data) {
@@ -90,7 +94,7 @@ const AddNewAttribute: React.FC<AddNewAttributeType> = ({ initialValue }) => {
 
       <form
         ref={formRef}
-        onSubmit={saveFunction}
+        onSubmit={saveFunctionOnce}
         className="flex flex-col items-start gap-4 w-full max-w-xl  "
       >
         <div className="w-full">

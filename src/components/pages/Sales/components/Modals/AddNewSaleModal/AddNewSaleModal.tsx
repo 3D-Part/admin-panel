@@ -11,6 +11,7 @@ import { toast } from 'react-toastify'
 import { useModalScroll } from '@/shared/hooks/useModalScroll'
 import { nextSaleColor } from '@/shared/helpers/saleTags'
 import SaleColorPicker from '../SaleColorPicker'
+import { useEnterSave } from '@/shared/hooks/useEnterSave'
 
 const AddNewSaleModal = () => {
   const [loading, setLoading] = useState(false)
@@ -93,6 +94,9 @@ const AddNewSaleModal = () => {
     }
   }
 
+  // Enter in a one-line field saves, like the button
+  const onEnter = useEnterSave(onSave, loading)
+
   useEffect(() => {
     resetData()
     if (isSaleAddNewModalOpen) setColor(nextSaleColor(takenColors))
@@ -118,7 +122,7 @@ const AddNewSaleModal = () => {
       </Modal.Header>
 
       <Modal.Body className="space-y-6">
-        <form ref={formRef} className="space-y-6">
+        <form ref={formRef} className="space-y-6" onKeyDown={onEnter}>
           {/* Sale Information */}
           <div>
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">

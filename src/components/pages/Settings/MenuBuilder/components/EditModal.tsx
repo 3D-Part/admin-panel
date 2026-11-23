@@ -7,6 +7,7 @@ import type {
   MenuItemNode,
   MenuItemType,
 } from '@/store/slices/menuBuilderSlice'
+import { useSingleFlight } from '@/shared/hooks/useEnterSave'
 
 interface EditModalProps {
   isOpen: boolean
@@ -104,12 +105,15 @@ const EditModal: React.FC<EditModalProps> = ({
     onClose()
   }
 
+  // Enter in a field submits the form; a second Enter or click while saving does nothing
+  const handleSubmitOnce = useSingleFlight(handleSubmit)
+
   const availableParents = allItems.filter((i) => i.id !== item?.id)
 
   return (
     <Modal root={modalRoot()} show={isOpen} onClose={onClose} size="md">
       <Modal.Header>{item ? tx("Edit Menu Item") : tx("Add Menu Item")}</Modal.Header>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmitOnce}>
         <Modal.Body className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">

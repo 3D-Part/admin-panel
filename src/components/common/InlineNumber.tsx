@@ -58,6 +58,8 @@ const InlineNumber: React.FC<InlineNumberType> = ({
 
   return (
     <input
+      // Enter only ends the editing of this one value
+      data-enter-ignore
       aria-label={label}
       inputMode="decimal"
       value={text}

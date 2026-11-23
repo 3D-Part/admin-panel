@@ -16,6 +16,7 @@ import { toast } from 'react-toastify'
 import { Loader } from '@/components/common'
 import CategoryAttribute from '../CategoryAttribute/CategoryAttribute'
 import { CategoryAttributeAPI } from '@/services'
+import { useSingleFlight } from '@/shared/hooks/useEnterSave'
 
 type AddNewCategoryType = {
   initialValue?: CategoryFormBody
@@ -120,6 +121,9 @@ const AddNewCategory: React.FC<AddNewCategoryType> = ({ initialValue }) => {
     }
   }
 
+  // Enter in a field submits the form; a second Enter or click while saving does nothing
+  const saveFunctionOnce = useSingleFlight(saveFunction)
+
   const getAllCategories = useCallback(async () => {
     const data = await fetchAllCategories()
     if (data) {
@@ -159,7 +163,7 @@ const AddNewCategory: React.FC<AddNewCategoryType> = ({ initialValue }) => {
 
       <form
         ref={formRef}
-        onSubmit={saveFunction}
+        onSubmit={saveFunctionOnce}
         className="flex flex-col items-start gap-4 w-full max-w-xl  "
       >
         <div className="w-full">

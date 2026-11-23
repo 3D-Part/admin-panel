@@ -21,6 +21,7 @@ import { useEffect, useRef } from 'react'
 import CategoryAttribute from '../../CategoryAttribute/CategoryAttribute'
 import { CategoryAttributeAPI } from '@/services'
 import { useModalScroll } from '@/shared/hooks/useModalScroll'
+import { useEnterSave } from '@/shared/hooks/useEnterSave'
 
 type ModalType = {
   isOpen: boolean
@@ -114,6 +115,9 @@ const CategoryEditModal: React.FC<ModalType> = ({
     resetData()
   }
 
+  // Enter in a one-line field saves, like the button
+  const onEnter = useEnterSave(saveFunction)
+
   useEffect(() => {
     if (!initialValue) return
 
@@ -154,7 +158,7 @@ const CategoryEditModal: React.FC<ModalType> = ({
 
         <Modal.Body className="space-y-6">
           {allCategories.length > 0 ? (
-            <form className="space-y-6">
+            <form className="space-y-6" onKeyDown={onEnter}>
               {/* Basic Information */}
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">

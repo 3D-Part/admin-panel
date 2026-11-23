@@ -24,6 +24,7 @@ import { Button, Label, Modal, Select, TextInput } from 'flowbite-react'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import { useModalScroll } from '@/shared/hooks/useModalScroll'
+import { useEnterSave } from '@/shared/hooks/useEnterSave'
 
 const AddProductsOnSaleModal = () => {
   const [loading, setLoading] = useState(false)
@@ -160,6 +161,9 @@ const AddProductsOnSaleModal = () => {
     changeIsAddProductsOnSaleModalOpen(false)
   }
 
+  // Enter in a one-line field saves, like the button
+  const onEnter = useEnterSave(onSave, loading)
+
   const onDelete = async () => {
     if (!productOnSelectedSale) return
     setLoading(true)
@@ -235,7 +239,7 @@ const AddProductsOnSaleModal = () => {
       </Modal.Header>
 
       <Modal.Body className="space-y-6 sm:space-y-8 p-4 sm:p-6 overflow-y-auto max-h-[calc(95vh-140px)]">
-        <form ref={formRef} className="space-y-6 sm:space-y-8">
+        <form ref={formRef} className="space-y-6 sm:space-y-8" onKeyDown={onEnter}>
           {/* Product Information */}
           <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-4 sm:p-6">
             <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6 flex items-center gap-2">

@@ -16,6 +16,7 @@ import { BackofficeAPI } from '@/services'
 import { CustomerTier } from '@/services/backoffice'
 import { SettingsAPI } from '@/services'
 import { readTierRows, sortTiers } from '@/shared/helpers/tiers'
+import { useEnterSave } from '@/shared/hooks/useEnterSave'
 
 // the tiers of the shop, set in Settings
 type ShopTier = { id: string; name: string; discount: number }
@@ -195,6 +196,9 @@ const UserDetails: React.FC<UserDetailsType> = ({
     }
   }
 
+  // Enter in the discount field saves it
+  const onDiscountEnter = useEnterSave(handleDiscountSave, isUpdating)
+
   return (
     <>
       <Modal root={modalRoot()}
@@ -285,7 +289,7 @@ const UserDetails: React.FC<UserDetailsType> = ({
                 value={tx("User Discount (%)")}
                 className="text-sm font-semibold text-purple-700 dark:text-purple-300 mb-2 block"
               />
-              <div className="flex gap-3 items-center">
+              <div className="flex gap-3 items-center" onKeyDown={onDiscountEnter}>
                 <TextInput
                   id="discount"
                   type="number"

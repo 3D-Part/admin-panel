@@ -13,6 +13,7 @@ import { BackofficeAPI } from '@/services'
 import { Order } from '@/shared/types'
 import { WarehouseProduct } from '@/shared/types/warehouse'
 import { OrderStatusEnum } from '@/shared/enums'
+import { useEnterSave } from '@/shared/hooks/useEnterSave'
 
 type Line = {
   productId: string
@@ -150,6 +151,9 @@ const OrderEditor: React.FC<{
     }
   }
 
+  // Enter in a quantity, price, discount or shipping field saves the order
+  const onEnter = useEnterSave(save, saving)
+
   // new orders, offers, cancelled and returned ones hold no stock
   const stockTaken = !create && ![
     OrderStatusEnum.Pending,
@@ -163,7 +167,7 @@ const OrderEditor: React.FC<{
       <Modal.Header>
         {create ? tx('New offer') : `${tx('Edit order')} #${order.orderNumber}`}
       </Modal.Header>
-      <Modal.Body className="space-y-6">
+      <Modal.Body className="space-y-6" onKeyDown={onEnter}>
         {stockTaken && (
           <Alert color="info">
             {tx("If stock was already taken for this order, quantity changes also change the stock.")}
@@ -172,6 +176,7 @@ const OrderEditor: React.FC<{
 
         <div className="space-y-2">
           <TextInput
+            data-enter-ignore
             placeholder={tx("Add a product: name, code or SKU")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}

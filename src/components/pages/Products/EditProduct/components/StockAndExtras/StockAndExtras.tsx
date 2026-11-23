@@ -14,6 +14,7 @@ import {
   readProductRibbons,
 } from '@/shared/helpers/productIcons'
 import RibbonBadge from '@/components/common/RibbonBadge/RibbonBadge'
+import { useEnterSave } from '@/shared/hooks/useEnterSave'
 import ColorChoice from '@/components/common/ColorChoice/ColorChoice'
 
 const toNumber = (value: string) => (value.trim() === '' ? null : Number(value))
@@ -83,6 +84,8 @@ const StockAndExtras = () => {
     }
   }
 
+  const onEnter = useEnterSave(save, saving)
+
   const categories = allCategories.filter(
     (category) =>
       category.id !== product.categoryId &&
@@ -90,7 +93,7 @@ const StockAndExtras = () => {
   )
 
   return (
-    <div className="flex flex-col gap-6 max-w-3xl pb-8">
+    <div className="flex flex-col gap-6 max-w-3xl pb-8" onKeyDown={onEnter}>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <Label htmlFor="purchase-price" value={tx("Purchase price (KM), staff only")} />
@@ -231,6 +234,7 @@ const StockAndExtras = () => {
           Also show in these categories ({categoryIds.length})
         </p>
         <TextInput
+          data-enter-ignore
           placeholder={tx("Filter categories")}
           value={categoryFilter}
           onChange={(e) => setCategoryFilter(e.target.value)}
