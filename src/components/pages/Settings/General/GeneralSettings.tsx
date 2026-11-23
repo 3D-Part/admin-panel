@@ -9,6 +9,8 @@ import { HiPlus, HiTrash } from 'react-icons/hi'
 import { useSearchParams } from 'next/navigation'
 import PageImages, { PageImage } from './PageImages'
 import BillingOptions from './BillingOptions'
+import RibbonsSettings from './RibbonsSettings'
+import { ProductRibbon, productRibbonsProblem, readProductRibbons } from '@/shared/helpers/productIcons'
 import BadgeLibrary, { BadgeImage } from './BadgeLibrary'
 import CustomerFlagsSettings, { customerFlagsProblem } from './CustomerFlagsSettings'
 import ZohoCampaignsSettings, {
@@ -87,6 +89,10 @@ const TABS: Record<string, { title: string; help: string }> = {
     title: 'Product flags',
     help: 'Flags the staff put on products, e.g. check the price or order more. They show next to the product in the products list, are picked there or on the product page, and the products list can be filtered by them. The site never shows them. Renaming or recoloring a flag changes it on every product that has it.',
   },
+  ribbons: {
+    title: 'Ribbons',
+    help: 'The ribbons the shop puts on products, e.g. New, Best seller or Sale: name, color and icon. Tick them on a product under Stock & extras; the site shows on the product card the product\'s ribbon that is highest in this list, and all of them on the product page. Changing a ribbon here changes it on every product that has it.',
+  },
   'order-flags': {
     title: 'Order flags',
     help: 'The flags the staff put on an order, e.g. urgent or waiting for payment. They show next to the order in the orders and offers lists and are picked in the order details. Renaming or recoloring a flag changes it on every order that has it.',
@@ -133,6 +139,7 @@ interface SettingsFormData {
   customerFlags: CustomerFlagType[]
   orderFlags: CustomerFlagType[]
   productFlags: CustomerFlagType[]
+  productRibbons: ProductRibbon[]
   newsletterMailbox: MailboxForm
   zohoCampaigns: ZohoForm
   pageImages: PageImage[]
@@ -173,6 +180,7 @@ const GeneralSettings = () => {
     customerFlags: [],
     orderFlags: [],
     productFlags: [],
+    productRibbons: [],
     newsletterMailbox: DEFAULT_MAILBOX_FORM,
     zohoCampaigns: DEFAULT_ZOHO_FORM,
     pageImages: [],
@@ -225,6 +233,7 @@ const GeneralSettings = () => {
           customerFlags: readCustomerFlags(settings),
           orderFlags: readOrderFlags(settings),
           productFlags: readProductFlags(settings),
+          productRibbons: readProductRibbons(settings),
           newsletterMailbox: readMailboxForm(settings.newsletterMailbox),
           zohoCampaigns: readZohoForm(settings.zohoCampaigns),
           pageImages: settings.pageImages ?? [],
@@ -328,6 +337,11 @@ const GeneralSettings = () => {
       toast(tx(flagProblem), { type: 'error', autoClose: 3500 })
       return
     }
+    const ribbonProblem = productRibbonsProblem(formData.productRibbons)
+    if (ribbonProblem) {
+      toast(tx(ribbonProblem), { type: 'error', autoClose: 3500 })
+      return
+    }
     if (badTier) {
       toast(tx("Every tier needs its own name and a discount between 0 and 100."), {
         type: 'error',
@@ -371,6 +385,7 @@ const GeneralSettings = () => {
         customerFlags: formData.customerFlags.map((flag) => ({ ...flag, label: flag.label.trim() })),
         orderFlags: formData.orderFlags.map((flag) => ({ ...flag, label: flag.label.trim() })),
         productFlags: formData.productFlags.map((flag) => ({ ...flag, label: flag.label.trim() })),
+        productRibbons: formData.productRibbons.map((ribbon) => ({ ...ribbon, label: ribbon.label.trim() })),
         newsletterMailbox: mailboxSettings(formData.newsletterMailbox),
         zohoCampaigns: zohoSettings(formData.zohoCampaigns),
         pageImages: formData.pageImages.filter((image) => image.desktop),
@@ -686,6 +701,15 @@ const GeneralSettings = () => {
               kind="product"
               value={formData.productFlags}
               onChange={(productFlags) => setFormData((prev) => ({ ...prev, productFlags }))}
+            />
+          </div>
+          )}
+
+          {tab === 'ribbons' && (
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+            <RibbonsSettings
+              value={formData.productRibbons}
+              onChange={(productRibbons) => setFormData((prev) => ({ ...prev, productRibbons }))}
             />
           </div>
           )}

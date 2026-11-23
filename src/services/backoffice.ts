@@ -431,6 +431,9 @@ const BackofficeAPI = {
     ),
   getProductFlagUsage: () =>
     attempt(() => API.get<Record<string, number>>(`${BASE}/product-flags/usage`)),
+  // how many products carry each ribbon of the settings
+  getProductRibbonUsage: () =>
+    attempt(() => API.get<Record<string, number>>(`${BASE}/product-ribbons/usage`)),
   // the product flags of each product, by product id
   getProductFlags: (ids: string[]) =>
     attempt(() =>

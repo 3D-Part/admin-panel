@@ -5,13 +5,15 @@ import SwitchCard from '@/components/common/SwitchCard/SwitchCard'
 import React, { useEffect, useState } from 'react'
 import { Button, Checkbox, Label, TextInput } from 'flowbite-react'
 import { toast } from 'react-toastify'
-import { BackofficeAPI, ProductsAPI, StoreManagerAPI } from '@/services'
+import { BackofficeAPI, ProductsAPI, SettingsAPI } from '@/services'
+import { useCategoryStore, useProductsStore } from '@/store/store'
 import {
-  useCategoryStore,
-  useProductsStore,
-  useS3ManagerStore,
-} from '@/store/store'
-import { CUSTOM_ICON, PRODUCT_ICONS } from '@/shared/helpers/productIcons'
+  CUSTOM_ICON,
+  ProductRibbon,
+  customIconSrc,
+  readProductRibbons,
+} from '@/shared/helpers/productIcons'
+import RibbonBadge from '@/components/common/RibbonBadge/RibbonBadge'
 import ColorChoice from '@/components/common/ColorChoice/ColorChoice'
 
 const toNumber = (value: string) => (value.trim() === '' ? null : Number(value))
@@ -31,8 +33,7 @@ const StockAndExtras = () => {
   const [categoryIds, setCategoryIds] = useState<string[]>([])
   const [categoryFilter, setCategoryFilter] = useState('')
   const [saving, setSaving] = useState(false)
-  const [uploading, setUploading] = useState(false)
-  const { getS3FormData } = useS3ManagerStore()
+  const [ribbons, setRibbons] = useState<ProductRibbon[] | null>(null)
 
   useEffect(() => {
     fetchAllCategories()
@@ -44,27 +45,8 @@ const StockAndExtras = () => {
     BackofficeAPI.getProductCategories(product.id).then((ids) => {
       if (ids) setCategoryIds(ids)
     })
+    SettingsAPI.getShopSettings().then((data) => setRibbons(readProductRibbons(data?.settings)))
   }, [fetchAllCategories, product.id])
-
-  const uploadIcon = async (file?: File) => {
-    if (!file) return
-    setUploading(true)
-    const s3Data = await getS3FormData()
-    let uploaded = false
-    if (s3Data) {
-      const formData = new FormData()
-      for (const [key, field] of Object.entries(s3Data.fields)) {
-        formData.append(key, field)
-      }
-      formData.append('file', file)
-      uploaded = await StoreManagerAPI.uploadImagesOnS3(formData, s3Data.url)
-      if (uploaded) {
-        setIcons((current) => [...current, `${CUSTOM_ICON}${s3Data.fields.key}`])
-      }
-    }
-    setUploading(false)
-    if (!uploaded) toast(tx("Upload failed"), { type: 'error', autoClose: 2000 })
-  }
 
   const toggle = (list: string[], value: string) =>
     list.includes(value) ? list.filter((x) => x !== value) : [...list, value]
@@ -201,49 +183,47 @@ const StockAndExtras = () => {
       </div>
 
       <div>
-        <p className="mb-2 text-sm font-medium text-gray-900 dark:text-white">
-          {tx("Icons shown in the shop")}
+        <p className="mb-1 text-sm font-medium text-gray-900 dark:text-white">{tx('Ribbons')}</p>
+        <p className="mb-2 text-xs text-gray-500 dark:text-gray-400">
+          {tx("The card in the shop shows the product's ribbon that comes first in Settings → Ribbons, the product page all of them. Names, colors, icons and their order are set there.")}
         </p>
-        <div className="flex flex-wrap gap-4">
-          {PRODUCT_ICONS.map(({ id, label }) => (
-            <div key={id} className="flex items-center gap-2">
-              <Checkbox
-                id={`icon-${id}`}
-                checked={icons.includes(id)}
-                onChange={() => setIcons(toggle(icons, id))}
-              />
-              <Label htmlFor={`icon-${id}`} value={tx(label)} />
-            </div>
-          ))}
-        </div>
-        <div className="flex flex-wrap items-center gap-3 mt-3">
-          {icons
-            .filter((icon) => icon.startsWith(CUSTOM_ICON))
-            .map((icon) => (
-              <button
-                key={icon}
-                type="button"
-                title={tx("Remove this icon")}
-                onClick={() => setIcons(toggle(icons, icon))}
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  alt={tx("Custom icon")}
-                  className="w-8 h-8 object-contain rounded border border-gray-300 dark:border-gray-600"
-                  src={`${process.env.S3_URL}/${icon.slice(CUSTOM_ICON.length)}`}
-                />
-              </button>
+        {ribbons === null ? (
+          <p className="text-sm text-gray-500 dark:text-gray-400">{tx('Loading...')}</p>
+        ) : ribbons.length === 0 ? (
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            {tx('No ribbons yet.')}{' '}
+            <a className="text-purple-600 hover:underline dark:text-purple-300" href="/settings/general?tab=ribbons">
+              {tx('Settings → Ribbons')}
+            </a>
+          </p>
+        ) : (
+          <div className="flex flex-wrap gap-x-5 gap-y-3">
+            {ribbons.map((ribbon) => (
+              <label key={ribbon.id} className="flex cursor-pointer items-center gap-2">
+                <Checkbox checked={icons.includes(ribbon.id)} onChange={() => setIcons(toggle(icons, ribbon.id))} />
+                <RibbonBadge ribbon={ribbon} />
+              </label>
             ))}
-          <label className="text-sm text-gray-900 dark:text-white">
-            Upload your own icon:{' '}
-            <input
-              type="file"
-              accept="image/png,image/svg+xml,image/webp"
-              disabled={uploading}
-              onChange={(e) => uploadIcon(e.target.files?.[0])}
-            />
-          </label>
-        </div>
+          </div>
+        )}
+        {/* pictures uploaded on the product before there were ribbons */}
+        {icons.some((icon) => icon.startsWith(CUSTOM_ICON)) && (
+          <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+            {tx('Old icons of this product (click to remove):')}
+            {icons
+              .filter((icon) => icon.startsWith(CUSTOM_ICON))
+              .map((icon) => (
+                <button key={icon} type="button" title={tx('Remove this icon')} onClick={() => setIcons(toggle(icons, icon))}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    alt={tx('Custom icon')}
+                    className="h-8 w-8 rounded border border-gray-300 object-contain dark:border-gray-600"
+                    src={customIconSrc(icon)}
+                  />
+                </button>
+              ))}
+          </div>
+        )}
       </div>
 
       <div>

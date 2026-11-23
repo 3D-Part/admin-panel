@@ -297,6 +297,7 @@ const SideBar = () => {
             ['Customer statuses', 'customer-flags'],
             ['Order flags', 'order-flags'],
             ['Product flags', 'product-flags'],
+            ['Ribbons', 'ribbons'],
             ['Zoho Campaigns', 'zoho-campaigns'],
             ['Delivery', 'delivery'],
             ['Company details', 'company'],
