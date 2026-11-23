@@ -1,5 +1,6 @@
 'use client'
 import { ProductSalesBox } from '@/components/common/SaleMarks/SaleMarks'
+import { ProductFlagsBox } from '@/components/common/ProductFlags/ProductFlags'
 import { tx } from '@/shared/i18n'
 import { Loader, Keywords } from '@/components/common'
 import {
@@ -226,6 +227,8 @@ const GeneralInfo = () => {
     >
       {/* the sales the product is on */}
       <ProductSalesBox productId={activeProduct.id} />
+      {/* the staff's flags, saved right away */}
+      <ProductFlagsBox productId={activeProduct.id} />
       {/* NAME */}
       <div className="w-full">
         <div className="mb-2 block">

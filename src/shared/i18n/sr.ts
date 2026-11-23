@@ -1212,6 +1212,18 @@ const sr: Record<string, string> = {
   "{name} added": "{name} je dodan",
   "Not on any running or upcoming sale.": "Nije ni na jednoj aktivnoj ni budućoj akciji.",
   "product is on it": "artikal je na njoj",
+  "Product flags": "Zastavice artikala",
+  "Flags the staff put on products, e.g. check the price or order more. They show next to the product in the products list, are picked there or on the product page, and the products list can be filtered by them. The site never shows them. Renaming or recoloring a flag changes it on every product that has it.": "Zastavice koje osoblje stavlja na artikle, npr. provjeriti cijenu ili naručiti još. Vide se pored artikla u listi artikala, biraju se tamo ili na stranici artikla, a lista artikala se po njima može filtrirati. Sajt ih nikad ne prikazuje. Promjena naziva ili boje zastavice mijenja je na svim artiklima koji je imaju.",
+  "Every product flag needs a name.": "Svaka zastavica artikla mora imati naziv.",
+  "Two product flags have the same name.": "Dvije zastavice artikala imaju isti naziv.",
+  "Products: {count}": "Artikala: {count}",
+  "Products have this flag. Take it off them first.": "Artikli imaju ovu zastavicu. Prvo je skini s njih.",
+  "No product flags yet.": "Još nema zastavica artikala.",
+  "No product flags yet. Add them in Settings → Product flags.": "Još nema zastavica artikala. Dodaj ih u Podešavanja → Zastavice artikala.",
+  "Product flags (staff only)": "Zastavice artikla (samo za osoblje)",
+  "{count} flags": "{count} zastavice",
+  "Flags": "Zastavice",
+  "Show all products": "Prikaži sve artikle",
 }
 
 export default sr

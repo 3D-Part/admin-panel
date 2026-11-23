@@ -14,6 +14,9 @@ export interface ProductsSliceInterface {
   sortOrder: 'ASC' | 'DESC'
   productFilters: {}
   onlyOutOfStock: boolean
+  // the staff's product flags: only the products with any of them
+  productFlagFilter: string[]
+  changeProductFlagFilter: (flags: string[]) => void
   changeOnlyOutOfStock: (data: boolean) => void
   changeCurrentPage: (data: number) => void
   changeItemsPerPage: (data: number) => void
@@ -43,6 +46,10 @@ export const productsSlice: StateCreator<ProductsSliceInterface> = (
   sortOrder: 'DESC',
   productFilters: {},
   onlyOutOfStock: false,
+  productFlagFilter: [],
+  changeProductFlagFilter: (flags: string[]) => {
+    set({ productFlagFilter: flags, currentPage: 1 })
+  },
 
   changeOnlyOutOfStock: (data: boolean) => {
     set({ onlyOutOfStock: data })
@@ -87,19 +94,19 @@ export const productsSlice: StateCreator<ProductsSliceInterface> = (
       order: get().sortOrder,
     }
 
+    const flags = get().productFlagFilter
+    const params = get().productFilters as { filters?: {} }
+    const filters = {
+      ...params.filters,
+      ...(get().onlyOutOfStock ? { quantity: { lt: 1 } } : {}),
+      ...(flags.length ? { flag: { in: flags.join(',') } } : {}),
+    }
+
     try {
       const data = await ProductsAPI.getProducts(
         sort,
         paginationData,
-        get().onlyOutOfStock
-          ? {
-              ...get().productFilters,
-              filters: {
-                ...(get().productFilters as { filters?: {} }).filters,
-                quantity: { lt: 1 },
-              },
-            }
-          : get().productFilters
+        Object.keys(filters).length ? { ...params, filters } : params
       )
 
       if (data) {

@@ -1,4 +1,5 @@
 import { SalePills } from '@/components/common/SaleMarks/SaleMarks'
+import { ProductFlagBadges, ProductFlagPicker } from '@/components/common/ProductFlags/ProductFlags'
 import { useSaleTags } from '@/shared/helpers/saleTags'
 import { tx } from '@/shared/i18n'
 import { URLPartsEnum } from '@/shared/enums'
@@ -24,6 +25,8 @@ import { PermissionEnum } from '@/shared/types'
 type TableItemType = {
   product: ProductData
   purchasePrice?: number
+  // the staff's product flags
+  flags?: string[]
   onWarningModalOpen: (product: ProductData) => void
 }
 
@@ -32,6 +35,7 @@ const S3_URL = process.env.S3_URL
 export const TableItem: React.FC<TableItemType> = ({
   product,
   purchasePrice,
+  flags = [],
   onWarningModalOpen,
 }) => {
   const [activeImageId, setActiveImageId] = useState('')
@@ -172,6 +176,12 @@ export const TableItem: React.FC<TableItemType> = ({
               label={published ? tx("Published") : tx("Hidden")}
               onChange={togglePublished}
             />
+            <span className="flex items-center gap-1">
+              <ProductFlagBadges flags={flags} />
+              {hasWritePermission && (
+                <ProductFlagPicker compact productId={product.id} flags={flags} />
+              )}
+            </span>
             {saleTags.length > 0 ? (
               <SalePills compact productId={product.id} />
             ) : (

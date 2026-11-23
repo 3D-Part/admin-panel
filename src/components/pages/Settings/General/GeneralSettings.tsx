@@ -23,7 +23,12 @@ import NewsletterMailboxSettings, {
   mailboxSettings,
   readMailboxForm,
 } from './NewsletterMailboxSettings'
-import { CustomerFlagType, readCustomerFlags, readOrderFlags } from '@/shared/helpers/customerFlags'
+import {
+  CustomerFlagType,
+  readCustomerFlags,
+  readOrderFlags,
+  readProductFlags,
+} from '@/shared/helpers/customerFlags'
 import AssistantSettings, { AssistantForm, DEFAULT_ASSISTANT_FORM, assistantSettings, readAssistantForm } from './AssistantSettings'
 import { BadgeItem, TIER_COLORS, TierRow, badgeProblem, newTierId, readTierRows, tierSettings } from '@/shared/helpers/tiers'
 import {
@@ -78,6 +83,10 @@ const TABS: Record<string, { title: string; help: string }> = {
     title: 'Newsletter mailbox',
     help: 'The mailbox the newsletter is sent from. On Subscribers → Create drafts the newsletter goes straight into its Drafts folder, one draft per group of recipients in Bcc; you open the drafts in the mail program and send them. The shop never sends the newsletter itself.',
   },
+  'product-flags': {
+    title: 'Product flags',
+    help: 'Flags the staff put on products, e.g. check the price or order more. They show next to the product in the products list, are picked there or on the product page, and the products list can be filtered by them. The site never shows them. Renaming or recoloring a flag changes it on every product that has it.',
+  },
   'order-flags': {
     title: 'Order flags',
     help: 'The flags the staff put on an order, e.g. urgent or waiting for payment. They show next to the order in the orders and offers lists and are picked in the order details. Renaming or recoloring a flag changes it on every order that has it.',
@@ -123,6 +132,7 @@ interface SettingsFormData {
   assistant: AssistantForm
   customerFlags: CustomerFlagType[]
   orderFlags: CustomerFlagType[]
+  productFlags: CustomerFlagType[]
   newsletterMailbox: MailboxForm
   zohoCampaigns: ZohoForm
   pageImages: PageImage[]
@@ -162,6 +172,7 @@ const GeneralSettings = () => {
     assistant: DEFAULT_ASSISTANT_FORM,
     customerFlags: [],
     orderFlags: [],
+    productFlags: [],
     newsletterMailbox: DEFAULT_MAILBOX_FORM,
     zohoCampaigns: DEFAULT_ZOHO_FORM,
     pageImages: [],
@@ -213,6 +224,7 @@ const GeneralSettings = () => {
           assistant: readAssistantForm(settings.assistant),
           customerFlags: readCustomerFlags(settings),
           orderFlags: readOrderFlags(settings),
+          productFlags: readProductFlags(settings),
           newsletterMailbox: readMailboxForm(settings.newsletterMailbox),
           zohoCampaigns: readZohoForm(settings.zohoCampaigns),
           pageImages: settings.pageImages ?? [],
@@ -309,7 +321,9 @@ const GeneralSettings = () => {
       return
     }
     const flagProblem =
-      customerFlagsProblem(formData.customerFlags) ?? customerFlagsProblem(formData.orderFlags, true)
+      customerFlagsProblem(formData.customerFlags) ??
+      customerFlagsProblem(formData.orderFlags, 'order') ??
+      customerFlagsProblem(formData.productFlags, 'product')
     if (flagProblem) {
       toast(tx(flagProblem), { type: 'error', autoClose: 3500 })
       return
@@ -356,6 +370,7 @@ const GeneralSettings = () => {
         assistant: assistantSettings(formData.assistant),
         customerFlags: formData.customerFlags.map((flag) => ({ ...flag, label: flag.label.trim() })),
         orderFlags: formData.orderFlags.map((flag) => ({ ...flag, label: flag.label.trim() })),
+        productFlags: formData.productFlags.map((flag) => ({ ...flag, label: flag.label.trim() })),
         newsletterMailbox: mailboxSettings(formData.newsletterMailbox),
         zohoCampaigns: zohoSettings(formData.zohoCampaigns),
         pageImages: formData.pageImages.filter((image) => image.desktop),
@@ -661,6 +676,16 @@ const GeneralSettings = () => {
             <NewsletterMailboxSettings
               value={formData.newsletterMailbox}
               onChange={(newsletterMailbox) => setFormData((prev) => ({ ...prev, newsletterMailbox }))}
+            />
+          </div>
+          )}
+
+          {tab === 'product-flags' && (
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+            <CustomerFlagsSettings
+              kind="product"
+              value={formData.productFlags}
+              onChange={(productFlags) => setFormData((prev) => ({ ...prev, productFlags }))}
             />
           </div>
           )}

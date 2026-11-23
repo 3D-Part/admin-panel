@@ -7,6 +7,7 @@ import { HiPlus } from 'react-icons/hi'
 import { URLPartsEnum } from '@/shared/enums'
 import ProductsSearch from './ProductsSearch'
 import ProductsSort from './ProductsSort'
+import ProductsFlagFilter from './ProductsFlagFilter'
 import { ExportButton } from '@/components/common'
 import { useCurrentUserStore } from '@/store/store'
 import { hasPermission } from '@/shared/helpers/permissions'
@@ -25,6 +26,7 @@ export const ProductsOverviewHeader = () => {
       <div className="w-full md:w-auto md:flex-1 min-w-0">
         <ProductsSearch />
       </div>
+      <ProductsFlagFilter />
       <ProductsSort />
       <ExportButton kind="products" />
       {hasWritePermission && (

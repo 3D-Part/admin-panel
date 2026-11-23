@@ -41,6 +41,12 @@ export const DEFAULT_ORDER_FLAGS: CustomerFlagType[] = [
   { id: 'SPREMNO', label: 'Spremno za slanje', color: 'green' },
 ]
 
+// flags the staff put on products, e.g. "check the price"; none until added
+export const DEFAULT_PRODUCT_FLAGS: CustomerFlagType[] = []
+
+export const readProductFlags = (settings: any): CustomerFlagType[] =>
+  Array.isArray(settings?.productFlags) ? settings.productFlags : DEFAULT_PRODUCT_FLAGS
+
 export const readOrderFlags = (settings: any): CustomerFlagType[] =>
   Array.isArray(settings?.orderFlags) ? settings.orderFlags : DEFAULT_ORDER_FLAGS
 
@@ -68,6 +74,9 @@ const useSettingsOnce = () => {
 
 /** The customer statuses of the settings. */
 export const useCustomerFlagTypes = (): CustomerFlagType[] => readCustomerFlags(useSettingsOnce())
+
+/** The product flags of the settings. */
+export const useProductFlagTypes = (): CustomerFlagType[] => readProductFlags(useSettingsOnce())
 
 /** The order flags of the settings. */
 export const useOrderFlagTypes = (): CustomerFlagType[] => readOrderFlags(useSettingsOnce())

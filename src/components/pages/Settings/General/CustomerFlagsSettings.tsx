@@ -14,12 +14,24 @@ import {
 } from '@/shared/helpers/customerFlags'
 
 /** Why the list cannot be saved, or null. */
-export const customerFlagsProblem = (flags: CustomerFlagType[], forOrders = false) => {
+export const customerFlagsProblem = (
+  flags: CustomerFlagType[],
+  kind: boolean | 'customer' | 'order' | 'product' = 'customer'
+) => {
+  const what = kind === true ? 'order' : kind === false ? 'customer' : kind
   const names = flags.map((flag) => flag.label.trim().toLowerCase())
   if (names.some((name) => !name))
-    return forOrders ? 'Every order flag needs a name.' : 'Every customer status needs a name.'
+    return what === 'order'
+      ? 'Every order flag needs a name.'
+      : what === 'product'
+      ? 'Every product flag needs a name.'
+      : 'Every customer status needs a name.'
   if (names.some((name, i) => names.indexOf(name) !== i))
-    return forOrders ? 'Two order flags have the same name.' : 'Two customer statuses have the same name.'
+    return what === 'order'
+      ? 'Two order flags have the same name.'
+      : what === 'product'
+      ? 'Two product flags have the same name.'
+      : 'Two customer statuses have the same name.'
   return null
 }
 
@@ -31,17 +43,21 @@ export const customerFlagsProblem = (flags: CustomerFlagType[], forOrders = fals
 const CustomerFlagsSettings: React.FC<{
   value: CustomerFlagType[]
   onChange: (next: CustomerFlagType[]) => void
-  // the same editor serves the order flags; on an order red is only a color
-  kind?: 'customer' | 'order'
+  // the same editor serves the order and product flags; there red is only a color
+  kind?: 'customer' | 'order' | 'product'
 }> = ({ value, onChange, kind = 'customer' }) => {
   const [usage, setUsage] = useState<Record<string, number>>({})
   const forOrders = kind === 'order'
+  const forProducts = kind === 'product'
 
   useEffect(() => {
-    ;(forOrders ? BackofficeAPI.getOrderFlagUsage() : BackofficeAPI.getCustomerFlagUsage()).then(
-      (data) => setUsage(data ?? {})
-    )
-  }, [forOrders])
+    ;(forProducts
+      ? BackofficeAPI.getProductFlagUsage()
+      : forOrders
+      ? BackofficeAPI.getOrderFlagUsage()
+      : BackofficeAPI.getCustomerFlagUsage()
+    ).then((data) => setUsage(data ?? {}))
+  }, [forOrders, forProducts])
 
   const update = (index: number, patch: Partial<CustomerFlagType>) =>
     onChange(value.map((flag, i) => (i === index ? { ...flag, ...patch } : flag)))
@@ -54,7 +70,7 @@ const CustomerFlagsSettings: React.FC<{
   }
 
   const add = (color: CustomerFlagColor) => {
-    const label = forOrders ? tx('New flag') : tx('New status')
+    const label = forOrders || forProducts ? tx('New flag') : tx('New status')
     onChange([
       ...value,
       { id: flagIdFromLabel(`${label} ${value.length + 1}`, value.map((flag) => flag.id)), label, color },
@@ -97,14 +113,16 @@ const CustomerFlagsSettings: React.FC<{
                 ))}
               </div>
               <div className="flex flex-1 items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
-                {!forOrders && flag.color === 'red' && (
+                {kind === 'customer' && flag.color === 'red' && (
                   <span className="rounded-full bg-red-100 px-2 py-0.5 font-medium text-red-700 dark:bg-red-900/40 dark:text-red-300">
                     {tx('Disputed')}
                   </span>
                 )}
                 <span>
                   {used > 0
-                    ? forOrders
+                    ? forProducts
+                      ? tx('Products: {count}', { count: used })
+                      : forOrders
                       ? tx('Orders: {count}', { count: used })
                       : tx('Customers: {count}', { count: used })
                     : tx('Not used')}
@@ -128,7 +146,9 @@ const CustomerFlagsSettings: React.FC<{
                   disabled={used > 0}
                   title={
                     used > 0
-                      ? forOrders
+                      ? forProducts
+                        ? tx('Products have this flag. Take it off them first.')
+                        : forOrders
                         ? tx('Orders have this flag. Give them another one first.')
                         : tx('Customers have this status. Give them another one first.')
                       : tx('Remove')
@@ -143,12 +163,16 @@ const CustomerFlagsSettings: React.FC<{
         })}
         {value.length === 0 && (
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            {forOrders ? tx('No order flags.') : tx('No customer statuses. Every customer is neutral.')}
+            {forProducts
+              ? tx('No product flags yet.')
+              : forOrders
+              ? tx('No order flags.')
+              : tx('No customer statuses. Every customer is neutral.')}
           </p>
         )}
       </div>
 
-      {forOrders ? (
+      {forOrders || forProducts ? (
         <Button size="sm" color="gray" onClick={() => add('blue')}>
           <HiFlag className={`mr-1 h-4 w-4 ${CUSTOMER_FLAG_COLORS.blue.text}`} /> {tx('Add a flag')}
         </Button>

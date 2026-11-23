@@ -1,6 +1,7 @@
 'use client'
 import { tx } from '@/shared/i18n'
 import { BackofficeAPI } from '@/services'
+import { useProductFlags } from '@/components/common/ProductFlags/ProductFlags'
 
 import { Pagination, Table } from 'flowbite-react'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
@@ -36,6 +37,7 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
     resetProductsState,
     sortFiled,
     sortOrder,
+    productFlagFilter,
   } = useProductsStore()
 
   useEffect(() => {
@@ -70,7 +72,7 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
 
   useEffect(() => {
     fetchProductsData()
-  }, [currentPage, fetchProductsData, sortFiled, sortOrder])
+  }, [currentPage, fetchProductsData, sortFiled, sortOrder, productFlagFilter])
 
   const { fetchAllCategories } = useCategoryStore()
   const { fetchAllManufactures } = useManufactureStore()
@@ -78,6 +80,9 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
     fetchAllCategories()
     fetchAllManufactures()
   }, [fetchAllCategories, fetchAllManufactures])
+
+  // the staff's product flags of the products on the page
+  const flags = useProductFlags(currentPageProducts.map((p) => p.id))
 
   const [costs, setCosts] = useState<Record<string, number>>({})
   useEffect(() => {
@@ -138,6 +143,7 @@ export const ProductsTable: React.FC<ProductsTableType> = ({
                     key={product.id}
                     product={product}
                     purchasePrice={costs[product.id]}
+                    flags={flags[product.id] ?? []}
                     onWarningModalOpen={onWarningModalOpen}
                   />
                 )

@@ -429,6 +429,17 @@ const BackofficeAPI = {
         body
       )
     ),
+  getProductFlagUsage: () =>
+    attempt(() => API.get<Record<string, number>>(`${BASE}/product-flags/usage`)),
+  // the product flags of each product, by product id
+  getProductFlags: (ids: string[]) =>
+    attempt(() =>
+      API.get<Record<string, string[]>>(`${BASE}/product-flags`, { ids: ids.join(',') })
+    ),
+  setProductFlags: (id: string, flags: string[]) =>
+    attempt(() =>
+      API.put<{ flags: string[] }, { productId: string; flags: string[] }>(`${BASE}/products/${id}/flags`, { flags })
+    ),
   getOrderFlagUsage: () =>
     attempt(() => API.get<Record<string, number>>(`${BASE}/order-flags/usage`)),
   getCustomerFlagUsage: () =>
