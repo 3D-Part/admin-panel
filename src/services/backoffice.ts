@@ -431,6 +431,14 @@ const BackofficeAPI = {
     ),
   getProductFlagUsage: () =>
     attempt(() => API.get<Record<string, number>>(`${BASE}/product-flags/usage`)),
+  // how many customers have each avatar of the settings
+  getCustomerAvatarUsage: () =>
+    attempt(() => API.get<Record<string, number>>(`${BASE}/customer-avatars/usage`)),
+  // give a customer one of the avatars of the settings, or none
+  setCustomerAvatar: (userId: string, image: string | null) =>
+    attempt(() =>
+      API.put<{ image: string | null }, { id: string; image: string | null }>(`${BASE}/customers/${userId}/avatar`, { image })
+    ),
   // how many products carry each ribbon of the settings
   getProductRibbonUsage: () =>
     attempt(() => API.get<Record<string, number>>(`${BASE}/product-ribbons/usage`)),

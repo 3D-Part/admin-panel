@@ -10,6 +10,8 @@ import { useSearchParams } from 'next/navigation'
 import PageImages, { PageImage } from './PageImages'
 import BillingOptions from './BillingOptions'
 import RibbonsSettings from './RibbonsSettings'
+import AvatarsSettings, { customerAvatarsProblem } from './AvatarsSettings'
+import { CustomerAvatar, loadCustomerAvatars, readCustomerAvatars } from '@/shared/helpers/avatars'
 import { ProductRibbon, productRibbonsProblem, readProductRibbons } from '@/shared/helpers/productIcons'
 import BadgeLibrary, { BadgeImage } from './BadgeLibrary'
 import CustomerFlagsSettings, { customerFlagsProblem } from './CustomerFlagsSettings'
@@ -93,6 +95,10 @@ const TABS: Record<string, { title: string; help: string }> = {
     title: 'Ribbons',
     help: 'The ribbons the shop puts on products, e.g. New, Best seller or Sale: name, color and icon. Tick them on a product under Stock & extras; the site shows on the product card the product\'s ribbon that is highest in this list, and all of them on the product page. Changing a ribbon here changes it on every product that has it.',
   },
+  avatars: {
+    title: 'Avatars',
+    help: 'The pictures customers pick for their profile on the site. Upload your own, rename them, choose which ones customers can pick, or remove them. An avatar that is not offered any more stays with the customers who have it; a removed one is taken off them and they show their initials. In Users the staff can give a customer any of these.',
+  },
   'order-flags': {
     title: 'Order flags',
     help: 'The flags the staff put on an order, e.g. urgent or waiting for payment. They show next to the order in the orders and offers lists and are picked in the order details. Renaming or recoloring a flag changes it on every order that has it.',
@@ -140,6 +146,7 @@ interface SettingsFormData {
   orderFlags: CustomerFlagType[]
   productFlags: CustomerFlagType[]
   productRibbons: ProductRibbon[]
+  customerAvatars: CustomerAvatar[]
   newsletterMailbox: MailboxForm
   zohoCampaigns: ZohoForm
   pageImages: PageImage[]
@@ -181,6 +188,7 @@ const GeneralSettings = () => {
     orderFlags: [],
     productFlags: [],
     productRibbons: [],
+    customerAvatars: [],
     newsletterMailbox: DEFAULT_MAILBOX_FORM,
     zohoCampaigns: DEFAULT_ZOHO_FORM,
     pageImages: [],
@@ -234,6 +242,7 @@ const GeneralSettings = () => {
           orderFlags: readOrderFlags(settings),
           productFlags: readProductFlags(settings),
           productRibbons: readProductRibbons(settings),
+          customerAvatars: readCustomerAvatars(settings),
           newsletterMailbox: readMailboxForm(settings.newsletterMailbox),
           zohoCampaigns: readZohoForm(settings.zohoCampaigns),
           pageImages: settings.pageImages ?? [],
@@ -342,6 +351,11 @@ const GeneralSettings = () => {
       toast(tx(ribbonProblem), { type: 'error', autoClose: 3500 })
       return
     }
+    const avatarProblem = customerAvatarsProblem(formData.customerAvatars)
+    if (avatarProblem) {
+      toast(tx(avatarProblem), { type: 'error', autoClose: 3500 })
+      return
+    }
     if (badTier) {
       toast(tx("Every tier needs its own name and a discount between 0 and 100."), {
         type: 'error',
@@ -386,6 +400,7 @@ const GeneralSettings = () => {
         orderFlags: formData.orderFlags.map((flag) => ({ ...flag, label: flag.label.trim() })),
         productFlags: formData.productFlags.map((flag) => ({ ...flag, label: flag.label.trim() })),
         productRibbons: formData.productRibbons.map((ribbon) => ({ ...ribbon, label: ribbon.label.trim() })),
+        customerAvatars: formData.customerAvatars.map((avatar) => ({ ...avatar, name: avatar.name.trim() })),
         newsletterMailbox: mailboxSettings(formData.newsletterMailbox),
         zohoCampaigns: zohoSettings(formData.zohoCampaigns),
         pageImages: formData.pageImages.filter((image) => image.desktop),
@@ -399,6 +414,8 @@ const GeneralSettings = () => {
     })
 
     if (success) {
+      // the avatars shown across the admin follow the new list
+      loadCustomerAvatars(true)
       toast(tx("Settings updated successfully!"), {
         hideProgressBar: true,
         autoClose: 2000,
@@ -710,6 +727,15 @@ const GeneralSettings = () => {
             <RibbonsSettings
               value={formData.productRibbons}
               onChange={(productRibbons) => setFormData((prev) => ({ ...prev, productRibbons }))}
+            />
+          </div>
+          )}
+
+          {tab === 'avatars' && (
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+            <AvatarsSettings
+              value={formData.customerAvatars}
+              onChange={(customerAvatars) => setFormData((prev) => ({ ...prev, customerAvatars }))}
             />
           </div>
           )}

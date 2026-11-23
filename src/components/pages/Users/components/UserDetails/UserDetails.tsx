@@ -7,7 +7,7 @@ import getOrderStatusLabel from '@/shared/helpers/getOrderStatusLabel'
 import OrderDetails from '@/components/pages/Orders/components/OrderDetails'
 import { User, Order } from '@/shared/types'
 import { UserAvatar } from '@/components/common/UserAvatar/UserAvatar'
-import { avatarOf } from '@/shared/helpers/avatars'
+import { avatarImageSrc, avatarOf, useCustomerAvatars } from '@/shared/helpers/avatars'
 import { Button, Modal, Table, TextInput, Label, Select } from 'flowbite-react'
 import React, { useEffect, useState, useRef } from 'react'
 import { toast } from 'react-toastify'
@@ -88,6 +88,27 @@ const UserDetails: React.FC<UserDetailsType> = ({
   const discountRef = useRef<HTMLInputElement>(null)
   const [isUpdating, setIsUpdating] = useState(false)
   const [isSendingReset, setIsSendingReset] = useState(false)
+  // the avatar shown here follows what the staff give the customer
+  const [image, setImage] = useState<string | null>(user.image)
+  const [pickingAvatar, setPickingAvatar] = useState(false)
+  const [savingAvatar, setSavingAvatar] = useState(false)
+  const avatars = useCustomerAvatars()
+
+  const giveAvatar = async (next: string | null) => {
+    setSavingAvatar(true)
+    const saved = await BackofficeAPI.setCustomerAvatar(user.id, next)
+    setSavingAvatar(false)
+    if (!saved) {
+      toast(tx('The avatar was not saved'), { type: 'error', autoClose: 3000 })
+      return
+    }
+    setImage(next)
+    // the row of the users list shows the same object when the modal closes
+    user.image = next
+    setPickingAvatar(false)
+    onUserUpdated?.({ ...user, image: next })
+    toast(next ? tx('Avatar changed') : tx('Avatar removed'), { type: 'success', autoClose: 2000 })
+  }
 
   const sendPasswordReset = async () => {
     setIsSendingReset(true)
@@ -213,15 +234,50 @@ const UserDetails: React.FC<UserDetailsType> = ({
           {tx("User ID:")}{' '}<span className="text-gray-400">#{id}</span>
         </Modal.Header>
         <Modal.Body>
-          {/* the avatar the customer picked on the shop's profile page */}
-          <div className="mb-4 flex items-center gap-3">
-            <UserAvatar image={user.image} name={fullName} size={56} />
-            <div className="text-sm">
-              <div className="font-medium text-gray-900 dark:text-white">{tx('Avatar')}</div>
-              <div className="text-gray-500 dark:text-gray-400">
-                {avatarOf(user.image)?.name ?? tx('No avatar picked')}
+          {/* the avatar the customer picked on the shop's profile page; the staff can change it */}
+          <div className="mb-4">
+            <div className="flex flex-wrap items-center gap-3">
+              <UserAvatar image={image} name={fullName} size={56} />
+              <div className="text-sm">
+                <div className="font-medium text-gray-900 dark:text-white">{tx('Avatar')}</div>
+                <div className="text-gray-500 dark:text-gray-400">
+                  {avatarOf(image, avatars)?.name ?? tx('No avatar picked')}
+                </div>
               </div>
+              <Button size="xs" color="gray" onClick={() => setPickingAvatar((open) => !open)}>
+                {pickingAvatar ? tx('Close') : tx('Change avatar')}
+              </Button>
             </div>
+            {pickingAvatar && (
+              <div className="mt-3 rounded-lg border border-gray-200 p-3 dark:border-gray-700">
+                <div className="flex flex-wrap gap-2">
+                  {avatars.map((avatar) => (
+                    <button
+                      key={avatar.id}
+                      type="button"
+                      disabled={savingAvatar}
+                      title={avatar.hidden ? `${avatar.name} (${tx('not offered to customers')})` : avatar.name}
+                      onClick={() => giveAvatar(avatar.id)}
+                      className={`rounded-full transition hover:scale-105 disabled:opacity-60 ${
+                        image === avatar.id ? 'ring-2 ring-purple-500 ring-offset-2 dark:ring-offset-gray-800' : ''
+                      } ${avatar.hidden ? 'opacity-50' : ''}`}
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={avatarImageSrc(avatar)}
+                        alt={avatar.name}
+                        className="h-12 w-12 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
+                      />
+                    </button>
+                  ))}
+                </div>
+                {image && (
+                  <Button className="mt-3" size="xs" color="light" disabled={savingAvatar} onClick={() => giveAvatar(null)}>
+                    {tx('Remove the avatar')}
+                  </Button>
+                )}
+              </div>
+            )}
           </div>
           <div className="flex flex-wrap gap-4">
             <UserDetail

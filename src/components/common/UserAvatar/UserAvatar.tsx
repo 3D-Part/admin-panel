@@ -1,17 +1,17 @@
 'use client'
 import { tx } from '@/shared/i18n'
-import { avatarOf } from '@/shared/helpers/avatars'
+import { avatarOf, useCustomerAvatars } from '@/shared/helpers/avatars'
 
 /**
  * The avatar a customer picked on the shop, or their first letter when they
- * have not picked one. The name of the avatar shows on hover.
+ * have not picked one (or it was removed in Settings → Avatars). The name of the avatar shows on hover.
  */
 export const UserAvatar: React.FC<{ image?: string | null; name?: string; size?: number }> = ({
   image,
   name,
   size = 28,
 }) => {
-  const avatar = avatarOf(image)
+  const avatar = avatarOf(image, useCustomerAvatars())
   const style = { width: size, height: size }
   if (!avatar) {
     return (
@@ -31,7 +31,7 @@ export const UserAvatar: React.FC<{ image?: string | null; name?: string; size?:
       alt={avatar.name}
       title={avatar.name}
       style={style}
-      className="shrink-0 rounded-full bg-gray-100 dark:bg-gray-700"
+      className="shrink-0 rounded-full bg-gray-100 object-cover dark:bg-gray-700"
     />
   )
 }
