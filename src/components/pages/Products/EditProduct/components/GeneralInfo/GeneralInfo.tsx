@@ -399,7 +399,6 @@ const GeneralInfo = () => {
         <p className="mb-2 text-sm font-medium text-gray-900 dark:text-white">{tx("Product groups")}</p>
         <div className="flex flex-wrap gap-2">
           {[
-            { id: 'published', label: 'Published', on: isPublished },
             { id: 'super-offer', label: 'Super offer', on: isRecommended },
             { id: 'most-sold', label: 'Most sold', on: isMostSold },
             { id: 'cart-recommended', label: 'Shopping cart recommended', on: isShoppingCartRecommended },

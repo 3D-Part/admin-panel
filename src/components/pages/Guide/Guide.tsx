@@ -72,7 +72,7 @@ const SECTIONS: Record<Language, Section[]> = {
     {
       title: 'Groups, flags and the chat',
       lines: [
-        'Products → Product groups: who is published, in Super offer, Most sold or recommended in the cart. Search on the right, add one or many; take out on the left.',
+        'Products → Product groups: who is in Super offer, Most sold or recommended in the cart. Search on the right, add one or many; take out on the left. A product is published or hidden with the Published switch on the product itself.',
         'Settings → Customer statuses and Order flags: name and color of each flag. Red customer statuses mean disputed.',
         'Settings → Chat assistant: one AI is active at a time (ChatGPT or Claude); the table below shows what it cost.',
       ],

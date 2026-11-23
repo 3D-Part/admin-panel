@@ -16,12 +16,8 @@ import { useCurrentUserStore } from '@/store/store'
 import { hasPermission } from '@/shared/helpers/permissions'
 import { PermissionEnum } from '@/shared/types'
 
+// Publishing is not a group here: it is switched on the product itself.
 export const PRODUCT_GROUPS: { id: ProductGroupId; title: string; help: string }[] = [
-  {
-    id: 'published',
-    title: 'Published',
-    help: 'Products the customers see on the site. A product outside this group is hidden everywhere on the site.',
-  },
   {
     id: 'super-offer',
     title: 'Super offer',
@@ -202,15 +198,14 @@ const GroupList: React.FC<{
 }
 
 /**
- * The product groups (published, super offer, most sold, shopping cart
- * recommended) managed like a sale: a list of the products in the group, and
+ * The product groups (super offer, most sold, shopping cart recommended) managed like a sale: a list of the products in the group, and
  * a search to put more in.
  */
 const ProductGroups = () => {
   const params = useSearchParams()
   const router = useRouter()
   const requested = params.get('group') as ProductGroupId | null
-  const group = PRODUCT_GROUPS.find((item) => item.id === requested) ?? PRODUCT_GROUPS[1]
+  const group = PRODUCT_GROUPS.find((item) => item.id === requested) ?? PRODUCT_GROUPS[0]
   const [counts, setCounts] = useState<Partial<Record<ProductGroupId, number>>>({})
   const [version, setVersion] = useState(0)
   const { currentUser } = useCurrentUserStore()
@@ -231,7 +226,7 @@ const ProductGroups = () => {
       <div>
         <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">{tx('Product groups')}</h1>
         <p className="text-sm text-gray-500 dark:text-gray-400">
-          {tx('Which products are published and which show in the sliders of the site. Put products into a group or take them out here, one by one or many at once.')}
+          {tx('Which products show in the sliders of the site. Put products into a group or take them out here, one by one or many at once. A product is published or hidden on the product itself.')}
         </p>
       </div>
 
