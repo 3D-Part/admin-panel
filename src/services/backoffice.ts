@@ -226,6 +226,15 @@ export type EditOrderBody = {
 
 // Errors are shown as a toast by the axios interceptor; callers only need to
 // know whether it worked.
+export type AssistantHealth = {
+  enabled: boolean
+  provider: 'openai' | 'anthropic'
+  hidden: boolean
+  problem: 'credit' | 'key' | 'failing' | null
+  message: string | null
+  since: string | null
+}
+
 const attempt = async <T>(request: () => Promise<T>): Promise<T | null> => {
   try {
     return await request()
@@ -300,6 +309,8 @@ const BackofficeAPI = {
         ...(to ? { to } : {}),
       })
     ),
+  // whether the chat assistant of the site works; if not, why
+  getAssistantHealth: () => attempt(() => API.get<AssistantHealth>(`${BASE}/assistant-health`)),
   // what the chat assistant used, per provider and model, last 30 days by default
   getAssistantUsage: (from?: string, to?: string) =>
     attempt(() =>

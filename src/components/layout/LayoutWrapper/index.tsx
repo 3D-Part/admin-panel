@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import React, { Suspense } from 'react'
 import Header from '../Header/Header'
 import SideBar from '../SideBar/SideBar'
+import AssistantAlert from '@/components/common/AssistantAlert/AssistantAlert'
 
 const LayoutWrapper = () => {
   const pathname = usePathname()
@@ -19,6 +20,7 @@ const LayoutWrapper = () => {
       <Suspense>
         <SideBar />
       </Suspense>
+      <AssistantAlert />
     </>
   )
 }

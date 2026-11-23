@@ -1164,6 +1164,13 @@ const sr: Record<string, string> = {
   "{count} recipients": "{count} primalaca",
   "Sending": "Šalje se",
   "Pick the test list in the settings first": "Prvo izaberi test listu u podešavanjima",
+  "No balance for the chat assistant": "Nema sredstava za chat asistenta",
+  "There is no money left on the balance of the AI provider, so the chat is hidden from the site. Top up the balance and the chat comes back by itself within 30 minutes, or at once when you save the key again.": "Na balansu AI provajdera nema više novca, pa je chat sakriven sa sajta. Uplatite sredstva i chat se sam vraća u roku od 30 minuta, ili odmah kad ponovo sačuvate ključ.",
+  "The chat assistant key is refused": "Ključ chat asistenta je odbijen",
+  "The AI provider refused the API key, so the chat is hidden from the site. Save a valid key in Settings.": "AI provajder je odbio API ključ, pa je chat sakriven sa sajta. Sačuvajte ispravan ključ u Postavkama.",
+  "The chat assistant is not working": "Chat asistent ne radi",
+  "The AI provider failed several times in a row, so the chat is hidden from the site for a few minutes. It is tried again by itself.": "AI provajder nije odgovorio nekoliko puta zaredom, pa je chat sakriven sa sajta na nekoliko minuta. Sam se ponovo pokušava.",
+  "Open chat settings": "Otvori postavke chata",
 }
 
 export default sr
