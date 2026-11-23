@@ -33,7 +33,7 @@ const OrderSteps: React.FC<{ order: Order; lists: StepLists }> = ({
   const options = listFor(lists, status, order.isOffer)
   const shown = visibleSteps(options, steps, otherList(lists, status, order.isOffer))
 
-  if (!followsSteps(status, options, steps)) {
+  if (!followsSteps(status, options, steps, options === lists.offers)) {
     const fill = STATUS_DOT[status] ?? 'bg-gray-500 border-gray-500'
     return (
       <div

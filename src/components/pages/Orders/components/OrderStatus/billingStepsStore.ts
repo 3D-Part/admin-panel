@@ -111,8 +111,14 @@ export const visibleSteps = (
 export const followsSteps = (
   status: string,
   options: BillingOption[],
-  steps: Record<string, string>
-) => options.some((option) => statusOf(option) === status && steps[option.id])
+  steps: Record<string, string>,
+  // an offer always shows its own steps: a new offer (e.g. a company order,
+  // which starts as an offer) has none ticked yet and shows empty circles,
+  // not every circle in the offer's brown
+  isOffer = false
+) =>
+  options.some((option) => statusOf(option) === status && steps[option.id]) ||
+  (isOffer && options.some((option) => statusOf(option) === status))
 
 export const STATUS_DOT: Record<string, string> = {
   [OrderStatusEnum.Pending]: 'bg-indigo-500 border-indigo-500',
