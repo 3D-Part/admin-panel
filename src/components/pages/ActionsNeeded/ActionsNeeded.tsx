@@ -73,7 +73,7 @@ const ActionRow: React.FC<{ action: ActionNeeded; onSaved: () => void }> = ({
   return (
     <Table.Row>
       <Table.Cell data-label={tx("Product")} className="text-gray-900 dark:text-white">
-        <ProductCodes block code={action.code} sku={action.sku} />
+        <ProductCodes block productId={action.productId} code={action.code} sku={action.sku} />
         <span className="block break-words font-medium">{action.name}</span>
         <span className="mt-1 block text-xs font-normal text-gray-500 dark:text-gray-400">
           {action.reason}
@@ -323,7 +323,7 @@ const OrderPicker: React.FC<{
                 }}
               >
                 <span className="min-w-0 text-gray-900 dark:text-white">
-                  <ProductCodes block code={product.code} sku={product.sku} />
+                  <ProductCodes block productId={product.id} code={product.code} sku={product.sku} />
                   <span className="break-words">{product.name}</span>
                 </span>
                 <span className="shrink-0 text-xs text-gray-500">{product.quantity} {tx("in stock")}</span>
@@ -415,7 +415,7 @@ const StockTab = () => {
                 <Table.Cell data-label={tx("Product")} className="text-gray-900 dark:text-white">
                   {task.product ? (
                     <>
-                      <ProductCodes block code={task.product.code} sku={task.product.sku} />
+                      <ProductCodes block productId={task.productId} code={task.product.code} sku={task.product.sku} />
                       {task.product.name}
                     </>
                   ) : (
@@ -463,7 +463,7 @@ const StockTab = () => {
             {ordered.map((alert) => (
               <Table.Row key={alert.id}>
                 <Table.Cell data-label={tx("Product")} className="text-gray-900 dark:text-white">
-                  <ProductCodes block code={alert.code} sku={alert.sku} />
+                  <ProductCodes block productId={alert.id} code={alert.code} sku={alert.sku} />
                   {alert.name}
                 </Table.Cell>
                 <Table.Cell data-label={tx("In stock")}>{alert.quantity}</Table.Cell>

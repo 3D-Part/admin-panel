@@ -4,6 +4,7 @@ import { Badge, Button, Pagination, Select, Table, TextInput } from 'flowbite-re
 import React, { useCallback, useEffect, useState } from 'react'
 import { HiTag } from 'react-icons/hi'
 import WarehouseAPI from '@/services/warehouse'
+import { SaleDots } from '@/components/common/SaleMarks/SaleMarks'
 import { tx } from '@/shared/i18n'
 import { getStockLevel, stockLevelClasses } from '@/shared/helpers/warehouseLabels'
 import { InventoryProduct, InventoryQuery } from '@/shared/types/warehouse'
@@ -175,6 +176,7 @@ const ProductInventory: React.FC<ProductInventoryProps> = ({ onPrintLabels }) =>
                     )}
                   </Table.Cell>
                   <Table.Cell className="text-gray-900 dark:text-white">
+                    <SaleDots productId={product.id} className="mr-1.5" />
                     {product.name}
                     <span className="block text-xs text-gray-500">
                       {[product.category?.name, product.manufacturer?.name]

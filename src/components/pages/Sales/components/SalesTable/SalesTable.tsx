@@ -17,6 +17,8 @@ import {
 import { PaginationData, Sale } from '@/shared/types'
 import dateTimeFormat from '@/shared/helpers/dateTimeFormat'
 import EditSaleModal from '../Modals/EditSaleModal/EditSaleModal'
+import SaleTimingBadge from './SaleTimingBadge'
+import { DEFAULT_SALE_COLOR } from '@/shared/helpers/saleTags'
 import { hasPermission } from '@/shared/helpers/permissions'
 import { PermissionEnum } from '@/shared/types'
 
@@ -90,9 +92,21 @@ export const SalesTable: React.FC<SalesTableType> = ({
     return (
       <MobileCardBuilder
         key={sale.id}
-        title={name}
+        title={
+          <span className="flex items-center gap-2">
+            <span
+              className="h-3 w-3 shrink-0 rounded-full"
+              style={{ backgroundColor: sale.color || DEFAULT_SALE_COLOR }}
+            />
+            {name}
+          </span>
+        }
         onClick={hasWritePermission ? () => handleEditSale(sale) : undefined}
         items={[
+          {
+            label: tx("Status"),
+            value: <SaleTimingBadge startsAt={startsAt} endsAt={endsAt} />,
+          },
           {
             label: tx("Start Date"),
             value: (
@@ -148,6 +162,7 @@ export const SalesTable: React.FC<SalesTableType> = ({
           <Table className="w-full">
             <Table.Head className="table-header">
               <Table.HeadCell className="table-cell">{tx("Name")}</Table.HeadCell>
+              <Table.HeadCell className="table-cell">{tx("Status")}</Table.HeadCell>
               <Table.HeadCell className="table-cell">{tx("Start Date")}</Table.HeadCell>
               <Table.HeadCell className="table-cell">{tx("End Date")}</Table.HeadCell>
               <Table.HeadCell className="table-cell">

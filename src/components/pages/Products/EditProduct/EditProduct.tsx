@@ -45,7 +45,7 @@ export const EditProduct = () => {
           <h2 className="text-gray-900 dark:text-white text-4xl font-bold">
             {activeProduct.name}
           </h2>
-          <ProductCodes block className="mt-1 text-sm" code={activeProduct.code} sku={activeProduct.sku} />
+          <ProductCodes block className="mt-1 text-sm" productId={activeProduct.id} code={activeProduct.code} sku={activeProduct.sku} />
         </div>
         <div className="flex items-center gap-4">
           <Button color="purple" onClick={addProductOnSale}>

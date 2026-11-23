@@ -1,5 +1,6 @@
 'use client'
 import { productCodes } from '@/components/common/ProductCodes/ProductCodes'
+import { SaleDots } from '@/components/common/SaleMarks/SaleMarks'
 import { tx } from '@/shared/i18n'
 
 import React, { useMemo, useState } from 'react'
@@ -126,6 +127,7 @@ const RowsSection: React.FC<{
                       )}
                       {(row.sku || row.code || row.orders !== undefined) && (
                         <span className="block text-xs text-gray-500 dark:text-gray-400">
+                          {row.code && <SaleDots productId={row.id} className="mr-1.5" />}
                           {[productCodes(row), row.orders !== undefined && `${row.orders} ${tx('orders')}`]
                             .filter(Boolean)
                             .join(' · ')}

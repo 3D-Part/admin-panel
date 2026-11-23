@@ -85,6 +85,14 @@ axiosInstance.interceptors.response.use(
     )
       return
 
+    // the sale marks are a help on many pages; staff without the permission
+    // simply do not see them
+    if (
+      errorUrl.includes('/shop/sale/product-tags') &&
+      error.response.status === 403
+    )
+      return Promise.reject(error)
+
     // Handle 401 Unauthorized errors
     if (_errorResponse.status === ErrorCodeEnum.Unauthorized) {
       // If this is a refresh token request that failed, redirect to login immediately

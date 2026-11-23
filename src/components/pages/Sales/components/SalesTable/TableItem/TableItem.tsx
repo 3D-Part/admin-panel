@@ -13,6 +13,8 @@ import { useRouter } from 'next/navigation'
 import React from 'react'
 import { hasPermission } from '@/shared/helpers/permissions'
 import { PermissionEnum } from '@/shared/types'
+import { DEFAULT_SALE_COLOR } from '@/shared/helpers/saleTags'
+import SaleTimingBadge from '../SaleTimingBadge'
 
 type TableItemType = {
   sale: Sale
@@ -58,7 +60,19 @@ export const TableItem: React.FC<TableItemType> = ({
             hasWritePermission ? 'cursor-pointer' : ''
           }`}
         >
-          <div className="flex justify-start items-center gap-6">{name}</div>
+          <div className="flex justify-start items-center gap-2">
+            <span
+              className="h-3 w-3 shrink-0 rounded-full"
+              style={{ backgroundColor: sale.color || DEFAULT_SALE_COLOR }}
+            />
+            {name}
+            <span className="text-xs font-normal text-gray-500 dark:text-gray-400">
+              ({sale.productOnSale?.length ?? 0})
+            </span>
+          </div>
+        </Table.Cell>
+        <Table.Cell className="whitespace-nowrap table-cell">
+          <SaleTimingBadge startsAt={startsAt} endsAt={endsAt} />
         </Table.Cell>
 
         <Table.Cell className="whitespace-nowrap font-medium table-cell">

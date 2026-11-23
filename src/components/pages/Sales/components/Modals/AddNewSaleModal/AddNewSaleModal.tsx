@@ -9,6 +9,8 @@ import { Button, Label, Modal, TextInput } from 'flowbite-react'
 import React, { useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import { useModalScroll } from '@/shared/hooks/useModalScroll'
+import { nextSaleColor } from '@/shared/helpers/saleTags'
+import SaleColorPicker from '../SaleColorPicker'
 
 const AddNewSaleModal = () => {
   const [loading, setLoading] = useState(false)
@@ -18,8 +20,19 @@ const AddNewSaleModal = () => {
     changeIsSaleEditModalOpen,
     isSaleAddNewModalOpen,
   } = useUISliceStore()
-  const { addNewSale, changeActiveSale, fetchSales, currentPage, itemsPerPage } =
-    useSalesSliceStore()
+  const {
+    addNewSale,
+    changeActiveSale,
+    fetchSales,
+    currentPage,
+    itemsPerPage,
+    currentPageSales,
+  } = useSalesSliceStore()
+  // the colors the other sales have, so a new one gets a different one
+  const takenColors = currentPageSales
+    .map((sale) => sale.color)
+    .filter((color): color is string => !!color)
+  const [color, setColor] = useState(nextSaleColor(takenColors))
 
   const fetchSalesData = async () => {
     const paginationData: PaginationData = {
@@ -57,6 +70,7 @@ const AddNewSaleModal = () => {
 
     const response = await addNewSale({
       ...salesDataRef.current,
+      color,
       startsAt: datetimeLocalToIso(salesDataRef.current.startsAt),
       endsAt: datetimeLocalToIso(salesDataRef.current.endsAt),
     })
@@ -81,6 +95,8 @@ const AddNewSaleModal = () => {
 
   useEffect(() => {
     resetData()
+    if (isSaleAddNewModalOpen) setColor(nextSaleColor(takenColors))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSaleAddNewModalOpen])
 
   // Disable body scroll when modal is open
@@ -127,6 +143,7 @@ const AddNewSaleModal = () => {
                   placeholder={tx("Enter sale name...")}
                 />
               </div>
+              <SaleColorPicker value={color} onChange={setColor} taken={takenColors} />
             </div>
           </div>
 

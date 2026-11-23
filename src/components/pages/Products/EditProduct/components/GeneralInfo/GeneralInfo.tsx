@@ -1,4 +1,5 @@
 'use client'
+import { ProductSalesBox } from '@/components/common/SaleMarks/SaleMarks'
 import { tx } from '@/shared/i18n'
 import { Loader, Keywords } from '@/components/common'
 import {
@@ -223,6 +224,8 @@ const GeneralInfo = () => {
       onSubmit={onSubmit}
       className="flex items-start max-w-2xl flex-col gap-6 pb-8"
     >
+      {/* the sales the product is on */}
+      <ProductSalesBox productId={activeProduct.id} />
       {/* NAME */}
       <div className="w-full">
         <div className="mb-2 block">

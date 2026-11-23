@@ -1,4 +1,5 @@
 'use client'
+import ProductCodes from '@/components/common/ProductCodes/ProductCodes'
 import { tx } from '@/shared/i18n'
 import { useProductSearch } from '@/shared/hooks/useProductSearch'
 import SearchListFooter from '@/components/common/SearchListFooter/SearchListFooter'
@@ -23,9 +24,6 @@ type Line = {
   price: number
 }
 
-// "P000194 · 230170": the codes the staff search by
-const codes = (product: { code?: string | null; sku?: string | null }) =>
-  [product.code, product.sku].filter(Boolean).join(' · ')
 
 const CONTACT_FIELDS = [
   { name: 'fullName', label: 'Full name' },
@@ -196,11 +194,12 @@ const OrderEditor: React.FC<{
                     className="w-full px-3 py-2 text-left text-sm text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700"
                     onClick={() => add(product)}
                   >
-                    {codes(product) && (
-                      <span className="mr-2 font-mono text-xs font-semibold text-gray-700 dark:text-gray-300">
-                        {codes(product)}
-                      </span>
-                    )}
+                    <ProductCodes
+                      productId={product.id}
+                      code={product.code}
+                      sku={product.sku}
+                      className="mr-2 font-semibold text-gray-700 dark:text-gray-300"
+                    />
                     {product.name}{' '}
                     <span className="text-gray-500">
                       {Number(product.price).toFixed(2)} KM,{' '}
@@ -225,11 +224,12 @@ const OrderEditor: React.FC<{
           {lines.map((line, index) => (
             <div key={line.productId} className="flex flex-wrap items-center gap-2">
               <span className="flex-1 min-w-[200px] text-sm text-gray-900 dark:text-white">
-                {codes(line) && (
-                  <span className="mr-2 font-mono text-xs font-semibold text-gray-600 dark:text-gray-400">
-                    {codes(line)}
-                  </span>
-                )}
+                <ProductCodes
+                  productId={line.productId}
+                  code={line.code}
+                  sku={line.sku}
+                  className="mr-2 font-semibold text-gray-600 dark:text-gray-400"
+                />
                 {line.name}
               </span>
               <TextInput

@@ -1,6 +1,7 @@
 import { StateCreator } from 'zustand'
 import { PaginationData, Sale, SaleFormBody, SalesData } from '@/shared/types'
 import { SalesAPI } from '@/services'
+import { refreshSaleTags } from '@/shared/helpers/saleTags'
 
 export interface SalesSliceInterface {
   activeSale: Sale | null
@@ -126,6 +127,7 @@ export const salesSlice: StateCreator<SalesSliceInterface> = (set, get) => ({
       name: sale.name,
       startsAt: sale.startsAt,
       endsAt: sale.endsAt,
+      ...(sale.color ? { color: sale.color } : {}),
     }
 
     try {
@@ -146,10 +148,13 @@ export const salesSlice: StateCreator<SalesSliceInterface> = (set, get) => ({
       name: sale.name,
       startsAt: sale.startsAt,
       endsAt: sale.endsAt,
+      ...(sale.color ? { color: sale.color } : {}),
     }
     try {
       const data = await SalesAPI.editSale(saleId, _salesData)
       if (data) {
+        // the products keep their marks in the sale's (new) color and dates
+        refreshSaleTags()
         set({ activeSale: data })
         return data
       }
@@ -164,6 +169,7 @@ export const salesSlice: StateCreator<SalesSliceInterface> = (set, get) => ({
     try {
       const data = await SalesAPI.removeSale(saleId)
       if (data) {
+        refreshSaleTags()
         set({ activeSale: null })
         return true
       }

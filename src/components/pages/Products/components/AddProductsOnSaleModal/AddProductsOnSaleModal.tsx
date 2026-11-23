@@ -1,5 +1,7 @@
 'use client'
 import ProductCodes from '@/components/common/ProductCodes/ProductCodes'
+import { ProductSalesBox } from '@/components/common/SaleMarks/SaleMarks'
+import { refreshSaleTags, saleTiming } from '@/shared/helpers/saleTags'
 import { tx } from '@/shared/i18n'
 import { modalRoot } from '@/shared/helpers/modalRoot'
 
@@ -153,6 +155,7 @@ const AddProductsOnSaleModal = () => {
     }
     await fetchAllSales()
     await refetchProducts()
+    refreshSaleTags()
     setLoading(false)
     changeIsAddProductsOnSaleModalOpen(false)
   }
@@ -176,11 +179,15 @@ const AddProductsOnSaleModal = () => {
     changeActiveSale({} as Sale)
     await fetchAllSales()
     await refetchProducts()
+    refreshSaleTags()
     setLoading(false)
   }
 
   useEffect(() => {
     resetData()
+    // the product page can be opened straight from a link, before the sales are loaded
+    if (isAddProductsOnSaleModalOpen) fetchAllSales()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAddProductsOnSaleModalOpen])
 
   // Disable body scroll when modal is open
@@ -221,7 +228,7 @@ const AddProductsOnSaleModal = () => {
               <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
                 {activeProduct.name}
               </p>
-              <ProductCodes block code={activeProduct.code} sku={activeProduct.sku} />
+              <ProductCodes block productId={activeProduct.id} code={activeProduct.code} sku={activeProduct.sku} />
             </div>
           </div>
         </div>
@@ -300,6 +307,7 @@ const AddProductsOnSaleModal = () => {
               {tx("Sale Selection")}
             </h3>
             <div className="space-y-4">
+              <ProductSalesBox productId={activeProduct.id} />
               <div>
                 <Label
                   htmlFor="saleId"
@@ -315,9 +323,13 @@ const AddProductsOnSaleModal = () => {
                 >
                   <option value={''}>{tx("Choose a sale...")}</option>
                   {allSales.map((sale) => {
+                    const onIt = sale.productOnSale?.some(
+                      (row) => row.productId === activeProduct.id
+                    )
                     return (
                       <option value={sale.id} key={sale.id}>
-                        {sale.name}
+                        {sale.name} ({saleTiming(sale.startsAt, sale.endsAt).text})
+                        {onIt ? ` · ${tx('product is on it')}` : ''}
                       </option>
                     )
                   })}

@@ -1,3 +1,5 @@
+import { SalePills } from '@/components/common/SaleMarks/SaleMarks'
+import { useSaleTags } from '@/shared/helpers/saleTags'
 import { tx } from '@/shared/i18n'
 import { URLPartsEnum } from '@/shared/enums'
 
@@ -139,6 +141,9 @@ export const TableItem: React.FC<TableItemType> = ({
     }
   }
 
+  // the sales the product is on that have not ended, in their colors
+  const saleTags = useSaleTags()[product.id] ?? []
+
   const editProduct = () => {
     // Only allow edit if user has write permission
     if (!hasWritePermission) {
@@ -167,10 +172,14 @@ export const TableItem: React.FC<TableItemType> = ({
               label={published ? tx("Published") : tx("Hidden")}
               onChange={togglePublished}
             />
-            {product.productOnSale.length > 0 && (
-              <Badge color="failure" className="w-fit">
-                {tx("On sale")}
-              </Badge>
+            {saleTags.length > 0 ? (
+              <SalePills compact productId={product.id} />
+            ) : (
+              product.productOnSale.length > 0 && (
+                <Badge color="failure" className="w-fit">
+                  {tx("On sale")}
+                </Badge>
+              )
             )}
           </div>
         </Table.Cell>

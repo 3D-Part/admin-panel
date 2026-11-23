@@ -1,5 +1,6 @@
 'use client'
 import ProductCodes from '@/components/common/ProductCodes/ProductCodes'
+import { refreshSaleTags } from '@/shared/helpers/saleTags'
 import { tx } from '@/shared/i18n'
 import { useProductSearch } from '@/shared/hooks/useProductSearch'
 import SearchListFooter from '@/components/common/SearchListFooter/SearchListFooter'
@@ -36,7 +37,7 @@ const SaleProductRow: React.FC<{
           {product.name}
         </p>
         <p className="text-xs text-gray-500 dark:text-gray-400">
-          <ProductCodes code={product.code} sku={product.sku} /> · {tx("regular price")} {Number(product.price).toFixed(2)} KM
+          <ProductCodes productId={product.id} code={product.code} sku={product.sku} /> · {tx("regular price")} {Number(product.price).toFixed(2)} KM
         </p>
       </div>
       <TextInput
@@ -77,7 +78,8 @@ const SaleProductSearch = () => {
       return
     }
 
-    toast(`${product.name} added`, { type: 'success', autoClose: 2000 })
+    toast(tx("{name} added", { name: product.name }), { type: 'success', autoClose: 2000 })
+    refreshSaleTags()
     // the list carries the products of each sale, a single sale does not
     await fetchSales({
       offset: (currentPage - 1) * itemsPerPage,

@@ -474,6 +474,8 @@ export interface ProductOnSale {
 export interface Sale {
   id: string
   name: string
+  // its own color in the admin, e.g. #e11d48
+  color?: string | null
   startsAt: string
   endsAt: string
   createdAt: string
@@ -485,12 +487,14 @@ export interface SalesFormData {
   name: string
   startsAt: string
   endsAt: string
+  color?: string
 }
 
 export interface SaleFormBody {
   name: string
   startsAt: string
   endsAt: string
+  color?: string
 }
 
 export interface SalesData {

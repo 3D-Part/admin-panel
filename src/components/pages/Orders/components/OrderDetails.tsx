@@ -1,5 +1,6 @@
 import { OrderFlagPicker } from '@/components/common/OrderFlag/OrderFlag'
 import { productCodes } from '@/components/common/ProductCodes/ProductCodes'
+import { SaleDots } from '@/components/common/SaleMarks/SaleMarks'
 import { tx } from '@/shared/i18n'
 import InfoTip from '@/components/common/InfoTip/InfoTip'
 import { modalRoot } from '@/shared/helpers/modalRoot'
@@ -126,7 +127,7 @@ const ProductCard: React.FC<ProductCardType> = ({ product }) => {
     <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-3">
       <div className="flex justify-between items-start mb-3">
         <h4 className="font-semibold text-gray-900 dark:text-white text-sm">
-          {name}
+          {name} <SaleDots productId={product.id} className="ml-1" />
         </h4>
         <div className="flex gap-2">
           {!!backorderQuantity && (

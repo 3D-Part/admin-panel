@@ -72,7 +72,7 @@ const MovementList: React.FC<MovementListProps> = ({
 
               {showItem && item && (
                 <span className="text-gray-900 dark:text-white">
-                  <ProductCodes code={item.code} sku={(item as { sku?: string }).sku} />{' '}
+                  <ProductCodes productId={movement.product?.id} code={item.code} sku={(item as { sku?: string }).sku} />{' '}
                   {item.name}
                 </span>
               )}

@@ -1,4 +1,5 @@
 'use client'
+import { refreshSaleTags } from '@/shared/helpers/saleTags'
 import { tx } from '@/shared/i18n'
 
 import React, { useEffect, useRef, useState } from 'react'
@@ -68,6 +69,7 @@ export const Sales = () => {
     const response = await SalesAPI.removeSale(activeSaleRef.current?.id)
 
     if (response) {
+      refreshSaleTags()
       const toastMessage = tx("sale {name} is removed", { name: activeSaleRef.current.name })
       toast(toastMessage, {
         hideProgressBar: true,

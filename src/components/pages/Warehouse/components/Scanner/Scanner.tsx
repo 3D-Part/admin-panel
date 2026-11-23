@@ -181,7 +181,11 @@ const Scanner: React.FC<ScannerProps> = ({ onPrintProduct, onPrintAsset }) => {
                   className="w-full flex gap-3 px-2 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-700"
                   onClick={() => setPicked(item)}
                 >
-                  <ProductCodes code={item.code} sku={isProduct(item) ? item.sku : undefined} />
+                  <ProductCodes
+                    productId={isProduct(item) ? item.id : undefined}
+                    code={item.code}
+                    sku={isProduct(item) ? item.sku : undefined}
+                  />
                   <span className="flex-1 text-gray-900 dark:text-white">
                     {item.name}
                   </span>

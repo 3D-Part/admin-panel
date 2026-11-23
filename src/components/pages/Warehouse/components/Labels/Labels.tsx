@@ -175,7 +175,7 @@ const Labels: React.FC<LabelsProps> = ({ items, setItems }) => {
                     className="w-full flex gap-3 px-3 py-2 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-700"
                     onClick={() => add(item)}
                   >
-                    <ProductCodes code={item.code} sku={item.sku} />
+                    <ProductCodes productId={item.sku !== undefined ? item.key : undefined} code={item.code} sku={item.sku} />
                     <span className="flex-1 text-gray-900 dark:text-white">
                       {item.name}
                     </span>
@@ -205,7 +205,7 @@ const Labels: React.FC<LabelsProps> = ({ items, setItems }) => {
             <ul className="divide-y divide-gray-200 dark:divide-gray-700">
               {items.map((item) => (
                 <li key={item.key} className="flex items-center gap-3 py-2 text-sm">
-                  <ProductCodes code={item.code} sku={item.sku} />
+                  <ProductCodes productId={item.sku !== undefined ? item.key : undefined} code={item.code} sku={item.sku} />
                   <span className="flex-1 text-gray-900 dark:text-white">
                     {item.name}
                   </span>

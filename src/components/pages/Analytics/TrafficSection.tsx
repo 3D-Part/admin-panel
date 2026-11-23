@@ -1,5 +1,6 @@
 'use client'
 import { productCodes } from '@/components/common/ProductCodes/ProductCodes'
+import { SaleDots } from '@/components/common/SaleMarks/SaleMarks'
 import { tx } from '@/shared/i18n'
 
 import React, { useEffect, useState } from 'react'
@@ -61,7 +62,10 @@ const ProductTable: React.FC<{ rows: TrafficProduct[] }> = ({ rows }) =>
               >
                 {row.name}
               </a>
-              <span className="block font-mono text-xs text-gray-500 dark:text-gray-400">{productCodes(row)}</span>
+              <span className="block font-mono text-xs text-gray-500 dark:text-gray-400">
+                <SaleDots productId={row.productId} className="mr-1.5" />
+                {productCodes(row)}
+              </span>
             </td>
             <td className={num}>{number(row.views)}</td>
             <td className={num}>{number(row.adds)}</td>

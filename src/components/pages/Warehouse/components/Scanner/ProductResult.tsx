@@ -1,4 +1,5 @@
 'use client'
+import { SaleDots } from '@/components/common/SaleMarks/SaleMarks'
 import { tx } from '@/shared/i18n'
 
 import { Badge, Button, Label, TextInput } from 'flowbite-react'
@@ -118,6 +119,7 @@ const ProductResult: React.FC<ProductResultProps> = ({
             {product.name}
           </h3>
           <div className="flex flex-wrap gap-2 text-sm text-gray-600 dark:text-gray-300">
+            <SaleDots productId={product.id} />
             <span className="font-mono font-semibold">{product.code}</span>
             <span>SKU {product.sku}</span>
             {product.ean && (
