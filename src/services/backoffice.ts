@@ -230,9 +230,11 @@ export type AssistantHealth = {
   enabled: boolean
   provider: 'openai' | 'anthropic'
   hidden: boolean
-  problem: 'credit' | 'key' | 'failing' | null
+  problem: 'credit' | 'key' | 'failing' | 'budget' | null
   message: string | null
   since: string | null
+  spentTodayUsd?: number
+  dailyBudgetUsd?: number
 }
 
 const attempt = async <T>(request: () => Promise<T>): Promise<T | null> => {

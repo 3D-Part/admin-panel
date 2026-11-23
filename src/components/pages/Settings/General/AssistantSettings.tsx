@@ -9,6 +9,8 @@ import { AssistantUsage } from '@/services/backoffice'
 export type AssistantForm = {
   enabled: boolean
   provider: 'openai' | 'anthropic'
+  // the most the chat may spend in a day, USD
+  dailyBudgetUsd: string
   // OpenAI
   model: string
   hasApiKey: boolean
@@ -24,6 +26,7 @@ export type AssistantForm = {
 export const DEFAULT_ASSISTANT_FORM: AssistantForm = {
   enabled: true,
   provider: 'openai',
+  dailyBudgetUsd: '5',
   model: 'gpt-4o-mini',
   hasApiKey: false,
   apiKey: '',
@@ -38,6 +41,7 @@ export const readAssistantForm = (stored: any): AssistantForm => ({
   ...DEFAULT_ASSISTANT_FORM,
   enabled: stored?.enabled !== false,
   provider: stored?.provider === 'anthropic' ? 'anthropic' : 'openai',
+  dailyBudgetUsd: Number(stored?.dailyBudgetUsd) > 0 ? String(stored.dailyBudgetUsd) : DEFAULT_ASSISTANT_FORM.dailyBudgetUsd,
   model: stored?.model || DEFAULT_ASSISTANT_FORM.model,
   hasApiKey: !!stored?.hasApiKey,
   anthropicModel: stored?.anthropicModel || DEFAULT_ASSISTANT_FORM.anthropicModel,
@@ -48,6 +52,7 @@ export const readAssistantForm = (stored: any): AssistantForm => ({
 export const assistantSettings = (form: AssistantForm) => ({
   enabled: form.enabled,
   provider: form.provider,
+  dailyBudgetUsd: Number(form.dailyBudgetUsd) > 0 ? Math.min(Number(form.dailyBudgetUsd), 1000) : 5,
   model: form.model.trim() || DEFAULT_ASSISTANT_FORM.model,
   anthropicModel: form.anthropicModel.trim() || DEFAULT_ASSISTANT_FORM.anthropicModel,
   ...(form.apiKey.trim() ? { apiKey: form.apiKey.trim() } : {}),
@@ -125,6 +130,23 @@ const AssistantSettings: React.FC<{
         />
         <span className="text-sm text-gray-900 dark:text-white">{tx("Show the chat on the site")}</span>
       </label>
+
+      <div className="max-w-sm">
+        <Label htmlFor="assistant-daily-budget" value={tx("Daily spending limit (USD)")} />
+        <TextInput
+          id="assistant-daily-budget"
+          type="number"
+          min={0.5}
+          max={1000}
+          step={0.5}
+          className="mt-1"
+          value={value.dailyBudgetUsd}
+          onChange={(e) => set({ dailyBudgetUsd: e.target.value })}
+        />
+        <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+          {tx("When the chat spends this much in a day, it is hidden from the site until the next day and a notice shows in the admin. It protects the balance from someone who asks on purpose to spend it. A visitor is also stopped after 30 questions in 10 minutes, 60 in a day, or 5 off-topic questions in a row.")}
+        </p>
+      </div>
 
       <div>
         <p className="mb-2 text-sm font-medium text-gray-900 dark:text-white">{tx("Which AI answers")}</p>

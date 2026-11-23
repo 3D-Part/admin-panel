@@ -1171,6 +1171,10 @@ const sr: Record<string, string> = {
   "The chat assistant is not working": "Chat asistent ne radi",
   "The AI provider failed several times in a row, so the chat is hidden from the site for a few minutes. It is tried again by itself.": "AI provajder nije odgovorio nekoliko puta zaredom, pa je chat sakriven sa sajta na nekoliko minuta. Sam se ponovo pokušava.",
   "Open chat settings": "Otvori postavke chata",
+  "Daily spending limit (USD)": "Dnevni limit potrošnje (USD)",
+  "When the chat spends this much in a day, it is hidden from the site until the next day and a notice shows in the admin. It protects the balance from someone who asks on purpose to spend it. A visitor is also stopped after 30 questions in 10 minutes, 60 in a day, or 5 off-topic questions in a row.": "Kad chat potroši ovoliko u jednom danu, sakriva se sa sajta do sljedećeg dana i u adminu se pojavi obavještenje. Tako je balans zaštićen od nekoga ko namjerno postavlja pitanja da ga potroši. Posjetilac se zaustavlja i poslije 30 pitanja u 10 minuta, 60 u jednom danu ili 5 pitanja van teme zaredom.",
+  "The chat assistant spent its daily limit": "Chat asistent je potrošio dnevni limit",
+  "The chat spent the daily limit set in Settings, so it is hidden from the site until tomorrow. If that is normal traffic, raise the limit; if not, someone may be trying to spend the balance on purpose.": "Chat je potrošio dnevni limit iz Postavki, pa je sakriven sa sajta do sutra. Ako je to normalan promet, povećajte limit. Ako nije, moguće je da neko namjerno pokušava potrošiti balans.",
 }
 
 export default sr

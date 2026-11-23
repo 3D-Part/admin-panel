@@ -17,6 +17,10 @@ const TEXTS = {
     title: 'The chat assistant key is refused',
     body: 'The AI provider refused the API key, so the chat is hidden from the site. Save a valid key in Settings.',
   },
+  budget: {
+    title: 'The chat assistant spent its daily limit',
+    body: 'The chat spent the daily limit set in Settings, so it is hidden from the site until tomorrow. If that is normal traffic, raise the limit; if not, someone may be trying to spend the balance on purpose.',
+  },
   failing: {
     title: 'The chat assistant is not working',
     body: 'The AI provider failed several times in a row, so the chat is hidden from the site for a few minutes. It is tried again by itself.',
