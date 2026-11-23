@@ -104,21 +104,16 @@ export const visibleSteps = (
     .map((id) => ({ id, label: id, color: 'gray', status: null })),
 ]
 
-// The circles follow the ticked steps when the step tied to the status is
-// ticked. Otherwise (no step is tied to it, or an older order that never had
-// it ticked, e.g. cancelled before Cancelled was a step) every circle takes
-// the color of the status.
+// The circles follow the steps: a circle is empty until its step is ticked,
+// also on a new order or offer where nothing is ticked yet. Only a status that
+// has no step of its own in the list (e.g. a cancelled offer, or an old status
+// no step is tied to) paints every circle in the color of that status.
 export const followsSteps = (
   status: string,
   options: BillingOption[],
-  steps: Record<string, string>,
-  // an offer always shows its own steps: a new offer (e.g. a company order,
-  // which starts as an offer) has none ticked yet and shows empty circles,
-  // not every circle in the offer's brown
-  isOffer = false
-) =>
-  options.some((option) => statusOf(option) === status && steps[option.id]) ||
-  (isOffer && options.some((option) => statusOf(option) === status))
+  _steps?: Record<string, string>,
+  _isOffer?: boolean
+) => status === OrderStatusEnum.Pending || options.some((option) => statusOf(option) === status)
 
 export const STATUS_DOT: Record<string, string> = {
   [OrderStatusEnum.Pending]: 'bg-indigo-500 border-indigo-500',
