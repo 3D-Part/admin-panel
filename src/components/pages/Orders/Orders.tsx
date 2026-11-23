@@ -9,6 +9,12 @@ import OrderDetails from './components/OrderDetails'
 import { useOrdersStore } from '@/store/store'
 import { OrdersTable } from './components/OrdersTable/OrdersTable'
 import { OrdersHeader } from './components/OrdersHeader'
+import OrderEditor from './components/OrderEditor/OrderEditor'
+import { Button } from 'flowbite-react'
+import { HiPlus } from 'react-icons/hi'
+import { useCurrentUserStore } from '@/store/store'
+import { hasPermission } from '@/shared/helpers/permissions'
+import { PermissionEnum } from '@/shared/types'
 
 const Orders = () => {
   const params = useSearchParams()
@@ -17,6 +23,10 @@ const Orders = () => {
   // /orders?order=<number> opens that order, e.g. from the analytics tables
   const orderNumber = params.get('order')
   const [linked, setLinked] = useState<Order | null>(null)
+  // a proforma for a customer who asked by phone or e-mail
+  const [newOffer, setNewOffer] = useState(false)
+  const { currentUser } = useCurrentUserStore()
+  const canWrite = hasPermission(currentUser?.permissions, PermissionEnum.ORDERS_WRITE, currentUser?.role)
 
   useEffect(() => {
     if (!orderNumber) {
@@ -64,9 +74,17 @@ const Orders = () => {
     <div className="w-full flex flex-col h-full overflow-hidden">
       {offers && (
         <div className="mb-4">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-            {tx("Offers")}
-          </h2>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+              {tx("Offers")}
+            </h2>
+            {canWrite && (
+              <Button color="purple" onClick={() => setNewOffer(true)}>
+                <HiPlus className="mr-2 h-4 w-4" />
+                {tx('New offer')}
+              </Button>
+            )}
+          </div>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             {tx("Orders you offered to a customer. They hold no stock and do not count in analytics until you move them to Accepted.")}
           </p>
@@ -91,6 +109,17 @@ const Orders = () => {
           onClose={() => {
             setLinked(null)
             router.replace(offers ? '/orders?view=offers' : '/orders')
+          }}
+        />
+      )}
+      {newOffer && (
+        <OrderEditor
+          create
+          order={{ id: '', orderNumber: '', products: [], discount: 0, shippingPrice: 0, points: 0, status: 'PROFORMA_SENT' } as any}
+          onClose={() => setNewOffer(false)}
+          onSaved={() => {
+            setNewOffer(false)
+            fetchOrders({ offset: 0, limit: itemsPerPage })
           }}
         />
       )}

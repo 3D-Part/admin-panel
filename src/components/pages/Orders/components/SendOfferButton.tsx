@@ -28,11 +28,11 @@ const SendOfferButton: React.FC<{
 
   const send = async () => {
     setSending(true)
-    const sent = await OrdersAPI.orderSendOffer(order.id)
+    const { data: sent, error } = await OrdersAPI.orderSendOffer(order.id)
     setSending(false)
     setConfirming(false)
     if (!sent) {
-      toast(tx('Could not send the offer'), { type: 'error', autoClose: 3000 })
+      toast(error ? tx(error) : tx('Could not send the offer'), { type: 'error', autoClose: 7000 })
       return
     }
     toast(tx('Offer sent to {email}', { email: order.email }), {

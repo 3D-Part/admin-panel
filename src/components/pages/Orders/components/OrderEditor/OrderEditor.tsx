@@ -33,7 +33,9 @@ const OrderEditor: React.FC<{
   order: Order
   onClose: () => void
   onSaved: (order: Order) => void
-}> = ({ order, onClose, onSaved }) => {
+  // a new offer made by hand: saved as a new order in the offers
+  create?: boolean
+}> = ({ order, onClose, onSaved, create = false }) => {
   const [lines, setLines] = useState<Line[]>(
     order.products.map((product) => ({
       productId: product.id,
@@ -100,7 +102,7 @@ const OrderEditor: React.FC<{
       return
     }
     setSaving(true)
-    const saved = await BackofficeAPI.editOrder(order.id, {
+    const body = {
       ...contact,
       products: lines.map(({ productId, quantity, price }) => ({
         productId,
@@ -109,7 +111,22 @@ const OrderEditor: React.FC<{
       })),
       discount: Number(discount) || 0,
       shippingPrice: Number(shipping) || 0,
-    })
+    }
+    if (create) {
+      const { data, error } = await BackofficeAPI.createOffer(body)
+      setSaving(false)
+      if (!data) {
+        toast(error ? tx(error) : tx('The offer was not made'), { type: 'error', autoClose: 5000 })
+        return
+      }
+      toast(tx('Offer {number} made; send it with the envelope icon', { number: data.orderNumber }), {
+        type: 'success',
+        autoClose: 4000,
+      })
+      onSaved(data)
+      return
+    }
+    const saved = await BackofficeAPI.editOrder(order.id, body)
     setSaving(false)
     if (saved) {
       toast(tx("Order saved"), { type: 'success', autoClose: 2000 })
@@ -117,15 +134,19 @@ const OrderEditor: React.FC<{
     }
   }
 
-  const stockTaken = ![
+  // new orders, offers, cancelled and returned ones hold no stock
+  const stockTaken = !create && ![
     OrderStatusEnum.Pending,
+    OrderStatusEnum.ProformaSent,
     OrderStatusEnum.Declined,
     OrderStatusEnum.Returned,
   ].includes(order.status as OrderStatusEnum)
 
   return (
     <Modal root={modalRoot()} show size="4xl" onClose={onClose}>
-      <Modal.Header>Edit order #{order.orderNumber}</Modal.Header>
+      <Modal.Header>
+        {create ? tx('New offer') : `${tx('Edit order')} #${order.orderNumber}`}
+      </Modal.Header>
       <Modal.Body className="space-y-6">
         {stockTaken && (
           <Alert color="info">

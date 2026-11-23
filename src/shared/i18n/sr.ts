@@ -1175,6 +1175,12 @@ const sr: Record<string, string> = {
   "When the chat spends this much in a day, it is hidden from the site until the next day and a notice shows in the admin. It protects the balance from someone who asks on purpose to spend it. A visitor is also stopped after 30 questions in 10 minutes, 60 in a day, or 5 off-topic questions in a row.": "Kad chat potroši ovoliko u jednom danu, sakriva se sa sajta do sljedećeg dana i u adminu se pojavi obavještenje. Tako je balans zaštićen od nekoga ko namjerno postavlja pitanja da ga potroši. Posjetilac se zaustavlja i poslije 30 pitanja u 10 minuta, 60 u jednom danu ili 5 pitanja van teme zaredom.",
   "The chat assistant spent its daily limit": "Chat asistent je potrošio dnevni limit",
   "The chat spent the daily limit set in Settings, so it is hidden from the site until tomorrow. If that is normal traffic, raise the limit; if not, someone may be trying to spend the balance on purpose.": "Chat je potrošio dnevni limit iz Postavki, pa je sakriven sa sajta do sutra. Ako je to normalan promet, povećajte limit. Ako nije, moguće je da neko namjerno pokušava potrošiti balans.",
+  "New offer": "Nova ponuda",
+  "The offer was not made": "Ponuda nije napravljena",
+  "Offer {number} made; send it with the envelope icon": "Ponuda {number} je napravljena; pošalji je ikonicom koverte",
+  "Put the bank account in Settings → Company details first: the offer tells the customer where to pay.": "Prvo upiši žiro račun u Podešavanja → Podaci o firmi: ponuda kupcu kaže gdje da plati.",
+  "The customer e-mail is required for an offer": "Za ponudu je potreban e-mail kupca",
+  "Enter the customer or the company name": "Upiši ime kupca ili firme",
 }
 
 export default sr

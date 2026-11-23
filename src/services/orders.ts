@@ -145,12 +145,13 @@ const orderSetBillingStep = async (
 }
 
 // e-mails the offer to the customer (offers only)
-const orderSendOffer = async (id: string): Promise<any | null> => {
+const orderSendOffer = async (id: string): Promise<{ data: any | null; error: string | null }> => {
   try {
-    return await API.post(`${API_BASE_URL}/order/${id}/send-offer`, {})
-  } catch (error) {
+    return { data: await API.post(`${API_BASE_URL}/order/${id}/send-offer`, {}), error: null }
+  } catch (error: any) {
     console.error('Error sending the offer:', error)
-    return null
+    // the server says why (e.g. no bank account in the settings)
+    return { data: null, error: error?.response?.data?.errors?.[0]?.message ?? null }
   }
 }
 

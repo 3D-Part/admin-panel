@@ -372,6 +372,9 @@ const BackofficeAPI = {
     ),
   getPackingList: (orderId: string) =>
     attempt(() => API.get<any[]>(`${BASE}/orders/${orderId}/packing`)),
+  // an offer made by hand: a new order in the offers, sent later as a proforma
+  createOffer: (body: EditOrderBody) =>
+    attemptWithError(() => API.post<EditOrderBody, any>(`${BASE}/offers`, body)),
   editOrder: (orderId: string, body: EditOrderBody) =>
     attempt(() => API.put<EditOrderBody, any>(`${BASE}/orders/${orderId}`, body)),
   // Zoho Campaigns: connect with the Self Client's code (secrets go to the API only)
