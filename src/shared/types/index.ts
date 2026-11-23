@@ -374,6 +374,8 @@ export interface User {
   discount: number
   updatedAt: string
   createdAt: string
+  // the last sign-in; null when not known (before it was tracked, or never)
+  lastLoginAt?: string | null
   orders: Order[]
   permissions: UserPermissions[]
 }

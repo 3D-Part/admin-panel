@@ -8,6 +8,7 @@ import { User } from '@/shared/types'
 import { Table } from 'flowbite-react'
 import React, { useState } from 'react'
 import UserDetails from '../../UserDetails/UserDetails'
+import { shortDateTime } from '@/shared/helpers/dateTimeFormat'
 
 type TableItemType = {
   user: User
@@ -35,7 +36,7 @@ export const TableItem: React.FC<TableItemType> = ({ user, profile }) => {
             <span>{fullName}</span>
           </div>
         </Table.Cell>
-        <Table.Cell className="whitespace-nowrap font-medium table-cell w-2/5">
+        <Table.Cell className="whitespace-nowrap font-medium table-cell w-1/4">
           <div className="flex justify-start items-center gap-6 ">{email}</div>
         </Table.Cell>
         <Table.Cell className="whitespace-nowrap font-medium table-cell w-1/8">
@@ -43,6 +44,18 @@ export const TableItem: React.FC<TableItemType> = ({ user, profile }) => {
         </Table.Cell>
         <Table.Cell className="whitespace-nowrap font-medium table-cell w-1/8">
           <div className="flex justify-start items-center gap-6">{city}</div>
+        </Table.Cell>
+        <Table.Cell className="whitespace-nowrap table-cell text-sm w-28" title={shortDateTime(user.createdAt, true)}>
+          {shortDateTime(user.createdAt)}
+        </Table.Cell>
+        <Table.Cell className="whitespace-nowrap table-cell text-sm w-36">
+          {user.lastLoginAt ? (
+            shortDateTime(user.lastLoginAt, true)
+          ) : (
+            <span className="text-gray-400 dark:text-gray-500" title={tx('Not known: no sign-in since this is kept')}>
+              —
+            </span>
+          )}
         </Table.Cell>
 
         <Table.Cell className="whitespace-nowrap font-medium table-cell w-1/6">

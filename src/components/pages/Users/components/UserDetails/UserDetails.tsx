@@ -17,6 +17,7 @@ import { CustomerTier } from '@/services/backoffice'
 import { SettingsAPI } from '@/services'
 import { readTierRows, sortTiers } from '@/shared/helpers/tiers'
 import { useEnterSave } from '@/shared/hooks/useEnterSave'
+import { shortDateTime } from '@/shared/helpers/dateTimeFormat'
 
 // the tiers of the shop, set in Settings
 type ShopTier = { id: string; name: string; discount: number }
@@ -236,6 +237,8 @@ const UserDetails: React.FC<UserDetailsType> = ({
             <UserDetail name="Post Code:" value={postCode} />
             <UserDetail name="Role:" value={role} />
             <UserDetail name="Provider:" value={provider} />
+            <UserDetail name={tx('Registered:')} value={shortDateTime(user.createdAt, true)} />
+            <UserDetail name={tx('Last login:')} value={shortDateTime(user.lastLoginAt, true)} />
             <div className="flex w-full flex-wrap gap-4">
               <UserDetail
                 name="Available points:"

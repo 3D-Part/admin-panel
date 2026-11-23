@@ -16,6 +16,9 @@ const sortOptions: SortOption[] = [
   { label: 'Newest first', field: 'createdAt', order: 'DESC' },
   { label: 'Oldest first', field: 'createdAt', order: 'ASC' },
   { label: 'Recently updated', field: 'updatedAt', order: 'DESC' },
+  // who never signed in comes last both ways
+  { label: 'Last login, newest first', field: 'lastLoginAt', order: 'DESC' },
+  { label: 'Last login, oldest first', field: 'lastLoginAt', order: 'ASC' },
   { label: 'Name A-Z', field: 'fullName', order: 'ASC' },
   { label: 'Name Z-A', field: 'fullName', order: 'DESC' },
   { label: 'Email A-Z', field: 'email', order: 'ASC' },

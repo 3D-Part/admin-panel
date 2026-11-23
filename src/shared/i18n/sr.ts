@@ -1256,6 +1256,13 @@ const sr: Record<string, string> = {
   "Every ribbon needs a name.": "Svaki ribbon mora imati naziv.",
   "A ribbon name can have at most 30 characters.": "Naziv ribbona može imati najviše 30 znakova.",
   "Two ribbons have the same name.": "Dva ribbona imaju isti naziv.",
+  "Registered": "Registrovan",
+  "Last login": "Zadnja prijava",
+  "Registered:": "Registrovan:",
+  "Last login:": "Zadnja prijava:",
+  "Not known: no sign-in since this is kept": "Nepoznato: nema prijave otkad se ovo bilježi",
+  "Last login, newest first": "Zadnja prijava, najnovije prvo",
+  "Last login, oldest first": "Zadnja prijava, najstarije prvo",
 }
 
 export default sr

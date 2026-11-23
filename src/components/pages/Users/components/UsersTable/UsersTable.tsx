@@ -17,6 +17,7 @@ import {
 } from '@/components/common'
 import { PaginationData, User } from '@/shared/types'
 import UserDetails from '../UserDetails/UserDetails'
+import { shortDateTime } from '@/shared/helpers/dateTimeFormat'
 
 export const UsersTable = () => {
   const [loader, setLoader] = useState(true)
@@ -107,6 +108,18 @@ export const UsersTable = () => {
             ),
           },
           {
+            label: tx("Registered"),
+            value: shortDateTime(user.createdAt),
+          },
+          {
+            label: tx("Last login"),
+            value: user.lastLoginAt ? (
+              shortDateTime(user.lastLoginAt, true)
+            ) : (
+              <span className="text-gray-400 dark:text-gray-500">—</span>
+            ),
+          },
+          {
             label: tx("Street"),
             value: street || (
               <span className="text-gray-400 dark:text-gray-500">—</span>
@@ -154,13 +167,15 @@ export const UsersTable = () => {
           <Table className="w-full">
             <Table.Head className="table-header">
               <Table.HeadCell className="table-cell w-1/6">{tx("Name")}</Table.HeadCell>
-              <Table.HeadCell className="table-cell w-2/5">
+              <Table.HeadCell className="table-cell w-1/4">
                 {tx("Email")}
               </Table.HeadCell>
               <Table.HeadCell className="table-cell w-1/8">
                 {tx("Phone")}
               </Table.HeadCell>
               <Table.HeadCell className="table-cell w-1/8">{tx("City")}</Table.HeadCell>
+              <Table.HeadCell className="table-cell w-28 whitespace-nowrap">{tx("Registered")}</Table.HeadCell>
+              <Table.HeadCell className="table-cell w-36 whitespace-nowrap">{tx("Last login")}</Table.HeadCell>
               <Table.HeadCell className="table-cell w-1/6">
                 {tx("Points")}
               </Table.HeadCell>
