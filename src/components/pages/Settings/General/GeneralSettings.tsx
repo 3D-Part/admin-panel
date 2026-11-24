@@ -8,6 +8,7 @@ import { toast } from 'react-toastify'
 import { HiPlus, HiTrash } from 'react-icons/hi'
 import { useSearchParams } from 'next/navigation'
 import PageImages, { PageImage } from './PageImages'
+import HomeTilesSettings, { HomeTile, DEFAULT_HOME_TILES, homeTilesProblem, readHomeTiles } from './HomeTilesSettings'
 import BillingOptions from './BillingOptions'
 import RibbonsSettings from './RibbonsSettings'
 import AvatarsSettings, { customerAvatarsProblem } from './AvatarsSettings'
@@ -50,6 +51,10 @@ const TABS: Record<string, { title: string; help: string }> = {
   'home-slider': {
     title: 'Home slider',
     help: 'The big images that slide on the home page. Add an image, upload it for desktop and for phones, and it joins the slider.',
+  },
+  'home-tiles': {
+    title: 'Home tiles',
+    help: 'The two tiles under the slider on the home page, 3D filamenti and 3D printeri out of the box: picture, title, text, button and link of each. Without an uploaded picture a tile keeps the site\'s own.',
   },
   'page-images': {
     title: 'Page images',
@@ -150,6 +155,7 @@ interface SettingsFormData {
   newsletterMailbox: MailboxForm
   zohoCampaigns: ZohoForm
   pageImages: PageImage[]
+  homeTiles: HomeTile[]
   billingOptions: BillingOption[]
   offerOptions: BillingOption[]
 }
@@ -192,6 +198,7 @@ const GeneralSettings = () => {
     newsletterMailbox: DEFAULT_MAILBOX_FORM,
     zohoCampaigns: DEFAULT_ZOHO_FORM,
     pageImages: [],
+    homeTiles: DEFAULT_HOME_TILES,
     billingOptions: [],
     offerOptions: [],
   })
@@ -246,6 +253,7 @@ const GeneralSettings = () => {
           newsletterMailbox: readMailboxForm(settings.newsletterMailbox),
           zohoCampaigns: readZohoForm(settings.zohoCampaigns),
           pageImages: settings.pageImages ?? [],
+          homeTiles: readHomeTiles(settings),
           billingOptions: readBillingOptions(settings),
           offerOptions: readOfferOptions(settings),
         })
@@ -356,6 +364,11 @@ const GeneralSettings = () => {
       toast(tx(avatarProblem), { type: 'error', autoClose: 3500 })
       return
     }
+    const tileProblem = homeTilesProblem(formData.homeTiles)
+    if (tileProblem) {
+      toast(tx(tileProblem), { type: 'error', autoClose: 3500 })
+      return
+    }
     if (badTier) {
       toast(tx("Every tier needs its own name and a discount between 0 and 100."), {
         type: 'error',
@@ -404,6 +417,13 @@ const GeneralSettings = () => {
         newsletterMailbox: mailboxSettings(formData.newsletterMailbox),
         zohoCampaigns: zohoSettings(formData.zohoCampaigns),
         pageImages: formData.pageImages.filter((image) => image.desktop),
+        homeTiles: formData.homeTiles.map((tile) => ({
+          ...tile,
+          title: tile.title.trim(),
+          text: tile.text.trim(),
+          buttonLabel: tile.buttonLabel.trim(),
+          link: tile.link.trim(),
+        })),
         billingOptions: formData.billingOptions.filter((option) =>
           option.label.trim()
         ),
@@ -642,6 +662,15 @@ const GeneralSettings = () => {
                 scope={tab === 'home-slider' ? 'home' : 'pages'}
                 value={formData.pageImages}
                 onChange={(pageImages) => setFormData({ ...formData, pageImages })}
+              />
+            </div>
+          )}
+
+          {tab === 'home-tiles' && (
+            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+              <HomeTilesSettings
+                value={formData.homeTiles}
+                onChange={(homeTiles) => setFormData({ ...formData, homeTiles })}
               />
             </div>
           )}

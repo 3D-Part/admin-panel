@@ -291,6 +291,7 @@ const SideBar = () => {
           ...[
             ['Top banner', 'banner'],
             ['Home slider', 'home-slider'],
+            ['Home tiles', 'home-tiles'],
             ['Page images', 'page-images'],
             ['Discount tiers', 'discount-tiers'],
             ['Invoice statuses', 'invoice-statuses'],

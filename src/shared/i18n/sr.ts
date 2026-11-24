@@ -1286,6 +1286,19 @@ const sr: Record<string, string> = {
   "A code was sent to this customer less than a minute ago. Try again in a minute.": "Kupcu je kod poslan prije manje od minute. Pokušajte ponovo za minutu.",
   "The e-mail could not be sent": "Mejl nije moguće poslati",
   "Users registered with Google or Linkedin cannot request password reset.": "Kupci prijavljeni preko Google-a ili Facebook-a ne mogu mijenjati lozinku.",
+  "Home tiles": "Pločice na početnoj",
+  "The two tiles under the slider on the home page, 3D filamenti and 3D printeri out of the box: picture, title, text, button and link of each. Without an uploaded picture a tile keeps the site's own.": "Dvije pločice ispod slajdera na početnoj, na početku 3D filamenti i 3D printeri: slika, naslov, tekst, dugme i link svake. Bez otpremljene slike pločica zadržava sliku sajta.",
+  "Left tile": "Lijeva pločica",
+  "Right tile": "Desna pločica",
+  "Title": "Naslov",
+  "Text": "Tekst",
+  "Button text": "Tekst dugmeta",
+  "Link": "Link",
+  "Picture (square or 4:3 looks best)": "Slika (najbolje kvadratna ili 4:3)",
+  "Use the site's picture": "Vrati sliku sajta",
+  "Back to the original tile": "Vrati originalnu pločicu",
+  "Every tile needs a title.": "Svaka pločica mora imati naslov.",
+  "Every tile needs a link: a page of the shop (/shop/...) or https://...": "Svaka pločica mora imati link: stranicu prodavnice (/shop/...) ili https://...",
 }
 
 export default sr
