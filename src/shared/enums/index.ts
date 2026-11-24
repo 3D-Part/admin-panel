@@ -41,6 +41,7 @@ export enum URLPartsEnum {
 
   Warehouse = '/warehouse',
   Analytics = '/analytics',
+  GoogleAnalytics = '/analytics/google',
   ActionsNeeded = '/actions-needed',
   Proformas = '/proformas',
 

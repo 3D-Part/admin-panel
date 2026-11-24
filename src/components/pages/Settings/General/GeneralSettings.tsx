@@ -30,6 +30,14 @@ import NewsletterMailboxSettings, {
   mailboxSettings,
   readMailboxForm,
 } from './NewsletterMailboxSettings'
+import GoogleAnalyticsSettings, {
+  DEFAULT_GA_FORM,
+  GoogleAnalyticsForm,
+  gaFormProblem,
+  gaSettings,
+  readGaForm,
+  savedGaForm,
+} from './GoogleAnalyticsSettings'
 import {
   CustomerFlagType,
   readCustomerFlags,
@@ -99,6 +107,10 @@ const TABS: Record<string, { title: string; help: string }> = {
     title: 'Order e-mails mailbox',
     help: 'The mailbox the e-mails to the customers who ordered are sent from. On Orders → Order Emails → Write to customers one e-mail goes straight into its Drafts folder, split into drafts with at most the set number of customers in Bcc; a colleague opens the drafts in the mail program and sends them. The shop never sends these e-mails itself.',
   },
+  'google-analytics': {
+    title: 'Google Analytics',
+    help: 'The figures of Google Analytics (users, sessions, page views, top pages, traffic sources, devices, purchases) on Analytics → Google Analytics. The admin reads them with a Google Cloud service account that may only view the GA4 property; the Guide says how to make one.',
+  },
   'product-flags': {
     title: 'Product flags',
     help: 'Flags the staff put on products, e.g. check the price or order more. They show next to the product in the products list, are picked there or on the product page, and the products list can be filtered by them. The site never shows them. Renaming or recoloring a flag changes it on every product that has it.',
@@ -163,6 +175,7 @@ interface SettingsFormData {
   customerAvatars: CustomerAvatar[]
   newsletterMailbox: MailboxForm
   orderMailbox: MailboxForm
+  googleAnalytics: GoogleAnalyticsForm
   zohoCampaigns: ZohoForm
   pageImages: PageImage[]
   homeTiles: HomeTile[]
@@ -209,6 +222,7 @@ const GeneralSettings = () => {
     customerAvatars: [],
     newsletterMailbox: DEFAULT_MAILBOX_FORM,
     orderMailbox: DEFAULT_ORDER_MAILBOX_FORM,
+    googleAnalytics: DEFAULT_GA_FORM,
     zohoCampaigns: DEFAULT_ZOHO_FORM,
     pageImages: [],
     homeTiles: DEFAULT_HOME_TILES,
@@ -267,6 +281,7 @@ const GeneralSettings = () => {
           customerAvatars: readCustomerAvatars(settings),
           newsletterMailbox: readMailboxForm(settings.newsletterMailbox),
           orderMailbox: readMailboxForm(settings.orderMailbox, DEFAULT_ORDER_MAILBOX_FORM),
+          googleAnalytics: readGaForm(settings.googleAnalytics),
           zohoCampaigns: readZohoForm(settings.zohoCampaigns),
           pageImages: settings.pageImages ?? [],
           homeTiles: readHomeTiles(settings),
@@ -391,6 +406,11 @@ const GeneralSettings = () => {
       toast(tx(bannerProblem), { type: 'error', autoClose: 3500 })
       return
     }
+    const analyticsProblem = gaFormProblem(formData.googleAnalytics)
+    if (analyticsProblem) {
+      toast(tx(analyticsProblem), { type: 'error', autoClose: 5000 })
+      return
+    }
     if (badTier) {
       toast(tx("Every tier needs its own name and a discount between 0 and 100."), {
         type: 'error',
@@ -444,6 +464,7 @@ const GeneralSettings = () => {
         customerAvatars: formData.customerAvatars.map((avatar) => ({ ...avatar, name: avatar.name.trim() })),
         newsletterMailbox: mailboxSettings(formData.newsletterMailbox),
         orderMailbox: mailboxSettings(formData.orderMailbox),
+        googleAnalytics: gaSettings(formData.googleAnalytics),
         zohoCampaigns: zohoSettings(formData.zohoCampaigns),
         pageImages: formData.pageImages.filter((image) => image.desktop),
         contentBanners: formData.contentBanners.map((banner) => ({
@@ -472,6 +493,8 @@ const GeneralSettings = () => {
     if (success) {
       // the avatars shown across the admin follow the new list
       loadCustomerAvatars(true)
+      // a pasted key is saved now: it is not kept in the form
+      setFormData((prev) => ({ ...prev, googleAnalytics: savedGaForm(prev.googleAnalytics) }))
       toast(tx("Settings updated successfully!"), {
         hideProgressBar: true,
         autoClose: 2000,
@@ -822,6 +845,15 @@ const GeneralSettings = () => {
               kind="order"
               value={formData.orderMailbox}
               onChange={(orderMailbox) => setFormData((prev) => ({ ...prev, orderMailbox }))}
+            />
+          </div>
+          )}
+
+          {tab === 'google-analytics' && (
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+            <GoogleAnalyticsSettings
+              value={formData.googleAnalytics}
+              onChange={(googleAnalytics) => setFormData((prev) => ({ ...prev, googleAnalytics }))}
             />
           </div>
           )}

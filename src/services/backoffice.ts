@@ -261,6 +261,28 @@ const attemptWithError = async <T,>(
   }
 }
 
+/** Google Analytics (GA4) figures of a period, read by the API with the saved service account. */
+export type GaOverview = {
+  connected: true
+  propertyId: string
+  from: string
+  to: string
+  currency: string
+  totals: { activeUsers: number; newUsers: number; sessions: number; screenPageViews: number; engagementRate: number }
+  days: { date: string; activeUsers: number; sessions: number; screenPageViews: number }[]
+  pages: { pagePath: string; pageTitle: string; screenPageViews: number; activeUsers: number }[]
+  channels: { sessionDefaultChannelGroup: string; sessions: number; activeUsers: number }[]
+  sources: { sessionSourceMedium: string; sessions: number; activeUsers: number }[]
+  devices: { deviceCategory: string; sessions: number; activeUsers: number }[]
+  ecommerce: {
+    purchases: number
+    revenue: number
+    items: { itemName: string; itemsPurchased: number; itemRevenue: number }[]
+  } | null
+  cachedAt: string
+}
+export type GaNotConnected = { connected: false; missing: ('propertyId' | 'serviceAccount')[] }
+
 /** Which customers who ordered get the e-mail: part of the address, ordered from / to (YYYY-MM-DD). */
 export type OrderEmailsFilter = { search?: string; from?: string; to?: string }
 
@@ -417,6 +439,21 @@ const BackofficeAPI = {
   sendZohoCampaign: (id: string) =>
     attemptWithError(() => API.post<unknown, { id: string; status: string }>(`${BASE}/zoho/campaigns/${id}/send`, {})),
   // the newsletter mailbox: log in and find the drafts folder
+  getGoogleAnalytics: (query: { from: string; to: string; fresh?: boolean }) =>
+    attemptWithError(() =>
+      API.get<GaOverview | GaNotConnected>(`${BASE}/google-analytics`, {
+        from: query.from,
+        to: query.to,
+        ...(query.fresh ? { fresh: 1 } : {}),
+      })
+    ),
+  testGoogleAnalytics: () =>
+    attemptWithError(() =>
+      API.post<unknown, { ok: true; propertyId: string; clientEmail: string; activeUsers: number }>(
+        `${BASE}/google-analytics/test`,
+        {}
+      )
+    ),
   // e-mails of the customers who ordered (Orders → Order Emails)
   countOrderEmails: (filter: OrderEmailsFilter) =>
     attempt(() => API.get<{ count: number }>(`${BASE}/order-emails/count`, filter)),

@@ -80,6 +80,15 @@ const SECTIONS: Record<Language, Section[]> = {
       ],
     },
     {
+      title: 'Google Analytics in the admin',
+      lines: [
+        'Analytics → Google Analytics shows for the chosen days: users (and new ones), sessions, page views, users per day, top pages, traffic channels and sources, devices, and purchases with revenue and the products bought when the GA property collects e-commerce. Google is asked at most every 10 minutes; Refresh asks again.',
+        'Setup, once: 1) Google Cloud Console (console.cloud.google.com): pick or create a project, APIs & Services → Library → Google Analytics Data API → Enable. 2) IAM & Admin → Service Accounts → Create service account (no roles needed); open it → Keys → Add key → Create new key → JSON, a .json file is downloaded. 3) Google Analytics → Admin → Property access management → + → the service account e-mail (…@….iam.gserviceaccount.com), role Viewer. 4) Google Analytics → Admin → Property details: copy the Property ID (a number, not the G-… measurement ID).',
+        'Then Settings → Google Analytics: paste the property ID, Load the JSON file (or paste its content), Save Settings and Check the connection. The key stays on the server and is never shown again; Remove the key disconnects.',
+        'If the check fails, the message says why: the API not enabled in the project, the service account not added to the property, a wrong property ID, or a key that was deleted in Google Cloud (make a new one).',
+      ],
+    },
+    {
       title: 'Groups, flags and the chat',
       lines: [
         'Products → Product groups: who is in Super offer, Most sold or recommended in the cart. Search on the right, add one or many; take out on the left. A product is published or hidden with the Published switch on the product itself.',
@@ -167,6 +176,15 @@ const SECTIONS: Record<Language, Section[]> = {
         'Zatim u adminu: Podešavanja → Sanduče za mejlove kupcima: adresa, IMAP server imap.zoho.eu (ili server koji Zoho pokazuje pod IMAP Access, npr. imappro.zoho.eu), port 993, lozinka za aplikaciju i Primalaca po nacrtu (100 ako se ne promijeni). Sačuvaj podešavanja, pa Provjeri vezu: pokaže adresu i folder Nacrti.',
         'Pisanje: Narudžbe → Mejlovi narudžbi → Piši kupcima. Izaberi Svi koji su naručivali, ili Samo neki (adresa sadrži, naručivali od / do); vidi se broj kupaca. Napiši naslov, glavni naslov, tekst i po želji dugme, pogledaj pregled i klikni Snimi nacrte u sanduče.',
         'Admin kaže koliko je nacrta napravljeno (npr. 8 nacrta za 754 kupca). Svaki nacrt ide na samo sanduče s najviše 100 kupaca u Bcc, pa se međusobno ne vide. Kolega otvori sanduče, ode u Nacrte (Drafts) i pošalje ih jedan po jedan. Shop ih sam nikad ne šalje.',
+      ],
+    },
+    {
+      title: 'Google Analytics u adminu',
+      lines: [
+        'Analitika → Google Analytics za izabrane dane pokazuje: korisnike (i nove), sesije, preglede stranica, korisnike po danu, najposjećenije stranice, kanale i izvore posjeta, uređaje, te kupovine s prihodom i kupljenim artiklima ako GA property prikuplja e-commerce. Google se pita najviše svakih 10 minuta; Osvježi pita ponovo.',
+        'Podešavanje, jednom: 1) Google Cloud Console (console.cloud.google.com): izaberi ili napravi projekat, APIs & Services → Library → Google Analytics Data API → Enable. 2) IAM & Admin → Service Accounts → Create service account (uloge ne trebaju); otvori ga → Keys → Add key → Create new key → JSON, preuzme se .json fajl. 3) Google Analytics → Admin → Property access management → + → mejl servisnog naloga (…@….iam.gserviceaccount.com), uloga Viewer. 4) Google Analytics → Admin → Property details: kopiraj Property ID (broj, ne G-… measurement ID).',
+        'Zatim Podešavanja → Google Analytics: upiši property ID, Učitaj JSON fajl (ili zalijepi njegov sadržaj), Sačuvaj podešavanja i Provjeri vezu. Ključ ostaje na serveru i više se ne prikazuje; Ukloni ključ prekida vezu.',
+        'Ako provjera ne uspije, poruka kaže zašto: API nije uključen u projektu, servisni nalog nije dodat na property, pogrešan property ID, ili je ključ obrisan u Google Cloudu (napravi novi).',
       ],
     },
     {

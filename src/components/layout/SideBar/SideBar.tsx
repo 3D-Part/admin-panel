@@ -175,6 +175,18 @@ const SideBar = () => {
         icon: FaChartLine,
         open: false,
         requiredPermissions: [PermissionEnum.ANALYTICS_READ],
+        children: [
+          {
+            name: tx("Sales and orders"),
+            href: URLPartsEnum.Analytics,
+            requiredPermissions: [PermissionEnum.ANALYTICS_READ],
+          },
+          {
+            name: tx("Google Analytics"),
+            href: URLPartsEnum.GoogleAnalytics,
+            requiredPermissions: [PermissionEnum.ANALYTICS_READ],
+          },
+        ],
       },
       {
         name: tx("Actions needed"),
@@ -302,6 +314,7 @@ const SideBar = () => {
             ['Avatars', 'avatars'],
             ['Zoho Campaigns', 'zoho-campaigns'],
             ['Order e-mails mailbox', 'order-mail'],
+            ['Google Analytics', 'google-analytics'],
             ['Delivery', 'delivery'],
             ['Company details', 'company'],
             ['Social media', 'social-media'],
