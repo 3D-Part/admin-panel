@@ -36,7 +36,8 @@ import {
   readProductFlags,
 } from '@/shared/helpers/customerFlags'
 import AssistantSettings, { AssistantForm, DEFAULT_ASSISTANT_FORM, assistantSettings, readAssistantForm } from './AssistantSettings'
-import { BadgeItem, TIER_COLORS, TierRow, badgeProblem, newTierId, readTierRows, tierSettings } from '@/shared/helpers/tiers'
+import { BadgeItem, TIER_COLORS, TierRow, badgeProblem, newTierId, readTierRows, tierCategoriesProblem, tierSettings } from '@/shared/helpers/tiers'
+import TierCategories from './TierCategories'
 import {
   BillingOption,
   readBillingOptions,
@@ -63,7 +64,7 @@ const TABS: Record<string, { title: string; help: string }> = {
   },
   'discount-tiers': {
     title: 'Discount tiers',
-    help: 'How much each customer tier saves, and how much a customer has to spend to reach it. On a product already on sale the customer gets the better of the two: a 10% sale with a 15% tier gives 15% in total, not 25%. A tier set by hand in Users stays, spending can only raise it.',
+    help: 'How much each customer tier saves, on which categories, and how much a customer has to spend to reach it. On a product already on sale the customer gets the better of the two: a 10% sale with a 15% tier gives 15% in total, not 25%. A tier set by hand in Users stays, spending can only raise it.',
   },
   'invoice-statuses': {
     title: 'Invoice statuses',
@@ -146,6 +147,8 @@ interface SettingsFormData {
   tierList: TierRow[]
   badgeLibrary: BadgeItem[]
   tierPeriod: 'all' | '12m'
+  // YYYY-MM-DD, '' to count from the beginning
+  tierStartDate: string
   tidio: { key: string }
   assistant: AssistantForm
   customerFlags: CustomerFlagType[]
@@ -190,6 +193,7 @@ const GeneralSettings = () => {
     tierList: [],
     badgeLibrary: [],
     tierPeriod: 'all',
+    tierStartDate: '',
     tidio: { key: '' },
     assistant: DEFAULT_ASSISTANT_FORM,
     customerFlags: [],
@@ -246,6 +250,7 @@ const GeneralSettings = () => {
           tierList: readTierRows(settings),
           badgeLibrary: Array.isArray(settings.badgeLibrary) ? settings.badgeLibrary : [],
           tierPeriod: settings.tierPeriod === '12m' ? '12m' : 'all',
+          tierStartDate: typeof settings.tierStartDate === 'string' ? settings.tierStartDate : '',
           tidio: { key: settings.tidio?.key ?? '' },
           assistant: readAssistantForm(settings.assistant),
           customerFlags: readCustomerFlags(settings),
@@ -281,7 +286,7 @@ const GeneralSettings = () => {
         ...prev,
         tierList: [
           ...prev.tierList,
-          { id: newTierId(name, prev.tierList.map((tier) => tier.id)), name, discount: '', threshold: '', color: 'blue', badge: '' },
+          { id: newTierId(name, prev.tierList.map((tier) => tier.id)), name, discount: '', threshold: '', color: 'blue', badge: '', categories: [] },
         ],
       }
     })
@@ -385,6 +390,11 @@ const GeneralSettings = () => {
       })
       return
     }
+    const categoryProblem = tierCategoriesProblem(formData.tierList)
+    if (categoryProblem) {
+      toast(tx(categoryProblem), { type: 'error', autoClose: 3500 })
+      return
+    }
 
     setLoading(true)
 
@@ -415,6 +425,7 @@ const GeneralSettings = () => {
         ...tierSettings(formData.tierList),
         badgeLibrary: formData.badgeLibrary,
         tierPeriod: formData.tierPeriod,
+        tierStartDate: formData.tierStartDate || null,
         tidio: { key: formData.tidio.key.trim() },
         // a key is sent only when a new one is typed; the API keeps the saved one otherwise
         assistant: assistantSettings(formData.assistant),
@@ -592,6 +603,12 @@ const GeneralSettings = () => {
                     <HiTrash className="h-4 w-4" />
                   </Button>
                 </div>
+                <TierCategories
+                  tierId={tier.id}
+                  value={tier.categories}
+                  defaultDiscount={tier.discount}
+                  onChange={(categories) => updateTier(index, { categories })}
+                />
                 <div className="mt-3">
                   <Label value={tx("Badge")} />
                   <div className="mt-1 flex flex-wrap items-center gap-2">
@@ -668,6 +685,26 @@ const GeneralSettings = () => {
                   <Label htmlFor={`tier-period-${period}`} value={label} />
                 </div>
               ))}
+              <div className="pt-2">
+                <Label htmlFor="tier-start-date" value={tx("Count spending from")} />
+                <div className="mt-1 flex flex-wrap items-center gap-2">
+                  <TextInput
+                    id="tier-start-date"
+                    type="date"
+                    className="w-48"
+                    value={formData.tierStartDate}
+                    onChange={(e) => setFormData({ ...formData, tierStartDate: e.target.value })}
+                  />
+                  {formData.tierStartDate && (
+                    <Button color="gray" size="sm" onClick={() => setFormData({ ...formData, tierStartDate: '' })}>
+                      {tx("Clear")}
+                    </Button>
+                  )}
+                </div>
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                  {tx("Only orders made on or after this day count towards the tiers, for every tier and every customer. Leave it empty to count from the beginning. With \"Only the last 12 months\" the later of the two days counts. Tiers given by hand in Users stay.")}
+                </p>
+              </div>
             </fieldset>
           </div>
           )}

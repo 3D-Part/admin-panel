@@ -11,7 +11,12 @@ export type TierRow = {
   color: string
   // id of a badge of the library, '' for none
   badge: string
+  // when not empty the tier gives only on these categories (and their
+  // subcategories), each with its own discount
+  categories: TierCategoryRow[]
 }
+
+export type TierCategoryRow = { categoryId: string; discount: string }
 
 // every class is written out so the build keeps it
 export const TIER_COLORS: Record<string, { label: string; badge: string; dot: string }> = {
@@ -43,10 +48,16 @@ export const readTierRows = (settings: Stored | undefined): TierRow[] => {
       threshold: tier.threshold ? String(tier.threshold) : '',
       color: TIER_COLORS[tier.color] ? tier.color : 'slate',
       badge: typeof tier.badge === 'string' ? tier.badge : '',
+      categories: Array.isArray(tier.categories)
+        ? tier.categories
+            .filter((rule: Stored) => typeof rule?.categoryId === 'string' && rule.categoryId)
+            .map((rule: Stored) => ({ categoryId: rule.categoryId, discount: String(rule.discount ?? '') }))
+        : [],
     }))
   }
   return LEGACY.map((tier) => ({
     ...tier,
+    categories: [],
     discount: String(settings?.tiers?.[tier.id.toLowerCase()] ?? ''),
     threshold: settings?.tierThresholds?.[tier.id.toLowerCase()]
       ? String(settings.tierThresholds[tier.id.toLowerCase()])
@@ -78,12 +89,28 @@ export const tierSettings = (rows: TierRow[]) => {
     threshold: parseFloat(row.threshold) || 0,
     color: row.color,
     badge: row.badge || null,
+    categories: row.categories
+      .filter((rule) => rule.categoryId)
+      .map((rule) => ({ categoryId: rule.categoryId, discount: parseFloat(rule.discount) || 0 })),
   }))
   const legacy = (key: 'discount' | 'threshold') =>
     Object.fromEntries(
       LEGACY.map(({ id }) => [id.toLowerCase(), tierList.find((tier) => tier.id === id)?.[key] ?? 0])
     )
   return { tierList, tiers: legacy('discount'), tierThresholds: legacy('threshold') }
+}
+
+/** Why the category discounts of a tier cannot be saved, or null. */
+export const tierCategoriesProblem = (rows: TierRow[]): string | null => {
+  for (const row of rows) {
+    const ids = row.categories.map((rule) => rule.categoryId)
+    if (ids.some((id) => !id)) return 'Pick a category in every category row of the tiers, or remove the row.'
+    if (new Set(ids).size !== ids.length) return 'A category can be in a tier only once.'
+    if (row.categories.some((rule) => !(parseFloat(rule.discount) >= 0 && parseFloat(rule.discount) <= 100))) {
+      return 'Every category discount must be between 0 and 100.'
+    }
+  }
+  return null
 }
 
 /** Tiers lowest first: a bigger discount is a higher tier. */

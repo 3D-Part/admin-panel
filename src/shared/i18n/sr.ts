@@ -365,7 +365,7 @@ const sr: Record<string, string> = {
   "History": "Istorija",
   "Home page slider": "Slajder na početnoj",
   "Home slider": "Slajder na početnoj",
-  "How much each customer tier saves, and how much a customer has to spend to reach it. On a product already on sale the customer gets the better of the two: a 10% sale with a 15% tier gives 15% in total, not 25%. A tier set by hand in Users stays, spending can only raise it.": "Koliko koji tier štedi i koliko kupac treba da potroši da ga dobije. Na artiklu koji je već na akciji kupac dobija bolje od ta dva: akcija 10% i tier 15% daju ukupno 15%, ne 25%. Tier postavljen ručno u Users ostaje, potrošnja ga može samo podići.",
+  "How much each customer tier saves, on which categories, and how much a customer has to spend to reach it. On a product already on sale the customer gets the better of the two: a 10% sale with a 15% tier gives 15% in total, not 25%. A tier set by hand in Users stays, spending can only raise it.": "Koliko koji tier štedi, na kojim kategorijama, i koliko kupac treba da potroši da ga dobije. Na artiklu koji je već na akciji kupac dobija bolje od ta dva: akcija 10% i tier 15% daju ukupno 15%, ne 25%. Tier postavljen ručno u Users ostaje, potrošnja ga može samo podići.",
   "Icons shown in the shop": "Ikonice na sajtu",
   "If stock was already taken for this order, quantity changes also change the stock.": "Ako je roba za ovu narudžbu već skinuta sa stanja, promjena količine mijenja i stanje.",
   "If this is a manufacturer barcode, find the product it belongs to and the next scan will find it right away.": "Ako je ovo bar kod proizvođača, pronađi artikal kojem pripada i sljedeće skeniranje će ga odmah naći.",
@@ -1352,6 +1352,17 @@ const sr: Record<string, string> = {
   "No product picture": "Bez slike artikla",
   "Picture of {name} taken.": "Uzeta je slika artikla {name}.",
   "Add content slide": "Dodaj slajd sa sadržajem",
+  "Clear": "Obriši",
+  "Remove category": "Ukloni kategoriju",
+  "Add category": "Dodaj kategoriju",
+  "Pick a category": "Izaberi kategoriju",
+  "Count spending from": "Potrošnja se broji od",
+  "The tier discount is given on every product. Add categories to give it only on them, each with its own discount.": "Popust tiera važi na sve artikle. Dodaj kategorije da važi samo na njima, svaka sa svojim popustom.",
+  "The tier gives a discount only on these categories and their subcategories, each with its own discount; other products get none. A subcategory with its own row gets its own discount. The discount above then only ranks the tier.": "Tier daje popust samo na ovim kategorijama i njihovim podkategorijama, svaka sa svojim popustom; ostali artikli nemaju popust tiera. Podkategorija sa svojim redom dobija svoj popust. Popust iznad tada samo određuje rang tiera.",
+  "Pick a category in every category row of the tiers, or remove the row.": "Izaberi kategoriju u svakom redu kategorija tiera ili ukloni red.",
+  "A category can be in a tier only once.": "Kategorija može biti u jednom tieru samo jednom.",
+  "Every category discount must be between 0 and 100.": "Svaki popust kategorije mora biti između 0 i 100.",
+  "Only orders made on or after this day count towards the tiers, for every tier and every customer. Leave it empty to count from the beginning. With \"Only the last 12 months\" the later of the two days counts. Tiers given by hand in Users stay.": "Za tierove se broje samo narudžbe od ovog dana, za sve tierove i sve kupce. Ostavi prazno da se broji od početka. Uz \"Samo zadnjih 12 mjeseci\" važi kasniji od ta dva datuma. Tierovi dati ručno u Users ostaju.",
 }
 
 export default sr
