@@ -279,6 +279,9 @@ const BackofficeAPI = {
         ...page,
       })
     ),
+  // e-mails the customer the code for a new password (the same as asking on the site)
+  sendPasswordReset: (userId: string) =>
+    attemptWithError(() => API.post<undefined, { email: string }>(`${BASE}/customers/${userId}/password-reset`, undefined)),
   getCustomerTier: (userId: string) =>
     attempt(() => API.get<CustomerTier>(`${BASE}/customers/${userId}/tier`)),
   // the file is built by the API, the browser only saves it

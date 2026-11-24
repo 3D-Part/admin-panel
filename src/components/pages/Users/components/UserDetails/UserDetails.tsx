@@ -112,13 +112,14 @@ const UserDetails: React.FC<UserDetailsType> = ({
 
   const sendPasswordReset = async () => {
     setIsSendingReset(true)
-    const sent = await UsersAPI.sendPasswordResetEmail(user.email)
+    // the customer gets a 6-digit code and a link to the shop's page to type it
+    const { data, error } = await BackofficeAPI.sendPasswordReset(user.id)
     setIsSendingReset(false)
     toast(
-      sent
-        ? tx("Email sent to {email}. The customer picks the new password.", { email: user.email })
-        : tx("The email could not be sent"),
-      { type: sent ? 'success' : 'error', autoClose: 3000 }
+      data
+        ? tx("Email sent to {email}. The customer types the code from it on the site and picks the new password.", { email: data.email })
+        : `${tx("The email could not be sent")}${error ? `: ${tx(error)}` : ''}`,
+      { type: data ? 'success' : 'error', autoClose: data ? 4000 : 6000 }
     )
   }
 

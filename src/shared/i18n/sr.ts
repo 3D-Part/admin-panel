@@ -300,7 +300,6 @@ const sr: Record<string, string> = {
   "Email Z-A": "Mejl Ž-A",
   "Email is sent!": "Mejl je poslan!",
   "Email message": "Tekst mejla",
-  "Email sent to {email}. The customer picks the new password.": "Mejl je poslan na {email}. Kupac sam bira novu lozinku.",
   "Email(s)": "Mejl(ovi)",
   "Employee created successfully!": "Zaposleni je napravljen!",
   "Employee updated successfully!": "Zaposleni je sačuvan!",
@@ -1283,6 +1282,10 @@ const sr: Record<string, string> = {
   "Change avatar": "Promijeni avatar",
   "not offered to customers": "ne nudi se kupcima",
   "Remove the avatar": "Ukloni avatar",
+  "Email sent to {email}. The customer types the code from it on the site and picks the new password.": "Mejl je poslan na {email}. Kupac na sajtu unosi kod iz njega i bira novu lozinku.",
+  "A code was sent to this customer less than a minute ago. Try again in a minute.": "Kupcu je kod poslan prije manje od minute. Pokušajte ponovo za minutu.",
+  "The e-mail could not be sent": "Mejl nije moguće poslati",
+  "Users registered with Google or Linkedin cannot request password reset.": "Kupci prijavljeni preko Google-a ili Facebook-a ne mogu mijenjati lozinku.",
 }
 
 export default sr

@@ -44,7 +44,7 @@ const SECTIONS: Record<Language, Section[]> = {
     {
       title: 'Customers',
       lines: [
-        'Users → open a customer: mark them disputed with a reason, or use Send password reset email. The customer picks the new password.',
+        'Users → open a customer: mark them disputed with a reason, give them an avatar, or use Send password reset email: the customer gets a 6-digit code and a link to the page of the shop where they type it and pick the new password.',
         'Settings → Discount tiers: set how much a customer has to spend for each tier, counted over everything or only the last 12 months. A tier set by hand stays.',
       ],
     },
