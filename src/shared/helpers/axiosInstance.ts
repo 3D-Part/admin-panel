@@ -95,6 +95,15 @@ axiosInstance.interceptors.response.use(
 
     // Handle 401 Unauthorized errors
     if (_errorResponse.status === ErrorCodeEnum.Unauthorized) {
+      // Already on the login page (or signed out): sending the page to the
+      // login again would reload it forever, so the request just fails quietly
+      const onLogin =
+        typeof window !== 'undefined' && window.location.pathname.startsWith(URLPartsEnum.Login)
+      if (onLogin || (!getCookie('refreshToken') && !getCookie('accessToken'))) {
+        if (!onLogin) window.location.href = URLPartsEnum.Login
+        return Promise.reject(error)
+      }
+
       // If this is a refresh token request that failed, redirect to login immediately
       if (
         originalRequest.url &&

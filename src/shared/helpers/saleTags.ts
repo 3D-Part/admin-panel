@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import { API } from '@/shared/helpers'
 import { tx, useLanguageStore } from '@/shared/i18n'
+import getCookie from '@/shared/helpers/getCookies'
 
 /**
  * Every sale has its own color, and every product on a sale that has not
@@ -80,6 +81,12 @@ let loading: Promise<void> | null = null
 const listeners = new Set<(tags: SaleTag[]) => void>()
 
 const load = () => {
+  // nobody signed in (e.g. the login page): there is nothing to ask for, and a
+  // 401 here would send the login page to itself again
+  if (!getCookie('accessToken')) {
+    cache = cache ?? []
+    return Promise.resolve()
+  }
   if (!loading) {
     loading = API.get<SaleTag[]>(`${process.env.API_KEY}/shop/sale/product-tags`)
       .then((tags) => {
