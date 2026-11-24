@@ -183,7 +183,7 @@ const GoogleAnalytics = () => {
       {!loading && report && (
         <>
           <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
-            <Tile label={tx('Users')} value={number(report.totals.activeUsers)} hint={tx('{count} new', { count: number(report.totals.newUsers) })} />
+            <Tile label={tx('Active users')} value={number(report.totals.activeUsers)} hint={tx('{count} new', { count: number(report.totals.newUsers) })} />
             <Tile label={tx('Sessions')} value={number(report.totals.sessions)} hint={tx('Engaged: {rate}', { rate: percent(report.totals.engagementRate) })} />
             <Tile label={tx('Page views')} value={number(report.totals.screenPageViews)} />
             {report.ecommerce ? (
@@ -211,7 +211,7 @@ const GoogleAnalytics = () => {
                     <tr>
                       <th className={th}>{tx('Page')}</th>
                       <th className={`${th} text-right`}>{tx('Page views')}</th>
-                      <th className={`${th} text-right`}>{tx('Users')}</th>
+                      <th className={`${th} text-right`}>{tx('Active users')}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100 text-gray-800 dark:divide-gray-700 dark:text-gray-200">
@@ -231,19 +231,19 @@ const GoogleAnalytics = () => {
             </Box>
             <Box title={tx('Traffic channels')}>
               <Rows
-                head={[tx('Channel'), tx('Sessions'), tx('Users')]}
+                head={[tx('Channel'), tx('Sessions'), tx('Active users')]}
                 rows={report.channels.map((row) => ({ name: row.sessionDefaultChannelGroup, a: row.sessions, b: row.activeUsers }))}
               />
             </Box>
             <Box title={tx('Traffic sources')}>
               <Rows
-                head={[tx('Source / medium'), tx('Sessions'), tx('Users')]}
+                head={[tx('Source / medium'), tx('Sessions'), tx('Active users')]}
                 rows={report.sources.map((row) => ({ name: row.sessionSourceMedium, a: row.sessions, b: row.activeUsers }))}
               />
             </Box>
             <Box title={tx('Devices')}>
               <Rows
-                head={[tx('Device'), tx('Sessions'), tx('Users')]}
+                head={[tx('Device'), tx('Sessions'), tx('Active users')]}
                 rows={report.devices.map((row) => ({ name: tx(row.deviceCategory), a: row.sessions, b: row.activeUsers }))}
               />
             </Box>
