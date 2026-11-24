@@ -1,15 +1,54 @@
 'use client'
 import React from 'react'
+import Link from 'next/link'
 import { tx } from '@/shared/i18n'
 import { DEFAULT_SALE_COLOR, SaleTag, saleTiming, useSaleTags } from '@/shared/helpers/saleTags'
 
 const describe = (tag: SaleTag) =>
   `${tag.name} · ${Number(tag.discountedPrice).toFixed(2)} KM · ${saleTiming(tag.startsAt, tag.endsAt).text}`
 
+/** Where a sale is opened in the admin. */
+export const saleHref = (saleId: string) => `/sales?sale=${encodeURIComponent(saleId)}`
+
+// a sale that has not started yet has a dashed border
+const pillStyle = (tag: SaleTag, color: string): React.CSSProperties => ({
+  borderColor: color,
+  borderStyle: saleTiming(tag.startsAt, tag.endsAt).state === 'upcoming' ? 'dashed' : 'solid',
+  backgroundColor: `${color}1f`,
+})
+
 /**
- * A small dot in the color of each sale the product is on (one that has not
- * ended); a sale that has not started yet is a ring. The sale, the price and
- * the days show on hover.
+ * One sale as a pill in its color, with its name; it opens that sale. Inside
+ * rows that open something themselves the click stays with the pill.
+ */
+const SalePill: React.FC<{ tag: SaleTag; full?: boolean; small?: boolean }> = ({ tag, full = false, small = false }) => {
+  const color = tag.color || DEFAULT_SALE_COLOR
+  return (
+    <Link
+      href={saleHref(tag.saleId)}
+      title={`${describe(tag)} · ${tx('Open the sale')}`}
+      onClick={(event) => event.stopPropagation()}
+      className={`inline-flex items-center gap-1.5 rounded-full border font-medium text-gray-800 no-underline transition hover:brightness-110 hover:underline dark:text-gray-100 ${
+        small ? 'max-w-[12rem] px-1.5 py-px text-[11px] leading-4' : 'px-2 py-0.5 text-xs'
+      } ${full ? '' : 'max-w-[14rem]'}`}
+      style={pillStyle(tag, color)}
+    >
+      <span className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: color }} />
+      {full ? (
+        <span>
+          {tag.name} · {Number(tag.discountedPrice).toFixed(2)} KM ·{' '}
+          <span className="text-gray-600 dark:text-gray-300">{saleTiming(tag.startsAt, tag.endsAt).text}</span>
+        </span>
+      ) : (
+        <span className="truncate">{tag.name}</span>
+      )}
+    </Link>
+  )
+}
+
+/**
+ * The sales the product is on (that have not ended), each as a small pill
+ * with the sale's name in its color; the price and days show on hover.
  */
 export const SaleDots: React.FC<{ productId?: string | null; className?: string }> = ({
   productId,
@@ -18,34 +57,13 @@ export const SaleDots: React.FC<{ productId?: string | null; className?: string 
   const tags = useSaleTags()[productId ?? ''] ?? []
   if (!productId || tags.length === 0) return null
   return (
-    <span className={`inline-flex items-center gap-0.5 align-middle ${className}`}>
-      {tags.map((tag) => {
-        const color = tag.color || DEFAULT_SALE_COLOR
-        const upcoming = saleTiming(tag.startsAt, tag.endsAt).state === 'upcoming'
-        return (
-          <span
-            key={tag.productOnSaleId}
-            title={describe(tag)}
-            aria-label={tx('On sale: {name}', { name: describe(tag) })}
-            className="inline-block h-2.5 w-2.5 shrink-0 rounded-full"
-            style={
-              upcoming
-                ? { boxShadow: `inset 0 0 0 2px ${color}` }
-                : { backgroundColor: color }
-            }
-          />
-        )
-      })}
+    <span className={`inline-flex flex-wrap items-center gap-1 align-middle ${className}`}>
+      {tags.map((tag) => (
+        <SalePill key={tag.productOnSaleId} tag={tag} small />
+      ))}
     </span>
   )
 }
-
-// a sale that has not started yet has a dashed border
-const pillStyle = (tag: SaleTag, color: string): React.CSSProperties => ({
-  borderColor: color,
-  borderStyle: saleTiming(tag.startsAt, tag.endsAt).state === 'upcoming' ? 'dashed' : 'solid',
-  backgroundColor: `${color}1f`,
-})
 
 /** A pill per sale the product is on: name, price and days, in the sale's color. */
 export const SalePills: React.FC<{
@@ -59,35 +77,9 @@ export const SalePills: React.FC<{
   if (!productId || tags.length === 0) return null
   return (
     <span className="flex flex-wrap gap-1.5">
-      {tags.map((tag) => {
-        const color = tag.color || DEFAULT_SALE_COLOR
-        if (compact) {
-          return (
-            <span
-              key={tag.productOnSaleId}
-              title={describe(tag)}
-              className="inline-flex max-w-[11rem] items-center gap-1.5 rounded-full border px-2 py-0.5 text-xs font-medium text-gray-800 dark:text-gray-100"
-              style={pillStyle(tag, color)}
-            >
-              <span className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: color }} />
-              <span className="truncate">{tag.name}</span>
-            </span>
-          )
-        }
-        return (
-          <span
-            key={tag.productOnSaleId}
-            className="inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-xs font-medium text-gray-800 dark:text-gray-100"
-            style={pillStyle(tag, color)}
-          >
-            <span className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />
-            {tag.name} · {Number(tag.discountedPrice).toFixed(2)} KM ·{' '}
-            <span className="text-gray-600 dark:text-gray-300">
-              {saleTiming(tag.startsAt, tag.endsAt).text}
-            </span>
-          </span>
-        )
-      })}
+      {tags.map((tag) => (
+        <SalePill key={tag.productOnSaleId} tag={tag} full={!compact} />
+      ))}
     </span>
   )
 }

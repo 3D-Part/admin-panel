@@ -1,8 +1,13 @@
 import { Sales } from '@/components/pages/Sales/Sales'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 const SalePage = () => {
-  return <Sales />
+  // ?sale=<id> is read on the client
+  return (
+    <Suspense>
+      <Sales />
+    </Suspense>
+  )
 }
 
 export default SalePage

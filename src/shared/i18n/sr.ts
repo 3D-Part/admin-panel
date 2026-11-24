@@ -1482,6 +1482,7 @@ const sr: Record<string, string> = {
   "The picture is larger than 8 MB": "Slika je veća od 8 MB",
   "The status is draft or publish": "Status je nacrt ili objavljeno",
   "Active users": "Korisnici",
+  "Open the sale": "Otvori akciju",
 }
 
 export default sr

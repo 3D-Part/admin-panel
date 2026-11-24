@@ -3,6 +3,8 @@ import { refreshSaleTags } from '@/shared/helpers/saleTags'
 import { tx } from '@/shared/i18n'
 
 import React, { useEffect, useRef, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { useUISliceStore } from '@/store/store'
 import { PaginationData, PromoCode, Sale } from '@/shared/types'
 import { useSalesSliceStore, useCurrentUserStore } from '@/store/store'
 import { SalesTable } from './components/SalesTable/SalesTable'
@@ -31,6 +33,22 @@ export const Sales = () => {
   } = useSalesSliceStore()
 
   const { currentUser } = useCurrentUserStore()
+
+  // /sales?sale=<id> (a sale pill elsewhere in the admin) opens that sale
+  const saleFromLink = useSearchParams().get('sale')
+  const { changeActiveSale } = useSalesSliceStore()
+  const { changeIsSaleEditModalOpen } = useUISliceStore()
+  useEffect(() => {
+    if (!saleFromLink) return
+    SalesAPI.getSales({ order: 'DESC', field: 'createdAt' } as any, { offset: 0, limit: 1 }, {
+      filters: { id: { is: saleFromLink } },
+    }).then((data) => {
+      const sale = data?.rows?.[0]
+      if (!sale) return
+      changeActiveSale(sale)
+      changeIsSaleEditModalOpen(true)
+    })
+  }, [saleFromLink, changeActiveSale, changeIsSaleEditModalOpen])
 
   const hasWritePermission = hasPermission(
     currentUser?.permissions,
