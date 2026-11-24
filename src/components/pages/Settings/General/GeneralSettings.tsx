@@ -8,6 +8,7 @@ import { toast } from 'react-toastify'
 import { HiPlus, HiTrash } from 'react-icons/hi'
 import { useSearchParams } from 'next/navigation'
 import PageImages, { PageImage } from './PageImages'
+import ContentBannersSettings, { ContentBanner, contentBannersProblem, readContentBanners } from './ContentBannersSettings'
 import HomeTilesSettings, { HomeTile, DEFAULT_HOME_TILES, homeTilesProblem, readHomeTiles } from './HomeTilesSettings'
 import BillingOptions from './BillingOptions'
 import RibbonsSettings from './RibbonsSettings'
@@ -50,7 +51,7 @@ const TABS: Record<string, { title: string; help: string }> = {
   },
   'home-slider': {
     title: 'Home slider',
-    help: 'The big images that slide on the home page. Add an image, upload it for desktop and for phones, and it joins the slider.',
+    help: 'The big slides on the home page. An image slide is one finished picture, for desktop and for phones. A content slide is drawn by the site from a title, a text, a button, a background (a color or a picture) and a product picture. The image slides come first, then the content slides.',
   },
   'home-tiles': {
     title: 'Home tiles',
@@ -156,6 +157,7 @@ interface SettingsFormData {
   zohoCampaigns: ZohoForm
   pageImages: PageImage[]
   homeTiles: HomeTile[]
+  contentBanners: ContentBanner[]
   billingOptions: BillingOption[]
   offerOptions: BillingOption[]
 }
@@ -199,6 +201,7 @@ const GeneralSettings = () => {
     zohoCampaigns: DEFAULT_ZOHO_FORM,
     pageImages: [],
     homeTiles: DEFAULT_HOME_TILES,
+    contentBanners: [],
     billingOptions: [],
     offerOptions: [],
   })
@@ -254,6 +257,7 @@ const GeneralSettings = () => {
           zohoCampaigns: readZohoForm(settings.zohoCampaigns),
           pageImages: settings.pageImages ?? [],
           homeTiles: readHomeTiles(settings),
+          contentBanners: readContentBanners(settings),
           billingOptions: readBillingOptions(settings),
           offerOptions: readOfferOptions(settings),
         })
@@ -369,6 +373,11 @@ const GeneralSettings = () => {
       toast(tx(tileProblem), { type: 'error', autoClose: 3500 })
       return
     }
+    const bannerProblem = contentBannersProblem(formData.contentBanners)
+    if (bannerProblem) {
+      toast(tx(bannerProblem), { type: 'error', autoClose: 3500 })
+      return
+    }
     if (badTier) {
       toast(tx("Every tier needs its own name and a discount between 0 and 100."), {
         type: 'error',
@@ -417,6 +426,13 @@ const GeneralSettings = () => {
         newsletterMailbox: mailboxSettings(formData.newsletterMailbox),
         zohoCampaigns: zohoSettings(formData.zohoCampaigns),
         pageImages: formData.pageImages.filter((image) => image.desktop),
+        contentBanners: formData.contentBanners.map((banner) => ({
+          ...banner,
+          title: banner.title.trim(),
+          text: banner.text.trim(),
+          buttonLabel: banner.buttonLabel.trim(),
+          buttonLink: banner.buttonLink.trim(),
+        })),
         homeTiles: formData.homeTiles.map((tile) => ({
           ...tile,
           title: tile.title.trim(),
@@ -658,10 +674,23 @@ const GeneralSettings = () => {
 
           {(tab === 'home-slider' || tab === 'page-images') && (
             <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+              {tab === 'home-slider' && (
+                <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">{tx('Image slides')}</h3>
+              )}
               <PageImages
                 scope={tab === 'home-slider' ? 'home' : 'pages'}
                 value={formData.pageImages}
                 onChange={(pageImages) => setFormData({ ...formData, pageImages })}
+              />
+            </div>
+          )}
+
+          {tab === 'home-slider' && (
+            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+              <h3 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">{tx('Content slides')}</h3>
+              <ContentBannersSettings
+                value={formData.contentBanners}
+                onChange={(contentBanners) => setFormData({ ...formData, contentBanners })}
               />
             </div>
           )}
