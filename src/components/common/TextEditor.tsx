@@ -8,6 +8,8 @@ type TextEditorType = {
   defaultValue?: string
   placeholder?: string
   id?: string
+  // headings (H2, H3) in the toolbar, for longer texts such as the info pages
+  headings?: boolean
 }
 
 const TextEditor: React.FC<TextEditorType> = ({
@@ -15,10 +17,12 @@ const TextEditor: React.FC<TextEditorType> = ({
   defaultValue,
   placeholder,
   id,
+  headings,
 }) => {
   const modules = {
     toolbar: [
       // [{ font: [] }, { header: [] }],
+      ...(headings ? [[{ header: [2, 3, false] }]] : []),
       [{ font: [] }],
       [{ size: [] }], // Add font size options
       [{ list: 'ordered' }, { list: 'bullet' }],

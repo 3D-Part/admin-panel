@@ -315,6 +315,11 @@ const SideBar = () => {
             href: URLPartsEnum.SettingsMenu,
             requiredPermissions: [PermissionEnum.SETTINGS_WRITE],
           },
+          {
+            name: tx("Info pages"),
+            href: URLPartsEnum.SettingsInfoPages,
+            requiredPermissions: [PermissionEnum.SETTINGS_WRITE],
+          },
         ],
       },
       {

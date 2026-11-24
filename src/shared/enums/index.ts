@@ -47,6 +47,7 @@ export enum URLPartsEnum {
   Settings = '/settings',
   SettingsGeneral = '/settings/general',
   SettingsMenu = '/settings/menu',
+  SettingsInfoPages = '/settings/info-pages',
 }
 
 export enum ErrorsEnum {

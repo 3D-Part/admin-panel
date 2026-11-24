@@ -44,6 +44,7 @@ const ROUTE_PERMISSIONS: Record<string, PermissionEnum[]> = {
   [URLPartsEnum.Settings]: [PermissionEnum.SETTINGS_WRITE],
   [URLPartsEnum.SettingsGeneral]: [PermissionEnum.SETTINGS_WRITE],
   [URLPartsEnum.SettingsMenu]: [PermissionEnum.SETTINGS_WRITE],
+  [URLPartsEnum.SettingsInfoPages]: [PermissionEnum.SETTINGS_WRITE],
 }
 
 // Routes that don't require permission checking
