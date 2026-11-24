@@ -13,6 +13,8 @@ export type MailboxForm = {
   password: string
   hasPassword: boolean
   clearPassword: boolean
+  // recipients in Bcc of one draft (the order e-mails mailbox only)
+  perDraft?: string
 }
 
 export const DEFAULT_MAILBOX_FORM: MailboxForm = {
@@ -26,13 +28,21 @@ export const DEFAULT_MAILBOX_FORM: MailboxForm = {
   clearPassword: false,
 }
 
-export const readMailboxForm = (stored: any): MailboxForm => ({
+// the mailbox of the e-mails to the customers who ordered; the address is not final
+export const DEFAULT_ORDER_MAILBOX_FORM: MailboxForm = {
   ...DEFAULT_MAILBOX_FORM,
-  host: stored?.host || DEFAULT_MAILBOX_FORM.host,
-  port: String(stored?.port || DEFAULT_MAILBOX_FORM.port),
-  user: stored?.user || '',
-  fromName: stored?.fromName || DEFAULT_MAILBOX_FORM.fromName,
+  user: 'ponude@3dpartshop.com',
+  perDraft: '100',
+}
+
+export const readMailboxForm = (stored: any, defaults: MailboxForm = DEFAULT_MAILBOX_FORM): MailboxForm => ({
+  ...defaults,
+  host: stored?.host || defaults.host,
+  port: String(stored?.port || defaults.port),
+  user: stored?.user || defaults.user,
+  fromName: stored?.fromName || defaults.fromName,
   hasPassword: !!stored?.hasPassword,
+  ...(defaults.perDraft !== undefined ? { perDraft: String(stored?.perDraft || defaults.perDraft) } : {}),
 })
 
 /** What goes into the settings: the password only when a new one is typed. */
@@ -41,6 +51,7 @@ export const mailboxSettings = (form: MailboxForm) => ({
   port: Number(form.port) || 993,
   user: form.user.trim(),
   fromName: form.fromName.trim(),
+  ...(form.perDraft !== undefined ? { perDraft: Math.min(500, Math.max(1, Number(form.perDraft) || 100)) } : {}),
   ...(form.password ? { password: form.password } : {}),
   ...(form.clearPassword ? { clearPassword: true } : {}),
 })
@@ -48,7 +59,9 @@ export const mailboxSettings = (form: MailboxForm) => ({
 const NewsletterMailboxSettings: React.FC<{
   value: MailboxForm
   onChange: (next: MailboxForm) => void
-}> = ({ value, onChange }) => {
+  // which mailbox the check logs in to
+  kind?: 'newsletter' | 'order'
+}> = ({ value, onChange, kind = 'newsletter' }) => {
   const [testing, setTesting] = useState(false)
   const [result, setResult] = useState<{ ok: boolean; text: string } | null>(null)
   const set = (patch: Partial<MailboxForm>) => onChange({ ...value, ...patch })
@@ -57,7 +70,8 @@ const NewsletterMailboxSettings: React.FC<{
   const test = async () => {
     setTesting(true)
     setResult(null)
-    const { data, error } = await BackofficeAPI.testNewsletterMailbox()
+    const { data, error } =
+      kind === 'order' ? await BackofficeAPI.testOrderMailbox() : await BackofficeAPI.testNewsletterMailbox()
     setTesting(false)
     setResult(
       data
@@ -75,7 +89,7 @@ const NewsletterMailboxSettings: React.FC<{
             id="mb-user"
             type="email"
             autoComplete="off"
-            placeholder="ime@3dpartshop.com"
+            placeholder={kind === 'order' ? 'ponude@3dpartshop.com' : 'ime@3dpartshop.com'}
             value={value.user}
             onChange={(e) => set({ user: e.target.value })}
           />
@@ -95,6 +109,22 @@ const NewsletterMailboxSettings: React.FC<{
           <Label htmlFor="mb-port" value={tx('Port')} />
           <TextInput id="mb-port" type="number" value={value.port} onChange={(e) => set({ port: e.target.value })} />
         </div>
+        {value.perDraft !== undefined && (
+          <div>
+            <Label htmlFor="mb-per-draft" value={tx('Recipients per draft')} />
+            <TextInput
+              id="mb-per-draft"
+              type="number"
+              min={1}
+              max={500}
+              value={value.perDraft}
+              onChange={(e) => set({ perDraft: e.target.value })}
+            />
+            <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+              {tx('Each draft gets at most this many customers in Bcc (1 to 500). Keep it within what the mail plan allows per message.')}
+            </p>
+          </div>
+        )}
         <div className="md:col-span-2">
           <Label htmlFor="mb-pass" value={tx('Password')} />
           <TextInput

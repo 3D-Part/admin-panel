@@ -25,6 +25,7 @@ import ZohoCampaignsSettings, {
 } from './ZohoCampaignsSettings'
 import NewsletterMailboxSettings, {
   DEFAULT_MAILBOX_FORM,
+  DEFAULT_ORDER_MAILBOX_FORM,
   MailboxForm,
   mailboxSettings,
   readMailboxForm,
@@ -94,6 +95,10 @@ const TABS: Record<string, { title: string; help: string }> = {
     title: 'Newsletter mailbox',
     help: 'The mailbox the newsletter is sent from. On Subscribers → Create drafts the newsletter goes straight into its Drafts folder, one draft per group of recipients in Bcc; you open the drafts in the mail program and send them. The shop never sends the newsletter itself.',
   },
+  'order-mail': {
+    title: 'Order e-mails mailbox',
+    help: 'The mailbox the e-mails to the customers who ordered are sent from. On Orders → Order Emails → Write to customers one e-mail goes straight into its Drafts folder, split into drafts with at most the set number of customers in Bcc; a colleague opens the drafts in the mail program and sends them. The shop never sends these e-mails itself.',
+  },
   'product-flags': {
     title: 'Product flags',
     help: 'Flags the staff put on products, e.g. check the price or order more. They show next to the product in the products list, are picked there or on the product page, and the products list can be filtered by them. The site never shows them. Renaming or recoloring a flag changes it on every product that has it.',
@@ -157,6 +162,7 @@ interface SettingsFormData {
   productRibbons: ProductRibbon[]
   customerAvatars: CustomerAvatar[]
   newsletterMailbox: MailboxForm
+  orderMailbox: MailboxForm
   zohoCampaigns: ZohoForm
   pageImages: PageImage[]
   homeTiles: HomeTile[]
@@ -202,6 +208,7 @@ const GeneralSettings = () => {
     productRibbons: [],
     customerAvatars: [],
     newsletterMailbox: DEFAULT_MAILBOX_FORM,
+    orderMailbox: DEFAULT_ORDER_MAILBOX_FORM,
     zohoCampaigns: DEFAULT_ZOHO_FORM,
     pageImages: [],
     homeTiles: DEFAULT_HOME_TILES,
@@ -259,6 +266,7 @@ const GeneralSettings = () => {
           productRibbons: readProductRibbons(settings),
           customerAvatars: readCustomerAvatars(settings),
           newsletterMailbox: readMailboxForm(settings.newsletterMailbox),
+          orderMailbox: readMailboxForm(settings.orderMailbox, DEFAULT_ORDER_MAILBOX_FORM),
           zohoCampaigns: readZohoForm(settings.zohoCampaigns),
           pageImages: settings.pageImages ?? [],
           homeTiles: readHomeTiles(settings),
@@ -435,6 +443,7 @@ const GeneralSettings = () => {
         productRibbons: formData.productRibbons.map((ribbon) => ({ ...ribbon, label: ribbon.label.trim() })),
         customerAvatars: formData.customerAvatars.map((avatar) => ({ ...avatar, name: avatar.name.trim() })),
         newsletterMailbox: mailboxSettings(formData.newsletterMailbox),
+        orderMailbox: mailboxSettings(formData.orderMailbox),
         zohoCampaigns: zohoSettings(formData.zohoCampaigns),
         pageImages: formData.pageImages.filter((image) => image.desktop),
         contentBanners: formData.contentBanners.map((banner) => ({
@@ -803,6 +812,16 @@ const GeneralSettings = () => {
             <NewsletterMailboxSettings
               value={formData.newsletterMailbox}
               onChange={(newsletterMailbox) => setFormData((prev) => ({ ...prev, newsletterMailbox }))}
+            />
+          </div>
+          )}
+
+          {tab === 'order-mail' && (
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+            <NewsletterMailboxSettings
+              kind="order"
+              value={formData.orderMailbox}
+              onChange={(orderMailbox) => setFormData((prev) => ({ ...prev, orderMailbox }))}
             />
           </div>
           )}

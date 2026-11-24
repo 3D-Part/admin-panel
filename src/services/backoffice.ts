@@ -261,6 +261,9 @@ const attemptWithError = async <T,>(
   }
 }
 
+/** Which customers who ordered get the e-mail: part of the address, ordered from / to (YYYY-MM-DD). */
+export type OrderEmailsFilter = { search?: string; from?: string; to?: string }
+
 const BackofficeAPI = {
   getAnalytics: (filters: AnalyticsFilters) =>
     attempt(() => API.get<Analytics>(`${BASE}/analytics`, filters)),
@@ -414,6 +417,21 @@ const BackofficeAPI = {
   sendZohoCampaign: (id: string) =>
     attemptWithError(() => API.post<unknown, { id: string; status: string }>(`${BASE}/zoho/campaigns/${id}/send`, {})),
   // the newsletter mailbox: log in and find the drafts folder
+  // e-mails of the customers who ordered (Orders → Order Emails)
+  countOrderEmails: (filter: OrderEmailsFilter) =>
+    attempt(() => API.get<{ count: number }>(`${BASE}/order-emails/count`, filter)),
+  testOrderMailbox: () =>
+    attemptWithError(() =>
+      API.post<unknown, { ok: true; user: string; draftsFolder: string }>(`${BASE}/order-emails/mailbox-test`, {})
+    ),
+  // one e-mail to all of them (or the filtered ones) into the order mailbox as drafts
+  createOrderEmailDrafts: (body: OrderEmailsFilter & { subject: string; html: string; text?: string }) =>
+    attemptWithError(() =>
+      API.post<typeof body, { drafts: number; recipients: number; draftsFolder: string; perDraft: number }>(
+        `${BASE}/order-emails/drafts`,
+        body
+      )
+    ),
   testNewsletterMailbox: () =>
     attemptWithError(() =>
       API.post<unknown, { ok: true; user: string; draftsFolder: string }>(`${BASE}/newsletter/mailbox-test`, {})

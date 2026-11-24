@@ -70,6 +70,16 @@ const SECTIONS: Record<Language, Section[]> = {
       ],
     },
     {
+      title: 'E-mails to customers who ordered',
+      lines: [
+        'Orders → Order Emails lists the address of everyone who ever ordered, the last ones first. It fills itself from the orders; nothing has to be copied.',
+        'Mailbox, once in Zoho Mail: 1) Create the mailbox (e.g. ponude@3dpartshop.com) in the Zoho Mail Admin Console. 2) Let it use IMAP: Admin Console → the user → Mail settings, allow IMAP access (if the organization blocks it). 3) Log in to the mailbox and switch IMAP on: Zoho Mail → Settings → Mail Accounts → IMAP Access. 4) If two-step sign-in is on, make an app password: accounts.zoho.eu → Security → App Passwords → Generate, and use it instead of the normal password.',
+        'Then in the admin: Settings → Order e-mails mailbox: the address, IMAP server imap.zoho.eu (or the server Zoho shows under IMAP Access, e.g. imappro.zoho.eu), port 993, the app password and Recipients per draft (100 by default). Save Settings, then Check the connection: it shows the address and the Drafts folder.',
+        'Writing: Orders → Order Emails → Write to customers. Choose Everyone who ordered, or Only some (address contains, ordered from / to); the number of customers is shown. Write the subject, headline, text and an optional button, check the preview and click Save drafts in the mailbox.',
+        'The admin says how many drafts were made (e.g. 8 drafts for 754 customers). Each draft goes to the mailbox itself with up to 100 customers in Bcc, so they do not see each other. A colleague opens the mailbox, goes to Drafts and sends them one by one. The shop never sends them itself.',
+      ],
+    },
+    {
       title: 'Groups, flags and the chat',
       lines: [
         'Products → Product groups: who is in Super offer, Most sold or recommended in the cart. Search on the right, add one or many; take out on the left. A product is published or hidden with the Published switch on the product itself.',
@@ -147,6 +157,16 @@ const SECTIONS: Record<Language, Section[]> = {
         'Lista kampanja pokazuje svaku: Proba, U Zohu, nije poslano (dugme Pošalji je šalje), Šalje se, Poslano s brojem ljudi, ili Nije uspjelo sa Zohovim razlogom.',
         'Pošalji mejl (pored Nove kampanje) nije Zoho: šalje običan mejl direktno iz prodavnice, svim pretplatnicima ili samo označenim. Koristi ga rijetko; newsletter ide preko Zoha.',
         'Zoho u svaki mejl dodaje link za odjavu. Ko se odjavi više ne dobija newsletter i poslije sljedeće sinhronizacije piše Odjavljen. Ako kampanja ne uspije, crveni red ispod nje kaže zašto (npr. pošiljalac nije potvrđen, veza prekinuta: ponovo Poveži).',
+      ],
+    },
+    {
+      title: 'Mejlovi kupcima koji su naručivali',
+      lines: [
+        'Narudžbe → Mejlovi narudžbi pokazuje adresu svakog ko je ikad naručio, zadnji prvi. Lista se sama puni iz narudžbi; ništa se ne kopira.',
+        'Sanduče, jednom u Zoho Mailu: 1) Napravi sanduče (npr. ponude@3dpartshop.com) u Zoho Mail Admin Console. 2) Dozvoli mu IMAP: Admin Console → korisnik → Mail settings, dozvoli IMAP pristup (ako ga organizacija blokira). 3) Prijavi se u sanduče i uključi IMAP: Zoho Mail → Settings → Mail Accounts → IMAP Access. 4) Ako je uključena prijava u dva koraka, napravi lozinku za aplikaciju: accounts.zoho.eu → Security → App Passwords → Generate, i koristi nju umjesto obične lozinke.',
+        'Zatim u adminu: Podešavanja → Sanduče za mejlove kupcima: adresa, IMAP server imap.zoho.eu (ili server koji Zoho pokazuje pod IMAP Access, npr. imappro.zoho.eu), port 993, lozinka za aplikaciju i Primalaca po nacrtu (100 ako se ne promijeni). Sačuvaj podešavanja, pa Provjeri vezu: pokaže adresu i folder Nacrti.',
+        'Pisanje: Narudžbe → Mejlovi narudžbi → Piši kupcima. Izaberi Svi koji su naručivali, ili Samo neki (adresa sadrži, naručivali od / do); vidi se broj kupaca. Napiši naslov, glavni naslov, tekst i po želji dugme, pogledaj pregled i klikni Snimi nacrte u sanduče.',
+        'Admin kaže koliko je nacrta napravljeno (npr. 8 nacrta za 754 kupca). Svaki nacrt ide na samo sanduče s najviše 100 kupaca u Bcc, pa se međusobno ne vide. Kolega otvori sanduče, ode u Nacrte (Drafts) i pošalje ih jedan po jedan. Shop ih sam nikad ne šalje.',
       ],
     },
     {
