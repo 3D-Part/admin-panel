@@ -110,11 +110,13 @@ const RemoveProductsFromSaleModal = () => {
   // Disable body scroll when modal is open
   useModalScroll(isRemoveProductsFromSaleModalOpen)
 
-  const isAllSelected =
+  // always true or false: undefined first makes the checkbox switch to controlled
+  const isAllSelected = !!(
     activeProduct &&
     activeProduct.productOnSale &&
     activeProduct.productOnSale.length > 0 &&
     selectedIds.length === activeProduct.productOnSale.length
+  )
 
   return (
     <Modal root={modalRoot()}

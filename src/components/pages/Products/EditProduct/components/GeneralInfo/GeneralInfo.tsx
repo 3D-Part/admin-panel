@@ -211,10 +211,11 @@ const GeneralInfo = () => {
   // }, [allCategories, getAllCategories]);
 
   useEffect(() => {
-    setIsPublished(activeProduct.isPublished)
-    setIsMostSold(activeProduct.isMostSold)
-    setIsRecommended(activeProduct.isRecommended)
-    setIsShoppingCartRecommended(activeProduct.isShoppingCartRecommended)
+    // a product opened by link is empty until it loads: keep the switches true/false
+    setIsPublished(activeProduct.isPublished ?? true)
+    setIsMostSold(!!activeProduct.isMostSold)
+    setIsRecommended(!!activeProduct.isRecommended)
+    setIsShoppingCartRecommended(!!activeProduct.isShoppingCartRecommended)
     setKeywords(activeProduct.keywords || [])
     // if (activeProduct.category) {
     //   setParentCategoryId(activeProduct.category.id)
