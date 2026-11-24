@@ -27,6 +27,7 @@ export enum URLPartsEnum {
   Users = '/users',
 
   Subscribers = '/subscribers',
+  Blog = '/blog',
   Guide = '/guide',
 
   PromoCodes = '/promocodes',

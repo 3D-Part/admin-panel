@@ -9,6 +9,7 @@ import {
   HiLibrary,
   HiDocumentText,
   HiQuestionMarkCircle,
+  HiPencilAlt,
 } from 'react-icons/hi'
 import { MdUnsubscribe } from 'react-icons/md'
 import { IoMdPricetags, IoMdSettings } from 'react-icons/io'
@@ -294,6 +295,13 @@ const SideBar = () => {
         requiredPermissions: PERMISSION_GROUPS.SUBSCRIBERS,
       },
       {
+        name: tx("Blog"),
+        href: URLPartsEnum.Blog,
+        icon: HiPencilAlt,
+        open: false,
+        requiredPermissions: [PermissionEnum.SETTINGS_WRITE],
+      },
+      {
         name: tx("Settings"),
         href: URLPartsEnum.Settings,
         icon: IoMdSettings,
@@ -315,6 +323,7 @@ const SideBar = () => {
             ['Zoho Campaigns', 'zoho-campaigns'],
             ['Order e-mails mailbox', 'order-mail'],
             ['Google Analytics', 'google-analytics'],
+            ['Blog (WordPress)', 'blog'],
             ['Delivery', 'delivery'],
             ['Company details', 'company'],
             ['Social media', 'social-media'],

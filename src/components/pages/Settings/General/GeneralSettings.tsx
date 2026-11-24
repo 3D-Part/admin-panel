@@ -38,6 +38,14 @@ import GoogleAnalyticsSettings, {
   readGaForm,
   savedGaForm,
 } from './GoogleAnalyticsSettings'
+import WordpressSettings, {
+  DEFAULT_WP_FORM,
+  WordpressForm,
+  readWpForm,
+  savedWpForm,
+  wpFormProblem,
+  wpSettings,
+} from './WordpressSettings'
 import {
   CustomerFlagType,
   readCustomerFlags,
@@ -111,6 +119,10 @@ const TABS: Record<string, { title: string; help: string }> = {
     title: 'Google Analytics',
     help: 'The figures of Google Analytics (users, sessions, page views, top pages, traffic sources, devices, purchases) on Analytics → Google Analytics. The admin reads them with a Google Cloud service account that may only view the GA4 property; the Guide says how to make one.',
   },
+  blog: {
+    title: 'Blog (WordPress)',
+    help: 'The blog of the shop is a WordPress site; its posts are written in the admin under Blog and sent to WordPress with an application password of a WordPress user. The home page of the shop shows the latest published posts.',
+  },
   'product-flags': {
     title: 'Product flags',
     help: 'Flags the staff put on products, e.g. check the price or order more. They show next to the product in the products list, are picked there or on the product page, and the products list can be filtered by them. The site never shows them. Renaming or recoloring a flag changes it on every product that has it.',
@@ -176,6 +188,7 @@ interface SettingsFormData {
   newsletterMailbox: MailboxForm
   orderMailbox: MailboxForm
   googleAnalytics: GoogleAnalyticsForm
+  wordpress: WordpressForm
   zohoCampaigns: ZohoForm
   pageImages: PageImage[]
   homeTiles: HomeTile[]
@@ -223,6 +236,7 @@ const GeneralSettings = () => {
     newsletterMailbox: DEFAULT_MAILBOX_FORM,
     orderMailbox: DEFAULT_ORDER_MAILBOX_FORM,
     googleAnalytics: DEFAULT_GA_FORM,
+    wordpress: DEFAULT_WP_FORM,
     zohoCampaigns: DEFAULT_ZOHO_FORM,
     pageImages: [],
     homeTiles: DEFAULT_HOME_TILES,
@@ -282,6 +296,7 @@ const GeneralSettings = () => {
           newsletterMailbox: readMailboxForm(settings.newsletterMailbox),
           orderMailbox: readMailboxForm(settings.orderMailbox, DEFAULT_ORDER_MAILBOX_FORM),
           googleAnalytics: readGaForm(settings.googleAnalytics),
+          wordpress: readWpForm(settings.wordpress),
           zohoCampaigns: readZohoForm(settings.zohoCampaigns),
           pageImages: settings.pageImages ?? [],
           homeTiles: readHomeTiles(settings),
@@ -411,6 +426,11 @@ const GeneralSettings = () => {
       toast(tx(analyticsProblem), { type: 'error', autoClose: 5000 })
       return
     }
+    const blogProblem = wpFormProblem(formData.wordpress)
+    if (blogProblem) {
+      toast(tx(blogProblem), { type: 'error', autoClose: 5000 })
+      return
+    }
     if (badTier) {
       toast(tx("Every tier needs its own name and a discount between 0 and 100."), {
         type: 'error',
@@ -465,6 +485,7 @@ const GeneralSettings = () => {
         newsletterMailbox: mailboxSettings(formData.newsletterMailbox),
         orderMailbox: mailboxSettings(formData.orderMailbox),
         googleAnalytics: gaSettings(formData.googleAnalytics),
+        wordpress: wpSettings(formData.wordpress),
         zohoCampaigns: zohoSettings(formData.zohoCampaigns),
         pageImages: formData.pageImages.filter((image) => image.desktop),
         contentBanners: formData.contentBanners.map((banner) => ({
@@ -494,7 +515,11 @@ const GeneralSettings = () => {
       // the avatars shown across the admin follow the new list
       loadCustomerAvatars(true)
       // a pasted key is saved now: it is not kept in the form
-      setFormData((prev) => ({ ...prev, googleAnalytics: savedGaForm(prev.googleAnalytics) }))
+      setFormData((prev) => ({
+        ...prev,
+        googleAnalytics: savedGaForm(prev.googleAnalytics),
+        wordpress: savedWpForm(prev.wordpress),
+      }))
       toast(tx("Settings updated successfully!"), {
         hideProgressBar: true,
         autoClose: 2000,
@@ -854,6 +879,15 @@ const GeneralSettings = () => {
             <GoogleAnalyticsSettings
               value={formData.googleAnalytics}
               onChange={(googleAnalytics) => setFormData((prev) => ({ ...prev, googleAnalytics }))}
+            />
+          </div>
+          )}
+
+          {tab === 'blog' && (
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+            <WordpressSettings
+              value={formData.wordpress}
+              onChange={(wordpress) => setFormData((prev) => ({ ...prev, wordpress }))}
             />
           </div>
           )}

@@ -89,6 +89,16 @@ const SECTIONS: Record<Language, Section[]> = {
       ],
     },
     {
+      title: 'Blog (WordPress)',
+      lines: [
+        'The blog of the shop is the WordPress site blog.3dpartshop.com; the home page of the shop shows its latest published posts. Posts are written in the admin under Blog and go straight to WordPress.',
+        'Connecting, once: 1) Log in to WordPress (blog.3dpartshop.com/wp-admin) as a user with the Editor or Administrator role. 2) Users → Profile, at the bottom Application Passwords: type a name (e.g. 3D Part admin) and click Add New Application Password. 3) Copy the password shown (four letters in groups with spaces); WordPress shows it only once. 4) In the admin: Settings → Blog (WordPress): blog address https://blog.3dpartshop.com, the WordPress user name and that application password, Save Settings, then Check the connection.',
+        'If WordPress has no Application Passwords section, the site has to run on https, or a security plugin turned them off; the person who runs the WordPress site has to allow them.',
+        'Writing: Blog → New post: title, address (made from the title), text, excerpt, featured image (Upload a picture puts it into the WordPress media library) and categories (tick them or add a new one). Save draft keeps it hidden; Publish puts it on the blog. A published post has Save changes and Unpublish (back to draft).',
+        'The list shows every post with its picture, status and date; search and the status filter help find one. The bin icon moves a post to the WordPress trash; it can be brought back in WordPress → Posts → Trash. The password stays on the server; the admin never talks to WordPress directly.',
+      ],
+    },
+    {
       title: 'Groups, flags and the chat',
       lines: [
         'Products → Product groups: who is in Super offer, Most sold or recommended in the cart. Search on the right, add one or many; take out on the left. A product is published or hidden with the Published switch on the product itself.',
@@ -185,6 +195,16 @@ const SECTIONS: Record<Language, Section[]> = {
         'Podešavanje, jednom: 1) Google Cloud Console (console.cloud.google.com): izaberi ili napravi projekat, APIs & Services → Library → Google Analytics Data API → Enable. 2) IAM & Admin → Service Accounts → Create service account (uloge ne trebaju); otvori ga → Keys → Add key → Create new key → JSON, preuzme se .json fajl. 3) Google Analytics → Admin → Property access management → + → mejl servisnog naloga (…@….iam.gserviceaccount.com), uloga Viewer. 4) Google Analytics → Admin → Property details: kopiraj Property ID (broj, ne G-… measurement ID).',
         'Zatim Podešavanja → Google Analytics: upiši property ID, Učitaj JSON fajl (ili zalijepi njegov sadržaj), Sačuvaj podešavanja i Provjeri vezu. Ključ ostaje na serveru i više se ne prikazuje; Ukloni ključ prekida vezu.',
         'Ako provjera ne uspije, poruka kaže zašto: API nije uključen u projektu, servisni nalog nije dodat na property, pogrešan property ID, ili je ključ obrisan u Google Cloudu (napravi novi).',
+      ],
+    },
+    {
+      title: 'Blog (WordPress)',
+      lines: [
+        'Blog prodavnice je WordPress sajt blog.3dpartshop.com; početna stranica prodavnice pokazuje njegove zadnje objavljene postove. Postovi se pišu u adminu pod Blog i idu direktno na WordPress.',
+        'Povezivanje, jednom: 1) Prijavi se u WordPress (blog.3dpartshop.com/wp-admin) kao korisnik s ulogom Editor ili Administrator. 2) Users → Profile, na dnu Application Passwords: upiši naziv (npr. 3D Part admin) i klikni Add New Application Password. 3) Kopiraj prikazanu lozinku (grupe od po četiri slova s razmacima); WordPress je pokaže samo jednom. 4) U adminu: Podešavanja → Blog (WordPress): adresa bloga https://blog.3dpartshop.com, WordPress korisničko ime i ta lozinka za aplikaciju, Sačuvaj podešavanja, pa Provjeri vezu.',
+        'Ako WordPress nema dio Application Passwords, sajt mora raditi na https-u, ili ih je isključio neki sigurnosni plugin; to mora dozvoliti onaj ko održava WordPress sajt.',
+        'Pisanje: Blog → Novi post: naslov, adresa (pravi se od naslova), tekst, kratak opis, glavna slika (Učitaj sliku je stavlja u WordPress biblioteku medija) i kategorije (označi ih ili dodaj novu). Snimi nacrt ga drži skrivenim; Objavi ga stavlja na blog. Objavljen post ima Snimi izmjene i Povuci (nazad u nacrt).',
+        'Lista pokazuje sve postove sa slikom, statusom i datumom; pretraga i filter statusa pomažu da se nađe post. Ikonica kante prebacuje post u WordPress smeće; vraća se u WordPress → Posts → Trash. Lozinka ostaje na serveru; admin nikad ne priča direktno s WordPressom.',
       ],
     },
     {
