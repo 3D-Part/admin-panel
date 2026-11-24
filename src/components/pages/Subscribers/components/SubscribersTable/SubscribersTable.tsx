@@ -2,7 +2,8 @@
 import { tx } from '@/shared/i18n'
 
 import React, { useCallback, useEffect, useState } from 'react'
-import { Checkbox, Pagination, Table } from 'flowbite-react'
+import { Checkbox, Table } from 'flowbite-react'
+import { Pagination } from '@/components/common/TablePagination/TablePagination'
 import { TableItem, ZohoStatusBadge } from './TableItem/TableItem'
 import { useSubscribersSliceStore } from '@/store/store'
 import {

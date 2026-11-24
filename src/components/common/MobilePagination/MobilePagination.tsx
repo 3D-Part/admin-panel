@@ -1,5 +1,6 @@
 import { tx } from '@/shared/i18n'
-import React from 'react'
+import React, { useRef } from 'react'
+import { scrollTableToTop } from '@/components/common/TablePagination/TablePagination'
 import {
   HiChevronLeft,
   HiChevronRight,
@@ -19,12 +20,18 @@ export const MobilePagination: React.FC<MobilePaginationProps> = ({
   onPageChange,
   count,
 }) => {
-  const goToFirst = () => onPageChange(1)
-  const goToPrevious = () => onPageChange(Math.max(1, currentPage - 1))
-  const goToNext = () => onPageChange(Math.min(totalPages, currentPage + 1))
+  const ref = useRef<HTMLDivElement>(null)
+  // a new page starts at its first card
+  const go = (page: number) => {
+    onPageChange(page)
+    scrollTableToTop(ref.current)
+  }
+  const goToFirst = () => go(1)
+  const goToPrevious = () => go(Math.max(1, currentPage - 1))
+  const goToNext = () => go(Math.min(totalPages, currentPage + 1))
 
   return (
-    <div className="mobile-pagination-container">
+    <div ref={ref} className="mobile-pagination-container">
       <div className="flex items-center justify-center gap-3 w-full">
         {/* First Page Button */}
         <button

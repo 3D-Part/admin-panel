@@ -2,7 +2,8 @@
 import { tx } from '@/shared/i18n'
 import { useCustomerProfiles } from '@/components/common/CustomerFlag/CustomerFlag'
 
-import { Pagination, Table } from 'flowbite-react'
+import { Table } from 'flowbite-react'
+import { Pagination } from '@/components/common/TablePagination/TablePagination'
 import React, { useCallback, useEffect, useState } from 'react'
 import { TableItem } from './TableItem/TableItem'
 import { useOrdersStore, useShopSettingsStore } from '@/store/store'

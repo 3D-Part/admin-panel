@@ -3,7 +3,8 @@ import { tx } from '@/shared/i18n'
 import { BackofficeAPI } from '@/services'
 import { useProductFlags } from '@/components/common/ProductFlags/ProductFlags'
 
-import { Pagination, Table } from 'flowbite-react'
+import { Table } from 'flowbite-react'
+import { Pagination } from '@/components/common/TablePagination/TablePagination'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { TableItem } from './TableItem/TableItem'
 import {

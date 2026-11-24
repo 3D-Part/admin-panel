@@ -9,7 +9,8 @@ import {
 } from '@/components/common'
 import { PaginationData, OrderEmail } from '@/shared/types'
 import { useOrdersEmailsStore } from '@/store/store'
-import { Pagination, Table } from 'flowbite-react'
+import { Table } from 'flowbite-react'
+import { Pagination } from '@/components/common/TablePagination/TablePagination'
 import { TableItem } from './TableItem'
 
 const EmailsTable = () => {

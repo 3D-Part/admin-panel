@@ -1,6 +1,7 @@
 'use client'
 
-import { Badge, Button, Pagination, Select, Table, TextInput } from 'flowbite-react'
+import { Badge, Button, Select, Table, TextInput } from 'flowbite-react'
+import { Pagination } from '@/components/common/TablePagination/TablePagination'
 import React, { useCallback, useEffect, useState } from 'react'
 import { HiTag } from 'react-icons/hi'
 import WarehouseAPI from '@/services/warehouse'
