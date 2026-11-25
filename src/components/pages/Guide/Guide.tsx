@@ -92,8 +92,8 @@ const SECTIONS: Record<Language, Section[]> = {
       title: 'Blog (WordPress)',
       lines: [
         'The blog of the shop is the WordPress site blog.3dpartshop.com; the home page of the shop shows its latest published posts. Posts are written in the admin under Blog and go straight to WordPress.',
-        'Connecting, once: 1) Log in to WordPress (blog.3dpartshop.com/wp-admin) as a user with the Editor or Administrator role. 2) Users → Profile, at the bottom Application Passwords: type a name (e.g. 3D Part admin) and click Add New Application Password. 3) Copy the password shown (four letters in groups with spaces); WordPress shows it only once. 4) In the admin: Settings → Blog (WordPress): blog address https://blog.3dpartshop.com, the WordPress user name and that application password, Save Settings, then Check the connection.',
-        'If WordPress has no Application Passwords section, the site has to run on https, or a security plugin turned them off; the person who runs the WordPress site has to allow them.',
+        'Connecting, once: Settings → Blog (WordPress): blog address https://blog.3dpartshop.com, the user name (e-mail) and password of a WordPress user with the Editor or Administrator role, the same as for wp-admin. Save Settings, then Check the connection.',
+        'Where WordPress offers Application Passwords (Users → Profile), one can be used instead of the real password; the blog of the shop has them turned off, so its normal login is used.',
         'Writing: Blog → New post: title, address (made from the title), text, excerpt, featured image (Upload a picture puts it into the WordPress media library) and categories (tick them or add a new one). Save draft keeps it hidden; Publish puts it on the blog. A published post has Save changes and Unpublish (back to draft).',
         'The list shows every post with its picture, status and date; search and the status filter help find one. The bin icon moves a post to the WordPress trash; it can be brought back in WordPress → Posts → Trash. The password stays on the server; the admin never talks to WordPress directly.',
       ],
@@ -201,8 +201,8 @@ const SECTIONS: Record<Language, Section[]> = {
       title: 'Blog (WordPress)',
       lines: [
         'Blog prodavnice je WordPress sajt blog.3dpartshop.com; početna stranica prodavnice pokazuje njegove zadnje objavljene postove. Postovi se pišu u adminu pod Blog i idu direktno na WordPress.',
-        'Povezivanje, jednom: 1) Prijavi se u WordPress (blog.3dpartshop.com/wp-admin) kao korisnik s ulogom Editor ili Administrator. 2) Users → Profile, na dnu Application Passwords: upiši naziv (npr. 3D Part admin) i klikni Add New Application Password. 3) Kopiraj prikazanu lozinku (grupe od po četiri slova s razmacima); WordPress je pokaže samo jednom. 4) U adminu: Podešavanja → Blog (WordPress): adresa bloga https://blog.3dpartshop.com, WordPress korisničko ime i ta lozinka za aplikaciju, Sačuvaj podešavanja, pa Provjeri vezu.',
-        'Ako WordPress nema dio Application Passwords, sajt mora raditi na https-u, ili ih je isključio neki sigurnosni plugin; to mora dozvoliti onaj ko održava WordPress sajt.',
+        'Povezivanje, jednom: Podešavanja → Blog (WordPress): adresa bloga https://blog.3dpartshop.com, korisničko ime (e-mail) i lozinka WordPress korisnika s ulogom Editor ili Administrator, iste kao za wp-admin. Sačuvaj podešavanja, pa Provjeri vezu.',
+        'Gdje WordPress nudi Application Passwords (Users → Profile), može se upisati i takva lozinka umjesto prave; na blogu shopa su isključene, pa se koristi obična prijava.',
         'Pisanje: Blog → Novi post: naslov, adresa (pravi se od naslova), tekst, kratak opis, glavna slika (Učitaj sliku je stavlja u WordPress biblioteku medija) i kategorije (označi ih ili dodaj novu). Snimi nacrt ga drži skrivenim; Objavi ga stavlja na blog. Objavljen post ima Snimi izmjene i Povuci (nazad u nacrt).',
         'Lista pokazuje sve postove sa slikom, statusom i datumom; pretraga i filter statusa pomažu da se nađe post. Ikonica kante prebacuje post u WordPress smeće; vraća se u WordPress → Posts → Trash. Lozinka ostaje na serveru; admin nikad ne priča direktno s WordPressom.',
       ],

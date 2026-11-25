@@ -54,7 +54,7 @@ const Problem: React.FC<{ message: string }> = ({ message }) => (
   <div className="max-w-3xl space-y-3" data-testid="blog-problem">
     <p className="font-medium text-gray-900 dark:text-white">{tx(message)}</p>
     <p className="text-sm text-gray-600 dark:text-gray-300">
-      {tx('In WordPress: Users → Profile → Application Passwords, give it a name (e.g. 3D Part admin) and click Add New Application Password; copy the password shown. Then here: Settings → Blog (WordPress): the blog address, the WordPress user name and that password, Save Settings and Check the connection.')}
+      {tx('Settings → Blog (WordPress): the blog address, the WordPress user name (e-mail) and its password, the same as for wp-admin. Save Settings and Check the connection.')}
     </p>
     <div className="flex gap-2">
       <Button size="sm" href={`${URLPartsEnum.SettingsGeneral}?tab=blog`}>

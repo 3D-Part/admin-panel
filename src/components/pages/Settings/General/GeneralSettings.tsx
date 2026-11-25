@@ -121,7 +121,7 @@ const TABS: Record<string, { title: string; help: string }> = {
   },
   blog: {
     title: 'Blog (WordPress)',
-    help: 'The blog of the shop is a WordPress site; its posts are written in the admin under Blog and sent to WordPress with an application password of a WordPress user. The home page of the shop shows the latest published posts.',
+    help: 'The blog of the shop is a WordPress site; its posts are written in the admin under Blog and sent to WordPress as a WordPress user (its login, or an application password). The home page of the shop shows the latest published posts.',
   },
   'product-flags': {
     title: 'Product flags',

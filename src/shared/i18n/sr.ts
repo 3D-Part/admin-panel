@@ -1483,6 +1483,9 @@ const sr: Record<string, string> = {
   "The status is draft or publish": "Status je nacrt ili objavljeno",
   "Active users": "Korisnici",
   "Open the sale": "Otvori akciju",
+  "The password the user logs in to wp-admin with (an application password works too, where WordPress offers them). The user needs the Editor or Administrator role. The password stays on the server and is never shown again.": "Lozinka kojom se korisnik prijavljuje u wp-admin (radi i lozinka za aplikaciju, gdje je WordPress nudi). Korisnik treba ulogu Editor ili Administrator. Lozinka ostaje na serveru i više se nikad ne prikazuje.",
+  "Settings → Blog (WordPress): the blog address, the WordPress user name (e-mail) and its password, the same as for wp-admin. Save Settings and Check the connection.": "Podešavanja → Blog (WordPress): adresa bloga, WordPress korisničko ime (e-mail) i njegova lozinka, iste kao za wp-admin. Sačuvaj podešavanja i Provjeri vezu.",
+  "The blog of the shop is a WordPress site; its posts are written in the admin under Blog and sent to WordPress as a WordPress user (its login, or an application password). The home page of the shop shows the latest published posts.": "Blog prodavnice je WordPress sajt; postovi se pišu u adminu pod Blog i šalju na WordPress kao jedan WordPress korisnik (njegovom prijavom ili lozinkom za aplikaciju). Početna stranica prodavnice pokazuje zadnje objavljene postove.",
 }
 
 export default sr

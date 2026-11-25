@@ -87,7 +87,7 @@ const WordpressSettings: React.FC<{ value: WordpressForm; onChange: (next: Wordp
           <TextInput id="wp-user" autoComplete="off" value={value.username} onChange={(e) => set({ username: e.target.value })} />
         </div>
         <div>
-          <Label htmlFor="wp-pass" value={tx('Application password')} />
+          <Label htmlFor="wp-pass" value={tx('Password')} />
           <TextInput
             id="wp-pass"
             type="password"
@@ -107,7 +107,7 @@ const WordpressSettings: React.FC<{ value: WordpressForm; onChange: (next: Wordp
         </div>
       </div>
       <p className="text-xs text-gray-500 dark:text-gray-400">
-        {tx('Not the normal WordPress password: in WordPress open Users → Profile → Application Passwords, type a name (e.g. 3D Part admin), click Add New Application Password and copy the password shown. The user needs the Editor or Administrator role. The password stays on the server and is never shown again.')}
+        {tx('The password the user logs in to wp-admin with (an application password works too, where WordPress offers them). The user needs the Editor or Administrator role. The password stays on the server and is never shown again.')}
       </p>
       <div className="flex flex-wrap items-center gap-3">
         <Button size="sm" color="gray" isProcessing={testing} disabled={testing} onClick={test}>
