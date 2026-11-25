@@ -55,19 +55,27 @@ const Orders = () => {
   const nameField = params.get('field')
   const name = params.get('name')
   const byName = name && (nameField === 'fullName' || nameField === 'companyName') ? { [nameField]: { is: name } } : null
+  // /orders?code=<promo code> lists the orders that used it (promo code statistics)
+  const promoCode = params.get('code')
 
   useEffect(() => {
     changeOffersOnly(offers)
     changeCurrentPage(1)
-    if (customer || byName) {
-      changeOrderFilter({ filters: { ...(customer ? { email: { is: customer } } : {}), ...(byName ?? {}) } })
-    } else if ((orderFilter as any)?.filters?.email || (orderFilter as any)?.filters?.fullName || (orderFilter as any)?.filters?.companyName) {
+    if (customer || byName || promoCode) {
+      changeOrderFilter({
+        filters: {
+          ...(customer ? { email: { is: customer } } : {}),
+          ...(byName ?? {}),
+          ...(promoCode ? { code: { is: promoCode } } : {}),
+        },
+      })
+    } else if ((orderFilter as any)?.filters?.email || (orderFilter as any)?.filters?.fullName || (orderFilter as any)?.filters?.companyName || (orderFilter as any)?.filters?.code) {
       // a customer filter left from an earlier visit
       changeOrderFilter({})
     }
     fetchOrders({ offset: 0, limit: itemsPerPage })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [offers, customer, nameField, name, changeOffersOnly, changeCurrentPage, changeOrderFilter, fetchOrders, itemsPerPage])
+  }, [offers, customer, nameField, name, promoCode, changeOffersOnly, changeCurrentPage, changeOrderFilter, fetchOrders, itemsPerPage])
 
   const clearCustomer = () => {
     changeOrderFilter({})
@@ -94,7 +102,7 @@ const Orders = () => {
           </p>
         </div>
       )}
-      {(customer || byName) && (
+      {(customer || byName || promoCode) && (
         <div className="mb-3 flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
           <span className="rounded-full bg-purple-100 px-3 py-1 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
             {label || customer}

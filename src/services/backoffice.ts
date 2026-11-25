@@ -228,6 +228,33 @@ export type EditOrderBody = {
 
 // Errors are shown as a toast by the axios interceptor; callers only need to
 // know whether it worked.
+export type PromoCodeStatsRow = {
+  id: string | null
+  code: string
+  discountPercentage: number | null
+  startsAt: string | null
+  endsAt: string | null
+  state: 'upcoming' | 'active' | 'ended' | 'deleted'
+  categoryLimited: boolean
+  assigned: number
+  redeemed: number
+  uses: number
+  sold: number
+  cancelled: number
+  saved: number
+  revenue: number
+  averageOrder: number
+  firstUsed: string | null
+  lastUsed: string | null
+}
+
+export type PromoCodeStatsData = {
+  from: string | null
+  to: string | null
+  totals: { codes: number; usedCodes: number; uses: number; sold: number; cancelled: number; saved: number; revenue: number }
+  rows: PromoCodeStatsRow[]
+}
+
 export type AssistantHealth = {
   enabled: boolean
   provider: 'openai' | 'anthropic'
@@ -337,6 +364,14 @@ const BackofficeAPI = {
   getTraffic: (from?: string, to?: string) =>
     attempt(() =>
       API.get<SiteTraffic>(`${BASE}/analytics/traffic`, {
+        ...(from ? { from } : {}),
+        ...(to ? { to } : {}),
+      })
+    ),
+  // uses, savings and revenue of every promo code
+  getPromoCodeStats: (from?: string, to?: string) =>
+    attempt(() =>
+      API.get<PromoCodeStatsData>(`${BASE}/promo-code-stats`, {
         ...(from ? { from } : {}),
         ...(to ? { to } : {}),
       })

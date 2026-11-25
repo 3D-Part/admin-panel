@@ -262,6 +262,11 @@ const SideBar = () => {
             href: URLPartsEnum.AddNewPromoCode,
             requiredPermissions: [PermissionEnum.PROMO_CODE_WRITE],
           },
+          {
+            name: tx("Statistics"),
+            href: '/promocodes/stats',
+            requiredPermissions: [PermissionEnum.PROMO_CODE_READ],
+          },
         ],
       },
       {
