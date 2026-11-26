@@ -85,6 +85,11 @@ axiosInstance.interceptors.response.use(
     )
       return
 
+    // the proforma preview runs while the staff type; the editor shows its
+    // problems next to the form instead of a toast at every key
+    if (errorUrl.includes('/offer-document/preview') && error.response.status === 400)
+      return Promise.reject(error)
+
     // the sale marks are a help on many pages; staff without the permission
     // simply do not see them
     if (

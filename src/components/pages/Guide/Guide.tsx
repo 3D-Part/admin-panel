@@ -21,7 +21,12 @@ const SECTIONS: Record<Language, Section[]> = {
       title: 'Offers and proformas',
       lines: [
         'An offer has its own steps (e.g. proforma sent, paid). The step that sets Accepted turns it into an order. Until then it holds no stock. Analytics count an order as sold once it is sent or ready for pickup.',
-        'Company orders (bank transfer) arrive straight in Offers. Send the offer with the envelope icon on the row; put your bank account in Settings → Company details first.',
+        'Company orders (bank transfer) arrive straight in Offers. The envelope icon on the row (or Send offer by email in the order) opens the proforma (predračun) before anything is sent.',
+        'The proforma looks like the one of the accounting software: number, date, the buyer box (name, street, post code and town, PIB, JIB), lines with code, name, unit, quantity, price, rabat, amount without VAT, VAT rate and amount with VAT, then UKUPNO, -RABAT, OSNOVICA ZA PDV, +PDV, ZA UPLATU and the amount in words.',
+        'It is filled from the order: the products with their code (SKU), the customer\'s own discount and the order discount as the rabat, the delivery as the line DOSTAVA (code 090015), the buyer from the order, today\'s date and the next number of the year (after 547/2026 comes 548/2026).',
+        'Everything can be changed before sending: number, date, buyer, every line (prices with VAT, rabat in %), and lines can be added or removed. The preview on the right shows exactly what the customer gets; problems (e.g. a line without a name) are listed under the form.',
+        'Save keeps the changes on the offer without sending. Send by email asks once more and sends it; the sent proforma stays saved, so opening it again shows what was sent. Fill again from the order throws the changes away and starts from the order.',
+        'The proforma is only a document: changing a price or a rabat in it does not change the order, its total or the stock. Change the order itself in the order editor.',
       ],
     },
     {
@@ -29,6 +34,10 @@ const SECTIONS: Record<Language, Section[]> = {
       lines: [
         'Internal code / SKU is your code, EAN is the barcode on the package.',
         'Sales → open a sale → Add products: search, enter the sale price, Add. The sale shows on the site only between its dates.',
+        'Each sale has its own color. Products on a sale show its name in that color everywhere in the admin; a click on such a pill opens the sale.',
+        'Product flags (Settings → Product flags) mark products for the team; set them in the products list or on the product, and filter the list by them.',
+        'On the product, Stock & extras: ribbons on the product card of the shop (made in Settings → Ribbons) and a highlight frame in a color of your choice.',
+        'The product code and SKU are shown next to a product everywhere, and All orders can be searched by product name, SKU or internal code.',
         'Actions needed lists what to fix, and every row has a note for your team.',
       ],
     },
@@ -45,7 +54,9 @@ const SECTIONS: Record<Language, Section[]> = {
       title: 'Customers',
       lines: [
         'Users → open a customer: mark them disputed with a reason, give them an avatar, or use Send password reset email: the customer gets a 6-digit code and a link to the page of the shop where they type it and pick the new password.',
-        'Settings → Discount tiers: set how much a customer has to spend for each tier, counted over everything or only the last 12 months. A tier set by hand stays.',
+        'Settings → Discount tiers: set how much a customer has to spend for each tier and from which day the spending counts. A tier can give its discount only on some categories (a category includes its subcategories), each with its own percent; without categories it is for every product. A tier set by hand stays.',
+        'Users shows when each customer registered and last logged in, and can be sorted by the last login.',
+        'Settings → Avatars: upload, rename, offer or hide the pictures customers can pick; the staff can also give a customer one in the user details.',
       ],
     },
     {
@@ -53,6 +64,14 @@ const SECTIONS: Record<Language, Section[]> = {
       lines: [
         'Employees → edit: for each section pick No access, View, or View and edit. Accounts marked Full access are owners and are not edited there.',
         'Export on Orders, Products and Users saves a CSV that opens in Excel. Analytics filters by category, manufacturer and customer.',
+      ],
+    },
+    {
+      title: 'Promo codes',
+      lines: [
+        'Promo Codes lists the codes with their discount and dates. A code works on the site only between its dates.',
+        'Promo Codes → Statistics: for the chosen period, how many times each code was used, how much the customers saved, the revenue of those orders and the average order, the first and last use. Cancelled or returned orders are counted apart and not as uses.',
+        'A click on the number of uses opens those orders; a click on the code opens the code. Show codes nobody used lists the unused ones too.',
       ],
     },
     {
@@ -66,6 +85,8 @@ const SECTIONS: Record<Language, Section[]> = {
         'A campaign, step by step: 1) New campaign. 2) Recipients: Everyone on the Zoho list, or Only the subscribers ticked in the table (tick them first; they get a Zoho list of their own and nobody else is reached). 3) Sender, subject and text; the headline is optional (the subject is used). 4) Send a test to me: it goes only to the test list, marked [PROBA]; check it in your inbox. 5) Send to everyone / Send to N ticked: it asks once more with the number of people.',
         'The list of campaigns shows each one: Test, In Zoho, not sent (the Send button sends it), Sending, Sent with the number of people, or Failed with Zoho\'s reason.',
         'Send email (next to New campaign) is not Zoho: it sends a plain mail straight from the shop, to all subscribers or only the ticked ones. Use it rarely; newsletters go through Zoho.',
+        'Writing to one or a few people only: first tick them in the table, then Send email (or New campaign) and check that Only the subscribers ticked in the table is chosen and the number is right. If All subscribers is chosen, it goes to everyone. The last question says once more to whom (e.g. Send to the 2 ticked subscribers only? or Send to ALL subscribers?): read it before confirming.',
+        'On the site a small newsletter card asks visitors to subscribe: after 20 seconds or 40% of a page, bottom right (a slim bar at the bottom on phones), never on the checkout or account pages. Closed, it stays away 30 days; after a sign-up it never comes again. Who signs up there lands in Subscribers like from the footer.',
         'Zoho adds the unsubscribe link to every mail. Who unsubscribes gets no more newsletters and shows as Unsubscribed after the next sync. If a campaign fails, the red line under it says why (e.g. a sender not verified, the connection gone: Connect again).',
       ],
     },
@@ -96,6 +117,7 @@ const SECTIONS: Record<Language, Section[]> = {
         'Where WordPress offers Application Passwords (Users → Profile), one can be used instead of the real password; the blog of the shop has them turned off, so its normal login is used.',
         'Writing: Blog → New post: title, address (made from the title), text, excerpt, featured image (Upload a picture puts it into the WordPress media library) and categories (tick them or add a new one). Save draft keeps it hidden; Publish puts it on the blog. A published post has Save changes and Unpublish (back to draft).',
         'The list shows every post with its picture, status and date; search and the status filter help find one. The bin icon moves a post to the WordPress trash; it can be brought back in WordPress → Posts → Trash. The password stays on the server; the admin never talks to WordPress directly.',
+        'If the blog does not answer or does not accept the login, the message ends with Check the connection: Settings → Blog (WordPress). A post being written stays in the editor, so nothing is lost: fix the connection and save again.',
       ],
     },
     {
@@ -103,13 +125,18 @@ const SECTIONS: Record<Language, Section[]> = {
       lines: [
         'Products → Product groups: who is in Super offer, Most sold or recommended in the cart. Search on the right, add one or many; take out on the left. A product is published or hidden with the Published switch on the product itself.',
         'Settings → Customer statuses and Order flags: name and color of each flag. Red customer statuses mean disputed.',
-        'Settings → Chat assistant: one AI is active at a time (ChatGPT or Claude); the table below shows what it cost.',
+        'Settings → Chat assistant: one AI is active at a time (ChatGPT or Claude); Show the chat on the site switches it on or off completely. The table below shows what it cost.',
+        'The chat answers only about 3D printing and the products of the shop, without emojis. When the AI account runs out of money, the chat disappears from the site by itself and a notice shows in the admin.',
+        'Daily spending limit: when the chat spends that much in a day, it is hidden until the next day and the admin shows a notice. One visitor is also stopped after 30 questions in 10 minutes, 60 in a day or 5 off-topic questions in a row.',
       ],
     },
     {
       title: 'Settings',
       lines: [
         'Every part has its own item in the sidebar. Home slider is for the home page, Page images for everything else.',
+        'Home slider: picture slides, and content slides made of a title, text, button, a color or picture background and a product picture (uploaded or taken from a product), with a preview, order and on/off.',
+        'Home tiles: the picture, title, text, button and link of the two tiles under the home slider, with a preview.',
+        'Info pages: the pages of the site at /info/<address> (e.g. delivery, terms), written in the editor, with published, footer link and place, SEO title and description.',
         'Nothing reaches the site until you click Save Settings.',
         'The EN | SR switch at the top right changes the language of the admin.',
       ],
@@ -130,7 +157,12 @@ const SECTIONS: Record<Language, Section[]> = {
       title: 'Ponude i predračuni',
       lines: [
         'Ponuda ima svoje korake (npr. predračun poslan, plaćeno). Korak koji postavlja Prihvaćena pretvara je u narudžbu. Do tada ne drži robu. Analitika broji narudžbu kao prodanu tek kad je poslana ili spremna za preuzimanje.',
-        'Predračuni → Pošalji šalje predračun kupcu na mejl. Prvo upiši žiro račun u Podešavanja → Podaci o firmi.',
+        'Narudžbe firmi (plaćanje virmanom) stižu odmah u Ponude. Ikonica koverte u redu (ili Pošalji ponudu mejlom u narudžbi) otvara predračun prije nego što se išta pošalje.',
+        'Predračun izgleda kao onaj iz knjigovodstvenog programa: broj, datum, okvir s kupcem (naziv, ulica, poštanski broj i mjesto, PIB, JIB), stavke sa šifrom, nazivom, JM, količinom, cijenom, rabatom, iznosom bez PDV-a, stopom PDV-a i iznosom sa PDV-om, pa UKUPNO, -RABAT, OSNOVICA ZA PDV, +PDV, ZA UPLATU i iznos slovima.',
+        'Popunjava se iz narudžbe: artikli sa šifrom (SKU), lični popust kupca i popust na narudžbu kao rabat, dostava kao stavka DOSTAVA (šifra 090015), kupac iz narudžbe, današnji datum i sljedeći broj u godini (poslije 547/2026 dolazi 548/2026).',
+        'Prije slanja sve se može promijeniti: broj, datum, kupac, svaka stavka (cijene sa PDV-om, rabat u %), a stavke se mogu dodati ili ukloniti. Pregled desno pokazuje tačno šta kupac dobija; greške (npr. stavka bez naziva) pišu ispod forme.',
+        'Sačuvaj čuva izmjene na ponudi bez slanja. Pošalji mejlom još jednom pita pa šalje; poslani predračun ostaje sačuvan, pa se ponovnim otvaranjem vidi šta je poslano. Ponovo popuni iz narudžbe briše izmjene i kreće od narudžbe.',
+        'Predračun je samo dokument: promjena cijene ili rabata u njemu ne mijenja narudžbu, njen iznos ni stanje. Narudžba se mijenja u uređivaču narudžbe.',
       ],
     },
     {
@@ -138,6 +170,10 @@ const SECTIONS: Record<Language, Section[]> = {
       lines: [
         'Interna šifra / SKU je vaša šifra, a EAN je bar kod na pakovanju.',
         'Akcije → otvori akciju → Dodaj artikle: pronađi artikal, upiši akcijsku cijenu i klikni Dodaj. Akcija se na sajtu vidi samo između svojih datuma.',
+        'Svaka akcija ima svoju boju. Artikli na akciji svuda u adminu pokazuju njen naziv u toj boji; klik na takvu oznaku otvara akciju.',
+        'Zastavice artikala (Podešavanja → Zastavice artikala) označavaju artikle za tim; postavljaju se u listi artikala ili na artiklu, a lista se po njima filtrira.',
+        'Na artiklu, Stanje i dodaci: ribboni na kartici artikla u prodavnici (prave se u Podešavanja → Ribboni) i okvir za isticanje u boji po izboru.',
+        'Šifra i SKU stoje pored artikla svuda, a Sve narudžbe se mogu pretraživati po nazivu artikla, SKU-u ili internoj šifri.',
         'Potrebne radnje pokazuje šta treba popraviti, a svaki red ima polje za vašu napomenu.',
       ],
     },
@@ -153,8 +189,10 @@ const SECTIONS: Record<Language, Section[]> = {
     {
       title: 'Kupci',
       lines: [
-        'Kupci → otvori kupca: označi ga kao spornog uz razlog, ili klikni Pošalji mejl za novu lozinku. Kupac sam bira novu lozinku.',
-        'Podešavanja → Tierovi popusta: upiši koliko kupac treba da potroši za svaki tier, ukupno ili samo u zadnjih 12 mjeseci. Tier postavljen ručno ostaje.',
+        'Kupci → otvori kupca: označi ga kao spornog uz razlog, daj mu avatar, ili klikni Pošalji mejl za novu lozinku: kupac dobije šestocifreni kod i link na stranicu prodavnice gdje ga upiše i sam izabere novu lozinku.',
+        'Podešavanja → Tierovi popusta: upiši koliko kupac treba da potroši za svaki tier i od kojeg dana se potrošnja broji. Tier može davati popust samo na neke kategorije (kategorija uključuje i podkategorije), svaka sa svojim procentom; bez kategorija važi za sve artikle. Tier postavljen ručno ostaje.',
+        'Kupci pokazuje kad se svaki kupac registrovao i kad se zadnji put prijavio, i mogu se sortirati po zadnjoj prijavi.',
+        'Podešavanja → Avatari: učitaj, preimenuj, ponudi ili sakrij slike koje kupci mogu izabrati; osoblje kupcu može dati avatar i u detaljima kupca.',
       ],
     },
     {
@@ -162,6 +200,14 @@ const SECTIONS: Record<Language, Section[]> = {
       lines: [
         'Zaposleni → izmjena: za svaku sekciju izaberi Bez pristupa, Pregled ili Pregled i uređivanje. Nalozi s oznakom Puni pristup su vlasnički i tu se ne uređuju.',
         'Izvoz na Narudžbama, Artiklima i Kupcima snima CSV koji se otvara u Excelu. Analitika se filtrira po kategoriji, proizvođaču i kupcu.',
+      ],
+    },
+    {
+      title: 'Promo kodovi',
+      lines: [
+        'Promo kodovi pokazuje kodove s popustom i datumima. Kod na sajtu radi samo između svojih datuma.',
+        'Promo kodovi → Statistika: za izabrani period koliko je puta svaki kod iskorišten, koliko su kupci uštedjeli, prihod tih narudžbi i prosječna narudžba, prvo i zadnje korištenje. Otkazane i vraćene narudžbe se broje posebno, ne kao korištenja.',
+        'Klik na broj korištenja otvara te narudžbe; klik na kod otvara kod. Prikaži i kodove koje niko nije iskoristio pokazuje i nekorištene.',
       ],
     },
     {
@@ -175,6 +221,8 @@ const SECTIONS: Record<Language, Section[]> = {
         'Kampanja, korak po korak: 1) Nova kampanja. 2) Primaoci: Svi na Zoho listi, ili Samo pretplatnici označeni u tabeli (prvo ih označi; dobiju svoju Zoho listu i niko drugi ne dobija mejl). 3) Pošiljalac, naslov i tekst; glavni naslov u mejlu nije obavezan (uzima se naslov). 4) Pošalji probu meni: ide samo na test listu, s oznakom [PROBA]; provjeri je u svom sandučetu. 5) Pošalji svima / Pošalji označenim (N): još jednom pita s brojem ljudi.',
         'Lista kampanja pokazuje svaku: Proba, U Zohu, nije poslano (dugme Pošalji je šalje), Šalje se, Poslano s brojem ljudi, ili Nije uspjelo sa Zohovim razlogom.',
         'Pošalji mejl (pored Nove kampanje) nije Zoho: šalje običan mejl direktno iz prodavnice, svim pretplatnicima ili samo označenim. Koristi ga rijetko; newsletter ide preko Zoha.',
+        'Mejl samo jednoj ili nekolicini osoba: prvo ih označi u tabeli, pa Pošalji mejl (ili Nova kampanja) i provjeri da je izabrano Samo pretplatnici označeni u tabeli i da je broj tačan. Ako je izabrano Svi pretplatnici, mejl ide svima. Zadnje pitanje još jednom kaže kome (npr. Poslati samo označenim pretplatnicima (2)? ili Poslati SVIM pretplatnicima?): pročitaj ga prije potvrde.',
+        'Na sajtu mala kartica poziva posjetioce da se prijave na newsletter: poslije 20 sekundi ili 40% stranice, dolje desno (na telefonu tanka traka na dnu), nikad na naplati ni na stranicama naloga. Ako je zatvore, ne vraća se 30 dana; poslije prijave više se ne pojavljuje. Ko se tu prijavi upada u Pretplatnike isto kao iz podnožja.',
         'Zoho u svaki mejl dodaje link za odjavu. Ko se odjavi više ne dobija newsletter i poslije sljedeće sinhronizacije piše Odjavljen. Ako kampanja ne uspije, crveni red ispod nje kaže zašto (npr. pošiljalac nije potvrđen, veza prekinuta: ponovo Poveži).',
       ],
     },
@@ -205,20 +253,26 @@ const SECTIONS: Record<Language, Section[]> = {
         'Gdje WordPress nudi Application Passwords (Users → Profile), može se upisati i takva lozinka umjesto prave; na blogu shopa su isključene, pa se koristi obična prijava.',
         'Pisanje: Blog → Novi post: naslov, adresa (pravi se od naslova), tekst, kratak opis, glavna slika (Učitaj sliku je stavlja u WordPress biblioteku medija) i kategorije (označi ih ili dodaj novu). Snimi nacrt ga drži skrivenim; Objavi ga stavlja na blog. Objavljen post ima Snimi izmjene i Povuci (nazad u nacrt).',
         'Lista pokazuje sve postove sa slikom, statusom i datumom; pretraga i filter statusa pomažu da se nađe post. Ikonica kante prebacuje post u WordPress smeće; vraća se u WordPress → Posts → Trash. Lozinka ostaje na serveru; admin nikad ne priča direktno s WordPressom.',
+        'Ako blog ne odgovara ili ne prihvata prijavu, poruka završava s Provjeri vezu: Podešavanja → Blog (WordPress). Post koji se piše ostaje u editoru, ništa se ne gubi: popravi vezu i sačuvaj ponovo.',
       ],
     },
     {
       title: 'Grupe, zastavice i chat',
       lines: [
-        'Artikli → Grupe proizvoda: šta je objavljeno, u Super ponudi, Najprodavanije ili preporučeno u korpi. Desno pretraga i dodavanje jednog ili više, lijevo izbacivanje.',
+        'Artikli → Grupe proizvoda: šta je u Super ponudi, Najprodavanije ili preporučeno u korpi. Desno pretraga i dodavanje jednog ili više, lijevo izbacivanje. Artikal se objavljuje ili sakriva prekidačem Objavljeno na samom artiklu.',
         'Podešavanja → Statusi kupaca i Zastavice narudžbi: naziv i boja svake zastavice. Crveni statusi kupaca znače sporan kupac.',
-        'Podešavanja → Chat asistent: aktivan je jedan AI (ChatGPT ili Claude); tabela ispod pokazuje koliko je koštao.',
+        'Podešavanja → Chat asistent: aktivan je jedan AI (ChatGPT ili Claude); Prikaži chat na sajtu ga potpuno uključuje ili isključuje. Tabela ispod pokazuje koliko je koštao.',
+        'Chat odgovara samo o 3D štampi i artiklima prodavnice, bez smajlija. Kad na AI nalogu nestane novca, chat sam nestane sa sajta, a u adminu se pojavi obavještenje.',
+        'Dnevni limit potrošnje: kad chat u jednom danu potroši toliko, skriva se do sljedećeg dana i admin pokaže obavještenje. Jedan posjetilac se zaustavlja i poslije 30 pitanja za 10 minuta, 60 u danu ili 5 pitanja zaredom koja nisu na temu.',
       ],
     },
     {
       title: 'Podešavanja',
       lines: [
         'Svaki dio ima svoju stavku u meniju lijevo. Slajder na početnoj je za početnu stranicu, a Slike stranica za sve ostale.',
+        'Slajder na početnoj: slajdovi sa slikom i slajdovi sa sadržajem (naslov, tekst, dugme, pozadina u boji ili slika, slika artikla učitana ili uzeta sa artikla), s pregledom, redoslijedom i uključi/isključi.',
+        'Pločice na početnoj: slika, naslov, tekst, dugme i link dvije pločice ispod slajdera, s pregledom.',
+        'Info stranice: stranice sajta na /info/<adresa> (npr. dostava, uslovi), pisane u editoru, s objavljeno, linkom i mjestom u podnožju, SEO naslovom i opisom.',
         'Ništa ne ide na sajt dok ne klikneš Sačuvaj podešavanja.',
         'Jezik admina mijenjaš dugmetom EN | SR gore desno.',
       ],

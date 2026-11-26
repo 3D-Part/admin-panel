@@ -1513,6 +1513,26 @@ const sr: Record<string, string> = {
   "\"Given / used\": how many customers got the code and how many of them used it. A click on the number of uses opens those orders.": "\"Dodijeljen / iskorišten\": koliko je kupaca dobilo kod i koliko ga je iskoristilo. Klik na broj korištenja otvara te narudžbe.",
   "Promo code": "Promo kod",
   "Check the connection: Settings → Blog (WordPress).": "Provjeri vezu: Podešavanja → Blog (WordPress).",
+  // the proforma of an offer
+  'Could not load the proforma': 'Predračun se nije mogao učitati',
+  'Proforma saved': 'Predračun je sačuvan',
+  'Proforma for {email}': 'Predračun za {email}',
+  'Saved. The customer gets it only when you send it.': 'Sačuvano. Kupac ga dobija tek kad ga pošalješ.',
+  'Filled from the order. Change what you need, the preview shows what the customer gets.': 'Popunjeno iz narudžbe. Promijeni šta treba, pregled pokazuje šta kupac dobija.',
+  'Proforma number': 'Broj predračuna',
+  'Buyer': 'Kupac',
+  'Company or full name': 'Firma ili ime i prezime',
+  'Post code, town': 'Poštanski broj, mjesto',
+  'Lines': 'Stavke',
+  'Prices with VAT, rabat in %': 'Cijene sa PDV-om, rabat u %',
+  'Remove the line': 'Ukloni stavku',
+  'Unit': 'JM',
+  'Price with VAT': 'Cijena sa PDV-om',
+  'Rabat %': 'Rabat %',
+  'Add a line': 'Dodaj stavku',
+  'To pay': 'Za uplatu',
+  'Fill again from the order': 'Ponovo popuni iz narudžbe',
+  'Send by email': 'Pošalji mejlom',
 }
 
 export default sr

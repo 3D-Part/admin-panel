@@ -144,14 +144,80 @@ const orderSetBillingStep = async (
   }
 }
 
-// e-mails the offer to the customer (offers only)
-const orderSendOffer = async (id: string): Promise<{ data: any | null; error: string | null }> => {
+// e-mails the offer to the customer (offers only), with the proforma as edited
+const orderSendOffer = async (
+  id: string,
+  document?: ProformaDraft
+): Promise<{ data: any | null; error: string | null }> => {
   try {
-    return { data: await API.post(`${API_BASE_URL}/order/${id}/send-offer`, {}), error: null }
+    return { data: await API.post(`${API_BASE_URL}/order/${id}/send-offer`, document ? { document } : {}), error: null }
   } catch (error: any) {
     console.error('Error sending the offer:', error)
-    // the server says why (e.g. no bank account in the settings)
     return { data: null, error: error?.response?.data?.errors?.[0]?.message ?? null }
+  }
+}
+
+export type ProformaDraftLine = {
+  code: string
+  name: string
+  unit: string
+  quantity: number | string
+  /** one piece with VAT, before the rabat */
+  price: number | string
+  /** rabat in percent */
+  discount: number | string
+}
+
+export type ProformaDraft = {
+  number: string
+  date: string
+  customer: { name: string; street: string; town: string; pib: string; jib: string }
+  lines: ProformaDraftLine[]
+}
+
+type ProformaResult = { draft: ProformaDraft; saved: boolean }
+type ProformaErrors = { errors: string[] }
+
+const proformaErrors = (error: any): ProformaErrors => ({
+  errors: (error?.response?.data?.errors ?? [])
+    .map((item: { message?: string }) => item.message)
+    .filter(Boolean),
+})
+
+// the proforma of an offer: the one saved last, or a fresh draft from the order
+const getOfferDocument = async (id: string): Promise<ProformaResult | null> => {
+  try {
+    return await API.get(`${API_BASE_URL}/order/${id}/offer-document`)
+  } catch (error) {
+    console.error('Error loading the proforma:', error)
+    return null
+  }
+}
+
+const saveOfferDocument = async (id: string, document: ProformaDraft): Promise<ProformaResult | ProformaErrors> => {
+  try {
+    return await API.put(`${API_BASE_URL}/order/${id}/offer-document`, { document })
+  } catch (error) {
+    return proformaErrors(error)
+  }
+}
+
+const resetOfferDocument = async (id: string): Promise<ProformaResult | null> => {
+  try {
+    await API.remove(`${API_BASE_URL}/order/${id}/offer-document`)
+    return await getOfferDocument(id)
+  } catch (error) {
+    console.error('Error resetting the proforma:', error)
+    return null
+  }
+}
+
+// the proforma as the customer gets it; quiet, it runs while typing
+const previewOfferDocument = async (document: ProformaDraft): Promise<{ html: string } | ProformaErrors> => {
+  try {
+    return await API.post(`${API_BASE_URL}/order/offer-document/preview`, { document })
+  } catch (error) {
+    return proformaErrors(error)
   }
 }
 
@@ -230,6 +296,10 @@ const OrdersAPI = {
   orderUpdateNote,
   orderSetDisputed,
   orderSendOffer,
+  getOfferDocument,
+  saveOfferDocument,
+  resetOfferDocument,
+  previewOfferDocument,
   orderSetBilling,
   orderSetBillingStep,
   orderStatusHistory,

@@ -4,15 +4,13 @@ import { tx } from '@/shared/i18n'
 import React, { useState } from 'react'
 import { Button } from 'flowbite-react'
 import { HiOutlineMail } from 'react-icons/hi'
-import { toast } from 'react-toastify'
-import { WarningModal } from '@/components/common'
-import { OrdersAPI } from '@/services'
+import OfferProformaModal from './OfferProformaModal'
 import { Order } from '@/shared/types'
 import { useOrdersStore } from '@/store/store'
 
 /**
- * E-mails an offer to the customer, after a confirmation. As a plain button
- * in the order details, or as a small icon button in the row of the list.
+ * Opens the proforma of an offer to check and change before it is e-mailed
+ * to the customer. As a plain button in the order details, or as a small icon button in the row of the list.
  * Shows only for offers; the server refuses anything else.
  */
 const SendOfferButton: React.FC<{
@@ -21,25 +19,12 @@ const SendOfferButton: React.FC<{
   onSent?: (order: Order) => void
 }> = ({ order, variant = 'button', onSent }) => {
   const { currentPage, itemsPerPage, fetchOrders } = useOrdersStore()
-  const [confirming, setConfirming] = useState(false)
-  const [sending, setSending] = useState(false)
+  const [editing, setEditing] = useState(false)
 
   if (order.status !== 'PROFORMA_SENT') return null
 
-  const send = async () => {
-    setSending(true)
-    const { data: sent, error } = await OrdersAPI.orderSendOffer(order.id)
-    setSending(false)
-    setConfirming(false)
-    if (!sent) {
-      toast(error ? tx(error) : tx('Could not send the offer'), { type: 'error', autoClose: 7000 })
-      return
-    }
-    toast(tx('Offer sent to {email}', { email: order.email }), {
-      type: 'success',
-      autoClose: 3000,
-    })
-    onSent?.({ ...order, billingSteps: sent.billingSteps })
+  const sent = (updated: Order) => {
+    onSent?.({ ...order, billingSteps: updated.billingSteps })
     fetchOrders({ offset: (currentPage - 1) * itemsPerPage, limit: itemsPerPage })
   }
 
@@ -51,7 +36,7 @@ const SendOfferButton: React.FC<{
           disabled={!order.email}
           onClick={(e) => {
             e.stopPropagation()
-            setConfirming(true)
+            setEditing(true)
           }}
           title={tx('Send offer by email')}
           aria-label={tx('Send offer by email')}
@@ -62,7 +47,7 @@ const SendOfferButton: React.FC<{
       ) : (
         <Button
           color="light"
-          onClick={() => setConfirming(true)}
+          onClick={() => setEditing(true)}
           disabled={!order.email}
           className="w-full sm:w-auto"
         >
@@ -70,14 +55,12 @@ const SendOfferButton: React.FC<{
           {tx('Send offer by email')}
         </Button>
       )}
-      <WarningModal
-        isOpen={confirming}
-        onSave={send}
-        onClose={() => setConfirming(false)}
-        isLoading={sending}
-        buttonColor="purple"
-        message={tx('Send the offer to {email}?', { email: order.email })}
-      />
+      {editing && (
+        // clicks in the window must not reach the row of the list (it opens the order)
+        <div onClick={(e) => e.stopPropagation()}>
+          <OfferProformaModal order={order} isOpen={editing} onClose={() => setEditing(false)} onSent={sent} />
+        </div>
+      )}
     </>
   )
 }
