@@ -2,6 +2,7 @@
 
 import { Pagination as FlowbitePagination, PaginationProps } from 'flowbite-react'
 import React, { useRef } from 'react'
+import { tx } from '@/shared/i18n'
 
 /**
  * After a page change the table shows its first row again: the table body
@@ -33,6 +34,8 @@ export const Pagination: React.FC<PaginationProps> = ({ onPageChange, ...props }
   return (
     <div ref={ref} className="contents">
       <FlowbitePagination
+        previousLabel={tx('Previous')}
+        nextLabel={tx('Next')}
         {...props}
         onPageChange={(page) => {
           onPageChange(page)

@@ -334,7 +334,7 @@ const SideBar = () => {
             ['Social media', 'social-media'],
             ['Chat assistant', 'assistant'],
           ].map(([name, tab]) => ({
-            name,
+            name: tx(name),
             href: `${URLPartsEnum.SettingsGeneral}?tab=${tab}`,
             requiredPermissions: [PermissionEnum.SETTINGS_WRITE],
           })),
