@@ -2,8 +2,9 @@
 import { tx } from '@/shared/i18n'
 
 import React, { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Button, Label, Modal, Spinner, TextInput } from 'flowbite-react'
-import { HiOutlineMail, HiOutlinePlus, HiOutlineRefresh, HiOutlineTrash } from 'react-icons/hi'
+import { HiOutlineArrowsExpand, HiOutlineMail, HiOutlinePlus, HiOutlineRefresh, HiOutlineTrash, HiX } from 'react-icons/hi'
 import { toast } from 'react-toastify'
 import { WarningModal } from '@/components/common'
 import { modalRoot } from '@/shared/helpers/modalRoot'
@@ -47,6 +48,8 @@ const OfferProformaModal: React.FC<{
   const previewBox = useRef<HTMLDivElement>(null)
   const [previewScale, setPreviewScale] = useState(0.7)
   const [previewHeight, setPreviewHeight] = useState(640)
+  // the proforma over the whole screen at its real A4 size, as the customer gets it
+  const [fullView, setFullView] = useState(false)
   useModalScroll(isOpen)
 
   useEffect(() => {
@@ -261,7 +264,18 @@ const OfferProformaModal: React.FC<{
               </div>
 
               <div>
-                <span className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">{tx('Preview')}</span>
+                <div className="mb-2 flex items-center justify-between gap-2">
+                  <span className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                    {tx('Preview')}
+                    <span className="rounded bg-blue-100 px-1.5 py-0.5 text-xs font-semibold text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                      A4
+                    </span>
+                  </span>
+                  <Button size="xs" color="light" onClick={() => setFullView(true)} disabled={!html}>
+                    <HiOutlineArrowsExpand className="mr-1.5 h-4 w-4" />
+                    {tx('Full view')}
+                  </Button>
+                </div>
                 {/* the proforma is A4 (794 px wide): shrunk to fit the column, scrolled inside */}
                 <div
                   ref={previewBox}
@@ -284,6 +298,7 @@ const OfferProformaModal: React.FC<{
             </div>
           )}
         </Modal.Body>
+        {fullView && <FullView html={html} number={draft?.number ?? ''} onClose={() => setFullView(false)} />}
         <Modal.Footer className="border-t border-gray-200 dark:border-gray-700">
           <div className="flex w-full flex-col gap-2 sm:flex-row sm:justify-between">
             <Button color="light" onClick={reset} disabled={!draft || !!busy} isProcessing={busy === 'reset'}>
@@ -318,3 +333,62 @@ const OfferProformaModal: React.FC<{
 }
 
 export default OfferProformaModal
+
+/**
+ * The proforma over the whole screen, its A4 sheets at their real size (only
+ * shrunk on a screen narrower than a sheet): exactly what the e-mail shows.
+ */
+const FullView: React.FC<{ html: string; number: string; onClose: () => void }> = ({ html, number, onClose }) => {
+  const [scale, setScale] = useState(1)
+
+  useEffect(() => {
+    const fit = () => setScale(Math.min(1, (window.innerWidth - 32) / SHEET_WIDTH))
+    fit()
+    window.addEventListener('resize', fit)
+    // Esc closes this view only, not the proforma window under it
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return
+      event.stopImmediatePropagation()
+      event.preventDefault()
+      onClose()
+    }
+    window.addEventListener('keydown', onKey, true)
+    return () => {
+      window.removeEventListener('resize', fit)
+      window.removeEventListener('keydown', onKey, true)
+    }
+  }, [onClose])
+
+  return createPortal(
+    <div className="fixed inset-0 z-[70] flex flex-col bg-gray-900/90 backdrop-blur-sm" role="dialog" aria-modal="true">
+      <div className="flex items-center justify-between gap-3 border-b border-gray-700 bg-gray-900 px-4 py-3 text-white">
+        <div className="min-w-0">
+          <div className="truncate font-semibold">{tx('Proforma {number}', { number })}</div>
+          <div className="text-xs text-gray-400">{tx('A4, real size: this is what the customer gets by e-mail')}</div>
+        </div>
+        <Button size="sm" color="light" onClick={onClose}>
+          <HiX className="mr-1.5 h-4 w-4" />
+          {tx('Close')}
+        </Button>
+      </div>
+      <div className="flex-1 overflow-hidden" onClick={onClose}>
+        <div className="mx-auto h-full" style={{ width: SHEET_WIDTH * scale }} onClick={(event) => event.stopPropagation()}>
+          <iframe
+            title={tx('Full view')}
+            srcDoc={html}
+            sandbox=""
+            style={{
+              width: SHEET_WIDTH,
+              height: `calc((100vh - 64px) / ${scale})`,
+              transform: `scale(${scale})`,
+              transformOrigin: '0 0',
+              border: 0,
+              display: 'block',
+            }}
+          />
+        </div>
+      </div>
+    </div>,
+    document.body
+  )
+}

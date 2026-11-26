@@ -527,6 +527,8 @@ const sr: Record<string, string> = {
   "Post code": "Poštanski broj",
   "Premium quality": "Vrhunski kvalitet",
   "Preview": "Pregled",
+  "Full view": "Puni prikaz",
+  "A4, real size: this is what the customer gets by e-mail": "A4, prava veličina: ovo kupac dobije mejlom",
   "Price": "Cijena",
   "Price of {name}": "Cijena za {name}",
   "Price: High to Low": "Cijena: od najveće",
