@@ -1,3 +1,5 @@
+import { toast } from 'react-toastify'
+import { tx } from '@/shared/i18n'
 import { API } from '@/shared/helpers'
 
 const API_BASE_URL = process.env.API_KEY
@@ -34,6 +36,19 @@ export type BlogCategory = { id: number; name: string; slug: string; count: numb
 /** What the API said is wrong, or a general message. */
 export const blogError = (error: any, fallback = 'The blog could not be reached'): string =>
   error?.response?.data?.errors?.[0]?.message ?? fallback
+
+/**
+ * The admin already shows the API's own error message (with what to check);
+ * only when no answer came at all is a message shown here, so it is never
+ * shown twice.
+ */
+export const showBlogError = (error: any, fallback = 'The blog could not be reached') => {
+  if (error?.response?.data) return
+  toast(`${tx(fallback)}. ${tx('Check the connection: Settings → Blog (WordPress).')}`, {
+    type: 'error',
+    autoClose: 6000,
+  })
+}
 
 const list = (query: { page?: number; search?: string; status?: string }) =>
   API.get<{ rows: BlogPost[]; count: number; pages: number }>(`${BASE}/posts`, query)

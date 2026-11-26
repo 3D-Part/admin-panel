@@ -8,7 +8,7 @@ import { Pagination } from '@/components/common/TablePagination/TablePagination'
 import { HiExternalLink, HiPencil, HiPlus, HiTrash } from 'react-icons/hi'
 import { toast } from 'react-toastify'
 import TextEditor from '@/components/common/TextEditor'
-import BlogAPI, { BlogCategory, BlogPost, BlogPostInput, blogError } from '@/services/blog'
+import BlogAPI, { BlogCategory, BlogPost, BlogPostInput, blogError, showBlogError } from '@/services/blog'
 import { URLPartsEnum } from '@/shared/enums'
 
 const EMPTY: BlogPostInput = {
@@ -104,7 +104,7 @@ const List: React.FC<{ onOpen: (id: string) => void }> = ({ onOpen }) => {
       toast(tx('The post is in the WordPress trash'), { type: 'success', autoClose: 2500 })
       load()
     } catch (error) {
-      toast(tx(blogError(error)), { type: 'error', autoClose: 4000 })
+      showBlogError(error)
     }
   }
 
@@ -233,7 +233,7 @@ const Categories: React.FC<{ value: number[]; onChange: (next: number[]) => void
       onChange([...value, category.id])
       setName('')
     } catch (error) {
-      toast(tx(blogError(error)), { type: 'error', autoClose: 4000 })
+      showBlogError(error)
     }
     setAdding(false)
   }
@@ -307,7 +307,7 @@ const Editor: React.FC<{ id: string; onClose: () => void; onSaved: (id: string) 
         })
       })
       .catch((error) => {
-        toast(tx(blogError(error, 'The post could not be loaded')), { type: 'error', autoClose: 4000 })
+        showBlogError(error, 'The post could not be loaded')
         onClose()
       })
   }, [id, isNew, onClose])
@@ -327,7 +327,7 @@ const Editor: React.FC<{ id: string; onClose: () => void; onSaved: (id: string) 
       setImage(media.url)
       toast(tx('Picture uploaded to the blog'), { type: 'success', autoClose: 2000 })
     } catch (error) {
-      toast(tx(blogError(error, 'The picture could not be uploaded')), { type: 'error', autoClose: 4000 })
+      showBlogError(error, 'The picture could not be uploaded')
     }
     setUploading(false)
   }
@@ -349,7 +349,7 @@ const Editor: React.FC<{ id: string; onClose: () => void; onSaved: (id: string) 
       )
       onSaved(String(result.id))
     } catch (error) {
-      toast(tx(blogError(error, 'The post could not be saved')), { type: 'error', autoClose: 5000 })
+      showBlogError(error, 'The post could not be saved')
     }
     setSaving(false)
   }

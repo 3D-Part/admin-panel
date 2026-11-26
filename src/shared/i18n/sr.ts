@@ -1512,6 +1512,7 @@ const sr: Record<string, string> = {
   "No promo codes in this period.": "Nema promo kodova u ovom periodu.",
   "\"Given / used\": how many customers got the code and how many of them used it. A click on the number of uses opens those orders.": "\"Dodijeljen / iskorišten\": koliko je kupaca dobilo kod i koliko ga je iskoristilo. Klik na broj korištenja otvara te narudžbe.",
   "Promo code": "Promo kod",
+  "Check the connection: Settings → Blog (WordPress).": "Provjeri vezu: Podešavanja → Blog (WordPress).",
 }
 
 export default sr
