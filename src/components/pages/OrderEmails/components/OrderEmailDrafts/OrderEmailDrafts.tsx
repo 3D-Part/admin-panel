@@ -20,11 +20,15 @@ import {
 import { URLPartsEnum } from '@/shared/enums'
 import { useShopSettingsStore } from '@/store/store'
 
+/** What a link from the guide fills in: the customers ticked, the subject, the text. */
+export type OrderEmailPrefill = { pick: string[]; subject: string; headline: string; text: string; target: string }
+
 type Props = {
   isOpen: boolean
   onClose: () => void
   // what is typed in the search of the list, offered as the filter
   search: string
+  prefill?: OrderEmailPrefill
 }
 
 type Customer = { email: string; name: string; orders: number; lastOrder: string }
@@ -65,7 +69,7 @@ const copyText = async (value: string) => {
  * or gives the subject, the text and the addresses of each group to copy; with
  * an IMAP mailbox set up it can also put them into its Drafts folder.
  */
-export const OrderEmailDrafts: React.FC<Props> = ({ isOpen, onClose, search }) => {
+export const OrderEmailDrafts: React.FC<Props> = ({ isOpen, onClose, search, prefill }) => {
   const [content, setContent] = useState<NewsletterContent>(EMPTY)
   const [audience, setAudience] = useState<'all' | 'filtered' | 'picked'>('all')
   const [filter, setFilter] = useState<OrderEmailsFilter>({ search: '', from: '', to: '' })
@@ -80,6 +84,8 @@ export const OrderEmailDrafts: React.FC<Props> = ({ isOpen, onClose, search }) =
   const [saved, setSaved] = useState<Saved | null>(null)
   const [loading, setLoading] = useState(false)
   const { getShopSettings } = useShopSettingsStore()
+  // the editor takes its text when it mounts: a new key after a prefill
+  const [editorKey, setEditorKey] = useState(0)
   // the IMAP way only when a mailbox with a password is set up (Settings → Order e-mails mailbox)
   const [hasMailbox, setHasMailbox] = useState(false)
 
@@ -91,6 +97,24 @@ export const OrderEmailDrafts: React.FC<Props> = ({ isOpen, onClose, search }) =
     setFilter((prev) => ({ ...prev, search }))
     setAudience(search ? 'filtered' : 'all')
     setTarget(remembered(TARGET_KEY, 'gmail') as Target)
+    if (prefill) {
+      const escape = (value: string) => value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      setContent({
+        ...EMPTY,
+        subject: prefill.subject,
+        headline: prefill.headline,
+        body: prefill.text
+          ? prefill.text.split(/\n{2,}/).map((part) => `<p>${escape(part).replace(/\n/g, '<br>')}</p>`).join('')
+          : '',
+      })
+      if (prefill.pick.length) {
+        setAudience('picked')
+        setPicked(prefill.pick)
+        setPickSearch(prefill.pick.length === 1 ? prefill.pick[0] : '')
+      }
+      if (['gmail', 'outlook', 'default'].includes(prefill.target)) setTarget(prefill.target as Target)
+      setEditorKey((key) => key + 1)
+    }
     // the group size is "Recipients per draft" of Settings → Order e-mails mailbox
     getShopSettings().then((data: any) => {
       const mailbox = data?.settings?.orderMailbox
@@ -100,7 +124,7 @@ export const OrderEmailDrafts: React.FC<Props> = ({ isOpen, onClose, search }) =
       setHasMailbox(ready)
       if (!ready) setTarget((prev) => (prev === 'mailbox' ? 'gmail' : prev))
     })
-  }, [isOpen, search, getShopSettings])
+  }, [isOpen, search, getShopSettings, prefill])
 
   const active: OrderEmailsFilter = useMemo(
     () =>
@@ -330,7 +354,7 @@ export const OrderEmailDrafts: React.FC<Props> = ({ isOpen, onClose, search }) =
             <div>
               <Label htmlFor="oe-body" value={tx('Text')} />
               <TextEditor
-                key={isOpen ? 'open' : 'closed'}
+                key={isOpen ? `open-${editorKey}` : 'closed'}
                 id="oe-body"
                 defaultValue={content.body}
                 // the editor puts non-breaking spaces between words, which would not wrap in the mail
