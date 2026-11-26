@@ -15,7 +15,7 @@ const SECTIONS: Record<Language, Section[]> = {
         'The customer gets an email on Accepted (new orders), the first In delivery, and Cancelled (with the reason you write).',
         'The steps, their colors and which status each one sets are in Settings → Invoice statuses: one list for orders, one for offers.',
         'Disputed: open the order and switch it on. Only that order is marked. Disputed only in the header filters them.',
-        'Every order of a company is in Offers, whatever its step (accepted, packed, invoiced, cancelled), with the offer steps; All orders has the people\'s orders only.',
+        'Every order of a company is in Offers, whatever its step (accepted, packed, invoiced, cancelled), with the offer steps. All orders shows the people\'s orders; Show companies at the top adds the companies\' orders there too, also to a search.',
       ],
     },
     {
@@ -153,7 +153,7 @@ const SECTIONS: Record<Language, Section[]> = {
         'Kupac dobija mejl na Prihvaćena (kod novih narudžbi), na prvi U dostavi i na Otkazana (s razlogom koji upišeš).',
         'Koraci, njihove boje i koji status postavljaju su u Podešavanja → Statusi računa: jedna lista za narudžbe, jedna za ponude.',
         'Sporna narudžba: otvori narudžbu i uključi Sporna narudžba. Označena je samo ta narudžba. Samo sporne na vrhu prikazuje samo njih.',
-        'Svaka narudžba firme je u Ponudama, na kojem god koraku bila (prihvaćena, spakovana, fakturisana, otkazana), sa koracima ponude; Sve narudžbe imaju samo narudžbe fizičkih lica.',
+        'Svaka narudžba firme je u Ponudama, na kojem god koraku bila (prihvaćena, spakovana, fakturisana, otkazana), sa koracima ponude. Sve narudžbe prikazuju narudžbe fizičkih lica; Prikaži firme na vrhu dodaje i narudžbe firmi, i u pretragu.',
       ],
     },
     {
