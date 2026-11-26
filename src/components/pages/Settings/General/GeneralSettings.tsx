@@ -160,6 +160,7 @@ interface CompanyDetails {
   town: string
   address: string
   bankAccount: string
+  jib: string
 }
 
 interface SocialMediaSettings {
@@ -216,6 +217,7 @@ const GeneralSettings = () => {
       town: '',
       address: '',
       bankAccount: '',
+      jib: '',
     },
     socialMedia: {
       facebook: '',
@@ -276,6 +278,7 @@ const GeneralSettings = () => {
             town: settings.company?.town || '',
             address: settings.company?.address || '',
             bankAccount: settings.company?.bankAccount || '',
+            jib: settings.company?.jib || '',
           },
           socialMedia: {
             facebook: settings.socialMedia?.facebook || '',
@@ -464,6 +467,7 @@ const GeneralSettings = () => {
           town: formData.company.town,
           address: formData.company.address,
           bankAccount: formData.company.bankAccount.trim(),
+          jib: formData.company.jib.trim(),
         },
         socialMedia: {
           facebook: formData.socialMedia.facebook,
@@ -1086,6 +1090,28 @@ const GeneralSettings = () => {
                   id="companyBankAccount"
                   type="text"
                   value={formData.company.bankAccount}
+                />
+              </div>
+
+              {/* Company JIB */}
+              <div className="w-full">
+                <div className="mb-2 block">
+                  <Label
+                    className="text-base"
+                    htmlFor="companyJib"
+                    value={tx("JIB")}
+                  />
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    {tx("The company's JIB, printed on proformas")}
+                  </p>
+                </div>
+                <TextInput
+                  name="company.jib"
+                  onChange={handleInputChange}
+                  id="companyJib"
+                  type="text"
+                  value={formData.company.jib}
+                  placeholder="400903470006"
                 />
               </div>
 

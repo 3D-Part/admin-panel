@@ -22,6 +22,7 @@ const SECTIONS: Record<Language, Section[]> = {
       lines: [
         'An offer has its own steps (e.g. proforma sent, paid). The step that sets Accepted turns it into an order. Until then it holds no stock. Analytics count an order as sold once it is sent or ready for pickup.',
         'Company orders (bank transfer) arrive straight in Offers. The envelope icon on the row (or Send offer by email in the order) opens the proforma (predračun) before anything is sent.',
+        'Under the title the proforma shows our own details (PRODAVAC: address, town, phone, JIB, bank account) from Settings → Company details. Without a bank account there the proforma cannot be sent, and the window says so.',
         'The proforma looks like the one of the accounting software: number, date, the buyer box (name, street, post code and town, PIB, JIB), lines with code, name, unit, quantity, price, rabat, amount without VAT, VAT rate and amount with VAT, then UKUPNO, -RABAT, OSNOVICA ZA PDV, +PDV, ZA UPLATU and the amount in words.',
         'It is filled from the order: the products with their code (SKU), the customer\'s own discount and the order discount as the rabat, the delivery as the line DOSTAVA (code 090015), the buyer from the order, today\'s date and the next number of the year (after 547/2026 comes 548/2026).',
         'Everything can be changed before sending: number, date, buyer, every line (prices with VAT, rabat in %), and lines can be added or removed. The preview on the right shows exactly what the customer gets; problems (e.g. a line without a name) are listed under the form.',
@@ -158,6 +159,7 @@ const SECTIONS: Record<Language, Section[]> = {
       lines: [
         'Ponuda ima svoje korake (npr. predračun poslan, plaćeno). Korak koji postavlja Prihvaćena pretvara je u narudžbu. Do tada ne drži robu. Analitika broji narudžbu kao prodanu tek kad je poslana ili spremna za preuzimanje.',
         'Narudžbe firmi (plaćanje virmanom) stižu odmah u Ponude. Ikonica koverte u redu (ili Pošalji ponudu mejlom u narudžbi) otvara predračun prije nego što se išta pošalje.',
+        'Ispod naslova predračun ima naše podatke (PRODAVAC: adresa, mjesto, telefon, JIB, žiro račun) iz Podešavanja → Podaci o firmi. Bez žiro računa tamo predračun se ne može poslati i prozor to javi.',
         'Predračun izgleda kao onaj iz knjigovodstvenog programa: broj, datum, okvir s kupcem (naziv, ulica, poštanski broj i mjesto, PIB, JIB), stavke sa šifrom, nazivom, JM, količinom, cijenom, rabatom, iznosom bez PDV-a, stopom PDV-a i iznosom sa PDV-om, pa UKUPNO, -RABAT, OSNOVICA ZA PDV, +PDV, ZA UPLATU i iznos slovima.',
         'Popunjava se iz narudžbe: artikli sa šifrom (SKU), lični popust kupca i popust na narudžbu kao rabat, dostava kao stavka DOSTAVA (šifra 090015), kupac iz narudžbe, današnji datum i sljedeći broj u godini (poslije 547/2026 dolazi 548/2026).',
         'Prije slanja sve se može promijeniti: broj, datum, kupac, svaka stavka (cijene sa PDV-om, rabat u %), a stavke se mogu dodati ili ukloniti. Pregled desno pokazuje tačno šta kupac dobija; greške (npr. stavka bez naziva) pišu ispod forme.',

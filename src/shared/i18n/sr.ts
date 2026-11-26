@@ -533,6 +533,7 @@ const sr: Record<string, string> = {
   "Print": "Štampaj",
   "Print barcode stickers. Add items from Scanner or Inventory, choose the sticker size and print.": "Štampa naljepnica s bar kodom. Dodaj stavke iz Skenera ili Inventara, izaberi veličinu i štampaj.",
   "Printed and emailed on proformas": "Štampa se i šalje na predračunima",
+  "The company's JIB, printed on proformas": "JIB firme, ispisuje se na predračunu",
   "Product": "Artikal",
   "Product Information": "Podaci o artiklu",
   "Product Name": "Naziv artikla",
