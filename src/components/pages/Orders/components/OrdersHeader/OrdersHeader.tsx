@@ -12,9 +12,6 @@ export const OrdersHeader = () => {
   const {
     disputedOnly,
     changeDisputedOnly,
-    showCompanies,
-    changeShowCompanies,
-    offersOnly,
     changeCurrentPage,
     fetchOrders,
     itemsPerPage,
@@ -27,18 +24,6 @@ export const OrdersHeader = () => {
       </div>
       {/* on a phone the controls sit in one row under the search */}
       <div className="flex w-full lg:w-auto lg:shrink-0 items-center justify-between gap-2 md:gap-4">
-      {/* All orders start without the companies' orders (they have Offers) */}
-      {!offersOnly && (
-        <ToggleSwitch
-          checked={showCompanies}
-          label={tx('Show companies')}
-          onChange={(value) => {
-            changeShowCompanies(value)
-            changeCurrentPage(1)
-            fetchOrders({ offset: 0, limit: itemsPerPage })
-          }}
-        />
-      )}
       <ToggleSwitch
         checked={disputedOnly}
         label={tx("Disputed only")}

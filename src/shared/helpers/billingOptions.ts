@@ -90,8 +90,10 @@ export const readStepLists = (settings: unknown): StepLists => ({
 
 /** An offer uses the offer steps, every other order the order steps. */
 // an offer, also a cancelled one, follows the offer steps
+// an offer keeps the offer steps through its whole life (accepted, packed,
+// invoiced, cancelled…), as the server does
 const isOfferNow = (status: string, isOffer?: boolean) =>
-  status === 'PROFORMA_SENT' || (!!isOffer && status === 'DECLINED')
+  status === 'PROFORMA_SENT' || !!isOffer
 
 export const listFor = (lists: StepLists, status: string, isOffer?: boolean) =>
   isOfferNow(status, isOffer) ? lists.offers : lists.orders
