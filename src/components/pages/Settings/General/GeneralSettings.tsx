@@ -55,6 +55,7 @@ import {
 import AssistantSettings, { AssistantForm, DEFAULT_ASSISTANT_FORM, assistantSettings, readAssistantForm } from './AssistantSettings'
 import { BadgeItem, TIER_COLORS, TierRow, badgeProblem, newTierId, readTierRows, tierCategoriesProblem, tierSettings } from '@/shared/helpers/tiers'
 import TierCategories from './TierCategories'
+import OrderEmailDrafts from '@/components/pages/OrderEmails/components/OrderEmailDrafts/OrderEmailDrafts'
 import {
   BillingOption,
   readBillingOptions,
@@ -248,6 +249,7 @@ const GeneralSettings = () => {
   })
   const formRef = useRef<HTMLFormElement>(null)
 
+  const [writingToCustomers, setWritingToCustomers] = useState(false)
   const { getShopSettings, updateShopSettings } = useShopSettingsStore()
 
   // Fetch settings on mount
@@ -870,6 +872,16 @@ const GeneralSettings = () => {
 
           {tab === 'order-mail' && (
           <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+            {/* IMAP is optional: without it Write to customers opens ready e-mails or gives the addresses to copy */}
+            <div className="mb-6 flex flex-col gap-3 rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900 dark:border-blue-800 dark:bg-blue-900/30 dark:text-blue-100 sm:flex-row sm:items-center sm:justify-between">
+              <p>
+                {tx('The mailbox below is not needed. Without it, Write to customers opens the e-mails ready in Gmail, Outlook or the mail program, or gives the subject, the text and the addresses of each group (at most Recipients per draft customers) to copy into Bcc. With a working IMAP mailbox it can also put them into its Drafts folder.')}
+              </p>
+              <Button color="purple" size="sm" className="shrink-0" onClick={() => setWritingToCustomers(true)}>
+                {tx('Write to customers')}
+              </Button>
+            </div>
+            <OrderEmailDrafts isOpen={writingToCustomers} onClose={() => setWritingToCustomers(false)} search="" />
             <NewsletterMailboxSettings
               kind="order"
               value={formData.orderMailbox}

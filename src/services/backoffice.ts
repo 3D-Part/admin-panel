@@ -490,6 +490,10 @@ const BackofficeAPI = {
       )
     ),
   // e-mails of the customers who ordered (Orders → Order Emails)
+  listOrderEmails: (filter: OrderEmailsFilter) =>
+    attempt(() =>
+      API.get<{ email: string; name: string; orders: number; lastOrder: string }[]>(`${BASE}/order-emails/list`, filter)
+    ),
   countOrderEmails: (filter: OrderEmailsFilter) =>
     attempt(() => API.get<{ count: number }>(`${BASE}/order-emails/count`, filter)),
   testOrderMailbox: () =>
@@ -497,7 +501,7 @@ const BackofficeAPI = {
       API.post<unknown, { ok: true; user: string; draftsFolder: string }>(`${BASE}/order-emails/mailbox-test`, {})
     ),
   // one e-mail to all of them (or the filtered ones) into the order mailbox as drafts
-  createOrderEmailDrafts: (body: OrderEmailsFilter & { subject: string; html: string; text?: string }) =>
+  createOrderEmailDrafts: (body: OrderEmailsFilter & { subject: string; html: string; text?: string; emails?: string[] }) =>
     attemptWithError(() =>
       API.post<typeof body, { drafts: number; recipients: number; draftsFolder: string; perDraft: number }>(
         `${BASE}/order-emails/drafts`,
