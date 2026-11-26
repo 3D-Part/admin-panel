@@ -11,7 +11,8 @@ import { useOrdersStore } from '@/store/store'
 /**
  * Opens the proforma of an offer to check and change before it is e-mailed
  * to the customer. As a plain button in the order details, or as a small icon button in the row of the list.
- * Shows only for offers; the server refuses anything else.
+ * Shows for every open offer (the server checks the same); a cancelled or
+ * returned one has none.
  */
 const SendOfferButton: React.FC<{
   order: Order
@@ -21,7 +22,11 @@ const SendOfferButton: React.FC<{
   const { currentPage, itemsPerPage, fetchOrders } = useOrdersStore()
   const [editing, setEditing] = useState(false)
 
-  if (order.status !== 'PROFORMA_SENT') return null
+  // every offer of the Offers list (an offer, or a company's order, at any
+  // step) but a cancelled or returned one; a ticked step such as "accepted"
+  // changes the status, the offer stays an offer
+  const offer = order.status === 'PROFORMA_SENT' || !!order.isOffer || !!order.companyName?.trim()
+  if (!offer || ['DECLINED', 'RETURNED'].includes(order.status)) return null
 
   const sent = (updated: Order) => {
     onSent?.({ ...order, billingSteps: updated.billingSteps })
