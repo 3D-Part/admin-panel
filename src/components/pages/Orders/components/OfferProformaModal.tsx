@@ -20,6 +20,9 @@ const money = (value: number) =>
 const lineTotal = (line: ProformaDraftLine) =>
   Math.round(toNumber(line.quantity) * toNumber(line.price) * (1 - toNumber(line.discount) / 100) * 100) / 100
 
+// an A4 page and the grey margin around it in the proforma
+const SHEET_WIDTH = 834
+
 const emptyLine = (): ProformaDraftLine => ({ code: '', name: '', unit: 'KOM', quantity: 1, price: 0, discount: 0 })
 
 /**
@@ -41,6 +44,9 @@ const OfferProformaModal: React.FC<{
   const [busy, setBusy] = useState<'' | 'save' | 'send' | 'reset'>('')
   const [confirming, setConfirming] = useState(false)
   const previewTimer = useRef<ReturnType<typeof setTimeout>>()
+  const previewBox = useRef<HTMLDivElement>(null)
+  const [previewScale, setPreviewScale] = useState(0.7)
+  const [previewHeight, setPreviewHeight] = useState(640)
   useModalScroll(isOpen)
 
   useEffect(() => {
@@ -59,6 +65,20 @@ const OfferProformaModal: React.FC<{
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, order.id])
+
+  // the A4 pages shrink to the width of the preview column
+  useEffect(() => {
+    const box = previewBox.current
+    if (!box) return
+    const fit = () => {
+      setPreviewScale(Math.min(1, box.clientWidth / SHEET_WIDTH))
+      setPreviewHeight(box.clientHeight)
+    }
+    fit()
+    const observer = new ResizeObserver(fit)
+    observer.observe(box)
+    return () => observer.disconnect()
+  }, [draft === null])
 
   // the preview follows the form, a moment after the typing stops
   useEffect(() => {
@@ -242,12 +262,24 @@ const OfferProformaModal: React.FC<{
 
               <div>
                 <span className="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">{tx('Preview')}</span>
-                <iframe
-                  title={tx('Preview')}
-                  srcDoc={html}
-                  sandbox=""
-                  className="h-[420px] w-full rounded-lg border border-gray-200 bg-white xl:h-[640px] dark:border-gray-700"
-                />
+                {/* the proforma is A4 (794 px wide): shrunk to fit the column, scrolled inside */}
+                <div
+                  ref={previewBox}
+                  className="h-[420px] w-full overflow-hidden rounded-lg border border-gray-200 bg-[#e9ecf1] xl:h-[640px] dark:border-gray-700"
+                >
+                  <iframe
+                    title={tx('Preview')}
+                    srcDoc={html}
+                    sandbox=""
+                    style={{
+                      width: SHEET_WIDTH,
+                      height: previewHeight / previewScale,
+                      transform: `scale(${previewScale})`,
+                      transformOrigin: '0 0',
+                      border: 0,
+                    }}
+                  />
+                </div>
               </div>
             </div>
           )}
