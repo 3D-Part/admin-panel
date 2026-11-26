@@ -274,6 +274,7 @@ const sr: Record<string, string> = {
   "Disputed": "Sporno",
   "Disputed customer, reason:": "Sporan kupac, razlog:",
   "Disputed only": "Samo sporne",
+  "Show companies": "Prikaži firme",
   "Disputed order (only this one, not the customer's other orders)": "Sporna narudžba (samo ova, ne i ostale narudžbe kupca)",
   "Disputed: {flag}": "Sporan: {flag}",
   "Do you want to send message to {email}": "Poslati poruku na {email}?",

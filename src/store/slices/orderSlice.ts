@@ -15,7 +15,10 @@ export interface OrdersSliceInterface {
   orderFilter: object
   disputedOnly: boolean
   offersOnly: boolean
+  // All orders hide the companies' orders until this is on
+  showCompanies: boolean
   changeDisputedOnly: (data: boolean) => void
+  changeShowCompanies: (data: boolean) => void
   changeOffersOnly: (data: boolean) => void
   changeCurrentPage: (data: number) => void
   changeItemsPerPage: (data: number) => void
@@ -39,9 +42,14 @@ export const ordersSlice: StateCreator<OrdersSliceInterface> = (set, get) => ({
   orderFilter: {},
   disputedOnly: false,
   offersOnly: false,
+  showCompanies: false,
 
   changeDisputedOnly: (data: boolean) => {
     set({ disputedOnly: data })
+  },
+
+  changeShowCompanies: (data: boolean) => {
+    set({ showCompanies: data })
   },
 
   changeOffersOnly: (data: boolean) => {
@@ -84,6 +92,11 @@ export const ordersSlice: StateCreator<OrdersSliceInterface> = (set, get) => ({
                 not: OrderStatusEnum.ProformaSent,
               },
           ...(get().disputedOnly && { disputed: { is: true } }),
+          // All orders without the companies, unless asked; a search (by order
+          // number, name, company…) or a customer's orders find them all
+          ...(!get().offersOnly &&
+            !get().showCompanies &&
+            Object.keys(orderFilter.filters ?? {}).length === 0 && { company: { is: false } }),
         },
       })
       if (data && request === latestOrdersRequest) {
