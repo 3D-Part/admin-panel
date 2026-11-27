@@ -56,6 +56,7 @@ import AssistantSettings, { AssistantForm, DEFAULT_ASSISTANT_FORM, assistantSett
 import { BadgeItem, TIER_COLORS, TierRow, badgeProblem, newTierId, readTierRows, tierCategoriesProblem, tierSettings } from '@/shared/helpers/tiers'
 import TierCategories from './TierCategories'
 import EmailPool from './EmailPool'
+import SiteRevalidateSettings, { DEFAULT_SITE_REVALIDATE, SiteRevalidateForm, readSiteRevalidate, siteRevalidateSettings } from './SiteRevalidateSettings'
 import {
   BillingOption,
   readBillingOptions,
@@ -194,6 +195,7 @@ interface SettingsFormData {
   zohoCampaigns: ZohoForm
   pageImages: PageImage[]
   homeTiles: HomeTile[]
+  siteRevalidate: SiteRevalidateForm
   contentBanners: ContentBanner[]
   billingOptions: BillingOption[]
   offerOptions: BillingOption[]
@@ -243,6 +245,7 @@ const GeneralSettings = () => {
     zohoCampaigns: DEFAULT_ZOHO_FORM,
     pageImages: [],
     homeTiles: DEFAULT_HOME_TILES,
+    siteRevalidate: DEFAULT_SITE_REVALIDATE,
     contentBanners: [],
     billingOptions: [],
     offerOptions: [],
@@ -304,6 +307,7 @@ const GeneralSettings = () => {
           zohoCampaigns: readZohoForm(settings.zohoCampaigns),
           pageImages: settings.pageImages ?? [],
           homeTiles: readHomeTiles(settings),
+          siteRevalidate: readSiteRevalidate(settings),
           contentBanners: readContentBanners(settings),
           billingOptions: readBillingOptions(settings),
           offerOptions: readOfferOptions(settings),
@@ -500,6 +504,7 @@ const GeneralSettings = () => {
           buttonLabel: banner.buttonLabel.trim(),
           buttonLink: banner.buttonLink.trim(),
         })),
+        siteRevalidate: siteRevalidateSettings(formData.siteRevalidate),
         homeTiles: formData.homeTiles.map((tile) => ({
           ...tile,
           title: tile.title.trim(),
@@ -1156,6 +1161,10 @@ const GeneralSettings = () => {
                 />
               </div>
             </div>
+            <SiteRevalidateSettings
+              value={formData.siteRevalidate}
+              onChange={(siteRevalidate) => setFormData((prev) => ({ ...prev, siteRevalidate }))}
+            />
           </div>
           )}
 

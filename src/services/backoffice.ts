@@ -489,6 +489,8 @@ const BackofficeAPI = {
         {}
       )
     ),
+  // the site drops its cached pages (Settings → Company details → Site refresh)
+  revalidateSite: () => attempt(() => API.post<unknown, { ok: boolean; message: string }>(`${BASE}/site/revalidate`, {})),
   // every address of the shop once, oldest first (Settings → E-mail list)
   getEmailPool: () => attempt(() => API.get<{ emails: string[] }>(`${BASE}/email-pool`)),
   // e-mails of the customers who ordered (Orders → Order Emails)
