@@ -39,6 +39,8 @@ const OfferProformaModal: React.FC<{
 }> = ({ order, isOpen, onClose, onSent }) => {
   const [draft, setDraft] = useState<ProformaDraft | null>(null)
   const [saved, setSaved] = useState(false)
+  // the order changed after the proforma was saved: it was filled again from the order
+  const [orderChanged, setOrderChanged] = useState(false)
   const [dirty, setDirty] = useState(false)
   const [errors, setErrors] = useState<string[]>([])
   const [html, setHtml] = useState('')
@@ -64,6 +66,7 @@ const OfferProformaModal: React.FC<{
       }
       setDraft(result.draft)
       setSaved(result.saved)
+      setOrderChanged(!!result.orderChanged)
       setDirty(false)
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -165,6 +168,8 @@ const OfferProformaModal: React.FC<{
           <p className="text-xs font-normal text-gray-500 dark:text-gray-400">
             {saved && !dirty
               ? tx('Saved. The customer gets it only when you send it.')
+              : orderChanged
+              ? tx('The order changed after the proforma was saved, so it is filled again from the order (same number). Check it before sending.')
               : tx('Filled from the order. Change what you need, the preview shows what the customer gets.')}
           </p>
         </Modal.Header>

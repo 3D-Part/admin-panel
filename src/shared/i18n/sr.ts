@@ -583,6 +583,7 @@ const sr: Record<string, string> = {
   "Copied": "Kopirano",
   "Unmark": "Ukloni oznaku",
   "Copy": "Kopiraj",
+  "The order changed after the proforma was saved, so it is filled again from the order (same number). Check it before sending.": "Narudžba je promijenjena poslije čuvanja predračuna, pa je ponovo popunjen iz narudžbe (isti broj). Provjeri ga prije slanja.",
   "Printed and emailed on proformas": "Štampa se i šalje na predračunima",
   "The company's JIB, printed on proformas": "JIB firme, ispisuje se na predračunu",
   "Product": "Artikal",

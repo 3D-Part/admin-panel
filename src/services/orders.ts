@@ -175,7 +175,7 @@ export type ProformaDraft = {
   lines: ProformaDraftLine[]
 }
 
-type ProformaResult = { draft: ProformaDraft; saved: boolean }
+type ProformaResult = { draft: ProformaDraft; saved: boolean; orderChanged?: boolean }
 type ProformaErrors = { errors: string[] }
 
 const proformaErrors = (error: any): ProformaErrors => ({
