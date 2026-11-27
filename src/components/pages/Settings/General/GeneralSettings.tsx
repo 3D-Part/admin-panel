@@ -55,7 +55,7 @@ import {
 import AssistantSettings, { AssistantForm, DEFAULT_ASSISTANT_FORM, assistantSettings, readAssistantForm } from './AssistantSettings'
 import { BadgeItem, TIER_COLORS, TierRow, badgeProblem, newTierId, readTierRows, tierCategoriesProblem, tierSettings } from '@/shared/helpers/tiers'
 import TierCategories from './TierCategories'
-import OrderEmailDrafts from '@/components/pages/OrderEmails/components/OrderEmailDrafts/OrderEmailDrafts'
+import EmailPool from './EmailPool'
 import {
   BillingOption,
   readBillingOptions,
@@ -113,8 +113,8 @@ const TABS: Record<string, { title: string; help: string }> = {
     help: 'The mailbox the newsletter is sent from. On Subscribers → Create drafts the newsletter goes straight into its Drafts folder, one draft per group of recipients in Bcc; you open the drafts in the mail program and send them. The shop never sends the newsletter itself.',
   },
   'order-mail': {
-    title: 'Order e-mails mailbox',
-    help: 'The mailbox the e-mails to the customers who ordered are sent from. On Orders → Order Emails → Write to customers one e-mail goes straight into its Drafts folder, split into drafts with at most the set number of customers in Bcc; a colleague opens the drafts in the mail program and sends them. The shop never sends these e-mails itself.',
+    title: 'E-mail list',
+    help: 'Every e-mail address of the shop once: the registered customers and everyone who ever ordered, lower-case, without the invalid ones. In groups of 100: Copy puts a group on the clipboard, separated by commas, ready to paste into the CC or Bcc of an e-mail. New addresses join at the end by themselves, so the groups already copied stay the same; a copied group is marked green in this browser.',
   },
   'google-analytics': {
     title: 'Google Analytics',
@@ -249,7 +249,6 @@ const GeneralSettings = () => {
   })
   const formRef = useRef<HTMLFormElement>(null)
 
-  const [writingToCustomers, setWritingToCustomers] = useState(false)
   const { getShopSettings, updateShopSettings } = useShopSettingsStore()
 
   // Fetch settings on mount
@@ -872,21 +871,7 @@ const GeneralSettings = () => {
 
           {tab === 'order-mail' && (
           <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
-            {/* IMAP is optional: without it Write to customers opens ready e-mails or gives the addresses to copy */}
-            <div className="mb-6 flex flex-col gap-3 rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900 dark:border-blue-800 dark:bg-blue-900/30 dark:text-blue-100 sm:flex-row sm:items-center sm:justify-between">
-              <p>
-                {tx('The mailbox below is not needed. Without it, Write to customers opens the e-mails ready in Gmail, Outlook or the mail program, or gives the subject, the text and the addresses of each group (at most Recipients per draft customers) to copy into Bcc. With a working IMAP mailbox it can also put them into its Drafts folder.')}
-              </p>
-              <Button color="purple" size="sm" className="shrink-0" onClick={() => setWritingToCustomers(true)}>
-                {tx('Write to customers')}
-              </Button>
-            </div>
-            <OrderEmailDrafts isOpen={writingToCustomers} onClose={() => setWritingToCustomers(false)} search="" />
-            <NewsletterMailboxSettings
-              kind="order"
-              value={formData.orderMailbox}
-              onChange={(orderMailbox) => setFormData((prev) => ({ ...prev, orderMailbox }))}
-            />
+            <EmailPool />
           </div>
           )}
 

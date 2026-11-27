@@ -97,15 +97,10 @@ const SECTIONS: Record<Language, Section[]> = {
     {
       title: 'E-mails to customers who ordered',
       lines: [
-        'Orders → Order Emails lists the address of everyone who ever ordered, the last ones first. It fills itself from the orders; nothing has to be copied.',
-        'Mailbox, once in Zoho Mail: 1) Create the mailbox (e.g. ponude@3dpartshop.com) in the Zoho Mail Admin Console. 2) Let it use IMAP: Admin Console → the user → Mail settings, allow IMAP access (if the organization blocks it). 3) Log in to the mailbox and switch IMAP on: Zoho Mail → Settings → Mail Accounts → IMAP Access. 4) If two-step sign-in is on, make an app password: accounts.zoho.eu → Security → App Passwords → Generate, and use it instead of the normal password.',
-        'Then in the admin: Settings → Order e-mails mailbox: the address, IMAP server imap.zoho.eu (or the server Zoho shows under IMAP Access, e.g. imappro.zoho.eu), port 993, the app password and Recipients per draft (100 by default). Save Settings, then Check the connection: it shows the address and the Drafts folder.',
-        'The mailbox (IMAP) is not needed. Writing: Orders → Order Emails → Write to customers (or Settings → Order e-mails mailbox → Write to customers). Choose Everyone who ordered, Only some (address or name contains, ordered from / to) or Pick customers (search by name or address and tick them); the number of customers is shown. Write the subject, headline, text and an optional button and check the preview.',
-        'Open in: Gmail, Outlook or the mail app on the computer. Create e-mails splits the customers into groups (Recipients per draft from the settings). For each group: Open → the e-mail opens with the customers in Bcc and the subject filled in, the designed text is already copied, so click into the message and press Ctrl+V (Cmd+V on a Mac) → Send. A sent group turns green, so it is not sent twice; the marks are lost when the window closes.',
-        'If the mail program does not open: Copy addresses copies the group\'s addresses separated by commas, paste them into Bcc; Copy subject and Copy text do the same for the subject and the text. Never put the customers into To or Cc.',
-        'A link can open the window filled in, for the team: /orders/emails?write=1&pick=address@example.com&subject=…&headline=…&text=…&target=gmail (pick: the addresses, comma separated; without pick it is Everyone who ordered).',
-        'With a working IMAP mailbox (below) the window also offers Straight into the mailbox (Drafts): the drafts go into its Drafts folder.',
-        'The admin says how many drafts were made (e.g. 8 drafts for 754 customers). Each draft goes to the mailbox itself with up to 100 customers in Bcc, so they do not see each other. A colleague opens the mailbox, goes to Drafts and sends them one by one. The shop never sends them itself.',
+        'Orders → Order Emails lists the address of everyone who ever ordered, the last ones first. It fills itself from the orders.',
+        'Settings → E-mail list has every address of the shop once: the registered customers and everyone who ever ordered, lower-case, without the invalid ones. New addresses join at the end by themselves.',
+        'They are in groups of 100. Copy puts a group on the clipboard, separated by commas; paste it into the CC or Bcc of a new e-mail and all 100 are added. Bcc is better: the customers do not see each other.',
+        'A copied group turns green (in this browser), so you know where you stopped; Unmark or Clear the marks start again. The shop never sends these e-mails itself.',
       ],
     },
     {
@@ -241,15 +236,10 @@ const SECTIONS: Record<Language, Section[]> = {
     {
       title: 'Mejlovi kupcima koji su naručivali',
       lines: [
-        'Narudžbe → Mejlovi narudžbi pokazuje adresu svakog ko je ikad naručio, zadnji prvi. Lista se sama puni iz narudžbi; ništa se ne kopira.',
-        'Sanduče, jednom u Zoho Mailu: 1) Napravi sanduče (npr. ponude@3dpartshop.com) u Zoho Mail Admin Console. 2) Dozvoli mu IMAP: Admin Console → korisnik → Mail settings, dozvoli IMAP pristup (ako ga organizacija blokira). 3) Prijavi se u sanduče i uključi IMAP: Zoho Mail → Settings → Mail Accounts → IMAP Access. 4) Ako je uključena prijava u dva koraka, napravi lozinku za aplikaciju: accounts.zoho.eu → Security → App Passwords → Generate, i koristi nju umjesto obične lozinke.',
-        'Zatim u adminu: Podešavanja → Sanduče za mejlove kupcima: adresa, IMAP server imap.zoho.eu (ili server koji Zoho pokazuje pod IMAP Access, npr. imappro.zoho.eu), port 993, lozinka za aplikaciju i Primalaca po nacrtu (100 ako se ne promijeni). Sačuvaj podešavanja, pa Provjeri vezu: pokaže adresu i folder Nacrti.',
-        'Sanduče (IMAP) nije obavezno. Pisanje: Narudžbe → Mejlovi narudžbi → Piši kupcima (ili Podešavanja → Sanduče za mejlove kupcima → Piši kupcima). Izaberi Svi koji su naručili, Samo neki (adresa ili ime sadrži, naručivali od / do) ili Izaberi kupce (pretraži po imenu ili adresi i štikliraj); vidi se broj kupaca. Napiši naslov, glavni naslov, tekst i po želji dugme i pogledaj pregled.',
-        'Otvori u: Gmail, Outlook ili mejl program na računaru. Kreiraj mejlove podijeli kupce u grupe (Primalaca po nacrtu iz podešavanja). Za svaku grupu: Otvori → otvori se mejl sa kupcima u Bcc i upisanim naslovom, dizajnirani tekst je već kopiran, pa klikni u poruku i pritisni Ctrl+V (Cmd+V na Macu) → Pošalji. Poslana grupa postane zelena, da se ne pošalje dvaput; oznake nestaju kad se prozor zatvori.',
-        'Ako se mejl program ne otvori: Kopiraj adrese kopira adrese grupe odvojene zarezom, zalijepi ih u Bcc; Kopiraj naslov i Kopiraj tekst rade isto za naslov i tekst. Kupce nikad ne stavljaj u To ni Cc.',
-        'Link može otvoriti popunjen prozor, za tim: /orders/emails?write=1&pick=adresa@example.com&subject=…&headline=…&text=…&target=gmail (pick: adrese odvojene zarezom; bez pick su Svi koji su naručili).',
-        'Sa ispravnim IMAP sandučetom (ispod) prozor nudi i Direktno u sanduče (Drafts): nacrti idu u njegov folder Drafts.',
-        'Admin kaže koliko je nacrta napravljeno (npr. 8 nacrta za 754 kupca). Svaki nacrt ide na samo sanduče s najviše 100 kupaca u Bcc, pa se međusobno ne vide. Kolega otvori sanduče, ode u Nacrte (Drafts) i pošalje ih jedan po jedan. Shop ih sam nikad ne šalje.',
+        'Narudžbe → Mejlovi narudžbi pokazuje adresu svakog ko je ikad naručio, zadnji prvi. Lista se sama puni iz narudžbi.',
+        'Podešavanja → Lista mejlova ima svaku adresu shopa jednom: registrovane kupce i sve koji su ikad naručili, malim slovima, bez neispravnih. Nove adrese se same dodaju na kraj.',
+        'Adrese su u grupama po 100. Kopiraj stavi grupu u clipboard, odvojenu zarezima; zalijepi je u CC ili Bcc novog mejla i dodaju se svih 100. Bolje je Bcc: kupci ne vide jedni druge.',
+        'Kopirana grupa postane zelena (u ovom pregledaču), pa znaš gdje si stao; Ukloni oznaku ili Obriši oznake kreću ispočetka. Shop ove mejlove nikad ne šalje sam.',
       ],
     },
     {

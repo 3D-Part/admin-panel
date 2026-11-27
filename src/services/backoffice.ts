@@ -489,6 +489,8 @@ const BackofficeAPI = {
         {}
       )
     ),
+  // every address of the shop once, oldest first (Settings → E-mail list)
+  getEmailPool: () => attempt(() => API.get<{ emails: string[] }>(`${BASE}/email-pool`)),
   // e-mails of the customers who ordered (Orders → Order Emails)
   listOrderEmails: (filter: OrderEmailsFilter) =>
     attempt(() =>

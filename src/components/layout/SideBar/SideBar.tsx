@@ -326,7 +326,7 @@ const SideBar = () => {
             ['Ribbons', 'ribbons'],
             ['Avatars', 'avatars'],
             ['Zoho Campaigns', 'zoho-campaigns'],
-            ['Order e-mails mailbox', 'order-mail'],
+            ['E-mail list', 'order-mail'],
             ['Google Analytics', 'google-analytics'],
             ['Blog (WordPress)', 'blog'],
             ['Delivery', 'delivery'],
